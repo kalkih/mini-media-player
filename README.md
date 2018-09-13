@@ -3,7 +3,9 @@ A minified version of the default lovelace media player card in [Home Assistant]
 
 Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t/custom-ui-mini-media-player/40135) and [custom-lovelace](https://github.com/ciotlosm/custom-lovelace).
 
-<img src="https://user-images.githubusercontent.com/457678/45425521-e7340e00-b699-11e8-8a91-6ff3f3f5b4d5.png" width="750px" alt="Preview">
+| Single player | Grouping players|
+|:----:|:----:|
+| <img src="https://user-images.githubusercontent.com/457678/45498746-0fe00480-b77b-11e8-8930-6b350877445d.png" alt="Preview 1" width="300"> | <img src="https://user-images.githubusercontent.com/457678/45498745-0fe00480-b77b-11e8-8a54-8946c535ac11.png" alt="Preview 2" width="300"> |
 
 ## Install
 
