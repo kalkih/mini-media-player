@@ -85,7 +85,7 @@ class MiniMediaPlayer extends HTMLElement {
       });
       if (this._state !== 'unavailable') {
         let power = card.querySelector('.power');
-        power.addEventListener('click', e => this._toggle(e));
+        power.addEventListener('click', e => this._callService(e, 'toggle'));
 
         if (this._state !== 'off') this._setupMediaControls();
       };
@@ -133,11 +133,11 @@ class MiniMediaPlayer extends HTMLElement {
   _setupMediaControls() {
     const root = this.shadowRoot;
     let mute = root.querySelector('.mute');
-    mute.addEventListener('click', e => this._toggleMute(e));
+    mute.addEventListener('click', e => this._callService(e, 'volume_mute', { is_volume_muted: !this._attributes.is_volume_muted }));
 
     let slider = root.querySelector('paper-slider');
     slider.addEventListener('change', e => this._handleVolumeChange(e));
-    slider.addEventListener('click', e => this._handleVolumeChange(e));
+    slider.addEventListener('click', e => e.stopPropagation());
 
     let prev = root.querySelector('.prev');
     let next = root.querySelector('.next');
@@ -147,34 +147,18 @@ class MiniMediaPlayer extends HTMLElement {
     playPause.addEventListener('click', e => this._callService(e, 'media_play_pause'));
   }
 
-  _callService(e, service) {
+  _callService(e, service, options) {
     e.stopPropagation();
-    this._hass.callService('media_player', service, { 'entity_id': this._config.entity });
-  }
-
-  _toggle(e) {
-    e.stopPropagation();
-    this._hass.callService('media_player', 'toggle', {
-      entity_id: this._config.entity
-    });
-  }
-
-  _toggleMute(e) {
-    e.stopPropagation();
-    this._hass.callService('media_player', 'volume_mute', {
-      entity_id: this._config.entity,
-      is_volume_muted: !this._attributes.is_volume_muted
-    });
+    options = (options === null || options === undefined) ? {} : options;
+    options.entity_id = this._config.entity;
+    this._hass.callService('media_player', service, options);
   }
 
   _handleVolumeChange(e) {
     e.stopPropagation();
-    var volPercentage = parseFloat(e.target.value);
-    var vol = volPercentage > 0 ? volPercentage / 100 : 0;
-    this._hass.callService('media_player', 'volume_set', {
-      entity_id: this._config.entity,
-      volume_level: vol
-    });
+    const volPercentage = parseFloat(e.target.value);
+    const vol = volPercentage > 0 ? volPercentage / 100 : 0;
+    this._callService(e, 'volume_set', { volume_level: vol })
   }
 
   _fire(type, detail, options) {
