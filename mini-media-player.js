@@ -10,7 +10,7 @@ class MiniMediaPlayer extends HTMLElement {
       'power': 'mdi:power',
       'muted': 'mdi:volume-off',
       'unmuted': 'mdi:volume-high',
-      'send': 'hass:send'
+      'send': 'mdi:send'
     }
   }
 
@@ -167,20 +167,17 @@ class MiniMediaPlayer extends HTMLElement {
     tts.addEventListener('click', e => {
       e.stopPropagation();
       const input = root.querySelector('.tts paper-input');
-      let options = {
-        entity_id: this._config.entity,
-        message: input.value
-      };
-      this._hass.callService('tts', this._config.show_tts + '_say' , options);
+      let options = { message: input.value };
+      this._callService(e, this._config.show_tts + '_say' , options, 'tts');
       input.value = '';
     });
   }
 
-  _callService(e, service, options) {
+  _callService(e, service, options, component = 'media_player') {
     e.stopPropagation();
     options = (options === null || options === undefined) ? {} : options;
-    options.entity_id = this._config.entity;
-    this._hass.callService('media_player', service, options);
+    options.entity_id = options.entity_id || this._config.entity;
+    this._hass.callService(component, service, options);
   }
 
   _handleVolumeChange(e) {
