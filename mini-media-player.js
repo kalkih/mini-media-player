@@ -9,7 +9,8 @@ class MiniMediaPlayer extends HTMLElement {
       'next': 'mdi:mdi:skip-forward',
       'power': 'mdi:power',
       'muted': 'mdi:volume-off',
-      'unmuted': 'mdi:volume-high'
+      'unmuted': 'mdi:volume-high',
+      'send': 'hass:send'
     }
   }
 
@@ -34,6 +35,7 @@ class MiniMediaPlayer extends HTMLElement {
     const root = this.shadowRoot;
     if (!config.icon) config.icon = false;
     if (config.more_info !== false) config.more_info = true;
+    config.show_tts = config.show_tts || false;
 
     this._card = document.createElement('ha-card');
     const content = document.createElement('div');
@@ -75,6 +77,7 @@ class MiniMediaPlayer extends HTMLElement {
           </div>
         </div>
         ${this._state !== 'off' && this._state !== 'unavailable' ? this._renderMediaControls() : '' }
+        ${this._config.show_tts && this._state !== 'unavailable' ? this._renderTts() : '' }
       `;
 
       card.addEventListener('click', e => {
@@ -88,6 +91,7 @@ class MiniMediaPlayer extends HTMLElement {
         power.addEventListener('click', e => this._callService(e, 'toggle'));
 
         if (this._state !== 'off') this._setupMediaControls();
+        if (this._config.show_tts) this._setupTts();
       };
     }
   }
@@ -130,6 +134,16 @@ class MiniMediaPlayer extends HTMLElement {
       </div>`;
   }
 
+  _renderTts() {
+    return `
+      <div class='flex justify tts'>
+        <paper-input no-label-float placeholder='Say...' onclick='event.stopPropagation();'></paper-input>
+        <div>
+          <paper-icon-button icon='${this._icons["send"]}' role='button'></paper-icon-button>
+        </div>
+      </div>`;
+  }
+
   _setupMediaControls() {
     const root = this.shadowRoot;
     let mute = root.querySelector('.mute');
@@ -145,6 +159,21 @@ class MiniMediaPlayer extends HTMLElement {
     prev.addEventListener('click', e => this._callService(e, 'media_previous_track'));
     next.addEventListener('click', e => this._callService(e, 'media_next_track'));
     playPause.addEventListener('click', e => this._callService(e, 'media_play_pause'));
+  }
+
+  _setupTts() {
+    const root = this.shadowRoot;
+    const tts = root.querySelector('.tts paper-icon-button');
+    tts.addEventListener('click', e => {
+      e.stopPropagation();
+      const input = root.querySelector('.tts paper-input');
+      let options = {
+        entity_id: this._config.entity,
+        message: input.value
+      };
+      this._hass.callService('tts', this._config.show_tts + '_say' , options);
+      input.value = '';
+    });
   }
 
   _callService(e, service, options) {
@@ -209,7 +238,7 @@ class MiniMediaPlayer extends HTMLElement {
         -webkit-justify-content: space-between;
         justify-content: space-between;
       }
-      .info, .mediacontrols {
+      .info, .mediacontrols, .tts {
         margin-left: 56px;
       }
       .artwork {
@@ -231,6 +260,10 @@ class MiniMediaPlayer extends HTMLElement {
       }
       .mediainfo {
         color: var(--secondary-text-color);
+      }
+      .tts paper-input {
+        flex: 1;
+        -webkit-flex: 1;
       }
     `;
     return css;
