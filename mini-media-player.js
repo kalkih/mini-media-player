@@ -225,7 +225,7 @@ class MiniMediaPlayer extends HTMLElement {
         -webkit-justify-content: space-between;
         justify-content: space-between;
       }
-      .info {
+      .info, .mediacontrols {
         margin-left: 56px;
       }
       .artwork {
@@ -247,9 +247,6 @@ class MiniMediaPlayer extends HTMLElement {
       }
       .mediainfo {
         color: var(--secondary-text-color);
-      }
-      .mediacontrols {
-        margin-left: 56px;
       }
     `;
     return css;
