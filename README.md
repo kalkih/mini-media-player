@@ -48,6 +48,7 @@ resources:
 | icon | string | optional | Specify a custom icon from any of the available mdi icons.
 | group | boolean | false | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
 | more_info | boolean | true | Set to `false` to disable the "more info" dialog when clicking on the card.
+| show_tts | string | optional | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
 
 ### Example usage
 
@@ -77,6 +78,8 @@ Use the card in a group together with other players or entities
 
 ## Getting errors?
 Make sure you have `javascript_version: latest` in your `configuration.yaml` under `frontend:`.
+
+Make sure you have the latest version of the code.
 
 ## Inspiration
 - [@ciotlosm](https://github.com/ciotlosm) - [custom-lovelace](https://github.com/ciotlosm/custom-lovelace)
