@@ -12,7 +12,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 ### Simple install
 
 - Copy `mini-media-player.js` into your `config/www` folder.
-- Add a reference to the `mini-media-player.js` inside your. `ui-lovelace.yaml`
+- Add a reference to the `mini-media-player.js` inside your `ui-lovelace.yaml`.
 
 ```yaml
 resources:
@@ -36,6 +36,14 @@ resources:
     type: js
 ```
 
+## Updating
+- Find your `mini-media-player.js` file in `config/www` or wherever you ended up storing it.
+- Replace the file with the latest version of [mini-media-player.js](mini-media-player.js).
+- You may need to empty the browser cache for Home Assistant to make sure the updated card is loaded.
+
+
+If you went the `git clone` route, just run `git pull` from inside your `config/www/mini-media-player` directory, to get the latest version of the code.
+
 ## Using the card
 
 ### Options
@@ -49,6 +57,8 @@ resources:
 | group | boolean | false | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
 | more_info | boolean | true | Set to `false` to disable the "more info" dialog when clicking on the card.
 | show_tts | string | optional | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
+
+*`show_tts` requires v0.2 or later*
 
 ### Example usage
 
@@ -79,7 +89,9 @@ Use the card in a group together with other players or entities
 ## Getting errors?
 Make sure you have `javascript_version: latest` in your `configuration.yaml` under `frontend:`.
 
-Make sure you have the latest version of the code.
+Make sure you have the latest version of `mini-media-player.js`.
+
+If you have issues after updating the card, try clearing your browser cache.
 
 ## Inspiration
 - [@ciotlosm](https://github.com/ciotlosm) - [custom-lovelace](https://github.com/ciotlosm/custom-lovelace)
