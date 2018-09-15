@@ -1,3 +1,4 @@
+/* mini-media-player - version: v0.2 */
 class MiniMediaPlayer extends HTMLElement {
   constructor() {
     super();
