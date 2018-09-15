@@ -139,7 +139,7 @@ class MiniMediaPlayer extends HTMLElement {
       <div class='flex justify tts'>
         <paper-input no-label-float placeholder='Say...' onclick='event.stopPropagation();'></paper-input>
         <div>
-          <paper-icon-button icon='${this._icons["send"]}' role='button'></paper-icon-button>
+          <paper-button>SEND</paper-button>
         </div>
       </div>`;
   }
@@ -163,7 +163,7 @@ class MiniMediaPlayer extends HTMLElement {
 
   _setupTts() {
     const root = this.shadowRoot;
-    const tts = root.querySelector('.tts paper-icon-button');
+    const tts = root.querySelector('.tts paper-button');
     tts.addEventListener('click', e => {
       e.stopPropagation();
       const input = root.querySelector('.tts paper-input');
@@ -261,6 +261,15 @@ class MiniMediaPlayer extends HTMLElement {
       .tts paper-input {
         flex: 1;
         -webkit-flex: 1;
+        cursor: text;
+      }
+      paper-button {
+        color: var(--primary-text-color);
+      }
+      paper-input {
+        font-size: 10px;
+        --paper-input-container-color: var(--primary-text-color);
+        --paper-input-container-focus-color: var(--accent-color);
       }
     `;
     return css;
