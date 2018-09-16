@@ -32,11 +32,12 @@ class MiniMediaPlayer extends HTMLElement {
     if (!config.entity || config.entity.split('.')[0] !== 'media_player') {
       throw new Error('Specify an entity from within the media_player domain.');
     }
-
     const root = this.shadowRoot;
-    if (!config.icon) config.icon = false;
-    if (config.more_info !== false) config.more_info = true;
-    config.show_tts = config.show_tts || false;
+
+    config.icon = config.icon || false
+    config.more_info = (config.more_info !== false ? true : false);
+    config.show_tts = (config.show_tts ? true : false);
+    config.artwork_border = (config.artwork_border ? true : false);
 
     this._card = document.createElement('ha-card');
     const content = document.createElement('div');
@@ -99,9 +100,13 @@ class MiniMediaPlayer extends HTMLElement {
 
   _renderIcon() {
     if (this._attributes.entity_picture && this._attributes.entity_picture != '') {
-      return `<div class='artwork' style='background-image: url("${this._attributes.entity_picture}")'></div>`;
+      return `<div class='artwork'
+        ${this._config.artwork_border ? `border='true'` : '' }
+        state='${this._state}'
+        style='background-image: url("${this._attributes.entity_picture}")'>
+        </div>`;
     } else {
-      return `<div class='artwork'><ha-icon icon='${this._config.icon}'> </ha-icon></div>`;
+      return `<div class='icon'><ha-icon icon='${this._config.icon}'> </ha-icon></div>`;
     }
   }
 
@@ -239,7 +244,7 @@ class MiniMediaPlayer extends HTMLElement {
       .info, .mediacontrols, .tts {
         margin-left: 56px;
       }
-      .artwork {
+      .artwork .icon {
         height: 40px;
         width: 40px;
         background-size: cover;
@@ -249,6 +254,15 @@ class MiniMediaPlayer extends HTMLElement {
         text-align: center;
         line-height: 40px;
         float: left;
+      }
+      .artwork[border] {
+        border: 2px solid var(--primary-text-color);
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+      }
+      .artwork[state='playing'] {
+        border-color: var(--accent-color);
       }
       .playername, .status {
         line-height: 40px;
