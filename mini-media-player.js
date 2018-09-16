@@ -244,7 +244,7 @@ class MiniMediaPlayer extends HTMLElement {
       .info, .mediacontrols, .tts {
         margin-left: 56px;
       }
-      .artwork .icon {
+      .artwork, .icon {
         height: 40px;
         width: 40px;
         background-size: cover;
