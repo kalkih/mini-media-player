@@ -219,6 +219,12 @@ class MiniMediaPlayer extends HTMLElement {
     return this._attributes[attr] || '';
   }
 
+  _getLabel(label, fallback = 'unknown') {
+    const lang = this._hass.selectedLanguage || this._hass.language;
+    const resources = this._hass.resources[lang];
+    return (resources && resources[label] ? resources[label] : fallback);
+  }
+
   _renderStyle() {
     const css = document.createElement('style');
     css.setAttribute('is', 'custom-style')
