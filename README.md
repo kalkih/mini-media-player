@@ -39,10 +39,17 @@ resources:
 ## Updating
 - Find your `mini-media-player.js` file in `config/www` or wherever you ended up storing it.
 - Replace the file with the latest version of [mini-media-player.js](mini-media-player.js).
-- You may need to empty the browser cache for Home Assistant to make sure the updated card is loaded.
+- Add the new version number to the end of the cards reference url in your `ui-lovelace.yaml` like below.
 
+```yaml
+resources:
+  - url: /local/mini-media-player.js?ver=0.3
+    type: js
+```
 
 If you went the `git clone` route, just run `git pull` from inside your `config/www/mini-media-player` directory, to get the latest version of the code.
+
+*You may need to empty the browsers cache if you have problems loading the updated card.*
 
 ## Using the card
 
@@ -57,8 +64,10 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | group | boolean | false | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
 | more_info | boolean | true | Set to `false` to disable the "more info" dialog when clicking on the card.
 | show_tts | string | optional | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
+| artwork_border | boolean | false | Set to `true` to display a border around media artwork, border color changes depending on playing state.
 
 *`show_tts` requires v0.2 or later*
+*`artwork_border` requires v0.3 or later*
 
 ### Example usage
 
@@ -67,6 +76,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 - type: custom:mini-media-player
   entity: media_player.spotify
   icon: 'mdi:cast'
+  artwork_border: true
 ```
 
 #### Grouping several
