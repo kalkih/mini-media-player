@@ -264,7 +264,7 @@ class MiniMediaPlayer extends HTMLElement {
         line-height: 40px;
         float: left;
       }
-      .artwork[border] {
+      .artwork[border='true'] {
         border: 2px solid var(--primary-text-color);
         box-sizing: border-box;
         -moz-box-sizing: border-box;
