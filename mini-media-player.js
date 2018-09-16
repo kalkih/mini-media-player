@@ -42,13 +42,10 @@ class MiniMediaPlayer extends HTMLElement {
     this._card = document.createElement('ha-card');
     const content = document.createElement('div');
     content.id = 'content';
-    if (config.group) {
-      content.setAttribute('group', 'true');
-      this._card.setAttribute('style', 'box-shadow: none; background: none;');
-    }
-    this._card.style.cursor = config.more_info ? 'pointer' : 'default';
-    this._card.appendChild(this._renderStyle());
+    this._card.setAttribute('group', config.group);
+    this._card.setAttribute('more-info', config.more_info);
     this._card.appendChild(content);
+    root.appendChild(this._renderStyle());
     root.appendChild(this._card);
     this._config = Object.assign({}, config);
   }
@@ -101,7 +98,7 @@ class MiniMediaPlayer extends HTMLElement {
   _renderIcon() {
     if (this._attributes.entity_picture && this._attributes.entity_picture != '') {
       return `<div class='artwork'
-        ${this._config.artwork_border ? `border='true'` : '' }
+        border='${this._config.artwork_border}'
         state='${this._state}'
         style='background-image: url("${this._attributes.entity_picture}")'>
         </div>`;
@@ -113,10 +110,10 @@ class MiniMediaPlayer extends HTMLElement {
   _renderMediaInfo() {
     return `
       <div class='info'>
-        <div class='playername' ${this._hasMediaInfo() ? `has-info='true'` : '' } >${this._getAttribute('friendly_name')}</div>
+        <div class='playername' has-info='${this._hasMediaInfo()}' >${this._getAttribute('friendly_name')}</div>
         <div class='mediainfo'>
-          ${this._hasAttribute('media_title') ? `<span class='mediatitle'>${this._getAttribute('media_title')}</span>` : '' }
-          ${this._hasAttribute('media_artist') ? `<span class='mediaartist'>- ${this._getAttribute('media_artist')}</span>` : '' }
+          <span class='mediatitle'>${this._getAttribute('media_title')}</span>
+          <span class='mediaartist'>${this._getAttribute('media_artist')}</span>
         </div>
       </div>`;
   }
@@ -224,12 +221,18 @@ class MiniMediaPlayer extends HTMLElement {
 
   _renderStyle() {
     const css = document.createElement('style');
+    css.setAttribute('is', 'custom-style')
     css.textContent = `
-      #content {
+      ha-card {
         padding: 16px;
       }
-      #content[group] {
+      ha-card[group='true'] {
+        background: none;
+        box-shadow: none;
         padding: 0;
+      }
+      ha-card[more-info='true'] {
+        cursor: pointer;
       }
       .flex {
         display: flex;
@@ -267,11 +270,17 @@ class MiniMediaPlayer extends HTMLElement {
       .playername, .status {
         line-height: 40px;
       }
-      .playername[has-info] {
+      .playername[has-info='true'] {
         line-height: 20px;
       }
       .mediainfo {
         color: var(--secondary-text-color);
+      }
+      .mediainfo > .mediaartist:before {
+        content: '- ';
+      }
+      .mediainfo > span:empty {
+        display: none;
       }
       .tts paper-input {
         flex: 1;
@@ -282,9 +291,12 @@ class MiniMediaPlayer extends HTMLElement {
         color: var(--primary-text-color);
       }
       paper-input {
-        font-size: 10px;
+        opacity: .75;
         --paper-input-container-color: var(--primary-text-color);
         --paper-input-container-focus-color: var(--accent-color);
+      }
+      paper-input[focused] {
+        opacity: 1;
       }
     `;
     return css;
