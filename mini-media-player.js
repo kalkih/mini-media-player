@@ -140,7 +140,7 @@ class MiniMediaPlayer extends HTMLElement {
   _renderTts() {
     return `
       <div class='flex justify tts'>
-        <paper-input no-label-float placeholder='Say...' onclick='event.stopPropagation();'></paper-input>
+        <paper-input no-label-float placeholder='${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...' onclick='event.stopPropagation();'></paper-input>
         <div>
           <paper-button>SEND</paper-button>
         </div>
