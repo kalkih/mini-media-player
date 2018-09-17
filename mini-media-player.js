@@ -136,7 +136,9 @@ class MiniMediaPlayer extends HTMLElement {
 
     if (has_artwork) {
       if (config.artwork == 'cover') {
-        shadow.getElementById('artwork-cover').style.backgroundImage = `url(${this._attributes.entity_picture})`;
+        const artworkCover = shadow.getElementById('artwork-cover')
+        artworkCover.style.backgroundImage = `url(${this._attributes.entity_picture})`;
+        artworkCover.setAttribute('has-artwork', has_artwork);
       } else {
         artwork.setAttribute('state', state);
         artwork.style.backgroundImage = `url(${this._attributes.entity_picture})`;
@@ -288,7 +290,7 @@ class MiniMediaPlayer extends HTMLElement {
         ha-card[has-title='true'] {
           padding-top: 0px;
         }
-        ha-card[artwork='cover'] #artwork-cover {
+        ha-card[artwork='cover'] #artwork-cover[has-artwork='true'] {
           display: block;
         }
         ha-card[artwork='cover'] paper-icon-button,
