@@ -1,3 +1,11 @@
+## v0.4
+- Major code rewrite with much improved rendering performance
+- Added new `artwork` option **cover** to display artwork as the cards background image
+- Added new option `power_color` for colored on/off button depending on power state
+- Added translation for unavailable string
+- Fixed bug with Text-To-Speech not working
+- Fixed duplicate top padding when `title` option was set
+
 ## v0.3
 - Added new option `artwork_border` to show a border around the artwork, border color changes depending on players state
 - Added translation support
