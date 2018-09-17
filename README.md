@@ -3,9 +3,9 @@ A minified version of the default lovelace media player card in [Home Assistant]
 
 Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t/custom-ui-mini-media-player/40135) and [custom-lovelace](https://github.com/ciotlosm/custom-lovelace).
 
-| Single player | Grouping players|
-|:----:|:----:|
-| <img src="https://user-images.githubusercontent.com/457678/45498746-0fe00480-b77b-11e8-8930-6b350877445d.png" alt="Preview 1" width="300"> | <img src="https://user-images.githubusercontent.com/457678/45498745-0fe00480-b77b-11e8-8a54-8946c535ac11.png" alt="Preview 2" width="300"> |
+| Single player | Grouping players| Customizable |
+|:----:|:----:|:----:|
+| <img src="https://user-images.githubusercontent.com/457678/45498746-0fe00480-b77b-11e8-8930-6b350877445d.png" alt="Preview 1" width="250"> | <img src="https://user-images.githubusercontent.com/457678/45498745-0fe00480-b77b-11e8-8a54-8946c535ac11.png" alt="Preview 2" width="250"> | <img src="https://user-images.githubusercontent.com/457678/45644414-f530c700-babd-11e8-8a80-571afa79547e.png" alt="Preview 2" width="250"> |
 
 ## Install
 
@@ -43,7 +43,7 @@ resources:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?ver=0.3
+  - url: /local/mini-media-player.js?ver=0.4
     type: js
 ```
 
@@ -65,9 +65,14 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | more_info | boolean | true | Set to `false` to disable the "more info" dialog when clicking on the card.
 | show_tts | string | optional | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
 | artwork_border | boolean | false | Set to `true` to display a border around media artwork, border color changes depending on playing state.
+| power_color | boolean | false | Set to `true` to have the power button change color based on power on/off.
+| artwork | string | default | Set to `cover` to have artwork displayed as the card background *(looks best for ungrouped cards)*.
 
 *`show_tts` requires v0.2 or later*
+
 *`artwork_border` requires v0.3 or later*
+
+*`power_color` & `artwork` requires v0.4 or later*
 
 ### Example usage
 
@@ -77,6 +82,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
   entity: media_player.spotify
   icon: 'mdi:cast'
   artwork_border: true
+  power_color: true
 ```
 
 #### Grouping several
