@@ -47,7 +47,7 @@ class MiniMediaPlayer extends HTMLElement {
     config.artwork_border = (config.artwork_border ? true : false);
     config.group = (config.group ? true : false);
     config.power_color = (config.power_color ? true : false);
-    config.artwork = config.artwork || false;
+    config.artwork = config.artwork || 'default';
 
     this._config = Object.assign({}, config);
   }
