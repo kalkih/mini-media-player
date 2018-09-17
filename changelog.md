@@ -1,3 +1,6 @@
+## v0.4.1
+- Fixed bug where attributes did not update when device state changed to `off` or `unavailable`
+
 ## v0.4
 - Major code rewrite with much improved rendering performance
 
