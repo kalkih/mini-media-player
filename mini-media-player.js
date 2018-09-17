@@ -26,13 +26,12 @@ class MiniMediaPlayer extends HTMLElement {
     if (!this.shadowRoot.lastChild) {
       this._attributes = entity.attributes || {};
       this._state = entity.state;
-      this._init(entity);
-      this._update(entity);
+      this._init();
     }
     if (entity.attributes != this._attributes) {
       this._state = entity.state;
       this._attributes = entity.attributes;
-      this._update(entity);
+      this._update();
     }
   }
 
@@ -48,10 +47,12 @@ class MiniMediaPlayer extends HTMLElement {
     config.artwork_border = (config.artwork_border ? true : false);
     config.group = (config.group ? true : false);
     config.power_color = (config.power_color ? true : false);
+    config.artwork = config.artwork || false;
+
     this._config = Object.assign({}, config);
   }
 
-  _init(entity) {
+  _init() {
     const shadow = this.shadow;
     const config = this._config;
     if (shadow.lastChild) shadow.removeChild(shadow.lastChild);
@@ -59,7 +60,8 @@ class MiniMediaPlayer extends HTMLElement {
 
     const template = `
       ${this._style()}
-      <ha-card group='${config.group}' more-info='${config.more_info}' has-title='${config.title !== ''}' >
+      <ha-card group='${config.group}' more-info='${config.more_info}' has-title='${config.title !== ''}' artwork='${config.artwork}' >
+        <div id='artwork-cover'></div>
         <div class='flex justify'>
           <div>
             <div id='artwork' border='${config.artwork_border}'></div>
@@ -96,9 +98,10 @@ class MiniMediaPlayer extends HTMLElement {
 
     shadow.innerHTML = template;
     this._setup();
+    this._update();
   }
 
-  _update(entity) {
+  _update() {
     const shadow = this.shadowRoot;
     const config = this._config;
     const state = this._state;
@@ -120,8 +123,8 @@ class MiniMediaPlayer extends HTMLElement {
     powerButton.style.display = state == 'unavailable' ? 'none' : '';
     shadow.getElementById('mediacontrols').style.display = active ? '' : 'none';
 
-    artwork.style.display = has_artwork ? '' : 'none';
-    shadow.getElementById('icon').style.display = has_artwork ? 'none' : '';
+    artwork.style.display = (has_artwork && config.artwork == 'default') ? '' : 'none';
+    shadow.getElementById('icon').style.display = (has_artwork && config.artwork == 'default') ? 'none' : '';
 
     // Configuration specific
     if (config.power_color) powerButton.setAttribute('on', active)
@@ -132,8 +135,12 @@ class MiniMediaPlayer extends HTMLElement {
     if (!active) return;
 
     if (has_artwork) {
-      artwork.setAttribute('state', state);
-      artwork.style.backgroundImage = `url(${this._attributes.entity_picture})`;
+      if (config.artwork == 'cover') {
+        shadow.getElementById('artwork-cover').style.backgroundImage = `url(${this._attributes.entity_picture})`;
+      } else {
+        artwork.setAttribute('state', state);
+        artwork.style.backgroundImage = `url(${this._attributes.entity_picture})`;
+      }
     }
 
     shadow.getElementById('mediatitle').innerHTML = this._getAttribute('media_title');
@@ -265,17 +272,49 @@ class MiniMediaPlayer extends HTMLElement {
       <style>
         ha-card {
           padding: 16px;
+          position: relative;
         }
         ha-card[group='true'] {
+          padding: 0;
           background: none;
           box-shadow: none;
-          padding: 0;
+        }
+        ha-card[group='true'][artwork='cover'] .info {
+          margin-top: 12px;
         }
         ha-card[more-info='true'] {
           cursor: pointer;
         }
         ha-card[has-title='true'] {
           padding-top: 0px;
+        }
+        ha-card[artwork='cover'] #artwork-cover {
+          display: block;
+        }
+        ha-card[artwork='cover'] paper-icon-button,
+        ha-card[artwork='cover'] ha-icon,
+        ha-card[artwork='cover'] .info,
+        ha-card[artwork='cover'] paper-button {
+          color: #FFFFFF;
+        }
+        ha-card[artwork='cover'] paper-input {
+          --paper-input-container-color: #FFFFFF;
+          --paper-input-container-input-color: #FFFFFF;
+        }
+        #artwork-cover {
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+          display: none;
+          position: absolute;
+          top: 0; left: 0; bottom: 0; right: 0;
+        }
+        #artwork-cover:before {
+          background: #000000;
+          content: '';
+          opacity: .6;
+          position: absolute;
+          top: 0; left: 0; bottom: 0; right: 0;
         }
         .flex {
           display: flex;
@@ -289,6 +328,7 @@ class MiniMediaPlayer extends HTMLElement {
         }
         .info, #mediacontrols, #tts {
           margin-left: 56px;
+          position: relative;
         }
         #power-button[on='true'] {
           color: var(--accent-color);
@@ -320,7 +360,7 @@ class MiniMediaPlayer extends HTMLElement {
           line-height: 20px;
         }
         #mediainfo {
-          color: var(--secondary-text-color);
+          color: var(--accent-color);
         }
         #mediaartist:before {
           content: '- ';
