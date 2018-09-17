@@ -314,7 +314,7 @@ class MiniMediaPlayer extends HTMLElement {
         #artwork-cover:before {
           background: #000000;
           content: '';
-          opacity: .6;
+          opacity: .5;
           position: absolute;
           top: 0; left: 0; bottom: 0; right: 0;
         }
