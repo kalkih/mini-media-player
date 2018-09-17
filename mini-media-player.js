@@ -132,11 +132,9 @@ class MiniMediaPlayer extends HTMLElement {
       shadow.getElementById('tts').style.display = state == 'unavailable' ? 'none' : '';
     }
 
-    if (!active) return;
-
+    const artworkCover = shadow.getElementById('artwork-cover')
     if (has_artwork) {
       if (config.artwork == 'cover') {
-        const artworkCover = shadow.getElementById('artwork-cover')
         artworkCover.style.backgroundImage = `url(${this._attributes.entity_picture})`;
         artworkCover.setAttribute('has-artwork', has_artwork);
       } else {
@@ -144,9 +142,12 @@ class MiniMediaPlayer extends HTMLElement {
         artwork.style.backgroundImage = `url(${this._attributes.entity_picture})`;
       }
     }
+    artworkCover.setAttribute('has-artwork', has_artwork);
 
     shadow.getElementById('mediatitle').innerHTML = this._getAttribute('media_title');
     shadow.getElementById('mediaartist').innerHTML = this._getAttribute('media_artist');
+
+    if (!active) return;
 
     shadow.getElementById('mute-button').setAttribute('icon', this._icons.mute[muted]);
 
