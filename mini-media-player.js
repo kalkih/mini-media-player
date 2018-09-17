@@ -3,7 +3,6 @@ class MiniMediaPlayer extends HTMLElement {
   constructor() {
     super();
     this.shadow = this.createShadowRoot();
-    this.shadow.id = 'media';
     this._icons = {
       'playing': {
         true: 'mdi:pause',
@@ -55,10 +54,7 @@ class MiniMediaPlayer extends HTMLElement {
     const shadow = this.shadow;
     const config = this._config;
     if (shadow.lastChild) shadow.removeChild(shadow.lastChild);
-
-    if (!config.icon) {
-      config.icon = this._attributes['icon'] || 'mdi:cast';
-    }
+    if (!config.icon) config.icon = this._attributes['icon'] || 'mdi:cast';
 
     const template = `
       ${this._style()}
@@ -77,7 +73,7 @@ class MiniMediaPlayer extends HTMLElement {
           </div>
           <div class='state'>
             <span id='unavailable'>${this._getLabel('state.default.unavailable', 'Unavailable')}</span>
-            <paper-icon-button id='power' icon='${this._icons["power"]}'></paper-icon-button>
+            <paper-icon-button id='power-button' icon='${this._icons["power"]}'></paper-icon-button>
           </div>
         </div>
         <div id='mediacontrols' class='flex justify'>
@@ -119,8 +115,12 @@ class MiniMediaPlayer extends HTMLElement {
     playername.innerHTML = this._getAttribute('friendly_name');
     playername.setAttribute('has-info', this._hasMediaInfo());
     shadow.getElementById('unavailable').style.display = state == 'unavailable' ? '' : 'none';
-    shadow.getElementById('power').style.display = state == 'unavailable' ? 'none' : '';
+    shadow.getElementById('power-button').style.display = state == 'unavailable' ? 'none' : '';
     shadow.getElementById('mediacontrols').style.display = active ? '' : 'none';
+
+    if (config.show_tts) {
+      shadow.getElementById('tts').style.display = state == 'unavailable' ? 'none' : '';
+    }
 
     artwork.style.display = has_artwork ? '' : 'none';
     shadow.getElementById('icon').style.display = has_artwork ? 'none' : '';
@@ -135,7 +135,6 @@ class MiniMediaPlayer extends HTMLElement {
     shadow.getElementById('mediatitle').innerHTML = this._getAttribute('media_title');
     shadow.getElementById('mediaartist').innerHTML = this._getAttribute('media_artist');
 
-
     shadow.getElementById('mute-button').setAttribute('icon', this._icons.mute[muted]);
 
     volumeSlider.setAttribute('value', volumeSliderValue);
@@ -147,7 +146,7 @@ class MiniMediaPlayer extends HTMLElement {
   _renderTts() {
     if (this._config.show_tts) {
       return `
-        <div class='flex justify tts'>
+        <div id='tts' class='flex justify'>
           <paper-input id='tts-input'
             no-label-float
             placeholder='${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...'
@@ -171,7 +170,7 @@ class MiniMediaPlayer extends HTMLElement {
         this._fire('hass-more-info', { entityId: this._config.entity });
       };
     });
-    const power = this.shadow.getElementById('power');
+    const power = this.shadow.getElementById('power-button');
     power.addEventListener('click', e => this._callService(e, 'toggle'));
 
     this._setupMediaControls();
@@ -284,7 +283,7 @@ class MiniMediaPlayer extends HTMLElement {
           -webkit-justify-content: space-between;
           justify-content: space-between;
         }
-        .info, #mediacontrols, .tts {
+        .info, #mediacontrols, #tts {
           margin-left: 56px;
         }
         #artwork, #icon {
@@ -307,7 +306,7 @@ class MiniMediaPlayer extends HTMLElement {
         #artwork[state='playing'] {
           border-color: var(--accent-color);
         }
-        #playername, .status {
+        #playername, .state {
           line-height: 40px;
         }
         #playername[has-info='true'] {
@@ -322,7 +321,7 @@ class MiniMediaPlayer extends HTMLElement {
         #mediainfo > span:empty {
           display: none;
         }
-        .tts paper-input {
+        #tts paper-input {
           flex: 1;
           -webkit-flex: 1;
           cursor: text;
