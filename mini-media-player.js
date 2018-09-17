@@ -47,6 +47,7 @@ class MiniMediaPlayer extends HTMLElement {
     config.show_tts = config.show_tts || false;
     config.artwork_border = (config.artwork_border ? true : false);
     config.group = (config.group ? true : false);
+    config.power_color = (config.power_color ? true : false);
     this._config = Object.assign({}, config);
   }
 
@@ -108,6 +109,7 @@ class MiniMediaPlayer extends HTMLElement {
     const playing = state == 'playing';
     const has_artwork = (this._attributes.entity_picture && this._attributes.entity_picture != '');
 
+    const powerButton = shadow.getElementById('power-button');
     const artwork = shadow.getElementById('artwork');
     const volumeSliderValue = this._attributes.volume_level * 100;
     const volumeSlider = shadow.getElementById('volume-slider');
@@ -115,15 +117,17 @@ class MiniMediaPlayer extends HTMLElement {
     playername.innerHTML = this._getAttribute('friendly_name');
     playername.setAttribute('has-info', this._hasMediaInfo());
     shadow.getElementById('unavailable').style.display = state == 'unavailable' ? '' : 'none';
-    shadow.getElementById('power-button').style.display = state == 'unavailable' ? 'none' : '';
+    powerButton.style.display = state == 'unavailable' ? 'none' : '';
     shadow.getElementById('mediacontrols').style.display = active ? '' : 'none';
-
-    if (config.show_tts) {
-      shadow.getElementById('tts').style.display = state == 'unavailable' ? 'none' : '';
-    }
 
     artwork.style.display = has_artwork ? '' : 'none';
     shadow.getElementById('icon').style.display = has_artwork ? 'none' : '';
+
+    // Configuration specific
+    if (config.power_color) powerButton.setAttribute('on', active)
+    if (config.show_tts) {
+      shadow.getElementById('tts').style.display = state == 'unavailable' ? 'none' : '';
+    }
 
     if (!active) return;
 
@@ -285,6 +289,9 @@ class MiniMediaPlayer extends HTMLElement {
         }
         .info, #mediacontrols, #tts {
           margin-left: 56px;
+        }
+        #power-button[on='true'] {
+          color: var(--accent-color);
         }
         #artwork, #icon {
           height: 40px;
