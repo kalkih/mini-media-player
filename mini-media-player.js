@@ -2,15 +2,20 @@
 class MiniMediaPlayer extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.shadow = this.createShadowRoot();
+    this.shadow.id = 'media';
     this._icons = {
-      'playing': 'mdi:play',
-      'paused': 'mdi:pause',
+      'playing': {
+        true: 'mdi:pause',
+        false: 'mdi:play'
+      },
       'prev': 'mdi:mdi:skip-backward',
       'next': 'mdi:mdi:skip-forward',
       'power': 'mdi:power',
-      'muted': 'mdi:volume-off',
-      'unmuted': 'mdi:volume-high',
+      'mute': {
+        true: 'mdi:volume-off',
+        false: 'mdi:volume-high'
+      },
       'send': 'mdi:send'
     }
   }
@@ -18,13 +23,17 @@ class MiniMediaPlayer extends HTMLElement {
   set hass(hass) {
     this._hass = hass;
     const entity = hass.states[this._config.entity];
-    if (entity && entity.state != this._state) {
+    if (!entity) return;
+    if (!this.shadowRoot.lastChild) {
+      this._attributes = entity.attributes || {};
       this._state = entity.state;
-      if (entity.attributes != this._attributes) this._attributes = entity.attributes;
-      this._render(entity);
-    } else if (entity && entity.attributes != this._attributes) {
+      this._init(entity);
+      this._update(entity);
+    }
+    if (entity.attributes != this._attributes) {
+      this._state = entity.state;
       this._attributes = entity.attributes;
-      this._render(entity);
+      this._update(entity);
     }
   }
 
@@ -32,144 +41,167 @@ class MiniMediaPlayer extends HTMLElement {
     if (!config.entity || config.entity.split('.')[0] !== 'media_player') {
       throw new Error('Specify an entity from within the media_player domain.');
     }
-    const root = this.shadowRoot;
 
-    config.icon = config.icon || false
+    config.title = config.title || '';
+    config.icon = config.icon || false;
     config.more_info = (config.more_info !== false ? true : false);
-    config.show_tts = (config.show_tts ? true : false);
+    config.show_tts = config.show_tts || false;
     config.artwork_border = (config.artwork_border ? true : false);
-
-    this._card = document.createElement('ha-card');
-    const content = document.createElement('div');
-    content.id = 'content';
-    this._card.setAttribute('group', config.group);
-    this._card.setAttribute('more-info', config.more_info);
-    this._card.appendChild(content);
-    root.appendChild(this._renderStyle());
-    root.appendChild(this._card);
+    config.group = (config.group ? true : false);
     this._config = Object.assign({}, config);
   }
 
-  _render(entity) {
+  _init(entity) {
+    const shadow = this.shadow;
     const config = this._config;
-    const root = this.shadowRoot;
-    const card = root.lastChild;
+    if (shadow.lastChild) shadow.removeChild(shadow.lastChild);
 
-    if (config.title) card.header = config.title;
     if (!config.icon) {
-      this._config.icon = this._attributes['icon'] || 'mdi:cast';
+      config.icon = this._attributes['icon'] || 'mdi:cast';
     }
 
-    if (this._state) {
-      root.getElementById('content').innerHTML = `
+    const template = `
+      ${this._style()}
+      <ha-card group='${config.group}' more-info='${config.more_info}' has-title='${config.title !== ''}' >
         <div class='flex justify'>
           <div>
-            ${this._renderIcon()}
-            ${this._renderMediaInfo()}
+            <div id='artwork' border='${config.artwork_border}'></div>
+            <div id='icon'><ha-icon icon='${config.icon}'></ha-icon></div>
+            <div class='info'>
+              <div id='playername' has-info='false'></div>
+              <div id='mediainfo'>
+                <span id='mediatitle'></span>
+                <span id='mediaartist'></span>
+              </div>
+            </div>
           </div>
+          <div class='state'>
+            <span id='unavailable'>${this._getLabel('state.default.unavailable', 'Unavailable')}</span>
+            <paper-icon-button id='power' icon='${this._icons["power"]}'></paper-icon-button>
+          </div>
+        </div>
+        <div id='mediacontrols' class='flex justify'>
           <div>
-            ${this._state == 'unavailable' ?
-              `<span class='status'>Unavailable</span>`
-            :
-              `<paper-icon-button class='power' icon='${this._icons["power"]}'></paper-icon-button>`
-            }
+            <paper-icon-button id='mute-button' icon='${this._icons[`unmuted`]}'></paper-icon-button>
+          </div>
+          <paper-slider id='volume-slider' onclick='event.stopPropagation();'
+            ignore-bar-touch pin min='0' max='100' value='0' class='flex'>
+          </paper-slider>
+          <div class='flex'>
+            <paper-icon-button id='prev-button' icon='${this._icons["prev"]}'></paper-icon-button>
+            <paper-icon-button id='play-button' icon='${this._icons["paused"]}'></paper-icon-button>
+            <paper-icon-button id='next-button' icon='${this._icons["next"]}'></paper-icon-button>
           </div>
         </div>
-        ${this._state !== 'off' && this._state !== 'unavailable' ? this._renderMediaControls() : '' }
-        ${this._config.show_tts && this._state !== 'unavailable' ? this._renderTts() : '' }
-      `;
+        ${this._renderTts()}
+      </ha-card>
+    `;
 
-      card.addEventListener('click', e => {
-        e.stopPropagation();
-        if (this._config.more_info) {
-          this._fire('hass-more-info', { entityId: this._config.entity });
-        };
-      });
-      if (this._state !== 'unavailable') {
-        let power = card.querySelector('.power');
-        power.addEventListener('click', e => this._callService(e, 'toggle'));
-
-        if (this._state !== 'off') this._setupMediaControls();
-        if (this._config.show_tts) this._setupTts();
-      };
-    }
+    shadow.innerHTML = template;
+    this._setup();
   }
 
-  _renderIcon() {
-    if (this._attributes.entity_picture && this._attributes.entity_picture != '') {
-      return `<div class='artwork'
-        border='${this._config.artwork_border}'
-        state='${this._state}'
-        style='background-image: url("${this._attributes.entity_picture}")'>
-        </div>`;
-    } else {
-      return `<div class='icon'><ha-icon icon='${this._config.icon}'> </ha-icon></div>`;
-    }
-  }
+  _update(entity) {
+    const shadow = this.shadowRoot;
+    const config = this._config;
+    const state = this._state;
 
-  _renderMediaInfo() {
-    return `
-      <div class='info'>
-        <div class='playername' has-info='${this._hasMediaInfo()}' >${this._getAttribute('friendly_name')}</div>
-        <div class='mediainfo'>
-          <span class='mediatitle'>${this._getAttribute('media_title')}</span>
-          <span class='mediaartist'>${this._getAttribute('media_artist')}</span>
-        </div>
-      </div>`;
-  }
+    const playername = shadow.getElementById('playername');
+    const active = (state !== 'off' && state !== 'unavailable');
+    const muted = this._attributes.is_volume_muted || false;
+    const playing = state == 'playing';
+    const has_artwork = (this._attributes.entity_picture && this._attributes.entity_picture != '');
 
-  _renderMediaControls() {
+    const artwork = shadow.getElementById('artwork');
     const volumeSliderValue = this._attributes.volume_level * 100;
+    const volumeSlider = shadow.getElementById('volume-slider');
 
-    return `
-      <div class='flex justify mediacontrols'>
-        <div>
-          <paper-icon-button class='mute' icon='${this._attributes.is_volume_muted ? this._icons[`muted`] : this._icons[`unmuted`]}'></paper-icon-button>
-        </div>
-        <paper-slider ${this._attributes.is_volume_muted ? 'disabled' : ''}
-          ignore-bar-touch pin role='slider' min='0' max='100' value='${volumeSliderValue}' class='flex'>
-        </paper-slider>
-        <div class='flex'>
-          <paper-icon-button class='prev' icon='${this._icons["prev"]}'></paper-icon-button>
-          <paper-icon-button class='play-pause' icon='${this._state == 'playing' ? this._icons['paused'] : this._icons['playing'] }'></paper-icon-button>
-          <paper-icon-button class='next' icon='${this._icons["next"]}'></paper-icon-button>
-        </div>
-      </div>`;
+    playername.innerHTML = this._getAttribute('friendly_name');
+    playername.setAttribute('has-info', this._hasMediaInfo());
+    shadow.getElementById('unavailable').style.display = state == 'unavailable' ? '' : 'none';
+    shadow.getElementById('power').style.display = state == 'unavailable' ? 'none' : '';
+    shadow.getElementById('mediacontrols').style.display = active ? '' : 'none';
+
+    artwork.style.display = has_artwork ? '' : 'none';
+    shadow.getElementById('icon').style.display = has_artwork ? 'none' : '';
+
+    if (!active) return;
+
+    if (has_artwork) {
+      artwork.setAttribute('state', state);
+      artwork.style.backgroundImage = `url(${this._attributes.entity_picture})`;
+    }
+
+    shadow.getElementById('mediatitle').innerHTML = this._getAttribute('media_title');
+    shadow.getElementById('mediaartist').innerHTML = this._getAttribute('media_artist');
+
+
+    shadow.getElementById('mute-button').setAttribute('icon', this._icons.mute[muted]);
+
+    volumeSlider.setAttribute('value', volumeSliderValue);
+    muted ? volumeSlider.setAttribute('disabled', muted) : volumeSlider.removeAttribute('disabled');
+
+    shadow.getElementById('play-button').setAttribute('icon', this._icons.playing[state == 'playing']);
   }
 
   _renderTts() {
-    return `
-      <div class='flex justify tts'>
-        <paper-input no-label-float placeholder='${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...' onclick='event.stopPropagation();'></paper-input>
-        <div>
-          <paper-button>SEND</paper-button>
-        </div>
-      </div>`;
+    if (this._config.show_tts) {
+      return `
+        <div class='flex justify tts'>
+          <paper-input id='tts-input'
+            no-label-float
+            placeholder='${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...'
+            onclick='event.stopPropagation();'>
+          </paper-input>
+          <div>
+            <paper-button id='tts-send'>SEND</paper-button>
+          </div>
+        </div>`;
+    }
+    return '';
+  }
+
+  _setup() {
+    const card = this.shadow.querySelector('ha-card');
+    card.header = this._config.title;
+
+    card.addEventListener('click', e => {
+      e.stopPropagation();
+      if (this._config.more_info) {
+        this._fire('hass-more-info', { entityId: this._config.entity });
+      };
+    });
+    const power = this.shadow.getElementById('power');
+    power.addEventListener('click', e => this._callService(e, 'toggle'));
+
+    this._setupMediaControls();
+    if (this._config.show_tts) this._setupTts();
   }
 
   _setupMediaControls() {
-    const root = this.shadowRoot;
-    let mute = root.querySelector('.mute');
-    mute.addEventListener('click', e => this._callService(e, 'volume_mute', { is_volume_muted: !this._attributes.is_volume_muted }));
+    const shadow = this.shadowRoot;
+    const mute = shadow.getElementById('mute-button');
+    mute.addEventListener('click', e => this._callService(e, 'volume_mute', {
+      is_volume_muted: !this._attributes.is_volume_muted
+    }));
 
-    let slider = root.querySelector('paper-slider');
+    const slider = shadow.getElementById('volume-slider');
     slider.addEventListener('change', e => this._handleVolumeChange(e));
-    slider.addEventListener('click', e => e.stopPropagation());
 
-    let prev = root.querySelector('.prev');
-    let next = root.querySelector('.next');
-    let playPause = root.querySelector('.play-pause');
+    const prev = shadow.getElementById('prev-button');
+    const next = shadow.getElementById('next-button');
+    const playPause = shadow.getElementById('play-button');
     prev.addEventListener('click', e => this._callService(e, 'media_previous_track'));
     next.addEventListener('click', e => this._callService(e, 'media_next_track'));
     playPause.addEventListener('click', e => this._callService(e, 'media_play_pause'));
   }
 
   _setupTts() {
-    const root = this.shadowRoot;
-    const tts = root.querySelector('.tts paper-button');
+    const shadow = this.shadowRoot;
+    const tts = shadow.getElementById('tts-send');
     tts.addEventListener('click', e => {
       e.stopPropagation();
-      const input = root.querySelector('.tts paper-input');
+      const input = shadow.getElementById('tts-input');
       let options = { message: input.value };
       this._callService(e, this._config.show_tts + '_say' , options, 'tts');
       input.value = '';
@@ -225,87 +257,89 @@ class MiniMediaPlayer extends HTMLElement {
     return (resources && resources[label] ? resources[label] : fallback);
   }
 
-  _renderStyle() {
-    const css = document.createElement('style');
-    css.setAttribute('is', 'custom-style')
-    css.textContent = `
-      ha-card {
-        padding: 16px;
-      }
-      ha-card[group='true'] {
-        background: none;
-        box-shadow: none;
-        padding: 0;
-      }
-      ha-card[more-info='true'] {
-        cursor: pointer;
-      }
-      .flex {
-        display: flex;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        flex-direction: row;
-      }
-      .justify {
-        -webkit-justify-content: space-between;
-        justify-content: space-between;
-      }
-      .info, .mediacontrols, .tts {
-        margin-left: 56px;
-      }
-      .artwork, .icon {
-        height: 40px;
-        width: 40px;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        border-radius: 100%;
-        text-align: center;
-        line-height: 40px;
-        float: left;
-      }
-      .artwork[border='true'] {
-        border: 2px solid var(--primary-text-color);
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-      }
-      .artwork[state='playing'] {
-        border-color: var(--accent-color);
-      }
-      .playername, .status {
-        line-height: 40px;
-      }
-      .playername[has-info='true'] {
-        line-height: 20px;
-      }
-      .mediainfo {
-        color: var(--secondary-text-color);
-      }
-      .mediainfo > .mediaartist:before {
-        content: '- ';
-      }
-      .mediainfo > span:empty {
-        display: none;
-      }
-      .tts paper-input {
-        flex: 1;
-        -webkit-flex: 1;
-        cursor: text;
-      }
-      paper-button {
-        color: var(--primary-text-color);
-      }
-      paper-input {
-        opacity: .75;
-        --paper-input-container-color: var(--primary-text-color);
-        --paper-input-container-focus-color: var(--accent-color);
-      }
-      paper-input[focused] {
-        opacity: 1;
-      }
+  _style() {
+    return `
+      <style>
+        ha-card {
+          padding: 16px;
+        }
+        ha-card[group='true'] {
+          background: none;
+          box-shadow: none;
+          padding: 0;
+        }
+        ha-card[more-info='true'] {
+          cursor: pointer;
+        }
+        ha-card[has-title='true'] {
+          padding-top: 0px;
+        }
+        .flex {
+          display: flex;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          flex-direction: row;
+        }
+        .justify {
+          -webkit-justify-content: space-between;
+          justify-content: space-between;
+        }
+        .info, #mediacontrols, .tts {
+          margin-left: 56px;
+        }
+        #artwork, #icon {
+          height: 40px;
+          width: 40px;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+          border-radius: 100%;
+          text-align: center;
+          line-height: 40px;
+          float: left;
+        }
+        #artwork[border='true'] {
+          border: 2px solid var(--primary-text-color);
+          box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+        }
+        #artwork[state='playing'] {
+          border-color: var(--accent-color);
+        }
+        #playername, .status {
+          line-height: 40px;
+        }
+        #playername[has-info='true'] {
+          line-height: 20px;
+        }
+        #mediainfo {
+          color: var(--secondary-text-color);
+        }
+        #mediaartist:before {
+          content: '- ';
+        }
+        #mediainfo > span:empty {
+          display: none;
+        }
+        .tts paper-input {
+          flex: 1;
+          -webkit-flex: 1;
+          cursor: text;
+        }
+        paper-button {
+          color: var(--primary-text-color);
+        }
+        paper-input {
+          opacity: .75;
+          --paper-input-container-color: var(--primary-text-color);
+          --paper-input-container-focus-color: var(--accent-color);
+        }
+        paper-input[focused] {
+          opacity: 1;
+        }
+      </style>
     `;
-    return css;
   }
 
   getCardSize() {
