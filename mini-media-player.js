@@ -26,22 +26,6 @@ class MiniMediaPlayer extends LitElement {
     };
   }
 
-  // set hass(hass) {
-  //   this._hass = hass;
-  //   const entity = hass.states[this._config.entity];
-  //   if (!entity) return;
-  //   if (!this.shadowRoot.lastChild) {
-  //     this._attributes = entity.attributes || {};
-  //     this._state = entity.state;
-  //     this._init();
-  //   }
-  //   if (entity.attributes != this._attributes) {
-  //     this._state = entity.state;
-  //     this._attributes = entity.attributes;
-  //     this._update();
-  //   }
-  // }
-
   setConfig(config) {
     if (!config.entity || config.entity.split('.')[0] !== 'media_player') {
       throw new Error('Specify an entity from within the media_player domain.');
