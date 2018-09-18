@@ -1,8 +1,8 @@
-/* mini-media-player - version: v0.3 */
-class MiniMediaPlayer extends HTMLElement {
+import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.1/lit-element.js?module';
+
+class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
-    this.shadow = this.createShadowRoot();
     this._icons = {
       'playing': {
         true: 'mdi:pause',
@@ -19,21 +19,28 @@ class MiniMediaPlayer extends HTMLElement {
     }
   }
 
-  set hass(hass) {
-    this._hass = hass;
-    const entity = hass.states[this._config.entity];
-    if (!entity) return;
-    if (!this.shadowRoot.lastChild) {
-      this._attributes = entity.attributes || {};
-      this._state = entity.state;
-      this._init();
-    }
-    if (entity.attributes != this._attributes) {
-      this._state = entity.state;
-      this._attributes = entity.attributes;
-      this._update();
-    }
+  static get properties() {
+    return {
+      hass: Object,
+      config: Object,
+    };
   }
+
+  // set hass(hass) {
+  //   this._hass = hass;
+  //   const entity = hass.states[this._config.entity];
+  //   if (!entity) return;
+  //   if (!this.shadowRoot.lastChild) {
+  //     this._attributes = entity.attributes || {};
+  //     this._state = entity.state;
+  //     this._init();
+  //   }
+  //   if (entity.attributes != this._attributes) {
+  //     this._state = entity.state;
+  //     this._attributes = entity.attributes;
+  //     this._update();
+  //   }
+  // }
 
   setConfig(config) {
     if (!config.entity || config.entity.split('.')[0] !== 'media_player') {
@@ -49,183 +56,109 @@ class MiniMediaPlayer extends HTMLElement {
     config.power_color = (config.power_color ? true : false);
     config.artwork = config.artwork || 'default';
 
-    this._config = Object.assign({}, config);
+    this.config = config;
   }
 
-  _init() {
-    const shadow = this.shadow;
-    const config = this._config;
-    if (shadow.lastChild) shadow.removeChild(shadow.lastChild);
-    if (!config.icon) config.icon = this._attributes['icon'] || 'mdi:cast';
+  render() {
+    const {hass, config} = this;
+    const entity = hass.states[config.entity];
+    const attributes = entity.attributes;
+    if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
 
-    const template = `
+    const active = (entity.state !== 'off' && entity.state !== 'unavailable');
+    const has_artwork = (attributes.entity_picture && attributes.entity_picture != '');
+
+    return html`
       ${this._style()}
-      <ha-card group='${config.group}' more-info='${config.more_info}' has-title='${config.title !== ''}' artwork='${config.artwork}' >
-        <div id='artwork-cover'></div>
+      <ha-card hello='true' group="${config.group}" more-info=${config.more_info} has-title=${config.title !== ''} artwork=${config.artwork} >
+        <div id='artwork-cover' style='background-image: url("${attributes.entity_picture}")'
+          has-artwork=${has_artwork}>
+        </div>
         <div class='flex justify'>
           <div>
-            <div id='artwork' border='${config.artwork_border}'></div>
-            <div id='icon'><ha-icon icon='${config.icon}'></ha-icon></div>
+            ${active && has_artwork && config.artwork == 'default' ?
+              html`<div id='artwork' border='${config.artwork_border}'
+                style='background-image: url("${attributes.entity_picture}")'
+                state=${entity.state}>
+              </div>`
+            :
+              html`<div id='icon'><ha-icon icon='${config.icon}'></ha-icon></div>`
+            }
             <div class='info'>
-              <div id='playername' has-info='false'></div>
+              <div id='playername' has-info='${this._hasMediaInfo(entity)}'>${this._getAttribute(entity, 'friendly_name')}</div>
               <div id='mediainfo'>
-                <span id='mediatitle'></span>
-                <span id='mediaartist'></span>
+                <span id='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
+                <span id='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
               </div>
             </div>
           </div>
           <div class='state'>
-            <span id='unavailable'>${this._getLabel('state.default.unavailable', 'Unavailable')}</span>
-            <paper-icon-button id='power-button' icon='${this._icons["power"]}'></paper-icon-button>
+            ${entity.state == 'unavailable' ?
+              html`<span id='unavailable'>${this._getLabel('state.default.unavailable', 'Unavailable')}</span>`
+            :
+              html`<paper-icon-button id='power-button' icon='${this._icons["power"]}'
+                @click='${(e) => this._callService(e, "toggle")}'
+                ?color=${config.power_color && active}>
+              </paper-icon-button>`
+            }
           </div>
         </div>
-        <div id='mediacontrols' class='flex justify'>
-          <div>
-            <paper-icon-button id='mute-button' icon='${this._icons[`unmuted`]}'></paper-icon-button>
-          </div>
-          <paper-slider id='volume-slider' onclick='event.stopPropagation();'
-            ignore-bar-touch pin min='0' max='100' value='0' class='flex'>
-          </paper-slider>
-          <div class='flex'>
-            <paper-icon-button id='prev-button' icon='${this._icons["prev"]}'></paper-icon-button>
-            <paper-icon-button id='play-button' icon='${this._icons["paused"]}'></paper-icon-button>
-            <paper-icon-button id='next-button' icon='${this._icons["next"]}'></paper-icon-button>
-          </div>
-        </div>
-        ${this._renderTts()}
-      </ha-card>
-    `;
-
-    shadow.innerHTML = template;
-    this._setup();
-    this._update();
+        ${active ? this._renderMediaControls(entity) : html``}
+        ${config.show_tts ? this._renderTts() : html``}
+      </ha-card>`;
   }
 
-  _update() {
-    const shadow = this.shadowRoot;
-    const config = this._config;
-    const state = this._state;
+  _renderMediaControls(entity) {
+    const volumeSliderValue = entity.attributes.volume_level * 100;
+    const playing = entity.state == 'playing';
+    const muted = entity.attributes.is_volume_muted || false;
 
-    const playername = shadow.getElementById('playername');
-    const active = (state !== 'off' && state !== 'unavailable');
-    const muted = this._attributes.is_volume_muted || false;
-    const playing = state == 'playing';
-    const has_artwork = (this._attributes.entity_picture && this._attributes.entity_picture != '');
-
-    const powerButton = shadow.getElementById('power-button');
-    const artwork = shadow.getElementById('artwork');
-    const volumeSliderValue = this._attributes.volume_level * 100;
-    const volumeSlider = shadow.getElementById('volume-slider');
-
-    playername.innerHTML = this._getAttribute('friendly_name');
-    playername.setAttribute('has-info', this._hasMediaInfo());
-    shadow.getElementById('unavailable').style.display = state == 'unavailable' ? '' : 'none';
-    powerButton.style.display = state == 'unavailable' ? 'none' : '';
-    shadow.getElementById('mediacontrols').style.display = active ? '' : 'none';
-
-    artwork.style.display = (has_artwork && config.artwork == 'default') ? '' : 'none';
-    shadow.getElementById('icon').style.display = (has_artwork && config.artwork == 'default') ? 'none' : '';
-
-    // Configuration specific
-    if (config.power_color) powerButton.setAttribute('on', active)
-    if (config.show_tts) {
-      shadow.getElementById('tts').style.display = state == 'unavailable' ? 'none' : '';
-    }
-
-    const artworkCover = shadow.getElementById('artwork-cover')
-    if (has_artwork) {
-      if (config.artwork == 'cover') {
-        artworkCover.style.backgroundImage = `url(${this._attributes.entity_picture})`;
-        artworkCover.setAttribute('has-artwork', has_artwork);
-      } else {
-        artwork.setAttribute('state', state);
-        artwork.style.backgroundImage = `url(${this._attributes.entity_picture})`;
-      }
-    }
-    artworkCover.setAttribute('has-artwork', has_artwork);
-
-    shadow.getElementById('mediatitle').innerHTML = this._getAttribute('media_title');
-    shadow.getElementById('mediaartist').innerHTML = this._getAttribute('media_artist');
-
-    if (!active) return;
-
-    shadow.getElementById('mute-button').setAttribute('icon', this._icons.mute[muted]);
-
-    volumeSlider.setAttribute('value', volumeSliderValue);
-    muted ? volumeSlider.setAttribute('disabled', muted) : volumeSlider.removeAttribute('disabled');
-
-    shadow.getElementById('play-button').setAttribute('icon', this._icons.playing[state == 'playing']);
+    return html`
+      <div id='mediacontrols' class='flex justify'>
+        <div>
+          <paper-icon-button id='mute-button' icon='${this._icons.mute[muted]}'
+            @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
+          </paper-icon-button>
+        </div>
+        <paper-slider id='volume-slider' ?disabled=${muted}
+          @change='${(e) => this._handleVolumeChange(e)}'
+          @click='${(e) => this._handleVolumeChange(e)}'
+          ignore-bar-touch pin min='0' max='100' value='${volumeSliderValue}' class='flex'>
+        </paper-slider>
+        <div class='flex'>
+          <paper-icon-button id='prev-button' icon='${this._icons["prev"]}'
+            @click='${(e) => this._callService(e, "media_previous_track")}'>
+          </paper-icon-button>
+          <paper-icon-button id='play-button'
+            icon='${this._icons.playing[playing]}'
+            @click='${(e) => this._callService(e, "media_play_pause")}'>
+          </paper-icon-button>
+          <paper-icon-button id='next-button' icon='${this._icons["next"]}'
+            @click='${(e) => this._callService(e, "media_next_track")}'>
+          </paper-icon-button>
+        </div>
+      </div>`;
   }
 
   _renderTts() {
-    if (this._config.show_tts) {
-      return `
-        <div id='tts' class='flex justify'>
-          <paper-input id='tts-input'
-            no-label-float
-            placeholder='${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...'
-            onclick='event.stopPropagation();'>
-          </paper-input>
-          <div>
-            <paper-button id='tts-send'>SEND</paper-button>
-          </div>
-        </div>`;
-    }
-    return '';
-  }
-
-  _setup() {
-    const card = this.shadow.querySelector('ha-card');
-    card.header = this._config.title;
-
-    card.addEventListener('click', e => {
-      e.stopPropagation();
-      if (this._config.more_info) {
-        this._fire('hass-more-info', { entityId: this._config.entity });
-      };
-    });
-    const power = this.shadow.getElementById('power-button');
-    power.addEventListener('click', e => this._callService(e, 'toggle'));
-
-    this._setupMediaControls();
-    if (this._config.show_tts) this._setupTts();
-  }
-
-  _setupMediaControls() {
-    const shadow = this.shadowRoot;
-    const mute = shadow.getElementById('mute-button');
-    mute.addEventListener('click', e => this._callService(e, 'volume_mute', {
-      is_volume_muted: !this._attributes.is_volume_muted
-    }));
-
-    const slider = shadow.getElementById('volume-slider');
-    slider.addEventListener('change', e => this._handleVolumeChange(e));
-
-    const prev = shadow.getElementById('prev-button');
-    const next = shadow.getElementById('next-button');
-    const playPause = shadow.getElementById('play-button');
-    prev.addEventListener('click', e => this._callService(e, 'media_previous_track'));
-    next.addEventListener('click', e => this._callService(e, 'media_next_track'));
-    playPause.addEventListener('click', e => this._callService(e, 'media_play_pause'));
-  }
-
-  _setupTts() {
-    const shadow = this.shadowRoot;
-    const tts = shadow.getElementById('tts-send');
-    tts.addEventListener('click', e => {
-      e.stopPropagation();
-      const input = shadow.getElementById('tts-input');
-      let options = { message: input.value };
-      this._callService(e, this._config.show_tts + '_say' , options, 'tts');
-      input.value = '';
-    });
+    return html`
+      <div id='tts' class='flex justify'>
+        <paper-input id='tts-input'
+          no-label-float
+          placeholder='${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...'
+          @click='${(e) => e.stopPropagation()}'>
+        </paper-input>
+        <div>
+          <paper-button id='tts-send' @click='${(e) => this._handleTts(e)}'>SEND</paper-button>
+        </div>
+      </div>`;
   }
 
   _callService(e, service, options, component = 'media_player') {
     e.stopPropagation();
     options = (options === null || options === undefined) ? {} : options;
-    options.entity_id = options.entity_id || this._config.entity;
-    this._hass.callService(component, service, options);
+    options.entity_id = options.entity_id || this.config.entity;
+    this.hass.callService(component, service, options);
   }
 
   _handleVolumeChange(e) {
@@ -233,6 +166,14 @@ class MiniMediaPlayer extends HTMLElement {
     const volPercentage = parseFloat(e.target.value);
     const vol = volPercentage > 0 ? volPercentage / 100 : 0;
     this._callService(e, 'volume_set', { volume_level: vol })
+  }
+
+  _handleTts(e) {
+    e.stopPropagation();
+    const input = this.shadowRoot.querySelector('#tts paper-input');
+    let options = { message: input.value };
+    this._callService(e, this.config.show_tts + '_say' , options, 'tts');
+    input.value = '';
   }
 
   _fire(type, detail, options) {
@@ -249,29 +190,29 @@ class MiniMediaPlayer extends HTMLElement {
     return e;
   }
 
-  _hasMediaInfo() {
-    if (this._attributes.media_title && this._attributes.media_title !== '') return true;
-    if (this._attributes.media_artist && this._attributes.media_artist !== '') return true;
+  _hasMediaInfo(entity, attr) {
+    if (entity.attributes.media_title && entity.attributes.media_title !== '') return true;
+    if (entity.attributes.media_artist && entity.attributes.media_artist !== '') return true;
     return false;
   }
 
-  _hasAttribute(attr) {
-    if (this._attributes[attr] && this._attributes[attr] !== '') return true;
+  _hasAttribute(entity, attr) {
+    if (entity.ettributes[attr] && entity.ettributes[attr] !== '') return true;
     return false;
   }
 
-  _getAttribute(attr) {
-    return this._attributes[attr] || '';
+  _getAttribute(entity, attr) {
+    return entity.attributes[attr] || '';
   }
 
   _getLabel(label, fallback = 'unknown') {
-    const lang = this._hass.selectedLanguage || this._hass.language;
-    const resources = this._hass.resources[lang];
+    const lang = this.hass.selectedLanguage || this.hass.language;
+    const resources = this.hass.resources[lang];
     return (resources && resources[label] ? resources[label] : fallback);
   }
 
   _style() {
-    return `
+    return html`
       <style>
         ha-card {
           padding: 16px;
@@ -333,7 +274,7 @@ class MiniMediaPlayer extends HTMLElement {
           margin-left: 56px;
           position: relative;
         }
-        #power-button[on='true'] {
+        #power-button[color] {
           color: var(--accent-color);
         }
         #artwork, #icon {
