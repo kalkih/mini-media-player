@@ -54,8 +54,12 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       ${this._style()}
-      <ha-card hello='true' group="${config.group}" more-info=${config.more_info} has-title=${config.title !== ''} artwork=${config.artwork} has-artwork=${has_artwork}>
-        <div id='artwork-cover' style='background-image: url("${attributes.entity_picture}")'>
+      <ha-card hello='true' group="${config.group}"
+        more-info=${config.more_info} has-title=${config.title !== ''}
+        artwork=${config.artwork} has-artwork=${has_artwork}
+        @click='${(e) => config.more_info ? this._fire('hass-more-info', { entityId: config.entity }) : ''}'>
+        <div id='artwork-cover'
+          style='background-image: url("${attributes.entity_picture}")'>
         </div>
         <div class='flex justify'>
           <div>
