@@ -54,9 +54,8 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       ${this._style()}
-      <ha-card hello='true' group="${config.group}" more-info=${config.more_info} has-title=${config.title !== ''} artwork=${config.artwork} >
-        <div id='artwork-cover' style='background-image: url("${attributes.entity_picture}")'
-          has-artwork=${has_artwork}>
+      <ha-card hello='true' group="${config.group}" more-info=${config.more_info} has-title=${config.title !== ''} artwork=${config.artwork} has-artwork=${has_artwork}>
+        <div id='artwork-cover' style='background-image: url("${attributes.entity_picture}")'>
         </div>
         <div class='flex justify'>
           <div>
@@ -216,16 +215,16 @@ class MiniMediaPlayer extends LitElement {
         ha-card[has-title='true'] {
           padding-top: 0px;
         }
-        ha-card[artwork='cover'] #artwork-cover[has-artwork='true'] {
+        ha-card[artwork='cover'][has-artwork='true'] #artwork-cover {
           display: block;
         }
-        ha-card[artwork='cover'] paper-icon-button,
-        ha-card[artwork='cover'] ha-icon,
-        ha-card[artwork='cover'] .info,
-        ha-card[artwork='cover'] paper-button {
+        ha-card[artwork='cover'][has-artwork='true'] paper-icon-button,
+        ha-card[artwork='cover'][has-artwork='true'] ha-icon,
+        ha-card[artwork='cover'][has-artwork='true'] .info,
+        ha-card[artwork='cover'][has-artwork='true'] paper-button {
           color: #FFFFFF;
         }
-        ha-card[artwork='cover'] paper-input {
+        ha-card[artwork='cover'][has-artwork='true'] paper-input {
           --paper-input-container-color: #FFFFFF;
           --paper-input-container-input-color: #FFFFFF;
         }
