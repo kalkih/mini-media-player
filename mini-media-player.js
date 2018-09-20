@@ -43,28 +43,27 @@ class MiniMediaPlayer extends LitElement {
     this.config = config;
   }
 
-  render() {
-    const {hass, config} = this;
+  render({hass, config} = this) {
     const entity = hass.states[config.entity];
     const attributes = entity.attributes;
-    if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
-
     const active = (entity.state !== 'off' && entity.state !== 'unavailable');
     const has_artwork = (attributes.entity_picture && attributes.entity_picture != '');
 
+    if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
+
     return html`
       ${this._style()}
-      <ha-card hello='true' group="${config.group}"
+      <ha-card group=${config.group}
         more-info=${config.more_info} has-title=${config.title !== ''}
         artwork=${config.artwork} has-artwork=${has_artwork}
-        @click='${(e) => config.more_info ? this._fire('hass-more-info', { entityId: config.entity }) : ''}'>
+        @click='${(e) => this._handleMore()}'>
         <div id='artwork-cover'
           style='background-image: url("${attributes.entity_picture}")'>
         </div>
         <div class='flex justify'>
           <div>
             ${active && has_artwork && config.artwork == 'default' ?
-              html`<div id='artwork' border='${config.artwork_border}'
+              html`<div id='artwork' border=${config.artwork_border}
                 style='background-image: url("${attributes.entity_picture}")'
                 state=${entity.state}>
               </div>`
@@ -72,21 +71,26 @@ class MiniMediaPlayer extends LitElement {
               html`<div id='icon'><ha-icon icon='${config.icon}'></ha-icon></div>`
             }
             <div class='info'>
-              <div id='playername' has-info='${this._hasMediaInfo(entity)}'>${this._getAttribute(entity, 'friendly_name')}</div>
+              <div id='playername' has-info=${this._hasMediaInfo(entity)}>
+                ${this._getAttribute(entity, 'friendly_name')}
+              </div>
               <div id='mediainfo'>
                 <span id='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
                 <span id='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
               </div>
             </div>
           </div>
-          <div class='state'>
+          <div class='power-state'>
             ${entity.state == 'unavailable' ?
-              html`<span id='unavailable'>${this._getLabel('state.default.unavailable', 'Unavailable')}</span>`
+              html`<span id='unavailable'>
+                    ${this._getLabel('state.default.unavailable', 'Unavailable')}
+                  </span>`
             :
-              html`<paper-icon-button id='power-button' icon='${this._icons["power"]}'
-                @click='${(e) => this._callService(e, "toggle")}'
-                ?color=${config.power_color && active}>
-              </paper-icon-button>`
+              html`<paper-icon-button id='power-button'
+                    icon=${this._icons["power"]}
+                    @click='${(e) => this._callService(e, "toggle")}'
+                    ?color=${config.power_color && active}>
+                  </paper-icon-button>`
             }
           </div>
         </div>
@@ -103,24 +107,24 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div id='mediacontrols' class='flex justify'>
         <div>
-          <paper-icon-button id='mute-button' icon='${this._icons.mute[muted]}'
+          <paper-icon-button id='mute-button' icon=${this._icons.mute[muted]}
             @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
           </paper-icon-button>
         </div>
-        <paper-slider id='volume-slider' ?disabled=${muted}
+        <paper-slider id='volume-slider' class='flex' ?disabled=${muted}
           @change='${(e) => this._handleVolumeChange(e)}'
           @click='${(e) => this._handleVolumeChange(e)}'
-          ignore-bar-touch pin min='0' max='100' value='${volumeSliderValue}' class='flex'>
+          min='0' max='100' value=${volumeSliderValue} ignore-bar-touch pin >
         </paper-slider>
         <div class='flex'>
-          <paper-icon-button id='prev-button' icon='${this._icons["prev"]}'
+          <paper-icon-button id='prev-button' icon=${this._icons["prev"]}
             @click='${(e) => this._callService(e, "media_previous_track")}'>
           </paper-icon-button>
           <paper-icon-button id='play-button'
-            icon='${this._icons.playing[playing]}'
+            icon=${this._icons.playing[playing]}
             @click='${(e) => this._callService(e, "media_play_pause")}'>
           </paper-icon-button>
-          <paper-icon-button id='next-button' icon='${this._icons["next"]}'
+          <paper-icon-button id='next-button' icon=${this._icons["next"]}
             @click='${(e) => this._callService(e, "media_next_track")}'>
           </paper-icon-button>
         </div>
@@ -130,13 +134,14 @@ class MiniMediaPlayer extends LitElement {
   _renderTts() {
     return html`
       <div id='tts' class='flex justify'>
-        <paper-input id='tts-input'
-          no-label-float
-          placeholder='${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...'
+        <paper-input id='tts-input' no-label-float
+          placeholder=${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...
           @click='${(e) => e.stopPropagation()}'>
         </paper-input>
         <div>
-          <paper-button id='tts-send' @click='${(e) => this._handleTts(e)}'>SEND</paper-button>
+          <paper-button id='tts-send' @click='${(e) => this._handleTts(e)}'>
+            SEND
+          </paper-button>
         </div>
       </div>`;
   }
@@ -163,6 +168,11 @@ class MiniMediaPlayer extends LitElement {
     input.value = '';
   }
 
+  _handleMore({config} = this) {
+    if(config.more_info)
+      this._fire('hass-more-info', { entityId: config.entity });
+  }
+
   _fire(type, detail, options) {
     const node = this.shadowRoot;
     options = options || {};
@@ -178,8 +188,10 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _hasMediaInfo(entity, attr) {
-    if (entity.attributes.media_title && entity.attributes.media_title !== '') return true;
-    if (entity.attributes.media_artist && entity.attributes.media_artist !== '') return true;
+    if (entity.attributes.media_title && entity.attributes.media_title !== '')
+      return true;
+    if (entity.attributes.media_artist && entity.attributes.media_artist !== '')
+      return true;
     return false;
   }
 
@@ -284,7 +296,7 @@ class MiniMediaPlayer extends LitElement {
         #artwork[state='playing'] {
           border-color: var(--accent-color);
         }
-        #playername, .state {
+        #playername, .power-state {
           line-height: 40px;
         }
         #playername[has-info='true'] {
