@@ -43,7 +43,7 @@ resources:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?ver=0.4.1
+  - url: /local/mini-media-player.js?ver=0.5
     type: js
 ```
 

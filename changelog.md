@@ -1,3 +1,8 @@
+## v0.5
+- Fixed browser incompatibility
+- Fixed black buttons on black artwork cover -> white buttons
+- Implemented lit-html for quicker re-rendering.
+
 ## v0.4.1
 - Fixed bug where attributes did not update when device state changed to `off` or `unavailable`
 

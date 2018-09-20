@@ -1,3 +1,4 @@
+/* mini-media-player - version: v0.5 */
 import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.1/lit-element.js?module';
 
 class MiniMediaPlayer extends LitElement {
