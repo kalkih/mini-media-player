@@ -46,6 +46,9 @@ class MiniMediaPlayer extends LitElement {
 
   render({hass, config} = this) {
     const entity = hass.states[config.entity];
+    if (!entity) {
+      return;
+    }
     const attributes = entity.attributes;
     const active = (entity.state !== 'off' && entity.state !== 'unavailable');
     const has_artwork = (attributes.entity_picture && attributes.entity_picture != '');
