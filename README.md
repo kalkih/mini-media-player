@@ -17,7 +17,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 ```yaml
 resources:
   - url: /local/mini-media-player.js
-    type: js
+    type: module
 ```
 
 ### Install using git
@@ -33,7 +33,7 @@ git clone https://github.com/kalkih/lovelace-mini-media-player.git
 ```yaml
 resources:
   - url: /local/mini-media-player/mini-media-player.js
-    type: js
+    type: module
 ```
 
 ## Updating
@@ -44,7 +44,7 @@ resources:
 ```yaml
 resources:
   - url: /local/mini-media-player.js?ver=0.5
-    type: js
+    type: module
 ```
 
 If you went the `git clone` route, just run `git pull` from inside your `config/www/mini-media-player` directory, to get the latest version of the code.
