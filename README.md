@@ -72,14 +72,6 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the card background *(looks best for ungrouped cards)*.
 | volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume up/down buttons (useful for media players that doesn't support volume state).
 
-*`show_tts` requires v0.2 or later*
-
-*`artwork_border` requires v0.3 or later*
-
-*`power_color` & `artwork` requires v0.4 or later*
-
-*volume_stateless*
-
 ### Example usage
 
 #### Standalone card
