@@ -226,7 +226,7 @@ class MiniMediaPlayer extends LitElement {
           background: none;
           box-shadow: none;
         }
-        ha-card[group='true'][artwork='cover'] .info {
+        ha-card[group='true'][artwork='cover'][has-artwork='true'] .info {
           margin-top: 12px;
         }
         ha-card[more-info='true'] {
@@ -291,6 +291,9 @@ class MiniMediaPlayer extends LitElement {
           line-height: 40px;
           float: left;
         }
+        #icon {
+          color: var(--paper-item-icon-color, #44739e);
+        }
         #artwork[border='true'] {
           border: 2px solid var(--primary-text-color);
           box-sizing: border-box;
@@ -307,6 +310,9 @@ class MiniMediaPlayer extends LitElement {
           line-height: 20px;
         }
         #mediainfo {
+          color: var(--secondary-text-color);
+        }
+        ha-card[artwork='cover'] #mediainfo {
           color: var(--accent-color);
         }
         #mediaartist:before {
