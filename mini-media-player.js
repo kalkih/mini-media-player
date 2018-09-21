@@ -12,6 +12,9 @@ class MiniMediaPlayer extends LitElement {
       'prev': 'mdi:mdi:skip-backward',
       'next': 'mdi:mdi:skip-forward',
       'power': 'mdi:power',
+      'volume_mute': 'mdi:volume-off',
+      'volume_up': 'mdi:volume-high',
+      'volume_down': 'mdi:volume-medium',
       'mute': {
         true: 'mdi:volume-off',
         false: 'mdi:volume-high'
@@ -40,6 +43,7 @@ class MiniMediaPlayer extends LitElement {
     config.group = (config.group ? true : false);
     config.power_color = (config.power_color ? true : false);
     config.artwork = config.artwork || 'default';
+    config.volume_stateless = (config.volume_stateless ? true : false);
 
     this.config = config;
   }
@@ -105,22 +109,12 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderMediaControls(entity) {
-    const volumeSliderValue = entity.attributes.volume_level * 100;
     const playing = entity.state == 'playing';
     const muted = entity.attributes.is_volume_muted || false;
 
     return html`
       <div id='mediacontrols' class='flex justify'>
-        <div>
-          <paper-icon-button id='mute-button' icon=${this._icons.mute[muted]}
-            @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
-          </paper-icon-button>
-        </div>
-        <paper-slider id='volume-slider' class='flex' ?disabled=${muted}
-          @change='${(e) => this._handleVolumeChange(e)}'
-          @click='${(e) => this._handleVolumeChange(e)}'
-          min='0' max='100' value=${volumeSliderValue} ignore-bar-touch pin >
-        </paper-slider>
+        ${this._renderVolumeUpDownControls(entity)}
         <div class='flex'>
           <paper-icon-button id='prev-button' icon=${this._icons["prev"]}
             @click='${(e) => this._callService(e, "media_previous_track")}'>
@@ -134,6 +128,38 @@ class MiniMediaPlayer extends LitElement {
           </paper-icon-button>
         </div>
       </div>`;
+  }
+
+  _renderVolumeUpDownControls(entity) {
+    const muted = entity.attributes.is_volume_muted || false;
+    const volumeSliderValue = entity.attributes.volume_level * 100;
+
+    if (this.config.volume_stateless) {
+      return html`
+      <div>
+        <paper-icon-button id='mute-button' icon=${this._icons.volume_mute}
+          @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
+        </paper-icon-button>
+        <paper-icon-button id='volume-down-button' icon=${this._icons.volume_down}
+          @click='${(e) => this._callService(e, "volume_down")}'>
+        </paper-icon-button>
+        <paper-icon-button id='volume-up-button' icon=${this._icons.volume_up}
+          @click='${(e) => this._callService(e, "volume_up")}'>
+        </paper-icon-button>
+      </div>`;
+    } else {
+      return html`
+        <div>
+          <paper-icon-button id='mute-button' icon=${this._icons.mute[muted]}
+            @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
+          </paper-icon-button>
+        </div>
+        <paper-slider id='volume-slider' class='flex' ?disabled=${muted}
+          @change='${(e) => this._handleVolumeChange(e)}'
+          @click='${(e) => this._handleVolumeChange(e)}'
+          min='0' max='100' value=${volumeSliderValue} ignore-bar-touch pin >
+        </paper-slider>`;
+    }
   }
 
   _renderTts() {
