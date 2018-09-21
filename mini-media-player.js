@@ -57,8 +57,8 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       ${this._style()}
-      <ha-card group=${config.group}
-        more-info=${config.more_info} has-title=${config.title !== ''}
+      <ha-card group=${config.group} header=${this.config.title}
+        more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} has-artwork=${has_artwork}
         @click='${(e) => this._handleMore()}'>
         <div id='artwork-cover'
@@ -232,7 +232,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[more-info='true'] {
           cursor: pointer;
         }
-        ha-card[has-title='true'] {
+        ha-card[has-title] {
           padding-top: 0px;
         }
         ha-card[artwork='cover'][has-artwork='true'] #artwork-cover {
