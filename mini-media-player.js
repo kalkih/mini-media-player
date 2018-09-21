@@ -47,6 +47,7 @@ class MiniMediaPlayer extends LitElement {
     config.power_color = (config.power_color ? true : false);
     config.artwork = config.artwork || 'default';
     config.volume_stateless = (config.volume_stateless ? true : false);
+    config.hide_power = config.hide_power || false;
 
     this.config = config;
   }
@@ -94,19 +95,16 @@ class MiniMediaPlayer extends LitElement {
           </div>
           <div class='power-state'>
             ${entity.state == 'unavailable' ?
-              html`<span id='unavailable'>
-                    ${this._getLabel('state.default.unavailable', 'Unavailable')}
-                  </span>`
+              html`
+                <span id='unavailable'>
+                  ${this._getLabel('state.default.unavailable', 'Unavailable')}
+                </span>`
             :
               html`
-                  <div class='select flex'>
-                    ${config.show_source ? this._renderInput(entity) : html``}
-                    <paper-icon-button id='power-button'
-                      icon=${this._icons["power"]}
-                      @click='${(e) => this._callService(e, "toggle")}'
-                      ?color=${config.power_color && active}>
-                    </paper-icon-button>
-                  </div>`
+                <div class='select flex'>
+                  ${config.show_source ? this._renderSource(entity) : html``}
+                  ${!config.hide_power ? this._renderPower(active) : html``}
+                </div>`
             }
           </div>
         </div>
@@ -115,7 +113,16 @@ class MiniMediaPlayer extends LitElement {
       </ha-card>`;
   }
 
-  _renderInput(entity) {
+  _renderPower(active) {
+    return html`
+      <paper-icon-button id='power-button'
+        icon=${this._icons["power"]}
+        @click='${(e) => this._callService(e, "toggle")}'
+        ?color=${this.config.power_color && active}>
+      </paper-icon-button>`;
+  }
+
+  _renderSource(entity) {
     const sources = entity.attributes['source_list'] || false;
     const source = entity.attributes['source'] || '';
 
