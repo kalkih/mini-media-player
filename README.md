@@ -1,5 +1,5 @@
 # Lovelace Mini Media Player
-A minified version of the default lovelace media player card in [Home Assistant](https://github.com/home-assistant/home-assistant).
+A minimalistic lovelace media player card for [Home Assistant](https://github.com/home-assistant/home-assistant).
 
 Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t/custom-ui-mini-media-player/40135) and [custom-lovelace](https://github.com/ciotlosm/custom-lovelace).
 
@@ -37,7 +37,7 @@ resources:
 ```
 
 ## Updating
- **Important:** If you are updating from versions earlier versions than v0.5, make sure you change `- type: js` to `- type: module` in your reference to the card in your `ui-lovelace.ysml`.
+ **Important:** If you are updating from a version prior to v0.5, make sure you change `- type: js` to `- type: module` in your reference to the card in your `ui-lovelace.ysml`.
 
 - Find your `mini-media-player.js` file in `config/www` or wherever you ended up storing it.
 - Replace the file with the latest version of [mini-media-player.js](mini-media-player.js).
@@ -45,7 +45,7 @@ resources:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?ver=0.5
+  - url: /local/mini-media-player.js?ver=0.6
     type: module
 ```
 
@@ -57,25 +57,28 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 
 ### Options
 
-| Name | Type | Default | Description |
-|------|:----:|:-------:|-------------|
-| type | string | **required** | `custom:mini-media-player`
-| entity | string | **required** | An entity_id from an entity within the `media_player` domain.
-| title | string | optional | Set a card title.
-| name | string | optional | Override the entities friendly name.
-| icon | string | optional | Specify a custom icon from any of the available mdi icons.
-| group | boolean | false | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
-| more_info | boolean | true | Set to `false` to disable the "more info" dialog when clicking on the card.
-| show_tts | string | optional | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
-| artwork_border | boolean | false | Set to `true` to display a border around media artwork, border color changes depending on playing state.
-| power_color | boolean | false | Set to `true` to have the power button change color based on power on/off.
-| artwork | string | default | Set to `cover` to have artwork displayed as the card background *(looks best for ungrouped cards)*.
+| Name | Type | Default | Since | Description |
+|------|:----:|:-------:|:-----:|-------------|
+| type | string | **required** | v0.1 | `custom:mini-media-player`
+| entity | string | **required** | v0.1 | An entity_id from an entity within the `media_player` domain.
+| title | string | optional | v0.1 | Set a card title.
+| name | string | optional | v0.6 | Override the entities friendly name.
+| icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
+| group | boolean | false | v0.1 | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
+| more_info | boolean | true | v0.1 | Set to `false` to disable the "more info" dialog when clicking on the card.
+| show_tts | string | optional | v0.2 | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
+| artwork_border | boolean | false | v0.3 | Set to `true` to display a border around media artwork, border color changes depending on playing state.
+| power_color | boolean | false | v0.4 | Set to `true` to have the power button change color based on power on/off.
+| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the card background *(looks best for ungrouped cards)*.
+| volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume up/down buttons (useful for media players that doesn't support volume state).
 
 *`show_tts` requires v0.2 or later*
 
 *`artwork_border` requires v0.3 or later*
 
 *`power_color` & `artwork` requires v0.4 or later*
+
+*volume_stateless*
 
 ### Example usage
 

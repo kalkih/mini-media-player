@@ -1,3 +1,11 @@
+## v0.6
+- Added: volume button option `volume_stateless`, useful for players without volume state information #3
+- Added: `name` option to set/override the entities display name
+- Fixed: `title` option now works again
+- Fixed: issue with alignment of name when card is grouped and `artwork: cover` option is set #4
+- Fixed: icon color when using default theme #4
+- Changed media info text color to secondary text color
+
 ## v0.5
 - Fixed browser incompatibility
 - Fixed black buttons on black artwork cover -> white buttons
