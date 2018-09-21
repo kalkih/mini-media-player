@@ -37,6 +37,8 @@ resources:
 ```
 
 ## Updating
+ **Important:** If you are updating from versions earlier versions than v0.5, make sure you change `- type: js` to `- type: module` in your reference to the card in your `ui-lovelace.ysml`.
+
 - Find your `mini-media-player.js` file in `config/www` or wherever you ended up storing it.
 - Replace the file with the latest version of [mini-media-player.js](mini-media-player.js).
 - Add the new version number to the end of the cards reference url in your `ui-lovelace.yaml` like below.
@@ -60,6 +62,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | type | string | **required** | `custom:mini-media-player`
 | entity | string | **required** | An entity_id from an entity within the `media_player` domain.
 | title | string | optional | Set a card title.
+| name | string | optional | Override the entities friendly name.
 | icon | string | optional | Specify a custom icon from any of the available mdi icons.
 | group | boolean | false | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
 | more_info | boolean | true | Set to `false` to disable the "more info" dialog when clicking on the card.
