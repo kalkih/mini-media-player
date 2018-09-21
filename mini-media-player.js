@@ -18,7 +18,8 @@ class MiniMediaPlayer extends LitElement {
         true: 'mdi:volume-off',
         false: 'mdi:volume-high'
       },
-      'send': 'mdi:send'
+      'send': 'mdi:send',
+      'dropdown': 'mdi:chevron-down'
     }
   }
 
@@ -26,6 +27,8 @@ class MiniMediaPlayer extends LitElement {
     return {
       hass: Object,
       config: Object,
+
+      _source: String
     };
   }
 
@@ -38,6 +41,7 @@ class MiniMediaPlayer extends LitElement {
     config.icon = config.icon || false;
     config.more_info = (config.more_info !== false ? true : false);
     config.show_tts = config.show_tts || false;
+    config.show_source = config.show_source || false;
     config.artwork_border = (config.artwork_border ? true : false);
     config.group = (config.group ? true : false);
     config.power_color = (config.power_color ? true : false);
@@ -94,17 +98,40 @@ class MiniMediaPlayer extends LitElement {
                     ${this._getLabel('state.default.unavailable', 'Unavailable')}
                   </span>`
             :
-              html`<paper-icon-button id='power-button'
-                    icon=${this._icons["power"]}
-                    @click='${(e) => this._callService(e, "toggle")}'
-                    ?color=${config.power_color && active}>
-                  </paper-icon-button>`
+              html`
+                  <div class='select flex'>
+                    ${config.show_source ? this._renderInput(entity) : html``}
+                    <paper-icon-button id='power-button'
+                      icon=${this._icons["power"]}
+                      @click='${(e) => this._callService(e, "toggle")}'
+                      ?color=${config.power_color && active}>
+                    </paper-icon-button>
+                  </div>`
             }
           </div>
         </div>
         ${active ? this._renderMediaControls(entity) : html``}
         ${config.show_tts ? this._renderTts() : html``}
       </ha-card>`;
+  }
+
+  _renderInput(entity) {
+    const sources = entity.attributes['source_list'] || false;
+    const source = entity.attributes['source'] || '';
+
+    if (sources) {
+      const selected = sources.indexOf(source);
+      return html`
+        <span id='source' slot='dropdown-trigger'>${this._source || source}</span>
+        <paper-menu-button slot='dropdown-trigger'
+          @click='${(e) => e.stopPropagation()}'>
+          <paper-icon-button icon=${this._icons['dropdown']} slot='dropdown-trigger'></paper-icon-button>
+          <paper-listbox id='list' slot='dropdown-content' selected=${selected}
+            @click='${(e) => this._handleSource(e)}'>
+            ${sources.map(item => html`<paper-item value=${item}>${item}</paper-item>`)}
+          </paper-listbox>
+        </paper-menu-button>`;
+    }
   }
 
   _renderMediaControls(entity) {
@@ -202,7 +229,7 @@ class MiniMediaPlayer extends LitElement {
   _handleTts(e) {
     e.stopPropagation();
     const input = this.shadowRoot.querySelector('#tts paper-input');
-    let options = { message: input.value };
+    const options = { message: input.value };
     this._callService(e, this.config.show_tts + '_say' , options, 'tts');
     input.value = '';
   }
@@ -210,6 +237,14 @@ class MiniMediaPlayer extends LitElement {
   _handleMore({config} = this) {
     if(config.more_info)
       this._fire('hass-more-info', { entityId: config.entity });
+  }
+
+  _handleSource(e) {
+    e.stopPropagation();
+    const source = e.target.getAttribute('value');
+    const options = { 'source': source };
+    this._callService(e, 'select_source' , options);
+    this._source = source;
   }
 
   _fire(type, detail, options) {
@@ -374,6 +409,25 @@ class MiniMediaPlayer extends LitElement {
         }
         paper-input[focused] {
           opacity: 1;
+        }
+        paper-menu-button {
+          padding: 0;
+        }
+        paper-menu-button paper-icon-button {
+          height: 36px;
+          width: 36px;
+        }
+        .select {
+          padding-left: 10px;
+        }
+        .select span {
+          position: relative;
+          display: block;
+          max-width: 60px;
+          width: auto;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       </style>
     `;
