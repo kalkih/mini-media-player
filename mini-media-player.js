@@ -9,8 +9,8 @@ class MiniMediaPlayer extends LitElement {
         true: 'mdi:pause',
         false: 'mdi:play'
       },
-      'prev': 'mdi:mdi:skip-backward',
-      'next': 'mdi:mdi:skip-forward',
+      'prev': 'mdi:mdi:skip-previous',
+      'next': 'mdi:mdi:skip-next',
       'power': 'mdi:power',
       'volume_up': 'mdi:volume-high',
       'volume_down': 'mdi:volume-medium',
