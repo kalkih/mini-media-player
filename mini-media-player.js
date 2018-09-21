@@ -49,6 +49,7 @@ class MiniMediaPlayer extends LitElement {
     if (!entity) {
       return;
     }
+    const name = config.name || this._getAttribute(entity, 'friendly_name')
     const attributes = entity.attributes;
     const active = (entity.state !== 'off' && entity.state !== 'unavailable');
     const has_artwork = (attributes.entity_picture && attributes.entity_picture != '');
@@ -76,7 +77,7 @@ class MiniMediaPlayer extends LitElement {
             }
             <div class='info'>
               <div id='playername' has-info=${this._hasMediaInfo(entity)}>
-                ${this._getAttribute(entity, 'friendly_name')}
+                ${name}
               </div>
               <div id='mediainfo'>
                 <span id='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
