@@ -78,13 +78,14 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       ${this._style()}
-      <ha-card group=${config.group} header=${this.config.title}
+      <ha-card group=${config.group}
         more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} has-artwork=${has_artwork}
         @click='${(e) => this._handleMore()}'>
         <div id='artwork-cover'
           style='background-image: url("${attributes.entity_picture}")'>
         </div>
+        <header>${config.title}</header>
         <div class='flex justify'>
           <div>
             ${active && has_artwork && config.artwork == 'default' ?
@@ -312,8 +313,20 @@ class MiniMediaPlayer extends LitElement {
           padding: 16px;
           position: relative;
         }
-        ha-card[has-title] #artwork-cover {
-          margin-top: 70px;
+        ha-card header {
+          display: none;
+        }
+        ha-card[has-title] header {
+          display: block;
+          position: relative;
+          font-size: var(--paper-font-headline_-_font-size);
+          font-weight: var(--paper-font-headline_-_font-weight);
+          letter-spacing: var(--paper-font-headline_-_letter-spacing);
+          line-height: var(--paper-font-headline_-_line-height);
+          padding: 24px 16px 16px;
+        }
+        ha-card[has-title] {
+          padding-top: 0px;
         }
         ha-card[group='true'] {
           padding: 0;
@@ -321,13 +334,10 @@ class MiniMediaPlayer extends LitElement {
           box-shadow: none;
         }
         ha-card[group='true'][artwork='cover'][has-artwork='true'] .info {
-          margin-top: 12px;
+          margin-top: 10px;
         }
         ha-card[more-info='true'] {
           cursor: pointer;
-        }
-        ha-card[has-title] {
-          padding-top: 0px;
         }
         ha-card[artwork='cover'][has-artwork='true'] #artwork-cover {
           display: block;
