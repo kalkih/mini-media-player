@@ -25,11 +25,20 @@ class MiniMediaPlayer extends LitElement {
 
   static get properties() {
     return {
-      hass: Object,
+      _hass: Object,
       config: Object,
+      entity: Object,
 
-      _source: String
+      source: String
     };
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    const entity = hass.states[this.config.entity]
+    if (this.entity !== entity) {
+      this.entity = entity;
+    }
   }
 
   setConfig(config) {
@@ -52,11 +61,14 @@ class MiniMediaPlayer extends LitElement {
     this.config = config;
   }
 
-  render({hass, config} = this) {
-    const entity = hass.states[config.entity];
-    if (!entity) {
-      return;
-    }
+  shouldUpdate(changedProps) {
+    const entity = changedProps.has('entity') || changedProps.has('source');
+    const initial = changedProps.get('_hass') == undefined;
+    if (initial || entity) return true;
+  }
+
+  render({_hass, config, entity} = this) {
+    if (!entity) return;
     const name = config.name || this._getAttribute(entity, 'friendly_name')
     const attributes = entity.attributes;
     const active = (entity.state !== 'off' && entity.state !== 'unavailable');
@@ -129,7 +141,9 @@ class MiniMediaPlayer extends LitElement {
     if (sources) {
       const selected = sources.indexOf(source);
       return html`
-        <span id='source' slot='dropdown-trigger'>${this._source || source}</span>
+        <span id='source'>
+          ${this.source || source}
+        </span>
         <paper-menu-button slot='dropdown-trigger'
           @click='${(e) => e.stopPropagation()}'>
           <paper-icon-button icon=${this._icons['dropdown']} slot='dropdown-trigger'></paper-icon-button>
@@ -223,7 +237,7 @@ class MiniMediaPlayer extends LitElement {
     e.stopPropagation();
     options = (options === null || options === undefined) ? {} : options;
     options.entity_id = options.entity_id || this.config.entity;
-    this.hass.callService(component, service, options);
+    this._hass.callService(component, service, options);
   }
 
   _handleVolumeChange(e) {
@@ -251,7 +265,7 @@ class MiniMediaPlayer extends LitElement {
     const source = e.target.getAttribute('value');
     const options = { 'source': source };
     this._callService(e, 'select_source' , options);
-    this._source = source;
+    this.source = source;
   }
 
   _fire(type, detail, options) {
@@ -286,8 +300,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _getLabel(label, fallback = 'unknown') {
-    const lang = this.hass.selectedLanguage || this.hass.language;
-    const resources = this.hass.resources[lang];
+    const lang = this._hass.selectedLanguage || this._hass.language;
+    const resources = this._hass.resources[lang];
     return (resources && resources[label] ? resources[label] : fallback);
   }
 
