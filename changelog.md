@@ -1,6 +1,8 @@
 ## v0.7
 - Added: `show_source` option to display source and source select dropdown
 - Added: `hide_power` option to hide power button
+- Added: check before render to only render if necessary
+- Changed: previous and next buttons to the proper ones `mdi:forward` & `mdi:backward` to `mdi:next` & `mdi:previous`
 - Fixed: issue with `artwork: cover` displaying over optional card title
 
 ## v0.6

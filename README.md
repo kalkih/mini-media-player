@@ -45,7 +45,7 @@ resources:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?ver=0.6
+  - url: /local/mini-media-player.js?ver=0.7
     type: module
 ```
 
@@ -71,7 +71,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*.
 | artwork_border | boolean | false | v0.3 | Set to `true` to display a border around media artwork, border color changes depending on playing state.
 | power_color | boolean | false | v0.4 | Set to `true` to have the power button change color based on power on/off.
-| hide_poweer | boolean | false | v0.7 | Set to `true` to hide the power button.
+| hide_power | boolean | false | v0.7 | Set to `true` to hide the power button.
 | volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume up/down buttons (useful for media players that doesn't support volume state).
 
 ### Example usage
