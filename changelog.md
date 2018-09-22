@@ -1,3 +1,8 @@
+## v0.7
+- Added: `show_source` option to display source and source select dropdown
+- Added: `hide_power` option to hide power button
+- Fixed: issue with `artwork: cover` displaying over optional card title
+
 ## v0.6
 - Added: volume button option `volume_stateless`, useful for players without volume state information #3
 - Added: `name` option to set/override the entities display name

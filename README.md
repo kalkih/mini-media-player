@@ -67,9 +67,11 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | group | boolean | false | v0.1 | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
 | more_info | boolean | true | v0.1 | Set to `false` to disable the "more info" dialog when clicking on the card.
 | show_tts | string | optional | v0.2 | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
+| show_source | boolean | optional | v0.7 | Set this option to `true` to display the current source and a source select dropdown.
+| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*.
 | artwork_border | boolean | false | v0.3 | Set to `true` to display a border around media artwork, border color changes depending on playing state.
 | power_color | boolean | false | v0.4 | Set to `true` to have the power button change color based on power on/off.
-| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the card background *(looks best for ungrouped cards)*.
+| hide_poweer | boolean | false | v0.7 | Set to `true` to hide the power button.
 | volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume up/down buttons (useful for media players that doesn't support volume state).
 
 ### Example usage
@@ -81,6 +83,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
   icon: 'mdi:cast'
   artwork_border: true
   power_color: true
+  show_source: true
 ```
 
 #### Grouping several
