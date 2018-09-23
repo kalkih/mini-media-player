@@ -71,16 +71,16 @@ class MiniMediaPlayer extends LitElement {
     if (!entity) return;
     const name = config.name || this._getAttribute(entity, 'friendly_name')
     const attributes = entity.attributes;
-    const active = (entity.state !== 'off' && entity.state !== 'unavailable');
-    const has_artwork = (attributes.entity_picture && attributes.entity_picture != '');
+    const active = (entity.state !== 'off' && entity.state !== 'unavailable') || false;
+    const has_artwork = (attributes.entity_picture && attributes.entity_picture != '') || false;
 
     if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
 
     return html`
       ${this._style()}
-      <ha-card group=${config.group}
+      <ha-card ?group=${config.group}
         more-info=${config.more_info} ?has-title=${config.title !== ''}
-        artwork=${config.artwork} has-artwork=${has_artwork}
+        artwork=${config.artwork} ?has-artwork=${has_artwork}
         @click='${(e) => this._handleMore()}'>
         <div id='artwork-cover'
           style='background-image: url("${attributes.entity_picture}")'>
@@ -142,12 +142,14 @@ class MiniMediaPlayer extends LitElement {
     if (sources) {
       const selected = sources.indexOf(source);
       return html`
-        <span id='source'>
-          ${this.source || source}
-        </span>
-        <paper-menu-button slot='dropdown-trigger'
+
+        <paper-menu-button slot='dropdown-trigger' .horizontalAlign=${'right'}
+          .verticalAlign=${'top'} .verticalOffset=${40}
           @click='${(e) => e.stopPropagation()}'>
-          <paper-icon-button icon=${this._icons['dropdown']} slot='dropdown-trigger'></paper-icon-button>
+          <paper-button slot='dropdown-trigger'>
+            <span id='source'>${this.source || source}</span>
+            <iron-icon icon=${this._icons['dropdown']}></iron-icon>
+          </paper-button>
           <paper-listbox id='list' slot='dropdown-content' selected=${selected}
             @click='${(e) => this._handleSource(e)}'>
             ${sources.map(item => html`<paper-item value=${item}>${item}</paper-item>`)}
@@ -328,29 +330,29 @@ class MiniMediaPlayer extends LitElement {
         ha-card[has-title] {
           padding-top: 0px;
         }
-        ha-card[group='true'] {
+        ha-card[group] {
           padding: 0;
           background: none;
           box-shadow: none;
         }
-        ha-card[group='true'][artwork='cover'][has-artwork='true'] .info {
+        ha-card[group][artwork='cover'][has-artwork] .info {
           margin-top: 10px;
         }
         ha-card[more-info='true'] {
           cursor: pointer;
         }
-        ha-card[artwork='cover'][has-artwork='true'] #artwork-cover {
+        ha-card[artwork='cover'][has-artwork] #artwork-cover {
           display: block;
         }
-        ha-card[artwork='cover'][has-artwork='true'] paper-icon-button,
-        ha-card[artwork='cover'][has-artwork='true'] ha-icon,
-        ha-card[artwork='cover'][has-artwork='true'] .info,
-        ha-card[artwork='cover'][has-artwork='true'] paper-button,
-        ha-card[artwork='cover'][has-artwork='true'] header,
-        ha-card[artwork='cover'][has-artwork='true'] .select span {
+        ha-card[artwork='cover'][has-artwork] paper-icon-button,
+        ha-card[artwork='cover'][has-artwork] ha-icon,
+        ha-card[artwork='cover'][has-artwork] .info,
+        ha-card[artwork='cover'][has-artwork] paper-button,
+        ha-card[artwork='cover'][has-artwork] header,
+        ha-card[artwork='cover'][has-artwork] .select span {
           color: #FFFFFF;
         }
-        ha-card[artwork='cover'][has-artwork='true'] paper-input {
+        ha-card[artwork='cover'][has-artwork] paper-input {
           --paper-input-container-color: #FFFFFF;
           --paper-input-container-input-color: #FFFFFF;
         }
@@ -420,11 +422,12 @@ class MiniMediaPlayer extends LitElement {
         paper-button,
         .select span {
           color: var(--primary-text-color);
+          position: relative;
         }
         #mediainfo {
           color: var(--secondary-text-color);
         }
-        ha-card[artwork='cover'][has-artwork='true'] #mediainfo,
+        ha-card[artwork='cover'][has-artwork] #mediainfo,
         #power-button[color] {
           color: var(--accent-color);
         }
@@ -450,9 +453,11 @@ class MiniMediaPlayer extends LitElement {
         paper-menu-button {
           padding: 0;
         }
-        paper-menu-button paper-icon-button {
-          height: 36px;
-          width: 36px;
+        paper-menu-button paper-button {
+          margin: 0;
+          height: 40px;
+          line-height: 20px;
+          text-transform: initial;
         }
         .select {
           padding-left: 10px;
