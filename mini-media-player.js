@@ -345,7 +345,9 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork='cover'][has-artwork='true'] paper-icon-button,
         ha-card[artwork='cover'][has-artwork='true'] ha-icon,
         ha-card[artwork='cover'][has-artwork='true'] .info,
-        ha-card[artwork='cover'][has-artwork='true'] paper-button {
+        ha-card[artwork='cover'][has-artwork='true'] paper-button,
+        ha-card[artwork='cover'][has-artwork='true'] header,
+        ha-card[artwork='cover'][has-artwork='true'] .select span {
           color: #FFFFFF;
         }
         ha-card[artwork='cover'][has-artwork='true'] paper-input {
@@ -384,9 +386,6 @@ class MiniMediaPlayer extends LitElement {
           margin-left: 56px;
           position: relative;
         }
-        #power-button[color] {
-          color: var(--accent-color);
-        }
         #artwork, #icon {
           height: 40px;
           width: 40px;
@@ -397,9 +396,6 @@ class MiniMediaPlayer extends LitElement {
           text-align: center;
           line-height: 40px;
           float: left;
-        }
-        #icon {
-          color: var(--paper-item-icon-color, #44739e);
         }
         #artwork[border='true'] {
           border: 2px solid var(--primary-text-color);
@@ -416,10 +412,20 @@ class MiniMediaPlayer extends LitElement {
         #playername[has-info='true'] {
           line-height: 20px;
         }
+        #icon {
+          color: var(--paper-item-icon-color, #44739e);
+        }
+        #player-name,
+        paper-icon-button,
+        paper-button,
+        .select span {
+          color: var(--primary-text-color);
+        }
         #mediainfo {
           color: var(--secondary-text-color);
         }
-        ha-card[artwork='cover'] #mediainfo {
+        ha-card[artwork='cover'][has-artwork='true'] #mediainfo,
+        #power-button[color] {
           color: var(--accent-color);
         }
         #mediaartist:before {
@@ -432,9 +438,6 @@ class MiniMediaPlayer extends LitElement {
           flex: 1;
           -webkit-flex: 1;
           cursor: text;
-        }
-        paper-button {
-          color: var(--primary-text-color);
         }
         paper-input {
           opacity: .75;
