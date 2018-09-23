@@ -271,8 +271,11 @@ class MiniMediaPlayer extends LitElement {
     this.source = source;
   }
 
+  EventTarget() {
+    this.listeners = {};
+  }
+
   _fire(type, detail, options) {
-    const node = this.shadowRoot;
     options = options || {};
     detail = (detail === null || detail === undefined) ? {} : detail;
     const e = new Event(type, {
@@ -281,7 +284,7 @@ class MiniMediaPlayer extends LitElement {
       composed: options.composed === undefined ? true : options.composed
     });
     e.detail = detail;
-    node.dispatchEvent(e);
+    this.dispatchEvent(e);
     return e;
   }
 
