@@ -58,7 +58,7 @@ class MiniMediaPlayer extends LitElement {
     config.volume_stateless = (config.volume_stateless ? true : false);
     config.hide_power = (config.hide_power ? true : false);
     config.hide_controls = (config.hide_controls ? true : false);
-    //config.hide_volume = (config.hide_volume ? true : false);
+    config.hide_volume = (config.hide_volume ? true : false);
 
     this.config = config;
   }
@@ -75,7 +75,8 @@ class MiniMediaPlayer extends LitElement {
     const attributes = entity.attributes;
     const active = (entity.state !== 'off' && entity.state !== 'unavailable') || false;
     const has_artwork = (attributes.entity_picture && attributes.entity_picture != '') || false;
-    const hide_controls = (config.hide_controls || config.hide_volume) || false
+    const hide_controls = (config.hide_controls || config.hide_volume) || false;
+    const short = (hide_controls || config.short_text)
 
     if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
 
@@ -89,8 +90,8 @@ class MiniMediaPlayer extends LitElement {
           style='background-image: url("${attributes.entity_picture}")'>
         </div>
         <header>${config.title}</header>
-        <div class='flex'>
-          <div>
+        <div class='entity flex'>
+          <div class='player'>
             ${active && has_artwork && config.artwork == 'default' ?
               html`<div id='artwork' border=${config.artwork_border}
                 style='background-image: url("${attributes.entity_picture}")'
@@ -99,11 +100,11 @@ class MiniMediaPlayer extends LitElement {
             :
               html`<div id='icon'><ha-icon icon='${config.icon}'></ha-icon></div>`
             }
-            <div class='info'>
+            <div class='info' ?short=${short}>
               <div id='playername' has-info=${this._hasMediaInfo(entity)}>
                 ${name}
               </div>
-              <div id='mediainfo' ?short=${hide_controls}>
+              <div id='mediainfo' ?short=${short}>
                 <span id='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
                 <span id='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
               </div>
@@ -118,8 +119,9 @@ class MiniMediaPlayer extends LitElement {
             :
               html`
                 <div class='select flex'>
-                  ${config.hide_controls ? this._renderVolSlider(entity) : html``}
+                  ${active && config.hide_controls && !config.hide_volume ? this._renderVolSlider(entity) : html``}
                   ${config.show_source ? this._renderSource(entity) : html``}
+                  ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
                   ${!config.hide_power ? this._renderPower(active) : html``}
                 </div>`
             }
@@ -162,7 +164,6 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderControlRow(entity) {
-
     return html`
       <div id='mediacontrols' class='flex justify flex-wrap' ?wrap=${this.config.volume_stateless}>
         ${this._renderVolControls(entity)}
@@ -405,6 +406,10 @@ class MiniMediaPlayer extends LitElement {
           margin-left: 56px;
           position: relative;
         }
+        .info[short] {
+          max-height: 40px;
+          overflow: hidden;
+        }
         #artwork, #icon {
           height: 40px;
           width: 40px;
@@ -487,7 +492,7 @@ class MiniMediaPlayer extends LitElement {
           height: 40px;
         }
         paper-slider {
-          min-width: 100px;
+          min-width: 80px;
           max-width: 200px;
           width: 100%;
         }
