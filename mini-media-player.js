@@ -56,7 +56,9 @@ class MiniMediaPlayer extends LitElement {
     config.power_color = (config.power_color ? true : false);
     config.artwork = config.artwork || 'default';
     config.volume_stateless = (config.volume_stateless ? true : false);
-    config.hide_power = config.hide_power || false;
+    config.hide_power = (config.hide_power ? true : false);
+    config.hide_controls = (config.hide_controls ? true : false);
+    //config.hide_volume = (config.hide_volume ? true : false);
 
     this.config = config;
   }
@@ -73,6 +75,7 @@ class MiniMediaPlayer extends LitElement {
     const attributes = entity.attributes;
     const active = (entity.state !== 'off' && entity.state !== 'unavailable') || false;
     const has_artwork = (attributes.entity_picture && attributes.entity_picture != '') || false;
+    const hide_controls = (config.hide_controls || config.hide_volume) || false
 
     if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
 
@@ -86,7 +89,7 @@ class MiniMediaPlayer extends LitElement {
           style='background-image: url("${attributes.entity_picture}")'>
         </div>
         <header>${config.title}</header>
-        <div class='flex justify'>
+        <div class='flex'>
           <div>
             ${active && has_artwork && config.artwork == 'default' ?
               html`<div id='artwork' border=${config.artwork_border}
@@ -100,13 +103,13 @@ class MiniMediaPlayer extends LitElement {
               <div id='playername' has-info=${this._hasMediaInfo(entity)}>
                 ${name}
               </div>
-              <div id='mediainfo'>
+              <div id='mediainfo' ?short=${hide_controls}>
                 <span id='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
                 <span id='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
               </div>
             </div>
           </div>
-          <div class='power-state'>
+          <div class='power-state flex'>
             ${entity.state == 'unavailable' ?
               html`
                 <span id='unavailable'>
@@ -115,13 +118,14 @@ class MiniMediaPlayer extends LitElement {
             :
               html`
                 <div class='select flex'>
+                  ${config.hide_controls ? this._renderVolSlider(entity) : html``}
                   ${config.show_source ? this._renderSource(entity) : html``}
                   ${!config.hide_power ? this._renderPower(active) : html``}
                 </div>`
             }
           </div>
         </div>
-        ${active ? this._renderMediaControls(entity) : html``}
+        ${active && !hide_controls ? this._renderControlRow(entity) : html``}
         ${config.show_tts ? this._renderTts() : html``}
       </ha-card>`;
   }
@@ -142,7 +146,6 @@ class MiniMediaPlayer extends LitElement {
     if (sources) {
       const selected = sources.indexOf(source);
       return html`
-
         <paper-menu-button slot='dropdown-trigger' .horizontalAlign=${'right'}
           .verticalAlign=${'top'} .verticalOffset=${40}
           @click='${(e) => e.stopPropagation()}'>
@@ -158,46 +161,57 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
-  _renderMediaControls(entity) {
-    const playing = entity.state == 'playing';
+  _renderControlRow(entity) {
 
     return html`
       <div id='mediacontrols' class='flex justify flex-wrap' ?wrap=${this.config.volume_stateless}>
         ${this._renderVolControls(entity)}
-        <div class='flex'>
-          <paper-icon-button id='prev-button' icon=${this._icons["prev"]}
-            @click='${(e) => this._callService(e, "media_previous_track")}'>
-          </paper-icon-button>
-          <paper-icon-button id='play-button'
-            icon=${this._icons.playing[playing]}
-            @click='${(e) => this._callService(e, "media_play_pause")}'>
-          </paper-icon-button>
-          <paper-icon-button id='next-button' icon=${this._icons["next"]}
-            @click='${(e) => this._callService(e, "media_next_track")}'>
-          </paper-icon-button>
-        </div>
+        ${this._renderMediaControls(entity)}
+      </div>`;
+  }
+
+  _renderMediaControls(entity) {
+    const playing = entity.state == 'playing';
+    return html`
+      <div class='flex'>
+        <paper-icon-button id='prev-button' icon=${this._icons["prev"]}
+          @click='${(e) => this._callService(e, "media_previous_track")}'>
+        </paper-icon-button>
+        <paper-icon-button id='play-button'
+          icon=${this._icons.playing[playing]}
+          @click='${(e) => this._callService(e, "media_play_pause")}'>
+        </paper-icon-button>
+        <paper-icon-button id='next-button' icon=${this._icons["next"]}
+          @click='${(e) => this._callService(e, "media_next_track")}'>
+        </paper-icon-button>
       </div>`;
   }
 
   _renderVolControls(entity) {
+    const muted = entity.attributes.is_volume_muted || false;
     if (this.config.volume_stateless) {
       return this._renderVolButtons(entity);
     } else {
-      return this._renderVolSlider(entity);
+      return html`
+        ${this._renderMuteButton(muted)}
+        ${this._renderVolSlider(entity, muted)}`;
     }
   }
 
-  _renderVolSlider(entity) {
-    const muted = entity.attributes.is_volume_muted || false;
-    const volumeSliderValue = entity.attributes.volume_level * 100;
-
+  _renderMuteButton(muted) {
     return html`
       <div>
         <paper-icon-button id='mute-button' icon=${this._icons.mute[muted]}
           @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
         </paper-icon-button>
-      </div>
-      <paper-slider id='volume-slider' class='flex' ?disabled=${muted}
+      </div>`;
+  }
+
+  _renderVolSlider(entity, muted = false) {
+    const volumeSliderValue = entity.attributes.volume_level * 100;
+
+    return html`
+      <paper-slider id='volume-slider' ?disabled=${muted}
         @change='${(e) => this._handleVolumeChange(e)}'
         @click='${(e) => this._handleVolumeChange(e)}'
         min='0' max='100' value=${volumeSliderValue} ignore-bar-touch pin >
@@ -430,6 +444,15 @@ class MiniMediaPlayer extends LitElement {
         #mediainfo {
           color: var(--secondary-text-color);
         }
+        #mediainfo[short] {
+          display: block;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          max-height: 1.4rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
         ha-card[artwork='cover'][has-artwork] #mediainfo,
         #power-button[color] {
           color: var(--accent-color);
@@ -444,6 +467,29 @@ class MiniMediaPlayer extends LitElement {
           flex: 1;
           -webkit-flex: 1;
           cursor: text;
+        }
+        .power-state {
+          padding-left: 10px;
+        }
+        .power-state,
+        .select {
+          width: auto;
+          margin-right: 0;
+          margin-left: auto;
+          justify-content: flex-end;
+        }
+        .power-state,
+        .select,
+        .power-state paper-slider {
+          flex: 1;
+        }
+        .power-state paper-slider {
+          height: 40px;
+        }
+        paper-slider {
+          min-width: 100px;
+          max-width: 200px;
+          width: 100%;
         }
         paper-input {
           opacity: .75;
@@ -462,10 +508,7 @@ class MiniMediaPlayer extends LitElement {
           line-height: 20px;
           text-transform: initial;
         }
-        .select {
-          padding-left: 10px;
-        }
-        .select span {
+        paper-menu-button span {
           position: relative;
           display: block;
           max-width: 60px;
