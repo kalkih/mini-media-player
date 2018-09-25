@@ -49,7 +49,7 @@ class MiniMediaPlayer extends LitElement {
     config.title = config.title || '';
     config.icon = config.icon || false;
     config.more_info = (config.more_info !== false ? true : false);
-    config.show_tts = config.show_tts || false;
+    config.show_tts = (config.show_tts ? true : false);
     config.show_source = config.show_source || false;
     config.artwork_border = (config.artwork_border ? true : false);
     config.group = (config.group ? true : false);
@@ -59,7 +59,8 @@ class MiniMediaPlayer extends LitElement {
     config.hide_power = (config.hide_power ? true : false);
     config.hide_controls = (config.hide_controls ? true : false);
     config.hide_volume = (config.hide_volume ? true : false);
-    config.short_info = (config.short_info ? true : false);
+    config.scroll_info = (config.scroll_info ? true : false);
+    config.short_info = (config.short_info || config.scroll_info ? true : false);
 
     this.config = config;
   }
@@ -70,6 +71,12 @@ class MiniMediaPlayer extends LitElement {
     if (initial || entity) return true;
   }
 
+  updated() {
+    if (this.config.scroll_info) {
+      this._hasOverflow();
+    }
+  }
+
   render({_hass, config, entity} = this) {
     if (!entity) return;
     const name = config.name || this._getAttribute(entity, 'friendly_name')
@@ -78,7 +85,6 @@ class MiniMediaPlayer extends LitElement {
     const has_artwork = (attributes.entity_picture && attributes.entity_picture != '') || false;
     const hide_controls = (config.hide_controls || config.hide_volume) || false;
     const short = (hide_controls || config.short_info)
-    console.log(config.short_info);
     if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
 
     return html`
@@ -105,10 +111,17 @@ class MiniMediaPlayer extends LitElement {
               <div id='playername' has-info=${this._hasMediaInfo(entity)}>
                 ${name}
               </div>
-              <div id='mediainfo' ?short=${short}>
-                <span id='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
-                <span id='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
-              </div>
+                <div id='mediainfo' ?short=${short}>
+                  ${config.scroll_info ? html`
+                    <div class='marquee'>
+                      <span class='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
+                      <span class='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
+                    </div>` : '' }
+                  <div>
+                    <span class='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
+                    <span class='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
+                  </div>
+                </div>
             </div>
           </div>
           <div class='power-state flex'>
@@ -131,6 +144,12 @@ class MiniMediaPlayer extends LitElement {
         ${active && !hide_controls ? this._renderControlRow(entity) : html``}
         ${config.show_tts ? this._renderTts() : html``}
       </ha-card>`;
+  }
+
+  _hasOverflow() {
+    const element = this.shadowRoot.querySelector('.marquee');
+    const status = element.clientWidth > (element.parentNode.clientWidth) ;
+    element.parentNode.setAttribute('scroll', status);
   }
 
   _renderPower(active) {
@@ -451,6 +470,7 @@ class MiniMediaPlayer extends LitElement {
           color: var(--secondary-text-color);
         }
         #mediainfo[short] {
+          word-wrap: break-word;
           display: block;
           display: -webkit-box;
           -webkit-line-clamp: 1;
@@ -459,14 +479,26 @@ class MiniMediaPlayer extends LitElement {
           overflow: hidden;
           text-overflow: ellipsis;
         }
+        #mediainfo[scroll='true'] div {
+          visibility: hidden;
+        }
+        #mediainfo[scroll='true'] .marquee {
+          animation: slide 10s linear infinite;
+          visibility: visible;
+        }
+        .marquee {
+          position: absolute;
+          white-space: nowrap;
+          display: inline-block;
+        }
         ha-card[artwork='cover'][has-artwork] #mediainfo,
         #power-button[color] {
           color: var(--accent-color);
         }
-        #mediaartist:before {
+        .mediaartist:before {
           content: '- ';
         }
-        #mediainfo > span:empty {
+        #mediainfo span:empty {
           display: none;
         }
         #tts paper-input {
@@ -475,7 +507,7 @@ class MiniMediaPlayer extends LitElement {
           cursor: text;
         }
         .power-state {
-          padding-left: 10px;
+          padding-left: 5px;
         }
         .power-state,
         .select {
@@ -522,6 +554,10 @@ class MiniMediaPlayer extends LitElement {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+        @keyframes slide {
+          from {transform: translate(100%, 0); }
+          to {transform: translate(-100%, 0); }
         }
       </style>
     `;
