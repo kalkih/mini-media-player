@@ -133,7 +133,9 @@ class MiniMediaPlayer extends LitElement {
             :
               html`
                 <div class='select flex'>
-                  ${active && config.hide_controls && !config.hide_volume ? this._renderVolSlider(entity) : html``}
+                  ${active && config.hide_controls && !config.hide_volume ?
+                    config.volume_stateless ? this._renderVolButtons(entity) :
+                    this._renderVolSlider(entity) : html``}
                   ${config.show_source ? this._renderSource(entity) : html``}
                   ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
                   ${!config.hide_power ? this._renderPower(active) : html``}
