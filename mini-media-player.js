@@ -59,6 +59,7 @@ class MiniMediaPlayer extends LitElement {
     config.hide_power = (config.hide_power ? true : false);
     config.hide_controls = (config.hide_controls ? true : false);
     config.hide_volume = (config.hide_volume ? true : false);
+    config.short_info = (config.short_info ? true : false);
 
     this.config = config;
   }
@@ -76,8 +77,8 @@ class MiniMediaPlayer extends LitElement {
     const active = (entity.state !== 'off' && entity.state !== 'unavailable') || false;
     const has_artwork = (attributes.entity_picture && attributes.entity_picture != '') || false;
     const hide_controls = (config.hide_controls || config.hide_volume) || false;
-    const short = (hide_controls || config.short_text)
-
+    const short = (hide_controls || config.short_info)
+    console.log(config.short_info);
     if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
 
     return html`
