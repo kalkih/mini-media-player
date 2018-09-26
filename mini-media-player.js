@@ -1,4 +1,4 @@
-/* mini-media-player - version: v0.7 */
+/* mini-media-player - version: v0.8 */
 import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.1/lit-element.js?module';
 
 class MiniMediaPlayer extends LitElement {
@@ -90,7 +90,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       ${this._style()}
       <ha-card ?group=${config.group}
-        more-info=${config.more_info} ?has-title=${config.title !== ''}
+        ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${has_artwork}
         @click='${(e) => this._handleMore()}'>
         <div id='artwork-cover'
@@ -100,7 +100,7 @@ class MiniMediaPlayer extends LitElement {
         <div class='entity flex'>
           <div class='player'>
             ${active && has_artwork && config.artwork == 'default' ?
-              html`<div id='artwork' border=${config.artwork_border}
+              html`<div id='artwork' ?border=${config.artwork_border}
                 style='background-image: url("${attributes.entity_picture}")'
                 state=${entity.state}>
               </div>`
@@ -108,7 +108,7 @@ class MiniMediaPlayer extends LitElement {
               html`<div id='icon'><ha-icon icon='${config.icon}'></ha-icon></div>`
             }
             <div class='info' ?short=${short}>
-              <div id='playername' has-info=${this._hasMediaInfo(entity)}>
+              <div id='playername' ?has-info=${this._hasMediaInfo(entity)}>
                 ${name}
               </div>
                 <div id='mediainfo' ?short=${short}>
@@ -170,7 +170,8 @@ class MiniMediaPlayer extends LitElement {
     if (sources) {
       const selected = sources.indexOf(source);
       return html`
-        <paper-menu-button slot='dropdown-trigger' .horizontalAlign=${'right'}
+        <paper-menu-button id='source-menu' slot='dropdown-trigger'
+          .horizontalAlign=${'right'}
           .verticalAlign=${'top'} .verticalOffset=${40}
           @click='${(e) => e.stopPropagation()}'>
           <paper-button slot='dropdown-trigger'>
@@ -378,7 +379,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[group][artwork='cover'][has-artwork] .info {
           margin-top: 10px;
         }
-        ha-card[more-info='true'] {
+        ha-card[more-info] {
           cursor: pointer;
         }
         ha-card[artwork='cover'][has-artwork] #artwork-cover {
@@ -443,7 +444,7 @@ class MiniMediaPlayer extends LitElement {
           line-height: 40px;
           float: left;
         }
-        #artwork[border='true'] {
+        #artwork[border] {
           border: 2px solid var(--primary-text-color);
           box-sizing: border-box;
           -moz-box-sizing: border-box;
@@ -455,7 +456,7 @@ class MiniMediaPlayer extends LitElement {
         #playername, .power-state {
           line-height: 40px;
         }
-        #playername[has-info='true'] {
+        #playername[has-info] {
           line-height: 20px;
         }
         #icon {
@@ -484,6 +485,10 @@ class MiniMediaPlayer extends LitElement {
         #mediainfo[scroll='true'] div {
           visibility: hidden;
         }
+        #mediainfo[scroll='true'] {
+          animation: move 10s linear infinite;
+          overflow: visible;
+        }
         #mediainfo[scroll='true'] .marquee {
           animation: slide 10s linear infinite;
           visibility: visible;
@@ -500,7 +505,8 @@ class MiniMediaPlayer extends LitElement {
         .mediaartist:before {
           content: '- ';
         }
-        #mediainfo span:empty {
+        #mediainfo span:empty,
+        #source-menu span:empty {
           display: none;
         }
         #tts paper-input {
@@ -539,16 +545,16 @@ class MiniMediaPlayer extends LitElement {
         paper-input[focused] {
           opacity: 1;
         }
-        paper-menu-button {
+        #source-menu {
           padding: 0;
         }
-        paper-menu-button paper-button {
+        #source-menu paper-button {
           margin: 0;
           height: 40px;
           line-height: 20px;
           text-transform: initial;
         }
-        paper-menu-button span {
+        #source-menu span {
           position: relative;
           display: block;
           max-width: 60px;
@@ -558,8 +564,12 @@ class MiniMediaPlayer extends LitElement {
           text-overflow: ellipsis;
         }
         @keyframes slide {
-          from {transform: translate(100%, 0); }
+          from {transform: translate(0, 0); }
           to {transform: translate(-100%, 0); }
+        }
+        @keyframes move {
+          from {transform: translate(100%, 0); }
+          to {transform: translate(0, 0); }
         }
       </style>
     `;
