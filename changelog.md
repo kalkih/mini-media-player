@@ -1,3 +1,19 @@
+## v0.8
+- Added: `hide_controls` option to hide media control buttons #6
+- Added: `hide_volume` option to hide volume control #6 & #8
+- Added: `short_info` option to limit the media information to one line
+- Added: `scroll_info` option to limit the media information to one line and scroll through potential overflowing text.
+- Changed: source select dropdown button changed from icon to source text + icon to make it easier to click.
+- Fixed: source select dropdown no longer expands outside of the screen area
+- Fixed: elements like title and source becoming hard to see with `artwork: cover` and dark backgrounds.
+- Fixed: wrong url in readme #9
+
+   <img src="https://user-images.githubusercontent.com/457678/46086928-80d6e180-c1a9-11e8-8bbf-5105bd5ae640.gif" width="500" alt="v0.8 example 1" />
+
+   <img src="https://user-images.githubusercontent.com/457678/46086935-846a6880-c1a9-11e8-9fa9-68097dd50980.png" width="500" alt="v0.8 example 2" />
+
+    <img src="https://user-images.githubusercontent.com/457678/46087158-078bbe80-c1aa-11e8-97e3-7d35b58375b3.png" width="500" alt="v0.8 example 3" />
+
 ## v0.7
 - Added: `show_source` option to display source and source select dropdown
 - Added: `hide_power` option to hide power button
@@ -11,7 +27,7 @@
 - Fixed: `title` option now works again
 - Fixed: issue with alignment of name when card is grouped and `artwork: cover` option is set #4
 - Fixed: icon color when using default theme #4
-- Changed media info text color to secondary text color
+- Changed: media info text color to secondary text color
 
 ## v0.5
 - Fixed browser incompatibility

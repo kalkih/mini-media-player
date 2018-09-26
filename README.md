@@ -5,7 +5,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 | Single player | Grouping players| Customizable |
 |:----:|:----:|:----:|
-| <img src="https://user-images.githubusercontent.com/457678/45498746-0fe00480-b77b-11e8-8930-6b350877445d.png" alt="Preview 1" width="250"> | <img src="https://user-images.githubusercontent.com/457678/45498745-0fe00480-b77b-11e8-8a54-8946c535ac11.png" alt="Preview 2" width="250"> | <img src="https://user-images.githubusercontent.com/457678/45644414-f530c700-babd-11e8-8a80-571afa79547e.png" alt="Preview 2" width="250"> |
+| <img src="https://user-images.githubusercontent.com/457678/45498746-0fe00480-b77b-11e8-8930-6b350877445d.png" alt="Preview 1" width="250"> | <img src="https://user-images.githubusercontent.com/457678/45498745-0fe00480-b77b-11e8-8a54-8946c535ac11.png" alt="Preview 2" width="250"> | <img src="https://user-images.githubusercontent.com/457678/46092838-0c566f80-c1b6-11e8-9c54-3797a03f39e7.gif" alt="Preview 3" width="250"> |
 
 ## Install
 
@@ -25,7 +25,7 @@ resources:
 - Clone this repository into your `config/www` folder using git.
 
 ```bash
-git clone https://github.com/kalkih/lovelace-mini-media-player.git
+git clone https://github.com/kalkih/mini-media-player.git
 ```
 
 - Add a reference to the card in your `ui-lovelace.yaml`.
@@ -45,7 +45,7 @@ resources:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?ver=0.7
+  - url: /local/mini-media-player.js?ver=0.8
     type: module
 ```
 
@@ -65,18 +65,23 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | name | string | optional | v0.6 | Override the entities friendly name.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
 | group | boolean | false | v0.1 | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
-| more_info | boolean | true | v0.1 | Set to `false` to disable the "more info" dialog when clicking on the card.
 | show_tts | string | optional | v0.2 | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
-| show_source | boolean | optional | v0.7 | Set this option to `true` to display the current source and a source select dropdown.
-| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*.
-| artwork_border | boolean | false | v0.3 | Set to `true` to display a border around media artwork, border color changes depending on playing state.
-| power_color | boolean | false | v0.4 | Set to `true` to have the power button change color based on power on/off.
+| show_source | boolean | false | v0.7 | Set this option to `true` to display the current source and a source select dropdown.
 | hide_power | boolean | false | v0.7 | Set to `true` to hide the power button.
-| volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume up/down buttons (useful for media players that doesn't support volume state).
+| hide_controls | boolean | false | v0.8 | Set to `true` to hide media control buttons (*sets `short_info` to `true`*).
+| hide_volume | boolean | false | v0.8 | Set to `true` to hide volume controls. (*sets `short_info` to `true`*).
+| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*.
+| short_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and cut off any potential overflowing text.
+| scroll_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and scroll through any potential overflowing text.
+| power_color | boolean | false | v0.4 | Set to `true` to have the power button change color based on power on/off.
+| artwork_border | boolean | false | v0.3 | Set to `true` to display a border around the media artwork, border color changes depending on playing state. *only applies to `artwork: default`*
+| volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume. up/down buttons (useful for media players that doesn't support volume state).
+| more_info | boolean | true | v0.1 | Set to `false` to disable the "more info" dialog when clicking on the card.
+
 
 ### Example usage
 
-#### Standalone card
+#### Single player
 ```yaml
 - type: custom:mini-media-player
   entity: media_player.spotify
@@ -86,7 +91,22 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
   show_source: true
 ```
 
-#### Grouping several
+<img src="https://user-images.githubusercontent.com/457678/46084819-d957b000-c1a4-11e8-897d-fda0385cbd2e.png" width="500px" />
+
+#### Compact player
+```yaml
+- type: custom:mini-media-player
+  entity: media_player.spotify
+  name: Spotify Player
+  artwork: cover
+  hide_power: true
+  hide_volume: true
+  show_source: true
+```
+
+<img src="https://user-images.githubusercontent.com/457678/46084911-0ad07b80-c1a5-11e8-895f-729886bdc5bc.png" width="500px" />
+
+#### Grouping players
 Use the card in a group together with other players or entities
 
 ```yaml
@@ -95,13 +115,17 @@ Use the card in a group together with other players or entities
   entities:
   - entity: media_player.spotify
     type: "custom:mini-media-player"
+    name: Spotify
     group: true
-  - entity: media_player.samsungtv
+  - entity: media_player.samsung_tv
+    type: "custom:mini-media-player"
+    group: true
+  - entity: media_player.google_home
     type: "custom:mini-media-player"
     group: true
 ```
 
-*Don't forget to set the group option to true.*
+<img src="https://user-images.githubusercontent.com/457678/46085589-a6aeb700-c1a6-11e8-87ce-011db2bc64fb.png" width="500px" />
 
 ## Getting errors?
 Make sure you have `javascript_version: latest` in your `configuration.yaml` under `frontend:`.
