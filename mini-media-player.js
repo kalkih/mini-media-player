@@ -1,4 +1,4 @@
-/* mini-media-player - version: v0.8 */
+/* mini-media-player - version: v0.8.1 */
 import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.1/lit-element.js?module';
 
 class MiniMediaPlayer extends LitElement {
@@ -458,6 +458,7 @@ class MiniMediaPlayer extends LitElement {
         }
         #playername, .power-state {
           line-height: 40px;
+          max-height: 40px;
         }
         #playername[has-info] {
           line-height: 20px;

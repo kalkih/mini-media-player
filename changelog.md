@@ -1,8 +1,18 @@
+## v0.8.1
+- Added: parameter `small` for `show_source`. Hides the current source name and only displays the source button
+- Added: `hide_mute` option to hide the mute button
+- Changed: `hide_controls: true` does not hide the mute button by default, use new `hide_mute` option
+- Changed: switched place of the media controls with source in the UI when `hide_volume` & `show_source` is enabled, for more consistency
+- Fixed: TTS not working after v0.8
+- Fixed: UI will now shrinks more to fit (instead of overflow) when no more horizontal space is available
+
+  <img src="https://user-images.githubusercontent.com/457678/46220899-dc40d500-c34b-11e8-927d-ee9e8b1ee85f.png" width="500" alt="v0.8 example 1" />
+
 ## v0.8
 - Added: `hide_controls` option to hide media control buttons #6
 - Added: `hide_volume` option to hide volume control #6 & #8
 - Added: `short_info` option to limit the media information to one line
-- Added: `scroll_info` option to limit the media information to one line and scroll through potential overflowing text.
+- Added: `scroll_info` option to limit the media information to one line and scroll through potential overflowing text
 - Changed: source select dropdown button changed from icon to source text + icon to make it easier to click.
 - Fixed: source select dropdown no longer expands outside of the screen area
 - Fixed: elements like title and source becoming hard to see with `artwork: cover` and dark backgrounds.
@@ -17,7 +27,7 @@
 ## v0.7
 - Added: `show_source` option to display source and source select dropdown
 - Added: `hide_power` option to hide power button
-- Added: check before render to only render if necessary
+- Added: check before rende2r to only render if necessary
 - Changed: previous and next buttons to the proper ones `mdi:forward` & `mdi:backward` to `mdi:next` & `mdi:previous`
 - Fixed: issue with `artwork: cover` displaying over optional card title
 
