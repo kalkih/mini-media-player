@@ -49,7 +49,7 @@ class MiniMediaPlayer extends LitElement {
     config.title = config.title || '';
     config.icon = config.icon || false;
     config.more_info = (config.more_info !== false ? true : false);
-    config.show_tts = (config.show_tts ? true : false);
+    config.show_tts = config.show_tts || false;
     config.show_source = config.show_source || false;
     config.artwork_border = (config.artwork_border ? true : false);
     config.group = (config.group ? true : false);
