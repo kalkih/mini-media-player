@@ -458,7 +458,6 @@ class MiniMediaPlayer extends LitElement {
         }
         #playername, .power-state {
           line-height: 40px;
-          max-height: 40px;
         }
         #playername[has-info] {
           line-height: 20px;
@@ -579,6 +578,9 @@ class MiniMediaPlayer extends LitElement {
         @keyframes move {
           from {transform: translate(100%, 0); }
           to {transform: translate(0, 0); }
+        }
+        #unavailable {
+          white-space: nowrap;
         }
       </style>
     `;
