@@ -99,7 +99,6 @@ class MiniMediaPlayer extends LitElement {
         </div>
         <header>${config.title}</header>
         <div class='entity flex'>
-          <div class='player'>
             ${active && has_artwork && config.artwork == 'default' ?
               html`<div id='artwork' ?border=${config.artwork_border}
                 style='background-image: url("${attributes.entity_picture}")'
@@ -124,7 +123,6 @@ class MiniMediaPlayer extends LitElement {
                   </div>
                 </div>
             </div>
-          </div>
           <div class='power-state flex'>
             ${entity.state == 'unavailable' ?
               html`
@@ -234,7 +232,9 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       <div class='vol-control flex'>
-        ${this._renderMuteButton(muted)}
+        <div>
+          ${this._renderMuteButton(muted)}
+        </div>
         <paper-slider id='volume-slider' ?disabled=${muted}
           @change='${(e) => this._handleVolumeChange(e)}'
           @click='${(e) => this._handleVolumeChange(e)}'
@@ -423,7 +423,12 @@ class MiniMediaPlayer extends LitElement {
         .flex-wrap[wrap] {
           flex-wrap: wrap;
         }
-        .info, #mediacontrols, #tts {
+        .info {
+          margin-left: 16px;
+          display: block;
+          position: relative;
+        }
+        #mediacontrols, #tts {
           margin-left: 56px;
           position: relative;
         }
@@ -432,6 +437,7 @@ class MiniMediaPlayer extends LitElement {
           overflow: hidden;
         }
         #artwork, #icon {
+          min-width: 40px;
           height: 40px;
           width: 40px;
           background-size: cover;
@@ -440,7 +446,6 @@ class MiniMediaPlayer extends LitElement {
           border-radius: 100%;
           text-align: center;
           line-height: 40px;
-          float: left;
         }
         #artwork[border] {
           border: 2px solid var(--primary-text-color);
