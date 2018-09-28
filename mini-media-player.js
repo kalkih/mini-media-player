@@ -59,6 +59,7 @@ class MiniMediaPlayer extends LitElement {
     config.hide_power = (config.hide_power ? true : false);
     config.hide_controls = (config.hide_controls ? true : false);
     config.hide_volume = (config.hide_volume ? true : false);
+    config.hide_mute = (config.hide_mute ? true : false);
     config.scroll_info = (config.scroll_info ? true : false);
     config.short_info = (config.short_info || config.scroll_info ? true : false);
 
@@ -133,11 +134,9 @@ class MiniMediaPlayer extends LitElement {
             :
               html`
                 <div class='select flex'>
-                  ${active && config.hide_controls && !config.hide_volume ?
-                    config.volume_stateless ? this._renderVolButtons(entity) :
-                    this._renderVolSlider(entity) : html``}
-                  ${config.show_source ? this._renderSource(entity) : html``}
+                  ${active && config.hide_controls && !config.hide_volume ? this._renderVolControls(entity) : html``}
                   ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
+                  ${config.show_source !== false ? this._renderSource(entity) : html``}
                   ${!config.hide_power ? this._renderPower(active) : html``}
                 </div>`
             }
@@ -175,7 +174,8 @@ class MiniMediaPlayer extends LitElement {
           .verticalAlign=${'top'} .verticalOffset=${40}
           @click='${(e) => e.stopPropagation()}'>
           <paper-button slot='dropdown-trigger'>
-            <span id='source'>${this.source || source}</span>
+            ${this.config.show_source !== 'small' ? html`
+            <span id='source'>${this.source || source}</span>` : '' }
             <iron-icon icon=${this._icons['dropdown']}></iron-icon>
           </paper-button>
           <paper-listbox id='list' slot='dropdown-content' selected=${selected}
@@ -214,42 +214,39 @@ class MiniMediaPlayer extends LitElement {
   _renderVolControls(entity) {
     const muted = entity.attributes.is_volume_muted || false;
     if (this.config.volume_stateless) {
-      return this._renderVolButtons(entity);
+      return this._renderVolButtons(entity, muted);
     } else {
       return html`
-        ${this._renderMuteButton(muted)}
         ${this._renderVolSlider(entity, muted)}`;
     }
   }
 
   _renderMuteButton(muted) {
-    return html`
-      <div>
+    if (!this.config.hide_mute)
+      return html`
         <paper-icon-button id='mute-button' icon=${this._icons.mute[muted]}
           @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
-        </paper-icon-button>
-      </div>`;
+        </paper-icon-button>`;
   }
 
   _renderVolSlider(entity, muted = false) {
     const volumeSliderValue = entity.attributes.volume_level * 100;
 
     return html`
-      <paper-slider id='volume-slider' ?disabled=${muted}
-        @change='${(e) => this._handleVolumeChange(e)}'
-        @click='${(e) => this._handleVolumeChange(e)}'
-        min='0' max='100' value=${volumeSliderValue} ignore-bar-touch pin >
-      </paper-slider>`;
+      <div class='vol-control flex'>
+        ${this._renderMuteButton(muted)}
+        <paper-slider id='volume-slider' ?disabled=${muted}
+          @change='${(e) => this._handleVolumeChange(e)}'
+          @click='${(e) => this._handleVolumeChange(e)}'
+          min='0' max='100' value=${volumeSliderValue} ignore-bar-touch pin >
+        </paper-slider>
+      </div>`;
   }
 
-  _renderVolButtons(entity) {
-    const muted = entity.attributes.is_volume_muted || false;
-
+  _renderVolButtons(entity, muted = false) {
     return html`
       <div class='flex'>
-        <paper-icon-button id='mute-button' icon=${this._icons.mute[true]}
-          @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
-        </paper-icon-button>
+        ${this._renderMuteButton(muted)}
         <paper-icon-button id='volume-down-button' icon=${this._icons.volume_down}
           @click='${(e) => this._callService(e, "volume_down")}'>
         </paper-icon-button>
@@ -352,6 +349,7 @@ class MiniMediaPlayer extends LitElement {
   _style() {
     return html`
       <style>
+        div:empty { display: none; }
         ha-card {
           padding: 16px;
           position: relative;
@@ -532,9 +530,13 @@ class MiniMediaPlayer extends LitElement {
         .power-state paper-slider {
           height: 40px;
         }
+        .vol-control {
+          min-width: 120px;
+          flex: 1;
+        }
         paper-slider {
           min-width: 80px;
-          max-width: 200px;
+          max-width: 400px;
           width: 100%;
         }
         paper-input {
@@ -553,6 +555,7 @@ class MiniMediaPlayer extends LitElement {
           height: 40px;
           line-height: 20px;
           text-transform: initial;
+          min-width: 0;
         }
         #source-menu span {
           position: relative;
