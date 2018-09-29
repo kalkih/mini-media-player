@@ -62,6 +62,7 @@ class MiniMediaPlayer extends LitElement {
     config.hide_mute = (config.hide_mute ? true : false);
     config.scroll_info = (config.scroll_info ? true : false);
     config.short_info = (config.short_info || config.scroll_info ? true : false);
+    config.max_volume = Number(config.max_volume) || 100;
 
     this.config = config;
   }
@@ -238,7 +239,8 @@ class MiniMediaPlayer extends LitElement {
         <paper-slider id='volume-slider' ?disabled=${muted}
           @change='${(e) => this._handleVolumeChange(e)}'
           @click='${(e) => this._handleVolumeChange(e)}'
-          min='0' max='100' value=${volumeSliderValue} ignore-bar-touch pin >
+          min='0' max=${this.config.max_volume} value=${volumeSliderValue}
+          ignore-bar-touch pin>
         </paper-slider>
       </div>`;
   }

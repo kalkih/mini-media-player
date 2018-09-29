@@ -78,6 +78,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | artwork_border | boolean | false | v0.3 | Set to `true` to display a border around the media artwork, border color changes depending on playing state. *only applies to `artwork: default`*
 | volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume. up/down buttons (useful for media players that doesn't support volume state).
 | more_info | boolean | true | v0.1 | Set to `false` to disable the "more info" dialog when clicking on the card.
+| max_volume | number | true | v0.8.2 | Set a max volume for the volume slider (number between 1 - 100).
 
 
 ### Example usage
