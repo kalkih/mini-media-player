@@ -125,20 +125,7 @@ class MiniMediaPlayer extends LitElement {
                 </div>
             </div>
           <div class='power-state flex'>
-            ${entity.state == 'unavailable' ?
-              html`
-                <span id='unavailable'>
-                  ${this._getLabel('state.default.unavailable', 'Unavailable')}
-                </span>`
-            :
-              html`
-                <div class='select flex'>
-                  ${active && config.hide_controls && !config.hide_volume ? this._renderVolControls(entity) : html``}
-                  ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
-                  ${config.show_source !== false ? this._renderSource(entity) : html``}
-                  ${!config.hide_power ? this._renderPower(active) : html``}
-                </div>`
-            }
+            ${this._renderPowerStrip(entity, active)}
           </div>
         </div>
         ${active && !hide_controls ? this._renderControlRow(entity) : html``}
@@ -155,10 +142,26 @@ class MiniMediaPlayer extends LitElement {
   _renderPower(active) {
     return html`
       <paper-icon-button id='power-button'
-        icon=${this._icons["power"]}
+        icon=${this._icons['power']}
         @click='${(e) => this._callService(e, "toggle")}'
         ?color=${this.config.power_color && active}>
       </paper-icon-button>`;
+  }
+
+  _renderPowerStrip(entity, active, {config} = this) {
+    if (entity.state == 'unavailable') {
+      return html`
+        <span id='unavailable'>
+          ${this._getLabel('state.default.unavailable', 'Unavailable')}
+        </span>`;
+    }
+    return html`
+      <div class='select flex'>
+        ${active && config.hide_controls && !config.hide_volume ? this._renderVolControls(entity) : html``}
+        ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
+        ${config.show_source !== false ? this._renderSource(entity) : html``}
+        ${!config.hide_power ? this._renderPower(active) : html``}
+      </div>`;
   }
 
   _renderSource(entity) {
@@ -306,10 +309,6 @@ class MiniMediaPlayer extends LitElement {
     const options = { 'source': source };
     this._callService(e, 'select_source' , options);
     this.source = source;
-  }
-
-  EventTarget() {
-    this.listeners = {};
   }
 
   _fire(type, detail, options) {
