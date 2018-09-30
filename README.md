@@ -16,7 +16,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js
+  - url: /local/mini-media-player.js?v0.8.2
     type: module
 ```
 
@@ -32,8 +32,19 @@ git clone https://github.com/kalkih/mini-media-player.git
 
 ```yaml
 resources:
-  - url: /local/mini-media-player/mini-media-player.js
+  - url: /local/mini-media-player/mini-media-player.js?v0.8.2
     type: module
+```
+
+### *(Optional)* Add to custom updater
+
+- Make sure you got the [custom_updater](https://github.com/custom-components/custom_updater) component installed.
+- Add a reference under `card_urls` in your `custom_updater` configuration in `configuration.yaml`.
+
+```yaml
+custom_updater:
+  card_urls:
+    - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
 ```
 
 ## Updating
@@ -45,7 +56,7 @@ resources:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?ver=0.8.1
+  - url: /local/mini-media-player.js?v=0.8.2
     type: module
 ```
 
