@@ -1,3 +1,8 @@
+## v0.8.2
+- Added: `max_volume` option to set a max volume value (between 1 & 100) for the volume slider
+- Added: `tracker.json` file for custom_updater support
+- Fixed: issue with text wrapping outside the card
+
 ## v0.8.1
 - Added: parameter `small` for `show_source`. Hides the current source name and only displays the source button
 - Added: `hide_mute` option to hide the mute button
