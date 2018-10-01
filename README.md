@@ -16,7 +16,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?v0.8.2
+  - url: /local/mini-media-player.js?v=0.8.3
     type: module
 ```
 
@@ -32,7 +32,7 @@ git clone https://github.com/kalkih/mini-media-player.git
 
 ```yaml
 resources:
-  - url: /local/mini-media-player/mini-media-player.js?v0.8.2
+  - url: /local/mini-media-player/mini-media-player.js?v=0.8.3
     type: module
 ```
 
@@ -56,7 +56,7 @@ custom_updater:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?v=0.8.2
+  - url: /local/mini-media-player.js?v=0.8.3
     type: module
 ```
 
@@ -78,6 +78,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | group | boolean | false | v0.1 | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
 | show_tts | string | optional | v0.2 | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
 | show_source | string | false | v0.7 | Set this option to `true` to display the current source, set to `small` to hide current source and only display the source button (v0.8.1).
+| show_progress | boolean | false | v0.8.3 | Set this option to `true` to show a progress bar when media progress information is available.
 | hide_power | boolean | false | v0.7 | Set to `true` to hide the power button.
 | hide_controls | boolean | false | v0.8 | Set to `true` to hide media control buttons (*sets `short_info` to `true`*).
 | hide_volume | boolean | false | v0.8 | Set to `true` to hide volume controls. (*sets `short_info` to `true`*).

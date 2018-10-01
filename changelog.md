@@ -1,7 +1,15 @@
+## v0.8.3
+- Added: `show_progress` option to show a progress bar when media progress information is available
+- Added: support to display media_series_title, media_season & media_episode information when available #13
+
+  <img src="https://user-images.githubusercontent.com/457678/46318413-abc09b80-c5d6-11e8-8892-724b93d0c06d.gif" width="500" alt="v0.8 example 1" />
+  
+  <img src="https://user-images.githubusercontent.com/457678/46318419-b11de600-c5d6-11e8-9327-eea239e9db7c.png" width="500" alt="v0.8 example 2" />
+
 ## v0.8.2
-- Added: `max_volume` option to set a max volume value (between 1 & 100) for the volume slider
-- Added: `tracker.json` file for custom_updater support
-- Fixed: issue with text wrapping outside the card
+- Added: `max_volume` option to set a max volume value (between 1 & 100) for the volume slider #12
+- Added: `tracker.json` file for custom_updater support #7
+- Fixed: issue where text would wrap outside the card
 
 ## v0.8.1
 - Added: parameter `small` for `show_source`. Hides the current source name and only displays the source button
