@@ -21,6 +21,13 @@ class MiniMediaPlayer extends LitElement {
       'send': 'mdi:send',
       'dropdown': 'mdi:chevron-down'
     }
+    this._media_info = [
+      { attr: 'media_title' },
+      { attr: 'media_artist' },
+      { attr: 'media_series_title' },
+      { attr: 'media_season', prefix: 'S' },
+      { attr: 'media_episode', prefix: 'E'}
+    ];
   }
 
   static get properties() {
@@ -28,7 +35,6 @@ class MiniMediaPlayer extends LitElement {
       _hass: Object,
       config: Object,
       entity: Object,
-
       source: String
     };
   }
@@ -81,13 +87,13 @@ class MiniMediaPlayer extends LitElement {
 
   render({_hass, config, entity} = this) {
     if (!entity) return;
-    const name = config.name || this._getAttribute(entity, 'friendly_name')
-    const attributes = entity.attributes;
+    const name = config.name || this._getAttribute('friendly_name')
+    const attr = entity.attributes;
     const active = (entity.state !== 'off' && entity.state !== 'unavailable') || false;
-    const has_artwork = (attributes.entity_picture && attributes.entity_picture != '') || false;
+    const has_artwork = (attr.entity_picture && attr.entity_picture != '') || false;
     const hide_controls = (config.hide_controls || config.hide_volume) || false;
-    const short = (hide_controls || config.short_info)
-    if (!config.icon) config.icon = attributes['icon'] || 'mdi:cast';
+    const short = (hide_controls || config.short_info);
+    if (!config.icon) config.icon = attr['icon'] || 'mdi:cast';
 
     return html`
       ${this._style()}
@@ -96,33 +102,23 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${has_artwork}
         @click='${(e) => this._handleMore()}'>
         <div id='artwork-cover'
-          style='background-image: url("${attributes.entity_picture}")'>
+          style='background-image: url("${attr.entity_picture}")'>
         </div>
         <header>${config.title}</header>
         <div class='entity flex'>
             ${active && has_artwork && config.artwork == 'default' ?
               html`<div id='artwork' ?border=${config.artwork_border}
-                style='background-image: url("${attributes.entity_picture}")'
+                style='background-image: url("${attr.entity_picture}")'
                 state=${entity.state}>
               </div>`
             :
               html`<div id='icon'><ha-icon icon='${config.icon}'></ha-icon></div>`
             }
             <div class='info' ?short=${short}>
-              <div id='playername' ?has-info=${this._hasMediaInfo(entity)}>
+              <div id='playername' ?has-info=${this._hasMediaInfo()}>
                 ${name}
               </div>
-                <div id='mediainfo' ?short=${short}>
-                  ${config.scroll_info ? html`
-                    <div class='marquee'>
-                      <span class='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
-                      <span class='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
-                    </div>` : '' }
-                  <div>
-                    <span class='mediatitle'>${this._getAttribute(entity, 'media_title')}</span>
-                    <span class='mediaartist'>${this._getAttribute(entity, 'media_artist')}</span>
-                  </div>
-                </div>
+              ${this._renderMediaInfo(short)}
             </div>
           <div class='power-state flex'>
             ${this._renderPowerStrip(entity, active)}
@@ -146,6 +142,25 @@ class MiniMediaPlayer extends LitElement {
         @click='${(e) => this._callService(e, "toggle")}'
         ?color=${this.config.power_color && active}>
       </paper-icon-button>`;
+  }
+
+  _renderMediaInfo(short) {
+    const items = this._media_info.map(item => {
+      item.info = this._getAttribute(item.attr);
+      item.prefix = item.prefix || '';
+      return item;
+    }).filter(item => item.info !== '');
+
+    return html`
+      <div id='mediainfo' ?short=${short}>
+        ${this.config.scroll_info ? html`
+          <div class='marquee'>
+            ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
+          </div>` : '' }
+        <div>
+          ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
+        </div>
+      </div>`;
   }
 
   _renderPowerStrip(entity, active, {config} = this) {
@@ -324,20 +339,19 @@ class MiniMediaPlayer extends LitElement {
     return e;
   }
 
-  _hasMediaInfo(entity, attr) {
-    if (entity.attributes.media_title && entity.attributes.media_title !== '')
-      return true;
-    if (entity.attributes.media_artist && entity.attributes.media_artist !== '')
-      return true;
-    return false;
+  _hasMediaInfo() {
+    const items = this._media_info.map(item => {
+      return item.info = this._getAttribute(item.attr);
+    }).filter(item => item !== '');
+    return items.length == 0 ? false : true;
   }
 
-  _hasAttribute(entity, attr) {
+  _hasAttribute(attr, {entity} = this) {
     if (entity.ettributes[attr] && entity.ettributes[attr] !== '') return true;
     return false;
   }
 
-  _getAttribute(entity, attr) {
+  _getAttribute(attr, {entity} = this) {
     return entity.attributes[attr] || '';
   }
 
@@ -506,8 +520,11 @@ class MiniMediaPlayer extends LitElement {
         #power-button[color] {
           color: var(--accent-color);
         }
-        .mediaartist:before {
-          content: '- ';
+        #mediainfo span:before {
+          content: ' - ';
+        }
+        #mediainfo span:first-child:before {
+          content: '';
         }
         #mediainfo span:empty,
         #source-menu span:empty {
