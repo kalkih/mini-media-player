@@ -1,5 +1,6 @@
 ## v0.8.4
 - Fixed: issue where volume slider would send double `volume_set` commands on change and glitch back.
+- Updated: lit-element dependency to 0.6.2
 
 ## v0.8.3
 - Added: `show_progress` option to show a progress bar when media progress information is available
