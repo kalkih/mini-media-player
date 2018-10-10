@@ -53,26 +53,30 @@ class MiniMediaPlayer extends LitElement {
       throw new Error('Specify an entity from within the media_player domain.');
     }
 
-    config.title = config.title || '';
-    config.icon = config.icon || false;
-    config.more_info = (config.more_info !== false ? true : false);
-    config.show_tts = config.show_tts || false;
-    config.show_source = config.show_source || false;
-    config.artwork_border = (config.artwork_border ? true : false);
-    config.group = (config.group ? true : false);
-    config.power_color = (config.power_color ? true : false);
-    config.artwork = config.artwork || 'default';
-    config.volume_stateless = (config.volume_stateless ? true : false);
-    config.hide_power = (config.hide_power ? true : false);
-    config.hide_controls = (config.hide_controls ? true : false);
-    config.hide_volume = (config.hide_volume ? true : false);
-    config.hide_mute = (config.hide_mute ? true : false);
-    config.scroll_info = (config.scroll_info ? true : false);
-    config.short_info = (config.short_info || config.scroll_info ? true : false);
-    config.max_volume = Number(config.max_volume) || 100;
-    config.show_progress = (config.show_progress ? true : false);
+    const conf = Object.assign({
+      title: '',
+      icon: false,
+      more_info: true,
+      show_tts: false,
+      show_source: false,
+      artwork_border: false,
+      group: false,
+      power_color: false,
+      artwork: 'default',
+      volume_stateless: false,
+      hide_power: false,
+      hide_controls: false,
+      hide_volume: false,
+      hide_mute: false,
+      scroll_info: false,
+      short_info: false,
+      max_volume: 100,
+      show_progress: false
+    }, config);
+    conf.max_volume = Number(conf.max_volume) || 100;
+    conf.short_info = (conf.short_info || conf.scroll_info ? true : false);
 
-    this.config = config;
+    this.config = conf;
   }
 
   shouldUpdate(changedProps) {
