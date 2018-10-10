@@ -68,6 +68,7 @@ class MiniMediaPlayer extends LitElement {
       hide_controls: false,
       hide_volume: false,
       hide_mute: false,
+      hide_info: false,
       scroll_info: false,
       short_info: false,
       max_volume: 100,
@@ -88,7 +89,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   updated() {
-    if (this.config.scroll_info) his._hasOverflow();
+    if (this.config.scroll_info) this._hasOverflow();
   }
 
   render({_hass, config, entity} = this) {
@@ -107,7 +108,7 @@ class MiniMediaPlayer extends LitElement {
           style='background-image: url("${artwork}")'>
         </div>
         <header>${config.title}</header>
-        <div class='entity flex'>
+        <div class='entity flex' ?hide-info=${this.config.hide_info}>
             ${this._renderIcon()}
             <div class='info' ?short=${short}>
               <div id='playername' ?has-info=${this._hasMediaInfo()}>
@@ -210,8 +211,10 @@ class MiniMediaPlayer extends LitElement {
       <div class='select flex'>
         ${active && config.hide_controls && !config.hide_volume ? this._renderVolControls(entity) : html``}
         ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
-        ${config.show_source !== false ? this._renderSource(entity) : html``}
-        ${!config.hide_power ? this._renderPower(active) : html``}
+        <div class='flex right'>
+          ${config.show_source !== false ? this._renderSource(entity) : html``}
+          ${!config.hide_power ? this._renderPower(active) : html``}
+        <div>
       </div>`;
   }
 
@@ -686,6 +689,19 @@ class MiniMediaPlayer extends LitElement {
         }
         #unavailable {
           white-space: nowrap;
+        }
+        .entity[hide-info] .info,
+        .entity[hide-info] #artwork,
+        .entity[hide-info] #icon {
+          display: none;
+        }
+        .entity[hide-info] .power-state,
+        .entity[hide-info] .select {
+          justify-content: space-between;
+        }
+        .right {
+          justify-content: flex-end;
+          margin-left: auto;
         }
         @keyframes slide {
           from {transform: translate(0, 0); }

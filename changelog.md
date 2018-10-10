@@ -1,5 +1,9 @@
 ## v0.8.4
-- Fixed: issue where volume slider would send double `volume_set` commands on change and glitch back.
+- Added: `hide_info` option to optionally hide entity icon, entity name & media information #15
+
+  <img src="https://user-images.githubusercontent.com/5662298/46736241-d4acf480-cc98-11e8-9332-e27bd931e306.png" width="500" alt="v0.8.4 example 1" />
+
+- Fixed: issue where volume slider would send double `volume_set` commands on change and glitch back
 - Updated: lit-element dependency to 0.6.2
 
 ## v0.8.3

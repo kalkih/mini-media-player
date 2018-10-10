@@ -83,6 +83,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | hide_controls | boolean | false | v0.8 | Set to `true` to hide media control buttons (*sets `short_info` to `true`*).
 | hide_volume | boolean | false | v0.8 | Set to `true` to hide volume controls. (*sets `short_info` to `true`*).
 | hide_mute | boolean | false | v0.8.1 | Set to `true` to hide the mute button.
+| hide_info | boolean | false | v0.8.4 | Set to `true` to hide entity icon, entity name & media information.
 | artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*.
 | short_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and cut off any potential overflowing text.
 | scroll_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and scroll through any potential overflowing text.
