@@ -269,7 +269,7 @@ class MiniMediaPlayer extends LitElement {
         </div>
         <paper-slider id='volume-slider' ?disabled=${muted}
           @change='${(e) => this._handleVolumeChange(e)}'
-          @click='${(e) => this._handleVolumeChange(e)}'
+          @click='${(e) => e.stopPropagation()}'
           min='0' max=${this.config.max_volume} value=${volumeSliderValue}
           ignore-bar-touch pin>
         </paper-slider>

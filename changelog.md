@@ -1,9 +1,12 @@
+## v0.8.4
+- Fixed: issue where volume slider would send double `volume_set` commands on change and glitch back.
+
 ## v0.8.3
 - Added: `show_progress` option to show a progress bar when media progress information is available
 - Added: support to display media_series_title, media_season & media_episode information when available #13
 
   <img src="https://user-images.githubusercontent.com/457678/46318413-abc09b80-c5d6-11e8-8892-724b93d0c06d.gif" width="500" alt="v0.8 example 1" />
-  
+
   <img src="https://user-images.githubusercontent.com/457678/46318419-b11de600-c5d6-11e8-9327-eea239e9db7c.png" width="500" alt="v0.8 example 2" />
 
 ## v0.8.2
