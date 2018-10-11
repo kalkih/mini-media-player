@@ -1,7 +1,7 @@
 {
     "mini-media-player": {
-      "updated_at": "2018-10-10",
-      "version": "0.8.4",
+      "updated_at": "2018-10-11",
+      "version": "0.8.5",
       "remote_location": "https://raw.githubusercontent.com/kalkih/mini-media-player/master/mini-media-player.js",
       "visit_repo": "https://github.com/kalkih/mini-media-player",
       "changelog": "https://github.com/kalkih/mini-media-player/releases/latest"
