@@ -1,3 +1,6 @@
+## v0.8.5
+- Fixed: Prev/Play/Next buttons misaligned with certain configs #16
+
 ## v0.8.4
 - Added: `hide_info` option to optionally hide entity icon, entity name & media information #15
 

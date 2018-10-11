@@ -699,7 +699,7 @@ class MiniMediaPlayer extends LitElement {
         .entity[hide-info] .select {
           justify-content: space-between;
         }
-        .right {
+        .entity[hide-info] .right {
           justify-content: flex-end;
           margin-left: auto;
         }
