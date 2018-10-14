@@ -5,21 +5,21 @@ class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
     this._icons = {
-      'playing': {
-        true: 'mdi:pause',
-        false: 'mdi:play'
-      },
       'prev': 'mdi:skip-previous',
       'next': 'mdi:skip-next',
       'power': 'mdi:power',
       'volume_up': 'mdi:volume-high',
       'volume_down': 'mdi:volume-medium',
+      'send': 'mdi:send',
+      'dropdown': 'mdi:chevron-down',
       'mute': {
         true: 'mdi:volume-off',
         false: 'mdi:volume-high'
       },
-      'send': 'mdi:send',
-      'dropdown': 'mdi:chevron-down'
+      'playing': {
+        true: 'mdi:pause',
+        false: 'mdi:play'
+      }
     }
     this._media_info = [
       { attr: 'media_title' },
@@ -43,15 +43,13 @@ class MiniMediaPlayer extends LitElement {
   set hass(hass) {
     const entity = hass.states[this.config.entity];
     this._hass = hass;
-    if (entity && this.entity !== entity) {
+    if (entity && this.entity !== entity)
       this.entity = entity;
-    }
   }
 
   setConfig(config) {
-    if (!config.entity || config.entity.split('.')[0] !== 'media_player') {
+    if (!config.entity || config.entity.split('.')[0] !== 'media_player')
       throw new Error('Specify an entity from within the media_player domain.');
-    }
 
     const conf = Object.assign({
       title: '',
@@ -81,7 +79,9 @@ class MiniMediaPlayer extends LitElement {
   }
 
   shouldUpdate(changedProps) {
-    const change = changedProps.has('entity') || changedProps.has('source') || changedProps.has('position');
+    const change = changedProps.has('entity')
+      || changedProps.has('source')
+      || changedProps.has('position');
     if (change) {
       if (this.config.show_progress) this._checkProgress();
       return true;
@@ -138,7 +138,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeIcon() {
-    return this.config.icon ? this.config.icon : this.entity.attributes.icon
+    return this.config.icon
+      ? this.config.icon : this.entity.attributes.icon
       || 'mdi:cast';
   }
 
@@ -272,8 +273,7 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.volume_stateless) {
       return this._renderVolButtons(entity, muted);
     } else {
-      return html`
-        ${this._renderVolSlider(entity, muted)}`;
+      return this._renderVolSlider(entity, muted);
     }
   }
 
