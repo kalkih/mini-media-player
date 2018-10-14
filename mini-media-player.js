@@ -167,7 +167,7 @@ class MiniMediaPlayer extends LitElement {
   _renderPower() {
     return html`
       <paper-icon-button id='power-button'
-        icon=${this._icons['power']}
+        .icon=${this._icons['power']}
         @click='${(e) => this._callService(e, "toggle")}'
         ?color=${this.config.power_color && this._isActive()}>
       </paper-icon-button>`;
@@ -233,7 +233,7 @@ class MiniMediaPlayer extends LitElement {
           <paper-button slot='dropdown-trigger'>
             ${this.config.show_source !== 'small' ? html`
             <span id='source'>${this.source || source}</span>` : '' }
-            <iron-icon icon=${this._icons['dropdown']}></iron-icon>
+            <iron-icon .icon=${this._icons['dropdown']}></iron-icon>
           </paper-button>
           <paper-listbox id='list' slot='dropdown-content' selected=${selected}
             @click='${(e) => this._handleSource(e)}'>
@@ -255,14 +255,14 @@ class MiniMediaPlayer extends LitElement {
     const playing = entity.state == 'playing';
     return html`
       <div class='flex'>
-        <paper-icon-button id='prev-button' icon=${this._icons["prev"]}
+        <paper-icon-button id='prev-button' .icon=${this._icons["prev"]}
           @click='${(e) => this._callService(e, "media_previous_track")}'>
         </paper-icon-button>
         <paper-icon-button id='play-button'
-          icon=${this._icons.playing[playing]}
+          .icon=${this._icons.playing[playing]}
           @click='${(e) => this._callService(e, "media_play_pause")}'>
         </paper-icon-button>
-        <paper-icon-button id='next-button' icon=${this._icons["next"]}
+        <paper-icon-button id='next-button' .icon=${this._icons["next"]}
           @click='${(e) => this._callService(e, "media_next_track")}'>
         </paper-icon-button>
       </div>`;
@@ -280,7 +280,7 @@ class MiniMediaPlayer extends LitElement {
   _renderMuteButton(muted) {
     if (!this.config.hide_mute)
       return html`
-        <paper-icon-button id='mute-button' icon=${this._icons.mute[muted]}
+        <paper-icon-button id='mute-button' .icon=${this._icons.mute[muted]}
           @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
         </paper-icon-button>`;
   }
@@ -306,10 +306,10 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div class='flex'>
         ${this._renderMuteButton(muted)}
-        <paper-icon-button id='volume-down-button' icon=${this._icons.volume_down}
+        <paper-icon-button id='volume-down-button' .icon=${this._icons.volume_down}
           @click='${(e) => this._callService(e, "volume_down")}'>
         </paper-icon-button>
-        <paper-icon-button id='volume-up-button' icon=${this._icons.volume_up}
+        <paper-icon-button id='volume-up-button' .icon=${this._icons.volume_up}
           @click='${(e) => this._callService(e, "volume_up")}'>
         </paper-icon-button>
       </div>`;
