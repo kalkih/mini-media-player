@@ -84,7 +84,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | hide_volume | boolean | false | v0.8 | Set to `true` to hide volume controls. (*sets `short_info` to `true`*).
 | hide_mute | boolean | false | v0.8.1 | Set to `true` to hide the mute button.
 | hide_info | boolean | false | v0.8.4 | Set to `true` to hide entity icon, entity name & media information.
-| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*.
+| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*, set to `none` to never display artwork.
 | short_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and cut off any potential overflowing text.
 | scroll_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and scroll through any potential overflowing text.
 | power_color | boolean | false | v0.4 | Set to `true` to have the power button change color based on power on/off.
@@ -92,7 +92,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume. up/down buttons (useful for media players that doesn't support volume state).
 | more_info | boolean | true | v0.1 | Set to `false` to disable the "more info" dialog when clicking on the card.
 | max_volume | number | true | v0.8.2 | Set a max volume for the volume slider (number between 1 - 100).
-
+| background | string | optional | v0.8.6 | Set a background image, specify the image url `"/local/background-img.png"` e.g.
 
 ### Example usage
 

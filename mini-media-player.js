@@ -52,25 +52,26 @@ class MiniMediaPlayer extends LitElement {
       throw new Error('Specify an entity from within the media_player domain.');
 
     const conf = Object.assign({
-      title: '',
-      icon: false,
-      more_info: true,
-      show_tts: false,
-      show_source: false,
-      artwork_border: false,
-      group: false,
-      power_color: false,
       artwork: 'default',
-      volume_stateless: false,
-      hide_power: false,
+      artwork_border: false,
+      background: false,
+      group: false,
       hide_controls: false,
-      hide_volume: false,
-      hide_mute: false,
       hide_info: false,
+      hide_mute: false,
+      hide_power: false,
+      hide_volume: false,
+      icon: false,
+      max_volume: 100,
+      more_info: true,
+      power_color: false,
       scroll_info: false,
       short_info: false,
-      max_volume: 100,
-      show_progress: false
+      show_progress: false,
+      show_source: false,
+      show_tts: false,
+      title: '',
+      volume_stateless: false
     }, config);
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.short_info = (conf.short_info || conf.scroll_info ? true : false);
@@ -95,6 +96,7 @@ class MiniMediaPlayer extends LitElement {
   render({_hass, config, entity} = this) {
     if (!entity) return;
     const artwork = this._computeArtwork();
+    console.log(artwork);
     const hide_controls = (config.hide_controls || config.hide_volume) || false;
     const short = (hide_controls || config.short_info);
 
@@ -104,8 +106,8 @@ class MiniMediaPlayer extends LitElement {
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork}
         @click='${(e) => this._handleMore()}' state=${entity.state}>
-        <div id='artwork-cover'
-          style='background-image: url("${artwork}")'>
+        <div id='artwork-cover' ?bg=${config.background}
+          style='background-image: url("${this._computeBackground()"})'>
         </div>
         <header>${config.title}</header>
         <div class='entity flex' ?hide-info=${this.config.hide_info}>
@@ -130,9 +132,14 @@ class MiniMediaPlayer extends LitElement {
     return this.config.name || this.entity.attributes.friendly_name;
   }
 
+  _computeBackground() {
+    return artwork && config.artwork == "cover" ? artwork : config.background;
+  }
+
   _computeArtwork() {
     return (this.entity.attributes.entity_picture
       && this.entity.attributes.entity_picture != '')
+      && this.config.artwork !== 'none'
       ? this.entity.attributes.entity_picture
       : false;
   }
@@ -158,7 +165,6 @@ class MiniMediaPlayer extends LitElement {
           state=${this.entity.state}>
         </div>`;
     }
-
     return html`
       <div id='icon'><ha-icon icon='${this._computeIcon()}'></ha-icon></div>
     `;
@@ -471,7 +477,8 @@ class MiniMediaPlayer extends LitElement {
         ha-card[more-info] {
           cursor: pointer;
         }
-        ha-card[artwork='cover'][has-artwork] #artwork-cover {
+        ha-card[artwork='cover'][has-artwork] #artwork-cover,
+        #artwork-cover[bg] {
           display: block;
         }
         ha-card[artwork='cover'][has-artwork] paper-icon-button,
@@ -494,7 +501,7 @@ class MiniMediaPlayer extends LitElement {
           position: absolute;
           top: 0; left: 0; bottom: 0; right: 0;
         }
-        #artwork-cover:before {
+        ha-card[artwork='cover'][has-artwork] #artwork-cover:before {
           background: #000000;
           content: '';
           opacity: .5;
@@ -538,8 +545,9 @@ class MiniMediaPlayer extends LitElement {
           background-repeat: no-repeat;
           background-position: center center;
           border-radius: 100%;
-          text-align: center;
           line-height: 40px;
+          position: relative;
+          text-align: center;
         }
         #artwork[border] {
           border: 2px solid var(--primary-text-color);

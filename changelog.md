@@ -1,3 +1,7 @@
+## v0.8.6
+- Added: `artwork:` `none` option, to not show artwork
+- Added: `background` option to set a custom background image
+
 ## v0.8.5
 - Fixed: Prev/Play/Next buttons misaligned with certain configs #16
 
