@@ -107,7 +107,7 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork}
         @click='${(e) => this._handleMore()}' state=${entity.state}>
         <div id='artwork-cover' ?bg=${config.background}
-          style='background-image: url("${this._computeBackground()"})'>
+          style='background-image: url("${this._computeBackground()}")'>
         </div>
         <header>${config.title}</header>
         <div class='entity flex' ?hide-info=${this.config.hide_info}>
