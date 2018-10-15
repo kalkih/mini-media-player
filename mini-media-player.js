@@ -96,7 +96,6 @@ class MiniMediaPlayer extends LitElement {
   render({_hass, config, entity} = this) {
     if (!entity) return;
     const artwork = this._computeArtwork();
-    console.log(artwork);
     const hide_controls = (config.hide_controls || config.hide_volume) || false;
     const short = (hide_controls || config.short_info);
 
