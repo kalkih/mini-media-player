@@ -1,3 +1,6 @@
+## v0.8.7
+- Fixed: unexpected syntax error #18
+
 ## v0.8.6
 - Added: `artwork:` `none` option, to not show artwork
 - Added: `background` option to set a custom background image
