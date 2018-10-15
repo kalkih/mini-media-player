@@ -1,4 +1,4 @@
-/* mini-media-player - version: v0.8.6 */
+/* mini-media-player - version: v0.8.7 */
 import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.2/lit-element.js?module';
 
 class MiniMediaPlayer extends LitElement {
@@ -96,7 +96,6 @@ class MiniMediaPlayer extends LitElement {
   render({_hass, config, entity} = this) {
     if (!entity) return;
     const artwork = this._computeArtwork();
-    console.log(artwork);
     const hide_controls = (config.hide_controls || config.hide_volume) || false;
     const short = (hide_controls || config.short_info);
 
@@ -107,7 +106,7 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork}
         @click='${(e) => this._handleMore()}' state=${entity.state}>
         <div id='artwork-cover' ?bg=${config.background}
-          style='background-image: url("${this._computeBackground()"})'>
+          style='background-image: url("${this._computeBackground()}")'>
         </div>
         <header>${config.title}</header>
         <div class='entity flex' ?hide-info=${this.config.hide_info}>
@@ -133,7 +132,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeBackground() {
-    return artwork && config.artwork == "cover" ? artwork : config.background;
+    const artwork = this._computeArtwork();
+    return artwork && this.config.artwork == "cover" ? artwork : this.config.background;
   }
 
   _computeArtwork() {

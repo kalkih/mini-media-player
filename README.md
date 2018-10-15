@@ -16,7 +16,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?v=0.8.6
+  - url: /local/mini-media-player.js?v=0.8.7
     type: module
 ```
 
@@ -32,7 +32,7 @@ git clone https://github.com/kalkih/mini-media-player.git
 
 ```yaml
 resources:
-  - url: /local/mini-media-player/mini-media-player.js?v=0.8.6
+  - url: /local/mini-media-player/mini-media-player.js?v=0.8.7
     type: module
 ```
 
@@ -56,7 +56,7 @@ custom_updater:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?v=0.8.6
+  - url: /local/mini-media-player.js?v=0.8.7
     type: module
 ```
 
