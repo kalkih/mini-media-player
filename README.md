@@ -143,6 +143,28 @@ Set the `group` option to `true` when nesting the mini media player(s) inside  c
 
 <img src="https://user-images.githubusercontent.com/457678/47516557-08d20900-d886-11e8-8922-4973c0aab94a.png" width="500px" />
 
+## Bundle
+
+If you want to avoid loading resources from https://unpkg.com, you can use
+`mini-media-player-bundle.js` instead.
+
+## Updating bundle (for developer)
+
+Install `nodejs` and `npm`, install dependances by running:
+
+```
+$ npm install
+```
+
+Edit source file `mini-media-player.js`, build by running:
+```
+$ npm build
+```
+
+Then `mini-media-player-bundle.js` will be updated and ready to use.
+
+Finally commit file `mini-media-player-bundle.js` to git.
+
 ## Getting errors?
 Make sure you have `javascript_version: latest` in your `configuration.yaml` under `frontend:`.
 
