@@ -241,8 +241,8 @@ class MiniMediaPlayer extends LitElement {
       const selected = sources.indexOf(source);
       return html`
         <paper-menu-button class='source-menu' slot='dropdown-trigger'
-          .horizontalAlign=${'right'}
-          .verticalAlign=${'top'} .verticalOffset=${40}
+          .horizontalAlign=${'right'} .verticalAlign=${'top'}
+          .verticalOffset=${40} .noAnimations=${true}
           @click='${(e) => e.stopPropagation()}'>
           <paper-button class='source-menu__button' slot='dropdown-trigger'>
             ${this.config.show_source !== 'small' ? html`
