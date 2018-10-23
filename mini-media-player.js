@@ -187,9 +187,10 @@ class MiniMediaPlayer extends LitElement {
 
   _renderMediaInfo(short) {
     const items = MEDIA_INFO.map(item => {
-      item.info = this._getAttribute(item.attr);
-      item.prefix = item.prefix || '';
-      return item;
+      return Object.assign({
+        info: this._getAttribute(item.attr),
+        prefix: item.prefix || ''
+      }, item);
     }).filter(item => item.info !== '');
 
     return html`
@@ -433,7 +434,7 @@ class MiniMediaPlayer extends LitElement {
 
   _hasMediaInfo() {
     const items = MEDIA_INFO.map(item => {
-      return item.info = this._getAttribute(item.attr);
+      return this._getAttribute(item.attr);
     }).filter(item => item !== '');
     return items.length == 0 ? false : true;
   }
