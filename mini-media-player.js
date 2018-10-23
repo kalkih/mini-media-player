@@ -611,6 +611,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork='cover'][has-artwork] .entity__info__media,
         .power-button[color] {
           color: var(--accent-color);
+          transition: color .25s ease-in-out;
         }
         .entity__info__media span:before {
           content: ' - ';
