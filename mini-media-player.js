@@ -106,13 +106,14 @@ class MiniMediaPlayer extends LitElement {
       ${this._style()}
       <ha-card ?group=${config.group}
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
-        artwork=${config.artwork} ?has-artwork=${artwork}
-        @click='${(e) => this._handleMore()}' state=${entity.state}>
+        artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
+        ?hide-icon=${config.hide_icon} ?hide-info=${this.config.hide_info}
+        @click='${(e) => this._handleMore()}'>
         <div class='bg' ?bg=${config.background}
           style='background-image: url("${this._computeBackground()}")'>
         </div>
         <header>${config.title}</header>
-        <div class='entity flex' ?hide-info=${this.config.hide_info}>
+        <div class='entity flex'>
           ${this._renderIcon()}
           <div class='entity__info' ?short=${short}>
             <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
@@ -399,9 +400,7 @@ class MiniMediaPlayer extends LitElement {
       clearInterval(this._positionTracker);
       this._positionTracker = null;
     }
-    if (this._showProgress) {
-      this.position = this._currentProgress();
-    }
+    if (this._showProgress) this.position = this._currentProgress();
   }
 
   _showProgress() {
@@ -415,7 +414,6 @@ class MiniMediaPlayer extends LitElement {
     let progress = this.entity.attributes.media_position;
     if (this._isPlaying()) {
       progress += (Date.now() - new Date(this.entity.attributes.media_position_updated_at).getTime()) / 1000.0;
-
     }
     return progress;
   }
@@ -491,6 +489,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork='cover'][has-artwork] paper-icon-button,
         ha-card[artwork='cover'][has-artwork] ha-icon,
         ha-card[artwork='cover'][has-artwork] .entity__info,
+        ha-card[artwork='cover'][has-artwork] .entity__info__name,
         ha-card[artwork='cover'][has-artwork] paper-button,
         ha-card[artwork='cover'][has-artwork] header,
         ha-card[artwork='cover'][has-artwork] .select span {
@@ -540,6 +539,13 @@ class MiniMediaPlayer extends LitElement {
         .control-row, .tts {
           margin-left: 56px;
           position: relative;
+          transition: margin-left 0.25s;
+        }
+        ha-card[hide-icon] .control-row,
+        ha-card[hide-icon] .tts,
+        ha-card[hide-info] .control-row,
+        ha-card[hide-info] .tts {
+          margin-left: 0;
         }
         .entity__info[short] {
           max-height: 40px;
@@ -723,23 +729,23 @@ class MiniMediaPlayer extends LitElement {
         .unavailable {
           white-space: nowrap;
         }
-        .entity[hide-info] .entity__info,
-        .entity[hide-info] .entity__artwork,
-        .entity[hide-info] .entity__icon {
+        ha-card[hide-info] .entity__info,
+        ha-card[hide-info] .entity__artwork,
+        ha-card[hide-info] .entity__icon {
           display: none;
         }
-        .entity[hide-info] .entity__control-row--top,
-        .entity[hide-info] .select {
+        ha-card[hide-info] .entity__control-row--top,
+        ha-card[hide-info] .select {
           justify-content: space-between;
         }
-        .entity[hide-info] .right {
+        ha-card[hide-info] .right {
           justify-content: flex-end;
           margin-left: auto;
         }
-        .entity[hide-info] .entity__control-row--top,
+        ha-card[hide-info] .entity__control-row--top,
         .entity__control-row--top,
         .select,
-        .entity[hide-info] .select {
+        ha-card[hide-info] .select {
           flex: 1
         }
         @keyframes slide {
@@ -749,6 +755,14 @@ class MiniMediaPlayer extends LitElement {
         @keyframes move {
           from {transform: translate(100%, 0); }
           to {transform: translate(0, 0); }
+        }
+        @media screen and (max-width: 325px) {
+          .control-row, .tts {
+            margin-left: 0;
+          }
+          .source-menu__source {
+            display: none;
+          }
         }
       </style>
     `;
