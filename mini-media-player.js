@@ -650,6 +650,7 @@ class MiniMediaPlayer extends LitElement {
         .vol-control {
           flex: 1;
           min-width: 120px;
+          max-height: 40px;
         }
         paper-slider {
           max-width: 400px;
