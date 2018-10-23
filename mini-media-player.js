@@ -156,7 +156,7 @@ class MiniMediaPlayer extends LitElement {
   _hasOverflow() {
     const element = this.shadowRoot.querySelector('.marquee');
     const status = element.clientWidth > (element.parentNode.clientWidth);
-    element.parentNode.setAttribute('scroll', status);
+    element.parentNode.parentNode.setAttribute('scroll', status);
   }
 
   _renderIcon() {
@@ -195,11 +195,12 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div class='entity__info__media' ?short=${short}>
         ${this.config.scroll_info ? html`
-          <div class='marquee'>
-            ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
+          <div>
+            <div class='marquee'>
+              ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
+            </div>
           </div>` : '' }
           ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
-
       </div>`;
   }
 
@@ -483,7 +484,8 @@ class MiniMediaPlayer extends LitElement {
         }
         ha-card[artwork='cover'][has-artwork] .bg,
         .bg[bg] {
-          display: block;
+          opacity: 1;
+          transition: opacity .5s ease-in;
         }
         ha-card[artwork='cover'][has-artwork] paper-icon-button,
         ha-card[artwork='cover'][has-artwork] ha-icon,
@@ -501,7 +503,8 @@ class MiniMediaPlayer extends LitElement {
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center center;
-          display: none;
+          opacity: 0;
+          transition: opacity .5s ease-in;
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
         }
@@ -595,13 +598,18 @@ class MiniMediaPlayer extends LitElement {
         .entity__info__media[scroll='true'] > span {
           visibility: hidden;
         }
-        .entity__info__media[scroll='true'] {
+        .entity__info__media[scroll='true'] > div {
           animation: move 10s linear infinite;
           overflow: visible;
         }
         .entity__info__media[scroll='true'] .marquee {
           animation: slide 10s linear infinite;
           visibility: visible;
+        }
+        .entity__info__media[scroll='true'] {
+          text-overflow: clip;
+          mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
         }
         .marquee {
           visibility: hidden;
@@ -667,6 +675,14 @@ class MiniMediaPlayer extends LitElement {
         }
         .source-menu {
           padding: 0;
+        }
+        .source-menu[focused] iron-icon {
+          transform: rotate(180deg);
+            color: var(--accent-color);
+        }
+        .source-menu__button[focused] iron-icon {
+          color: var(--primary-text-color);
+          transform: rotate(0deg);
         }
         .source-menu__button {
           height: 40px;
