@@ -57,6 +57,7 @@ class MiniMediaPlayer extends LitElement {
       background: false,
       group: false,
       hide_controls: false,
+      hide_icon: false,
       hide_info: false,
       hide_mute: false,
       hide_power: false,
@@ -157,6 +158,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderIcon() {
+    if (this.config.hide_icon) return;
     const artwork = this._computeArtwork();
     if (this._isActive() && artwork && this.config.artwork == 'default') {
       return html`
@@ -525,7 +527,7 @@ class MiniMediaPlayer extends LitElement {
           flex-wrap: wrap;
         }
         .info {
-          margin-left: 16px;
+          margin-left: 8px;
           display: block;
           position: relative;
         }
@@ -546,6 +548,7 @@ class MiniMediaPlayer extends LitElement {
           background-position: center center;
           border-radius: 100%;
           line-height: 40px;
+          margin-right: 8px;
           position: relative;
           text-align: center;
         }
