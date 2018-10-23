@@ -113,13 +113,13 @@ class MiniMediaPlayer extends LitElement {
         </div>
         <header>${config.title}</header>
         <div class='entity flex' ?hide-info=${this.config.hide_info}>
-            ${this._renderIcon()}
-            <div class='entity__info' ?short=${short}>
-              <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
-                ${this._computeName()}
-              </div>
-              ${this._renderMediaInfo(short)}
+          ${this._renderIcon()}
+          <div class='entity__info' ?short=${short}>
+            <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
+              ${this._computeName()}
             </div>
+            ${this._renderMediaInfo(short)}
+          </div>
           <div class='entity__control-row--top flex'>
             ${this._renderPowerStrip(entity)}
           </div>
@@ -155,7 +155,7 @@ class MiniMediaPlayer extends LitElement {
 
   _hasOverflow() {
     const element = this.shadowRoot.querySelector('.marquee');
-    const status = element.clientWidth > (element.parentNode.clientWidth) ;
+    const status = element.clientWidth > (element.parentNode.clientWidth);
     element.parentNode.setAttribute('scroll', status);
   }
 
@@ -198,9 +198,8 @@ class MiniMediaPlayer extends LitElement {
           <div class='marquee'>
             ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
           </div>` : '' }
-        <div>
           ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
-        </div>
+
       </div>`;
   }
 
@@ -567,11 +566,16 @@ class MiniMediaPlayer extends LitElement {
         .entity__artwork[state='playing'] {
           border-color: var(--accent-color);
         }
-        .entity__info__name, .entity__control-row--top {
-          line-height: 40px;
+        .entity__info__name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .entity__info__name[has-info] {
           line-height: 20px;
+        }
+        .entity__info__name, .entity__control-row--top {
+          line-height: 40px;
         }
         .entity__info__name,
         paper-icon-button,
@@ -584,16 +588,11 @@ class MiniMediaPlayer extends LitElement {
           color: var(--secondary-text-color);
         }
         .entity__info__media[short] {
-          display: block;
-          display: -webkit-box;
-          max-height: 1.4rem;
           overflow: hidden;
           text-overflow: ellipsis;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          word-wrap: break-word;
+          white-space: nowrap;
         }
-        .entity__info__media[scroll='true'] div {
+        .entity__info__media[scroll='true'] > span {
           visibility: hidden;
         }
         .entity__info__media[scroll='true'] {
@@ -605,7 +604,7 @@ class MiniMediaPlayer extends LitElement {
           visibility: visible;
         }
         .marquee {
-          display: inline-block;
+          visibility: hidden;
           position: absolute;
           white-space: nowrap;
         }
@@ -616,7 +615,7 @@ class MiniMediaPlayer extends LitElement {
         .entity__info__media span:before {
           content: ' - ';
         }
-        .entity__info__media span:first-child:before {
+        .entity__info__media span:first-of-type:before {
           content: '';
         }
         .entity__info__media span:empty,
@@ -631,6 +630,9 @@ class MiniMediaPlayer extends LitElement {
         .entity__control-row--top {
           padding-left: 5px;
         }
+        .select .vol-control {
+          max-width: 200px;
+        }
         .entity__control-row--top,
         .select {
           justify-content: flex-end;
@@ -638,8 +640,6 @@ class MiniMediaPlayer extends LitElement {
           margin-left: auto;
           width: auto;
         }
-        .entity__control-row--top,
-        .select,
         .entity__control-row--top paper-slider {
           flex: 1;
         }
@@ -716,6 +716,12 @@ class MiniMediaPlayer extends LitElement {
         .entity[hide-info] .right {
           justify-content: flex-end;
           margin-left: auto;
+        }
+        .entity[hide-info] .entity__control-row--top,
+        .entity__control-row--top,
+        .select,
+        .entity[hide-info] .select {
+          flex: 1
         }
         @keyframes slide {
           from {transform: translate(0, 0); }
