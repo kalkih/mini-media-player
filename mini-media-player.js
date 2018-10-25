@@ -492,7 +492,8 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork='cover'][has-artwork] .entity__info__name,
         ha-card[artwork='cover'][has-artwork] paper-button,
         ha-card[artwork='cover'][has-artwork] header,
-        ha-card[artwork='cover'][has-artwork] .select span {
+        ha-card[artwork='cover'][has-artwork] .select span,
+        ha-card[artwork='cover'][has-artwork] .source-menu__button[focused] iron-icon {
           color: #FFFFFF;
         }
         ha-card[artwork='cover'][has-artwork] paper-input {
@@ -625,7 +626,7 @@ class MiniMediaPlayer extends LitElement {
         }
         ha-card[artwork='cover'][has-artwork] .entity__info__media,
         .power-button[color] {
-          color: var(--accent-color);
+          color: var(--accent-color) !important;
           transition: color .25s ease-in-out;
         }
         .entity__info__media span:before {
@@ -669,7 +670,7 @@ class MiniMediaPlayer extends LitElement {
         }
         paper-slider {
           max-width: 400px;
-          min-width: 80px;
+          min-width: 100px;
           width: 100%;
         }
         paper-input {
@@ -682,6 +683,7 @@ class MiniMediaPlayer extends LitElement {
         }
         .source-menu {
           padding: 0;
+          height: 40px;
         }
         .source-menu[focused] iron-icon {
           transform: rotate(180deg);
