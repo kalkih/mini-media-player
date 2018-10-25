@@ -1,4 +1,4 @@
-/* mini-media-player - version: v0.8.7 */
+/* mini-media-player - version: v0.8.8 */
 import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.2/lit-element.js?module';
 
 const MEDIA_INFO = [

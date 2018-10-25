@@ -1,3 +1,18 @@
+## v0.8.8
+- Added: `hide_icon` option to optionally hide the entity icon
+- Added: ellipsis instead of clipping the entity name if text overflows
+- Added: fade in/out effect for media info text when `scroll_info` is enabled
+- Added: various minimalistic transitions
+- Fixed: made ellipsis for media info or entity name text overflow work in more browsers
+- Fixed: Improved responsive design for small screens
+- Fixed: minor alignment issue of the mute button while using `hide_controls`
+- Removed: source select dropdown animation
+
+  <img src="https://user-images.githubusercontent.com/457678/47514724-61eb6e00-d881-11e8-88ce-94a8f0a3b540.gif" width="500" alt="v0.8.8 example 1" />
+
+  <img src="https://user-images.githubusercontent.com/457678/47515109-4339a700-d882-11e8-99e5-1bc9931c796a.png" width="500" alt="v0.8.8 example 2" />
+
+
 ## v0.8.7
 - Fixed: unexpected syntax error #18
 

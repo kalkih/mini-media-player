@@ -1,11 +1,9 @@
-# Lovelace Mini Media Player
-A minimalistic lovelace media player card for [Home Assistant](https://github.com/home-assistant/home-assistant).
+# Mini Media Player
+A minimalistic yet powerful & customizable media player card for [Home Assistant](https://github.com/home-assistant/home-assistant) Lovelace UI.
 
 Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t/custom-ui-mini-media-player/40135) and [custom-lovelace](https://github.com/ciotlosm/custom-lovelace).
 
-| Single player | Grouping players| Customizable |
-|:----:|:----:|:----:|
-| <img src="https://user-images.githubusercontent.com/457678/45498746-0fe00480-b77b-11e8-8930-6b350877445d.png" alt="Preview 1" width="250"> | <img src="https://user-images.githubusercontent.com/457678/45498745-0fe00480-b77b-11e8-8a54-8946c535ac11.png" alt="Preview 2" width="250"> | <img src="https://user-images.githubusercontent.com/457678/46092838-0c566f80-c1b6-11e8-9c54-3797a03f39e7.gif" alt="Preview 3" width="250"> |
+![Preview Image](https://user-images.githubusercontent.com/457678/47517460-9282d600-d888-11e8-9705-cf9ec3698c3c.png)
 
 ## Install
 
@@ -16,7 +14,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?v=0.8.7
+  - url: /local/mini-media-player.js?v=0.8.8
     type: module
 ```
 
@@ -32,7 +30,7 @@ git clone https://github.com/kalkih/mini-media-player.git
 
 ```yaml
 resources:
-  - url: /local/mini-media-player/mini-media-player.js?v=0.8.7
+  - url: /local/mini-media-player/mini-media-player.js?v=0.8.8
     type: module
 ```
 
@@ -56,7 +54,7 @@ custom_updater:
 
 ```yaml
 resources:
-  - url: /local/mini-media-player.js?v=0.8.7
+  - url: /local/mini-media-player.js?v=0.8.8
     type: module
 ```
 
@@ -84,6 +82,7 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | hide_volume | boolean | false | v0.8 | Set to `true` to hide volume controls. (*sets `short_info` to `true`*).
 | hide_mute | boolean | false | v0.8.1 | Set to `true` to hide the mute button.
 | hide_info | boolean | false | v0.8.4 | Set to `true` to hide entity icon, entity name & media information.
+| hide_icon | boolean | false | v0.8.8 | Set to `true` to hide the entity icon.
 | artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*, set to `none` to never display artwork.
 | short_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and cut off any potential overflowing text.
 | scroll_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and scroll through any potential overflowing text.
@@ -99,55 +98,57 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 #### Single player
 ```yaml
 - type: custom:mini-media-player
-  entity: media_player.spotify
-  icon: 'mdi:cast'
+  entity: media_player.avr
+  icon: mdi:router-wireless
   artwork_border: true
-  power_color: true
   show_source: true
 ```
 
-<img src="https://user-images.githubusercontent.com/457678/46084819-d957b000-c1a4-11e8-897d-fda0385cbd2e.png" width="500px" />
+<img src="https://user-images.githubusercontent.com/457678/47515832-256d4180-d884-11e8-97a6-267c5c63c000.png" width="500px" />
 
 #### Compact player
+Setting either `hide_volume` and/or `hide_controls` to `true` will make the  player collapse into one row.
 ```yaml
 - type: custom:mini-media-player
   entity: media_player.spotify
   name: Spotify Player
   artwork: cover
-  hide_power: true
+  power_color: true
   hide_volume: true
-  show_source: true
+  show_progress: true
 ```
 
-<img src="https://user-images.githubusercontent.com/457678/46084911-0ad07b80-c1a5-11e8-895f-729886bdc5bc.png" width="500px" />
+<img src="https://user-images.githubusercontent.com/457678/47516141-fc997c00-d884-11e8-9bc9-eb9b0818f28b.png" width="500px" />
 
 #### Grouping players
-Use the card in a group together with other players or entities
+Set the `group` option to `true` when nesting the mini media player(s) inside  cards that already have margins/paddings.
 
 ```yaml
 - type: entities
-  title: Media
+  title: Media Players
   entities:
-  - entity: media_player.spotify
-    type: "custom:mini-media-player"
-    name: Spotify
-    group: true
-  - entity: media_player.samsung_tv
-    type: "custom:mini-media-player"
-    group: true
-  - entity: media_player.google_home
-    type: "custom:mini-media-player"
-    group: true
+    - entity: media_player.spotify
+      type: "custom:mini-media-player"
+      group: true
+    - entity: media_player.google_home
+      type: "custom:mini-media-player"
+      hide_controls: true
+      show_tts: true
+      group: true
+    - entity: media_player.samsung_tv
+      type: "custom:mini-media-player"
+      hide_controls: true
+      group: true
 ```
 
-<img src="https://user-images.githubusercontent.com/457678/46085589-a6aeb700-c1a6-11e8-87ce-011db2bc64fb.png" width="500px" />
+<img src="https://user-images.githubusercontent.com/457678/47516557-08d20900-d886-11e8-8922-4973c0aab94a.png" width="500px" />
 
 ## Getting errors?
 Make sure you have `javascript_version: latest` in your `configuration.yaml` under `frontend:`.
 
 Make sure you have the latest version of `mini-media-player.js`.
 
-If you have issues after updating the card, try clearing your browser cache.
+If you have issues after updating the card, try clearing your browsers cache or restart Home Assistant.
 
 ## Inspiration
 - [@ciotlosm](https://github.com/ciotlosm) - [custom-lovelace](https://github.com/ciotlosm/custom-lovelace)
