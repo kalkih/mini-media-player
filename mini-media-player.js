@@ -77,16 +77,18 @@ class MiniMediaPlayer extends LitElement {
       volume_stateless: false
     }, config);
     conf.max_volume = Number(conf.max_volume) || 100;
-    conf.short_info = (conf.short_info || conf.scroll_info ? true : false);
+    conf.collapse = (conf.hide_controls || conf.hide_volume)
+    conf.short_info = (conf.short_info || conf.scroll_info || conf.collapse);
 
     this.config = conf;
   }
 
   shouldUpdate(changedProps) {
-    const change = changedProps.has('entity')
+    const update = this.entity
+      && (changedProps.has('entity')
       || changedProps.has('source')
-      || changedProps.has('position');
-    if (change) {
+      || changedProps.has('position'));
+    if (update) {
       if (this.config.show_progress) this._checkProgress();
       return true;
     }
@@ -97,10 +99,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   render({_hass, config, entity} = this) {
-    if (!entity) return;
     const artwork = this._computeArtwork();
-    const hide_controls = (config.hide_controls || config.hide_volume) || false;
-    const short = (hide_controls || config.short_info);
 
     return html`
       ${this._style()}
@@ -110,24 +109,24 @@ class MiniMediaPlayer extends LitElement {
         ?hide-icon=${config.hide_icon} ?hide-info=${this.config.hide_info}
         @click='${(e) => this._handleMore()}'>
         <div class='bg' ?bg=${config.background}
-          style='background-image: url("${this._computeBackground()}")'>
+          style='background-image: url("${this._computeCover(artwork)}")'>
         </div>
         <header>${config.title}</header>
         <div class='entity flex'>
-          ${this._renderIcon()}
-          <div class='entity__info' ?short=${short}>
+          ${this._renderIcon(artwork)}
+          <div class='entity__info' ?short=${config.short_info}>
             <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
               ${this._computeName()}
             </div>
-            ${this._renderMediaInfo(short)}
+            ${this._renderMediaInfo(config.short_info)}
           </div>
           <div class='entity__control-row--top flex'>
             ${this._renderPowerStrip(entity)}
           </div>
         </div>
-        ${this._isActive() && !hide_controls ? this._renderControlRow(entity) : html``}
+        ${!config.collapse && this._isActive() ? this._renderControlRow(entity) : html``}
         ${config.show_tts ? this._renderTts() : html``}
-        ${config.show_progress ? this._renderProgress(entity) : ''}
+        ${config.show_progress && this._showProgress ? this._renderProgress(entity) : ''}
       </ha-card>`;
   }
 
@@ -135,9 +134,8 @@ class MiniMediaPlayer extends LitElement {
     return this.config.name || this.entity.attributes.friendly_name;
   }
 
-  _computeBackground() {
-    const artwork = this._computeArtwork();
-    return artwork && this.config.artwork == "cover" ? artwork : this.config.background;
+  _computeCover(artwork) {
+    return (artwork && this.config.artwork == 'cover') ? artwork : this.config.background;
   }
 
   _computeArtwork() {
@@ -160,9 +158,8 @@ class MiniMediaPlayer extends LitElement {
     element.parentNode.parentNode.setAttribute('scroll', status);
   }
 
-  _renderIcon() {
+  _renderIcon(artwork) {
     if (this.config.hide_icon) return;
-    const artwork = this._computeArtwork();
     if (this._isActive() && artwork && this.config.artwork == 'default') {
       return html`
         <div class='entity__artwork' ?border=${this.config.artwork_border}
@@ -207,10 +204,9 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderProgress(entity) {
-    const show = this._showProgress();
     return html`
-      <paper-progress max=${entity.attributes.media_duration}
-        value=${this.position} class='progress transiting ${!show ? "hidden" : ""}'>
+      <paper-progress class='progress transiting' value=${this.position}
+        max=${entity.attributes.media_duration}>
       </paper-progress>`;
   }
 
@@ -227,7 +223,7 @@ class MiniMediaPlayer extends LitElement {
         ${active && config.hide_controls && !config.hide_volume ? this._renderVolControls(entity) : html``}
         ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
         <div class='flex right'>
-          ${config.show_source !== false ? this._renderSource(entity) : html``}
+          ${config.show_source ? this._renderSource(entity) : html``}
           ${!config.hide_power ? this._renderPower(active) : html``}
         <div>
       </div>`;
@@ -291,10 +287,11 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderMuteButton(muted) {
+    const data = { is_volume_muted: !muted }
     if (!this.config.hide_mute)
       return html`
         <paper-icon-button .icon=${ICON.mute[muted]}
-          @click='${(e) => this._callService(e, "volume_mute", { is_volume_muted: !muted })}'>
+          @click='${(e) => this._callService(e, "volume_mute", data)}'>
         </paper-icon-button>`;
   }
 
@@ -392,30 +389,30 @@ class MiniMediaPlayer extends LitElement {
   }
 
   async _checkProgress() {
-    if (this._isPlaying() && this._showProgress()) {
+    if (this._isPlaying() && this._showProgress) {
       if (!this._positionTracker) {
-        this._positionTracker = setInterval(() => this.position = this._currentProgress(), 1000);
+        this._positionTracker = setInterval(() =>
+          this.position = this._currentProgress, 1000);
       }
     } else if (this._positionTracker) {
       clearInterval(this._positionTracker);
       this._positionTracker = null;
     }
-    if (this._showProgress) this.position = this._currentProgress();
+    this.position = this._currentProgress;
   }
 
-  _showProgress() {
+  get _showProgress() {
     return (
       (this._isPlaying() || this._isPaused())
       && 'media_duration' in this.entity.attributes
       && 'media_position' in this.entity.attributes
       && 'media_position_updated_at' in this.entity.attributes);
   }
-  _currentProgress() {
-    let progress = this.entity.attributes.media_position;
-    if (this._isPlaying()) {
-      progress += (Date.now() - new Date(this.entity.attributes.media_position_updated_at).getTime()) / 1000.0;
-    }
-    return progress;
+
+  get _currentProgress() {
+    const updated = this.entity.attributes.media_position_updated_at;
+    const position = this.entity.attributes.media_position;
+    return position + (Date.now() - new Date(updated).getTime()) / 1000.0;
   }
 
   _isPaused() {
@@ -643,9 +640,6 @@ class MiniMediaPlayer extends LitElement {
           cursor: text;
           flex: 1;
           -webkit-flex: 1;
-        }
-        .entity__control-row--top {
-          padding-left: 5px;
         }
         .select .vol-control {
           max-width: 200px;
