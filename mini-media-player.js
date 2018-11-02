@@ -10,22 +10,22 @@ const MEDIA_INFO = [
 ];
 
 const ICON = {
-  'prev': 'mdi:skip-previous',
-  'next': 'mdi:skip-next',
-  'power': 'mdi:power',
-  'volume_up': 'mdi:volume-high',
-  'volume_down': 'mdi:volume-medium',
-  'send': 'mdi:send',
-  'dropdown': 'mdi:chevron-down',
-  'shuffle': 'mdi:shuffle-variant',
-  'mute': {
+  dropdown: 'mdi:chevron-down',
+  mute: {
     true: 'mdi:volume-off',
     false: 'mdi:volume-high'
   },
-  'playing': {
+  next: 'mdi:skip-next',
+  playing: {
     true: 'mdi:pause',
     false: 'mdi:play'
-  }
+  },
+  power: 'mdi:power',
+  prev: 'mdi:skip-previous',
+  send: 'mdi:send',
+  shuffle: 'mdi:shuffle-variant',
+  volume_down: 'mdi:volume-medium',
+  volume_up: 'mdi:volume-high'
 };
 
 class MiniMediaPlayer extends LitElement {
@@ -185,7 +185,7 @@ class MiniMediaPlayer extends LitElement {
   _renderPower() {
     return html`
       <paper-icon-button class='power-button'
-        .icon=${ICON['power']}
+        .icon=${ICON.power}
         @click='${e => this._handlePower(e)}'
         ?color=${this.config.power_color && this.active}>
       </paper-icon-button>`;
@@ -283,7 +283,7 @@ class MiniMediaPlayer extends LitElement {
           <paper-button class='source-menu__button' slot='dropdown-trigger'>
             ${this.config.show_source !== 'small' ? html`
             <span class='source-menu__source'>${this.source || source}</span>` : '' }
-            <iron-icon .icon=${ICON['dropdown']}></iron-icon>
+            <iron-icon .icon=${ICON.dropdown}></iron-icon>
           </paper-button>
           <paper-listbox slot='dropdown-content' selected=${selected}
             @click='${(e) => this._handleSource(e)}'>
@@ -305,11 +305,11 @@ class MiniMediaPlayer extends LitElement {
   _renderMediaControls(entity) {
     return html`
       <div class='flex'>
-        <paper-icon-button .icon=${ICON["prev"]}
+        <paper-icon-button .icon=${ICON.prev}
           @click='${(e) => this._callService(e, "media_previous_track")}'>
         </paper-icon-button>
         ${this._renderPlayButton()}
-        <paper-icon-button .icon=${ICON["next"]}
+        <paper-icon-button .icon=${ICON.next}
           @click='${(e) => this._callService(e, "media_next_track")}'>
         </paper-icon-button>
       </div>`;
