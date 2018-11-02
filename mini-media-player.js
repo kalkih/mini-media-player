@@ -257,10 +257,10 @@ class MiniMediaPlayer extends LitElement {
       <div class='select flex'>
         ${active && config.hide_controls
           && !config.hide_volume ? this._renderVolControls(entity) : html``}
-        ${active && config.show_shuffle
-          && (config.hide_volume || config.hide_controls ) ? this._renderShuffle() : html``}
         ${active && config.hide_volume
           && !config.hide_controls ? this._renderMediaControls(entity) : html``}
+        ${active && config.show_shuffle
+          && (config.hide_volume || config.hide_controls ) ? this._renderShuffle() : html``}
         <div class='flex right'>
           ${config.show_source ? this._renderSource(entity) : html``}
           ${config.consider_idle_after ? this._renderIdleStatus() : html``}
