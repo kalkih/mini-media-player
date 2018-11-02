@@ -132,8 +132,12 @@ class MiniMediaPlayer extends LitElement {
             ${this._renderPowerStrip()}
           </div>
         </div>
-        ${!config.collapse && this.active ? this._renderControlRow() : html``}
-        ${config.show_tts ? this._renderTts() : html``}
+        <div class='rows'>
+          <div class='control-row flex flex-wrap justify' ?wrap=${this.config.volume_stateless}>
+            ${!config.collapse && this.active ? this._renderControlRow() : ''}
+          </div>
+          ${config.show_tts ? this._renderTts() : ''}
+        </div>
         ${config.show_progress && this._showProgress ? this._renderProgress() : ''}
       </ha-card>`;
   }
@@ -259,12 +263,7 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       <div class='select flex'>
-        ${active && config.hide_controls
-          && !config.hide_volume ? this._renderVolControls() : html``}
-        ${active && config.hide_volume
-          && !config.hide_controls ? this._renderMediaControls() : html``}
-        ${active && config.show_shuffle
-          && (config.hide_volume || config.hide_controls ) ? this._renderShuffle() : html``}
+        ${active && config.collapse ? this._renderControlRow() : html``}
         <div class='flex right'>
           ${config.show_source ? this._renderSource() : html``}
           ${config.consider_idle_after ? this._renderIdleStatus() : html``}
@@ -299,11 +298,9 @@ class MiniMediaPlayer extends LitElement {
 
   _renderControlRow() {
     return html`
-      <div class='control-row flex flex-wrap justify' ?wrap=${this.config.volume_stateless}>
-        ${this._renderVolControls()}
-        ${this.config.show_shuffle ? this._renderShuffle() : ''}
-        ${this._renderMediaControls()}
-      </div>`;
+      ${!this.config.hide_volume ? this._renderVolControls() : ''}
+      ${this.config.show_shuffle ? this._renderShuffle() : ''}
+      ${!this.config.hide_controls ? this._renderMediaControls() : ''}`;
   }
 
   _renderMediaControls() {
@@ -602,15 +599,12 @@ class MiniMediaPlayer extends LitElement {
           display: block;
           position: relative;
         }
-        .control-row, .tts {
+        .rows {
           margin-left: 56px;
           position: relative;
           transition: margin-left 0.25s;
         }
-        ha-card[hide-icon] .control-row,
-        ha-card[hide-icon] .tts,
-        ha-card[hide-info] .control-row,
-        ha-card[hide-info] .tts {
+        ha-card[hide-icon] .rows {
           margin-left: 0;
         }
         .entity__info[short] {
@@ -703,6 +697,7 @@ class MiniMediaPlayer extends LitElement {
         paper-icon-button.shuffle {
           align-self: center;
           height: 36px;
+          min-width: 36px;
           text-align: center;
           width: 36px;
         }
@@ -739,7 +734,7 @@ class MiniMediaPlayer extends LitElement {
         }
         .vol-control {
           flex: 1;
-          min-width: 120px;
+          min-width: 140px;
           max-height: 40px;
         }
         paper-slider {
@@ -834,7 +829,7 @@ class MiniMediaPlayer extends LitElement {
           to {transform: translate(0, 0); }
         }
         @media screen and (max-width: 325px) {
-          .control-row, .tts {
+          .rows {
             margin-left: 0;
           }
           .source-menu__source {
