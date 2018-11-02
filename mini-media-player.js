@@ -684,7 +684,7 @@ class MiniMediaPlayer extends LitElement {
           visibility: visible;
         }
         .entity__info__media[scroll='true'] {
-          text-overflow: clip;
+          text-overflow: clip !important;
           mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
           -webkit-mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
         }
