@@ -129,12 +129,12 @@ class MiniMediaPlayer extends LitElement {
             ${this._renderMediaInfo()}
           </div>
           <div class='entity__control-row--top flex'>
-            ${this._renderPowerStrip(entity)}
+            ${this._renderPowerStrip()}
           </div>
         </div>
-        ${!config.collapse && this.active ? this._renderControlRow(entity) : html``}
+        ${!config.collapse && this.active ? this._renderControlRow() : html``}
         ${config.show_tts ? this._renderTts() : html``}
-        ${config.show_progress && this._showProgress ? this._renderProgress(entity) : ''}
+        ${config.show_progress && this._showProgress ? this._renderProgress() : ''}
       </ha-card>`;
   }
 
@@ -220,10 +220,10 @@ class MiniMediaPlayer extends LitElement {
       </div>`;
   }
 
-  _renderProgress(entity) {
+  _renderProgress() {
     return html`
       <paper-progress class='progress transiting' value=${this.position}
-        max=${entity.attributes.media_duration}>
+        max=${this.entity.attributes.media_duration}>
       </paper-progress>`;
   }
 
@@ -236,8 +236,10 @@ class MiniMediaPlayer extends LitElement {
 
   _renderIdleStatus() {
     if (this._isInactive()) {
-      if (this._isPaused()) return this._renderPlayButton();
-      return this._renderString('state.media_player.idle', 'Idle');
+      if (this._isPaused())
+        return this._renderPlayButton();
+      else
+        return this._renderString('state.media_player.idle', 'Idle');
     }
   }
 
@@ -250,28 +252,28 @@ class MiniMediaPlayer extends LitElement {
       </paper-icon-button>`;
   }
 
-  _renderPowerStrip(entity, {config} = this) {
+  _renderPowerStrip({config} = this) {
     const active = this.active;
-    if (entity.state == 'unavailable') {
+    if (this.entity.state == 'unavailable')
       this._renderString('state.default.unavailable', 'Unavailable');
-    }
+
     return html`
       <div class='select flex'>
         ${active && config.hide_controls
-          && !config.hide_volume ? this._renderVolControls(entity) : html``}
+          && !config.hide_volume ? this._renderVolControls() : html``}
         ${active && config.hide_volume
-          && !config.hide_controls ? this._renderMediaControls(entity) : html``}
+          && !config.hide_controls ? this._renderMediaControls() : html``}
         ${active && config.show_shuffle
           && (config.hide_volume || config.hide_controls ) ? this._renderShuffle() : html``}
         <div class='flex right'>
-          ${config.show_source ? this._renderSource(entity) : html``}
+          ${config.show_source ? this._renderSource() : html``}
           ${config.consider_idle_after ? this._renderIdleStatus() : html``}
           ${!config.hide_power ? this._renderPower() : html``}
         <div>
       </div>`;
   }
 
-  _renderSource(entity) {
+  _renderSource({entity} = this) {
     const sources = entity.attributes['source_list'] || false;
     const source = entity.attributes['source'] || '';
 
@@ -295,16 +297,16 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
-  _renderControlRow(entity) {
+  _renderControlRow() {
     return html`
       <div class='control-row flex flex-wrap justify' ?wrap=${this.config.volume_stateless}>
-        ${this._renderVolControls(entity)}
+        ${this._renderVolControls()}
         ${this.config.show_shuffle ? this._renderShuffle() : ''}
-        ${this._renderMediaControls(entity)}
+        ${this._renderMediaControls()}
       </div>`;
   }
 
-  _renderMediaControls(entity) {
+  _renderMediaControls() {
     return html`
       <div class='flex'>
         <paper-icon-button .icon=${ICON.prev}
@@ -317,13 +319,12 @@ class MiniMediaPlayer extends LitElement {
       </div>`;
   }
 
-  _renderVolControls(entity) {
-    const muted = entity.attributes.is_volume_muted || false;
-    if (this.config.volume_stateless) {
-      return this._renderVolButtons(entity, muted);
-    } else {
-      return this._renderVolSlider(entity, muted);
-    }
+  _renderVolControls() {
+    const muted = this.entity.attributes.is_volume_muted || false;
+    if (this.config.volume_stateless)
+      return this._renderVolButtons(muted);
+    else
+      return this._renderVolSlider(muted);
   }
 
   _renderMuteButton(muted) {
@@ -335,8 +336,8 @@ class MiniMediaPlayer extends LitElement {
         </paper-icon-button>`;
   }
 
-  _renderVolSlider(entity, muted = false) {
-    const volumeSliderValue = entity.attributes.volume_level * 100;
+  _renderVolSlider(muted = false) {
+    const volSliderVal = this.entity.attributes.volume_level * 100;
 
     return html`
       <div class='vol-control flex'>
@@ -346,13 +347,13 @@ class MiniMediaPlayer extends LitElement {
         <paper-slider ?disabled=${muted}
           @change='${(e) => this._handleVolumeChange(e)}'
           @click='${(e) => e.stopPropagation()}'
-          min='0' max=${this.config.max_volume} value=${volumeSliderValue}
+          min='0' max=${this.config.max_volume} value=${volSliderVal}
           ignore-bar-touch pin>
         </paper-slider>
       </div>`;
   }
 
-  _renderVolButtons(entity, muted = false) {
+  _renderVolButtons(muted = false) {
     return html`
       <div class='flex'>
         ${this._renderMuteButton(muted)}
@@ -388,7 +389,6 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handleVolumeChange(e) {
-    e.stopPropagation();
     const volPercentage = parseFloat(e.target.value);
     const vol = volPercentage > 0 ? volPercentage / 100 : 0;
     this._callService(e, 'volume_set', { volume_level: vol })
@@ -406,7 +406,6 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handleTts(e) {
-    e.stopPropagation();
     const input = this.shadowRoot.querySelector('#tts paper-input');
     const options = { message: input.value };
     this._callService(e, this.config.show_tts + '_say' , options, 'tts');
@@ -419,7 +418,6 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handleSource(e) {
-    e.stopPropagation();
     const source = e.target.getAttribute('value');
     const options = { 'source': source };
     this._callService(e, 'select_source' , options);
