@@ -78,6 +78,7 @@ class MiniMediaPlayer extends LitElement {
       show_source: false,
       show_tts: false,
       title: '',
+      toggle_power: true,
       volume_stateless: false
     }, config);
     conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
@@ -185,7 +186,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <paper-icon-button class='power-button'
         .icon=${ICON['power']}
-        @click='${(e) => this._callService(e, "toggle")}'
+        @click='${e => this._handlePower(e)}'
         ?color=${this.config.power_color && this.active}>
       </paper-icon-button>`;
   }
@@ -389,6 +390,17 @@ class MiniMediaPlayer extends LitElement {
     const volPercentage = parseFloat(e.target.value);
     const vol = volPercentage > 0 ? volPercentage / 100 : 0;
     this._callService(e, 'volume_set', { volume_level: vol })
+  }
+
+  _handlePower(e) {
+    if (this.config.toggle_power) {
+      this._callService(e, 'toggle');
+    } else {
+      if (this.entity.state === 'off')
+        this._callService(e, 'turn_on');
+      else
+        this._callService(e, 'turn_off');
+    }
   }
 
   _handleTts(e) {
