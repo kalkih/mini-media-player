@@ -17,6 +17,7 @@ const ICON = {
   'volume_down': 'mdi:volume-medium',
   'send': 'mdi:send',
   'dropdown': 'mdi:chevron-down',
+  'shuffle': 'mdi:shuffle-variant',
   'mute': {
     true: 'mdi:volume-off',
     false: 'mdi:volume-high'
@@ -73,6 +74,7 @@ class MiniMediaPlayer extends LitElement {
       scroll_info: false,
       short_info: false,
       show_progress: false,
+      show_shuffle: true,
       show_source: false,
       show_tts: false,
       title: '',
@@ -236,6 +238,15 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
+  _renderShuffle() {
+    const shuffle = this.entity.attributes.shuffle || false;
+    return html`
+      <paper-icon-button class='shuffle' .icon=${ICON.shuffle} ?color=${shuffle}
+        @click='${e => this._callService(e, "shuffle_set",
+          { shuffle: !shuffle })}'>
+      </paper-icon-button>`;
+  }
+
   _renderPowerStrip(entity, {config} = this) {
     const active = this.active;
     if (entity.state == 'unavailable') {
@@ -243,8 +254,12 @@ class MiniMediaPlayer extends LitElement {
     }
     return html`
       <div class='select flex'>
-        ${active && config.hide_controls && !config.hide_volume ? this._renderVolControls(entity) : html``}
-        ${active && config.hide_volume && !config.hide_controls ? this._renderMediaControls(entity) : html``}
+        ${active && config.hide_controls
+          && !config.hide_volume ? this._renderVolControls(entity) : html``}
+        ${active && config.show_shuffle
+          && (config.hide_volume || config.hide_controls ) ? this._renderShuffle() : html``}
+        ${active && config.hide_volume
+          && !config.hide_controls ? this._renderMediaControls(entity) : html``}
         <div class='flex right'>
           ${config.show_source ? this._renderSource(entity) : html``}
           ${config.consider_idle_after ? this._renderIdleStatus() : html``}
@@ -281,6 +296,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div class='control-row flex flex-wrap justify' ?wrap=${this.config.volume_stateless}>
         ${this._renderVolControls(entity)}
+        ${this.config.show_shuffle ? this._renderShuffle() : ''}
         ${this._renderMediaControls(entity)}
       </div>`;
   }
@@ -666,9 +682,17 @@ class MiniMediaPlayer extends LitElement {
           white-space: nowrap;
         }
         ha-card[artwork='cover'][has-artwork] .entity__info__media,
-        .power-button[color] {
+        paper-icon-button[color] {
           color: var(--accent-color) !important;
+        }
+        paper-icon-button {
           transition: color .25s ease-in-out;
+        }
+        paper-icon-button.shuffle {
+          align-self: center;
+          height: 36px;
+          text-align: center;
+          width: 36px;
         }
         .entity__info__media span:before {
           content: ' - ';
