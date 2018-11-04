@@ -73,28 +73,28 @@ If you went the `git clone` route, just run `git pull` from inside your `config/
 | title | string | optional | v0.1 | Set a card title.
 | name | string | optional | v0.6 | Override the entities friendly name.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
-| group | boolean | false | v0.1 | Are you using this card inside another card, `entities` for example? Then set this option to true to avoid double paddings and the extra box-shadow.
-| show_tts | string | optional | v0.2 | If you want to show the TTS input directly on the media player card, specify your [TTS platform](https://www.home-assistant.io/components/tts/) here: `show_tts: google`, `show_tts: amazon_polly`, `show_tts: marytts` e.g.
-| show_source | string | false | v0.7 | Set this option to `true` to display the current source, set to `small` to hide current source and only display the source button (v0.8.1).
-| show_progress | boolean | false | v0.8.3 | Set to `true` to show a progress bar when media progress information is available.
-| show_shuffle | boolean | false | v0.8.9 | Set to `true` to show a shuffle button (only for players that support `shuffle_set`).
-| hide_power | boolean | false | v0.7 | Set to `true` to hide the power button.
-| hide_controls | boolean | false | v0.8 | Set to `true` to hide media control buttons (*sets `short_info` to `true`*).
-| hide_volume | boolean | false | v0.8 | Set to `true` to hide volume controls. (*sets `short_info` to `true`*).
-| hide_mute | boolean | false | v0.8.1 | Set to `true` to hide the mute button.
-| hide_info | boolean | false | v0.8.4 | Set to `true` to hide entity icon, entity name & media information.
-| hide_icon | boolean | false | v0.8.8 | Set to `true` to hide the entity icon.
-| artwork | string | default | v0.4 | Set to `cover` to have artwork displayed as the cards background *(looks best for ungrouped cards without a title)*, set to `none` to never display artwork.
-| short_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and cut off any potential overflowing text.
-| scroll_info | boolean | false | v0.8 | Set to `true` to have the media information stay on a single line and scroll through any potential overflowing text.
-| power_color | boolean | false | v0.4 | Set to `true` to have the power button change color based on power on/off.
-| artwork_border | boolean | false | v0.3 | Set to `true` to display a border around the media artwork, border color changes depending on playing state. *only applies to `artwork: default`*
-| volume_stateless | boolean | false | v0.6 | Set to `true` to swap out the volume slider for volume. up/down buttons (useful for media players that doesn't support volume state).
-| toggle_power | boolean | true | v0.8.9 | Set to `false` to have the card call `turn_off` / `turn_on` service instead of `toggle` when pressing the power button.
-| consider_idle_after | number | optional | v0.8.9 | Useful for players that doesn't turn off, specify a number (minutes), if the player hasn't updated its media position in specified amount of minutes the card will render as idle. (only supported on players that report `media_position_updated_at`).
-| more_info | boolean | true | v0.1 | Set to `false` to disable the "more info" dialog when clicking on the card.
-| max_volume | number | true | v0.8.2 | Set a max volume for the volume slider (number between 1 - 100).
-| background | string | optional | v0.8.6 | Set a background image, specify the image url `"/local/background-img.png"` e.g.
+| group | boolean | false | v0.1 | Disable paddings and box-shadow.
+| show_tts | string | optional | v0.2 | Show Text-To-Speech input, specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `show_tts: google` or `show_tts: amazon_polly`.
+| show_source | string | false | v0.7 | `true` to display source select, `small` to display the source button & hide current source (v0.8.1).
+| show_progress | boolean | false | v0.8.3 | Display a progress bar when media progress information is available.
+| show_shuffle | boolean | false | v0.8.9 | Display a shuffle button (only for players with `shuffle_set` support).
+| hide_power | boolean | false | v0.7 | Hide the power button.
+| hide_controls | boolean | false | v0.8 | Hide media control buttons (*force `short_info` to `true`*).
+| hide_volume | boolean | false | v0.8 | Hide volume controls. (*force `short_info` to `true`*).
+| hide_mute | boolean | false | v0.8.1 | Hide the mute button.
+| hide_info | boolean | false | v0.8.4 | Hide entity icon, entity name & media information.
+| hide_icon | boolean | false | v0.8.8 | Hide the entity icon.
+| artwork | string | default | v0.4 | `cover` to have artwork displayed as the card background, `none` to hide artwork.
+| short_info | boolean | false | v0.8 | Limit media information to one row.
+| scroll_info | boolean | false | v0.8 | Limit media information to one row, scroll through the overflow.
+| power_color | boolean | false | v0.4 | Make power button change color based on on/off state.
+| artwork_border | boolean | false | v0.3 | Display a border around the `default` media artwork.
+| volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
+| toggle_power | boolean | true | v0.8.9 | Change power button behaviour `turn_off` / `turn_on` or `toggle`
+| consider_idle_after | number | optional | v0.8.9 | Specify a number (minutes) *only supported on players with `media_position_updated_at`)* after which the player displays as idle.
+| more_info | boolean | true | v0.1 | Enable the "more info" dialog when pressing on the card.
+| max_volume | number | true | v0.8.2 | Max volume for the volume slider (number between 1 - 100).
+| background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
 
 ### Example usage
 
