@@ -1,10 +1,15 @@
+## v0.9.0
+- Added: bundle version, to avoid externally loaded dependency #21
+- Updated: instructions to include bundle instead of source #21
+- Updated: tracker.json with bundle version #21
+
 ## v0.8.9
 - Added: `toggle_power` option, to be able to change power button behaviour
 
 - Added: `show_shuffle` option, to display a shuffle button
 
   <img src="https://user-images.githubusercontent.com/457678/47924787-ddba6b80-debc-11e8-9398-602fc80cc230.png" width="500" alt="v0.8.9 example 1" />
-  
+
 - Added: `consider_idle_after` option, to display player as idle after x amount of time
 
   <img src="https://user-images.githubusercontent.com/457678/47925288-1c045a80-debe-11e8-8178-1bab32c9773e.gif" width="500" alt="v0.8.9 example 2" />

@@ -9,56 +9,60 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ### Simple install
 
-- Copy `mini-media-player.js` into your `config/www` folder.
-- Add a reference to the `mini-media-player.js` inside your `ui-lovelace.yaml`.
+1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 
-```yaml
-resources:
-  - url: /local/mini-media-player.js?v=0.8.9
-    type: module
-```
+- Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
-### Install using git
+  ```yaml
+  resources:
+    - url: /local/mini-media-player-bundle.js?v=0.9.0
+      type: module
+  ```
 
-- Clone this repository into your `config/www` folder using git.
+### CLI install
 
-```bash
-git clone https://github.com/kalkih/mini-media-player.git
-```
+1. Move into your `config/www` directory
 
-- Add a reference to the card in your `ui-lovelace.yaml`.
+- Grab `mini-media-player-bundle.js`
 
-```yaml
-resources:
-  - url: /local/mini-media-player/mini-media-player.js?v=0.8.9
-    type: module
-```
+  ```
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.0/mini-media-player-bundle.js
+  ```
+
+- Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
+
+  ```yaml
+  resources:
+    - url: /local/mini-media-player-bundle.js?v=0.9.0
+      type: module
+  ```
 
 ### *(Optional)* Add to custom updater
 
-- Make sure you got the [custom_updater](https://github.com/custom-components/custom_updater) component installed.
-- Add a reference under `card_urls` in your `custom_updater` configuration in `configuration.yaml`.
+1. Make sure you've the [custom_updater](https://github.com/custom-components/custom_updater) component installed and working.
 
-```yaml
-custom_updater:
-  card_urls:
-    - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
+- Add a new reference under `card_urls` in your `custom_updater` configuration in `configuration.yaml`.
+
+  ```yaml
+  custom_updater:
+    card_urls:
+      - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
 ```
 
 ## Updating
  **Important:** If you are updating from a version prior to v0.5, make sure you change `- type: js` to `- type: module` in your reference to the card in your `ui-lovelace.ysml`.
 
-- Find your `mini-media-player.js` file in `config/www` or wherever you ended up storing it.
-- Replace the file with the latest version of [mini-media-player.js](mini-media-player.js).
+1. Find your `mini-media-player-bundle.js` file in `config/www` or wherever you ended up storing it.
+
+- Replace the local file with the latest one attached in the [latest release](https://github.com/kalkih/mini-media-player/releases/latest).
+
 - Add the new version number to the end of the cards reference url in your `ui-lovelace.yaml` like below.
 
-```yaml
-resources:
-  - url: /local/mini-media-player.js?v=0.8.9
-    type: module
-```
-
-If you went the `git clone` route, just run `git pull` from inside your `config/www/mini-media-player` directory, to get the latest version of the code.
+  ```yaml
+  resources:
+    - url: /local/mini-media-player-bundle.js?v=0.9.0
+      type: module
+  ```
 
 *You may need to empty the browsers cache if you have problems loading the updated card.*
 
@@ -146,27 +150,39 @@ Set the `group` option to `true` when nesting the mini media player(s) inside  c
 
 <img src="https://user-images.githubusercontent.com/457678/47516557-08d20900-d886-11e8-8922-4973c0aab94a.png" width="500px" />
 
-## Bundle
+## Development
 
-If you want to avoid loading resources from https://unpkg.com, you can use
-`mini-media-player-bundle.js` instead.
+**Clone this repository into your `config/www` folder using git.**
 
-## Updating bundle (for developer)
+```
+$ git clone https://github.com/kalkih/mini-media-player.git
+```
 
-Install `nodejs` and `npm`, install dependances by running:
+**Add a reference to the card in your `ui-lovelace.yaml`.**
+
+```yaml
+resources:
+  - url: /local/mini-media-player/mini-media-player.js
+    type: module
+```
+
+### Generate the bundle
+
+*Requires `nodejs` & `npm`*
+
+**Move into the `mini-media-player` repo & install dependencies.**
 
 ```
 $ npm install
 ```
 
-Edit source file `mini-media-player.js`, build by running:
+**Edit the source file `mini-media-player.js`, build by running**
 ```
-$ npm build
+$ npm run build
 ```
 
-Then `mini-media-player-bundle.js` will be updated and ready to use.
+The `mini-media-player-bundle.js` will be rebuilt and ready.
 
-Finally commit file `mini-media-player-bundle.js` to git.
 
 ## Getting errors?
 Make sure you have `javascript_version: latest` in your `configuration.yaml` under `frontend:`.
