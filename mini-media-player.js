@@ -39,7 +39,8 @@ class MiniMediaPlayer extends LitElement {
       entity: Object,
       source: String,
       position: Number,
-      active: Boolean
+      active: Boolean,
+      overflow: Boolean
     };
   }
 
@@ -63,6 +64,7 @@ class MiniMediaPlayer extends LitElement {
       hide_controls: false,
       hide_icon: false,
       hide_info: false,
+      hide_media_info: false,
       hide_mute: false,
       hide_power: false,
       hide_volume: false,
@@ -93,7 +95,8 @@ class MiniMediaPlayer extends LitElement {
     const update = this.entity
       && (changedProps.has('entity')
       || changedProps.has('source')
-      || changedProps.has('position'));
+      || changedProps.has('position')
+      || changedProps.has('overflow'));
     if (update) {
       this.active = this._isActive();
       if (this.config.show_progress) this._checkProgress();
@@ -165,9 +168,11 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _hasOverflow() {
-    const element = this.shadowRoot.querySelector('.marquee');
-    const status = element.clientWidth > (element.parentNode.clientWidth);
-    element.parentNode.parentNode.setAttribute('scroll', status);
+    const ele = this.shadowRoot.querySelector('.marquee');
+    if (ele) {
+      const status = ele.clientWidth > ele.parentNode.clientWidth;
+      this.overflow = status;
+    }
   }
 
   _renderIcon(artwork) {
@@ -203,6 +208,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderMediaInfo() {
+    if (this.config.hide_media_info) return;
     const items = MEDIA_INFO.map(item => {
       return {
         info: this._getAttribute(item.attr),
@@ -212,7 +218,7 @@ class MiniMediaPlayer extends LitElement {
     }).filter(item => item.info !== '');
 
     return html`
-      <div class='entity__info__media' ?inactive=${!this.active}>
+      <div class='entity__info__media' ?inactive=${!this.active} ?scroll=${this.overflow}>
         ${this.config.scroll_info ? html`
           <div>
             <div class='marquee'>
@@ -256,13 +262,12 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderPowerStrip({config} = this) {
-    const active = this.active;
     if (this.entity.state == 'unavailable')
       this._renderString('state.default.unavailable', 'Unavailable');
 
     return html`
       <div class='select flex'>
-        ${active && config.collapse ? this._renderControlRow() : html``}
+        ${this.active && config.collapse ? this._renderControlRow() : html``}
         <div class='flex right'>
           ${config.show_source ? this._renderSource() : html``}
           ${config.consider_idle_after ? this._renderIdleStatus() : html``}
@@ -495,7 +500,7 @@ class MiniMediaPlayer extends LitElement {
     const items = MEDIA_INFO.map(item => {
       return this._getAttribute(item.attr);
     }).filter(item => item !== '');
-    return items.length !== 0 ? true : false;
+    return items.length !== 0 && !this.config.hide_media_info ? true : false;
   }
 
   _getAttribute(attr, {entity} = this) {
@@ -665,18 +670,18 @@ class MiniMediaPlayer extends LitElement {
           color: var(--primary-text-color);
           opacity: .5;
         }
-        .entity__info__media[scroll='true'] > span {
+        .entity__info__media[scroll] > span {
           visibility: hidden;
         }
-        .entity__info__media[scroll='true'] > div {
+        .entity__info__media[scroll] > div {
           animation: move 10s linear infinite;
           overflow: visible;
         }
-        .entity__info__media[scroll='true'] .marquee {
+        .entity__info__media[scroll] .marquee {
           animation: slide 10s linear infinite;
           visibility: visible;
         }
-        .entity__info__media[scroll='true'] {
+        .entity__info__media[scroll] {
           text-overflow: clip !important;
           mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
           -webkit-mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
