@@ -30,6 +30,7 @@ const ICON = {
 class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
+    this._overflow = false;
   }
 
   static get properties() {
@@ -40,7 +41,7 @@ class MiniMediaPlayer extends LitElement {
       source: String,
       position: Number,
       active: Boolean,
-      overflow: Boolean
+      _overflow: Boolean
     };
   }
 
@@ -49,6 +50,11 @@ class MiniMediaPlayer extends LitElement {
     this._hass = hass;
     if (entity && this.entity !== entity)
       this.entity = entity;
+  }
+
+  set overflow(overflow) {
+    if (overflow !== this._overflow)
+      this._overflow = overflow;
   }
 
   setConfig(config) {
@@ -96,7 +102,8 @@ class MiniMediaPlayer extends LitElement {
       && (changedProps.has('entity')
       || changedProps.has('source')
       || changedProps.has('position')
-      || changedProps.has('overflow'));
+      || changedProps.has('_overflow'));
+
     if (update) {
       this.active = this._isActive();
       if (this.config.show_progress) this._checkProgress();
@@ -105,7 +112,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   updated() {
-    if (this.config.scroll_info) this._hasOverflow();
+    if (this.config.scroll_info) this._computeOverflow();
   }
 
   render({_hass, config, entity} = this) {
@@ -167,11 +174,11 @@ class MiniMediaPlayer extends LitElement {
       || 'mdi:cast';
   }
 
-  _hasOverflow() {
+  _computeOverflow() {
     const ele = this.shadowRoot.querySelector('.marquee');
     if (ele) {
       const status = ele.clientWidth > ele.parentNode.clientWidth;
-      this.overflow = status;
+      this.overflow = status ? 5 + (ele.clientWidth / 100) : false;
     }
   }
 
@@ -218,7 +225,8 @@ class MiniMediaPlayer extends LitElement {
     }).filter(item => item.info !== '');
 
     return html`
-      <div class='entity__info__media' ?inactive=${!this.active} ?scroll=${this.overflow}>
+      <div class='entity__info__media' ?inactive=${!this.active}
+        ?scroll=${this._overflow} style='animation-duration: ${this._overflow}s;'>
         ${this.config.scroll_info ? html`
           <div>
             <div class='marquee'>
@@ -279,25 +287,24 @@ class MiniMediaPlayer extends LitElement {
   _renderSource({entity} = this) {
     const sources = entity.attributes['source_list'] || false;
     const source = entity.attributes['source'] || '';
+    if (!sources) return;
 
-    if (sources) {
-      const selected = sources.indexOf(source);
-      return html`
-        <paper-menu-button class='source-menu' slot='dropdown-trigger'
-          .horizontalAlign=${'right'} .verticalAlign=${'top'}
-          .verticalOffset=${40} .noAnimations=${true}
-          @click='${(e) => e.stopPropagation()}'>
-          <paper-button class='source-menu__button' slot='dropdown-trigger'>
-            ${this.config.show_source !== 'small' ? html`
-            <span class='source-menu__source'>${this.source || source}</span>` : '' }
-            <iron-icon .icon=${ICON.dropdown}></iron-icon>
-          </paper-button>
-          <paper-listbox slot='dropdown-content' selected=${selected}
-            @click='${(e) => this._handleSource(e)}'>
-            ${sources.map(item => html`<paper-item value=${item}>${item}</paper-item>`)}
-          </paper-listbox>
-        </paper-menu-button>`;
-    }
+    const selected = sources.indexOf(source);
+    return html`
+      <paper-menu-button class='source-menu' slot='dropdown-trigger'
+        .horizontalAlign=${'right'} .verticalAlign=${'top'}
+        .verticalOffset=${40} .noAnimations=${true}
+        @click='${(e) => e.stopPropagation()}'>
+        <paper-button class='source-menu__button' slot='dropdown-trigger'>
+          ${this.config.show_source !== 'small' ? html`
+          <span class='source-menu__source'>${this.source || source}</span>` : '' }
+          <iron-icon .icon=${ICON.dropdown}></iron-icon>
+        </paper-button>
+        <paper-listbox slot='dropdown-content' selected=${selected}
+          @click='${(e) => this._handleSource(e)}'>
+          ${sources.map(item => html`<paper-item value=${item}>${item}</paper-item>`)}
+        </paper-listbox>
+      </paper-menu-button>`;
   }
 
   _renderControlRow() {
@@ -674,14 +681,17 @@ class MiniMediaPlayer extends LitElement {
           visibility: hidden;
         }
         .entity__info__media[scroll] > div {
-          animation: move 10s linear infinite;
+          animation: move linear infinite;
+          animation-duration: inherit;
           overflow: visible;
         }
         .entity__info__media[scroll] .marquee {
-          animation: slide 10s linear infinite;
+          animation: slide linear infinite;
+          animation-duration: inherit;
           visibility: visible;
         }
         .entity__info__media[scroll] {
+          animation-duration: 10s;
           text-overflow: clip !important;
           mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
           -webkit-mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
@@ -819,18 +829,17 @@ class MiniMediaPlayer extends LitElement {
           margin-left: auto;
         }
         ha-card[hide-info] .entity__control-row--top,
+        ha-card[hide-info] .select
         .entity__control-row--top,
-        .select,
-        ha-card[hide-info] .select {
+        .select {
           flex: 1
         }
         @keyframes slide {
-          from {transform: translate(0, 0); }
-          to {transform: translate(-100%, 0); }
+          100% { transform: translateX(-100%); }
         }
         @keyframes move {
-          from {transform: translate(100%, 0); }
-          to {transform: translate(0, 0); }
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
         }
         @media screen and (max-width: 325px) {
           .rows {
