@@ -710,10 +710,10 @@ class MiniMediaPlayer extends LitElement {
         }
         paper-icon-button.shuffle {
           align-self: center;
-          height: 36px;
-          min-width: 36px;
+          height: 38px;
+          min-width: 38px;
           text-align: center;
-          width: 36px;
+          width: 38px;
         }
         .entity__info__media span:before {
           content: ' - ';
