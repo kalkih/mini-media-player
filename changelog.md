@@ -1,3 +1,11 @@
+## v0.9.1
+- Added: hide_media_info option #23
+- Added: consider_pause_idle option, to render the player idle while it's paused
+- Added: parameter `full` for `show_source`, to display full source name
+- Added: *(scroll_info)* dynamic scroll speed, based on media information length
+- Changed: made shuffle button slightly larger
+- Fixed: alignment issue when `group` was set to true and artwork cover was present
+
 ## v0.9.0
 - Added: bundle version, to avoid externally loaded dependency #21
 - Updated: instructions to include bundle instead of source #21

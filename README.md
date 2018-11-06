@@ -15,7 +15,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.0
+    - url: /local/mini-media-player-bundle.js?v=0.9.1
       type: module
   ```
 
@@ -26,14 +26,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 - Grab `mini-media-player-bundle.js`
 
   ```
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.0/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.1/mini-media-player-bundle.js
   ```
 
 - Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.0
+    - url: /local/mini-media-player-bundle.js?v=0.9.1
       type: module
   ```
 
@@ -60,7 +60,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.0
+    - url: /local/mini-media-player-bundle.js?v=0.9.1
       type: module
   ```
 
@@ -79,12 +79,13 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
 | group | boolean | false | v0.1 | Disable paddings and box-shadow.
 | show_tts | string | optional | v0.2 | Show Text-To-Speech input, specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `show_tts: google` or `show_tts: amazon_polly`.
-| show_source | string | false | v0.7 | `true` to display source select, `small` to display the source button & hide current source (v0.8.1).
+| show_source | string | false | v0.7 | `true` display source select, `small` to only display the source button (v0.8.1), `full` display the full source name (v0.9.1).
 | show_progress | boolean | false | v0.8.3 | Display a progress bar when media progress information is available.
 | show_shuffle | boolean | false | v0.8.9 | Display a shuffle button (only for players with `shuffle_set` support).
 | hide_power | boolean | false | v0.7 | Hide the power button.
 | hide_controls | boolean | false | v0.8 | Hide media control buttons (*force `short_info` to `true`*).
 | hide_volume | boolean | false | v0.8 | Hide volume controls. (*force `short_info` to `true`*).
+| hide_media_info | boolean | false | v0.9.1 | Hide media information.
 | hide_mute | boolean | false | v0.8.1 | Hide the mute button.
 | hide_info | boolean | false | v0.8.4 | Hide entity icon, entity name & media information.
 | hide_icon | boolean | false | v0.8.8 | Hide the entity icon.
@@ -96,6 +97,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
 | toggle_power | boolean | true | v0.8.9 | Change power button behaviour `turn_off` / `turn_on` or `toggle`
 | consider_idle_after | number | optional | v0.8.9 | Specify a number (minutes) *only supported on players with `media_position_updated_at`)* after which the player displays as idle.
+| consider_pause_idle | boolean | false | v0.9.1 | Display the player as idle when player is paused
 | more_info | boolean | true | v0.1 | Enable the "more info" dialog when pressing on the card.
 | max_volume | number | true | v0.8.2 | Max volume for the volume slider (number between 1 - 100).
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
