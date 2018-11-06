@@ -41,6 +41,7 @@ class MiniMediaPlayer extends LitElement {
       source: String,
       position: Number,
       active: Boolean,
+      idle: Boolean,
       _overflow: Boolean
     };
   }
@@ -66,6 +67,7 @@ class MiniMediaPlayer extends LitElement {
       artwork_border: false,
       background: false,
       consider_idle_after: false,
+      consider_pause_idle: false,
       group: false,
       hide_controls: false,
       hide_icon: false,
@@ -252,12 +254,10 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderIdleStatus() {
-    if (this._isInactive()) {
-      if (this._isPaused())
-        return this._renderPlayButton();
-      else
-        return this._renderString('state.media_player.idle', 'Idle');
-    }
+    if (this._isPaused())
+      return this._renderPlayButton();
+    else
+      return this._renderString('state.media_player.idle', 'Idle');
   }
 
   _renderShuffle() {
@@ -278,7 +278,7 @@ class MiniMediaPlayer extends LitElement {
         ${this.active && config.collapse ? this._renderControlRow() : html``}
         <div class='flex right'>
           ${config.show_source ? this._renderSource() : html``}
-          ${config.consider_idle_after ? this._renderIdleStatus() : html``}
+          ${this.idle ? this._renderIdleStatus() : html``}
           ${!config.hide_power ? this._renderPower() : html``}
         <div>
       </div>`;
@@ -482,24 +482,27 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _isActive(inactive = false) {
-    if (this.config.consider_idle_after)
-      inactive = this._isInactive();
+    if (this.config.consider_idle_after || this.config.consider_pause_idle)
+      this.idle = this._isIdle();
     return ( this.entity.state !== 'off'
       && this.entity.state !== 'unavailable'
-      && !inactive) || false;
+      && !this.idle) || false;
   }
 
-  _isInactive() {
+  _isIdle() {
+    if (this.config.consider_pause_idle && this._isPaused())
+      return true
+
     const updated = this.entity.attributes.media_position_updated_at;
-    if (updated) {
-      const diff = (Date.now() - new Date(updated).getTime()) / 1000;
-      if (diff > this.config.consider_idle_after) return true;
-      if (!this._inactiveTracker) {
-        this._inactiveTracker = setTimeout(() => {
-          this.position = 0;
-          this._inactiveTracker = null;
-        }, (this.config.consider_idle_after - diff) * 1000)
-      }
+    if (!updated || !this.config.consider_idle_after) return false;
+
+    const diff = (Date.now() - new Date(updated).getTime()) / 1000;
+    if (diff > this.config.consider_idle_after) return true;
+    if (!this._inactiveTracker) {
+      this._inactiveTracker = setTimeout(() => {
+        this.position = 0;
+        this._inactiveTracker = null;
+      }, (this.config.consider_idle_after - diff) * 1000)
     }
     return false;
   }
