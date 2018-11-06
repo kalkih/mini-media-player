@@ -531,6 +531,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card {
           padding: 16px;
           position: relative;
+          transition: padding .5s;
         }
         header {
           display: none;
@@ -552,8 +553,8 @@ class MiniMediaPlayer extends LitElement {
           box-shadow: none;
           padding: 0;
         }
-        ha-card[group][artwork='cover'][has-artwork] .entity__info {
-          margin-top: 10px;
+        ha-card[group][artwork='cover'][has-artwork] {
+          padding: 8px 0;
         }
         ha-card[more-info] {
           cursor: pointer;
@@ -698,8 +699,8 @@ class MiniMediaPlayer extends LitElement {
         .entity__info__media[scroll] {
           animation-duration: 10s;
           text-overflow: clip !important;
-          mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to right, transparent 0%, var(--secondary-text-color) 5%, var(--secondary-text-color) 95%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
         }
         .marquee {
           visibility: hidden;
@@ -818,9 +819,6 @@ class MiniMediaPlayer extends LitElement {
         }
         ha-card[state='paused'] paper-progress {
           --paper-progress-active-color: var(--disabled-text-color, rgba(150,150,150,.5));
-        }
-        ha-card[group] paper-progress {
-          position: relative
         }
         .string {
           margin: 0 8px;
