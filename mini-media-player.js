@@ -296,8 +296,9 @@ class MiniMediaPlayer extends LitElement {
         .verticalOffset=${40} .noAnimations=${true}
         @click='${(e) => e.stopPropagation()}'>
         <paper-button class='source-menu__button' slot='dropdown-trigger'>
-          ${this.config.show_source !== 'small' ? html`
-          <span class='source-menu__source'>${this.source || source}</span>` : '' }
+          <span class='source-menu__source' show=${this.config.show_source}>
+            ${this.source || source}
+          </span>
           <iron-icon .icon=${ICON.dropdown}></iron-icon>
         </paper-button>
         <paper-listbox slot='dropdown-content' selected=${selected}
@@ -574,11 +575,12 @@ class MiniMediaPlayer extends LitElement {
           --paper-input-container-input-color: #FFFFFF;
         }
         .bg {
+          background: transparent;
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center center;
           opacity: 0;
-          transition: opacity .5s ease-in;
+          transition: all .5s ease-in;
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
         }
@@ -765,12 +767,12 @@ class MiniMediaPlayer extends LitElement {
           opacity: 1;
         }
         .source-menu {
-          padding: 0;
           height: 40px;
+          padding: 0;
         }
         .source-menu[focused] iron-icon {
+          color: var(--accent-color);
           transform: rotate(180deg);
-            color: var(--accent-color);
         }
         .source-menu__button[focused] iron-icon {
           color: var(--primary-text-color);
@@ -791,6 +793,12 @@ class MiniMediaPlayer extends LitElement {
           text-overflow: ellipsis;
           width: auto;
           white-space: nowrap;
+        }
+        .source-menu__source[show="small"] {
+          display: none;
+        }
+        .source-menu__source[show="full"] {
+          max-width: none;
         }
         paper-progress {
           bottom: 0;
@@ -829,10 +837,15 @@ class MiniMediaPlayer extends LitElement {
           margin-left: auto;
         }
         ha-card[hide-info] .entity__control-row--top,
-        ha-card[hide-info] .select
+        ha-card[hide-info] .select,
         .entity__control-row--top,
         .select {
           flex: 1
+        }
+        ha-card[hide-info] paper-slider,
+        ha-card[hide-info] .vol-control {
+          width: 100%;
+          max-width: none;
         }
         @keyframes slide {
           100% { transform: translateX(-100%); }
