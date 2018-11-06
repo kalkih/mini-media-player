@@ -128,7 +128,7 @@ class MiniMediaPlayer extends LitElement {
         ?hide-icon=${config.hide_icon} ?hide-info=${this.config.hide_info}
         @click='${(e) => this._handleMore()}'>
         <div class='bg' ?bg=${config.background}
-          style='background-image: url("${this._computeCover(artwork)}")'>
+          style=${artwork ? `background-image: url("${this._computeCover(artwork)}");` : ''}>
         </div>
         <header>${config.title}</header>
         <div class='entity flex'>
@@ -180,7 +180,7 @@ class MiniMediaPlayer extends LitElement {
     const ele = this.shadowRoot.querySelector('.marquee');
     if (ele) {
       const status = ele.clientWidth > ele.parentNode.clientWidth;
-      this.overflow = status ? 7.5 + (ele.clientWidth / 100) : false;
+      this.overflow = status && this.active ? 7.5 + (ele.clientWidth / 100) : false;
     }
   }
 
@@ -562,7 +562,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork='cover'][has-artwork] .bg,
         .bg[bg] {
           opacity: 1;
-          transition: opacity .5s ease-in;
+          transition: all .5s ease-in;
         }
         ha-card[artwork='cover'][has-artwork] paper-icon-button,
         ha-card[artwork='cover'][has-artwork] ha-icon,
@@ -588,12 +588,18 @@ class MiniMediaPlayer extends LitElement {
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
         }
-        ha-card[artwork='cover'][has-artwork] .bg:before {
+        .bg:before {
           background: #000000;
           content: '';
-          opacity: .5;
+          opacity: 0;
           position: absolute;
           top: 0; left: 0; bottom: 0; right: 0;
+          transition: all .5s ease-in;
+          visibility: hidden;
+        }
+        ha-card[artwork='cover'][has-artwork] .bg:before {
+          opacity: .5;
+          visibility: visible;
         }
         .flex {
           display: flex;
