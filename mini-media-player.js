@@ -23,8 +23,8 @@ const ICON = {
   prev: 'mdi:skip-previous',
   send: 'mdi:send',
   shuffle: 'mdi:shuffle-variant',
-  volume_down: 'mdi:volume-medium',
-  volume_up: 'mdi:volume-high'
+  volume_down: 'mdi:volume-minus',
+  volume_up: 'mdi:volume-plus'
 };
 
 class MiniMediaPlayer extends LitElement {
