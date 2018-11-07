@@ -62,35 +62,35 @@ class MiniMediaPlayer extends LitElement {
     if (!config.entity || config.entity.split('.')[0] !== 'media_player')
       throw new Error('Specify an entity from within the media_player domain.');
 
-    const conf = {
-      artwork: 'default',
-      artwork_border: false,
-      background: false,
-      consider_idle_after: false,
-      consider_pause_idle: false,
-      group: false,
-      hide_controls: false,
-      hide_icon: false,
-      hide_info: false,
-      hide_media_info: false,
-      hide_mute: false,
-      hide_power: false,
-      hide_volume: false,
-      icon: false,
-      max_volume: 100,
-      more_info: true,
-      power_color: false,
-      scroll_info: false,
-      short_info: false,
-      show_progress: false,
-      show_shuffle: false,
-      show_source: false,
-      show_tts: false,
-      title: '',
-      toggle_power: true,
-      volume_stateless: false,
-      ...config
-    };
+    const conf = Object.assign({
+        artwork: 'default',
+        artwork_border: false,
+        background: false,
+        consider_idle_after: false,
+        consider_pause_idle: false,
+        group: false,
+        hide_controls: false,
+        hide_icon: false,
+        hide_info: false,
+        hide_media_info: false,
+        hide_mute: false,
+        hide_power: false,
+        hide_volume: false,
+        icon: false,
+        max_volume: 100,
+        more_info: true,
+        power_color: false,
+        scroll_info: false,
+        short_info: false,
+        show_progress: false,
+        show_shuffle: false,
+        show_source: false,
+        show_tts: false,
+        title: '',
+        toggle_power: true,
+        volume_stateless: false
+      }, config
+    );
     conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.collapse = (conf.hide_controls || conf.hide_volume)
@@ -219,11 +219,11 @@ class MiniMediaPlayer extends LitElement {
   _renderMediaInfo() {
     if (this.config.hide_media_info) return;
     const items = MEDIA_INFO.map(item => {
-      return {
-        info: this._getAttribute(item.attr),
-        prefix: item.prefix || '',
-        ...item
-      }
+      return Object.assign({
+          info: this._getAttribute(item.attr),
+          prefix: item.prefix || ''
+        }, item
+      );
     }).filter(item => item.info !== '');
 
     return html`
@@ -336,7 +336,7 @@ class MiniMediaPlayer extends LitElement {
       return this._renderVolSlider(muted);
   }
 
-  _renderMuteButton(muted) {
+  _renderMuteButton(muted) {
     const data = { is_volume_muted: !muted }
     if (!this.config.hide_mute)
       return html`
@@ -393,7 +393,7 @@ class MiniMediaPlayer extends LitElement {
   _callService(e, service, options, component = 'media_player') {
     e.stopPropagation();
     options = (options === null || options === undefined) ? {} : options;
-    options.entity_id = options.entity_id || this.config.entity;
+    options.entity_id = options.entity_id || this.config.entity;
     this._hass.callService(component, service, options);
   }
 
