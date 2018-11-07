@@ -311,21 +311,21 @@ class MiniMediaPlayer extends LitElement {
   _renderControlRow() {
     return html`
       ${!this.config.hide_volume ? this._renderVolControls() : ''}
-      ${this.config.show_shuffle ? this._renderShuffle() : ''}
-      ${!this.config.hide_controls ? this._renderMediaControls() : ''}`;
+      <div class='flex'>
+        ${this.config.show_shuffle ? this._renderShuffle() : ''}
+        ${!this.config.hide_controls ? this._renderMediaControls() : ''}
+      </div>`;
   }
 
   _renderMediaControls() {
     return html`
-      <div class='flex'>
-        <paper-icon-button .icon=${ICON.prev}
-          @click='${(e) => this._callService(e, "media_previous_track")}'>
-        </paper-icon-button>
-        ${this._renderPlayButton()}
-        <paper-icon-button .icon=${ICON.next}
-          @click='${(e) => this._callService(e, "media_next_track")}'>
-        </paper-icon-button>
-      </div>`;
+      <paper-icon-button .icon=${ICON.prev}
+        @click='${(e) => this._callService(e, "media_previous_track")}'>
+      </paper-icon-button>
+      ${this._renderPlayButton()}
+      <paper-icon-button .icon=${ICON.next}
+        @click='${(e) => this._callService(e, "media_next_track")}'>
+      </paper-icon-button>`;
   }
 
   _renderVolControls() {
