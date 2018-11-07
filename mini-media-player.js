@@ -63,34 +63,33 @@ class MiniMediaPlayer extends LitElement {
       throw new Error('Specify an entity from within the media_player domain.');
 
     const conf = Object.assign({
-        artwork: 'default',
-        artwork_border: false,
-        background: false,
-        consider_idle_after: false,
-        consider_pause_idle: false,
-        group: false,
-        hide_controls: false,
-        hide_icon: false,
-        hide_info: false,
-        hide_media_info: false,
-        hide_mute: false,
-        hide_power: false,
-        hide_volume: false,
-        icon: false,
-        max_volume: 100,
-        more_info: true,
-        power_color: false,
-        scroll_info: false,
-        short_info: false,
-        show_progress: false,
-        show_shuffle: false,
-        show_source: false,
-        show_tts: false,
-        title: '',
-        toggle_power: true,
-        volume_stateless: false
-      }, config
-    );
+      artwork: 'default',
+      artwork_border: false,
+      background: false,
+      consider_idle_after: false,
+      consider_pause_idle: false,
+      group: false,
+      hide_controls: false,
+      hide_icon: false,
+      hide_info: false,
+      hide_media_info: false,
+      hide_mute: false,
+      hide_power: false,
+      hide_volume: false,
+      icon: false,
+      max_volume: 100,
+      more_info: true,
+      power_color: false,
+      scroll_info: false,
+      short_info: false,
+      show_progress: false,
+      show_shuffle: false,
+      show_source: false,
+      show_tts: false,
+      title: '',
+      toggle_power: true,
+      volume_stateless: false
+    }, config);
     conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.collapse = (conf.hide_controls || conf.hide_volume)
@@ -220,10 +219,9 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.hide_media_info) return;
     const items = MEDIA_INFO.map(item => {
       return Object.assign({
-          info: this._getAttribute(item.attr),
-          prefix: item.prefix || ''
-        }, item
-      );
+        info: this._getAttribute(item.attr),
+        prefix: item.prefix || ''
+      }, item);
     }).filter(item => item.info !== '');
 
     return html`
