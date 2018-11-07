@@ -180,7 +180,7 @@ class MiniMediaPlayer extends LitElement {
     const ele = this.shadowRoot.querySelector('.marquee');
     if (ele) {
       const status = ele.clientWidth > ele.parentNode.clientWidth;
-      this.overflow = status && this.active ? 7.5 + (ele.clientWidth / 100) : false;
+      this.overflow = status && this.active ? 7.5 + (ele.clientWidth / 50) : false;
     }
   }
 
