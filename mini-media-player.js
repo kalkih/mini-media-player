@@ -62,7 +62,7 @@ class MiniMediaPlayer extends LitElement {
     if (!config.entity || config.entity.split('.')[0] !== 'media_player')
       throw new Error('Specify an entity from within the media_player domain.');
 
-    const conf = {
+    const conf = Object.assign({
       artwork: 'default',
       artwork_border: false,
       background: false,
@@ -88,9 +88,8 @@ class MiniMediaPlayer extends LitElement {
       show_tts: false,
       title: '',
       toggle_power: true,
-      volume_stateless: false,
-      ...config
-    };
+      volume_stateless: false
+    }, config);
     conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.collapse = (conf.hide_controls || conf.hide_volume)
@@ -219,11 +218,10 @@ class MiniMediaPlayer extends LitElement {
   _renderMediaInfo() {
     if (this.config.hide_media_info) return;
     const items = MEDIA_INFO.map(item => {
-      return {
+      return Object.assign({
         info: this._getAttribute(item.attr),
-        prefix: item.prefix || '',
-        ...item
-      }
+        prefix: item.prefix || ''
+      }, item);
     }).filter(item => item.info !== '');
 
     return html`
@@ -336,7 +334,7 @@ class MiniMediaPlayer extends LitElement {
       return this._renderVolSlider(muted);
   }
 
-  _renderMuteButton(muted) {
+  _renderMuteButton(muted) {
     const data = { is_volume_muted: !muted }
     if (!this.config.hide_mute)
       return html`
@@ -393,7 +391,7 @@ class MiniMediaPlayer extends LitElement {
   _callService(e, service, options, component = 'media_player') {
     e.stopPropagation();
     options = (options === null || options === undefined) ? {} : options;
-    options.entity_id = options.entity_id || this.config.entity;
+    options.entity_id = options.entity_id || this.config.entity;
     this._hass.callService(component, service, options);
   }
 
