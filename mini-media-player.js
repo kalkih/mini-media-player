@@ -78,6 +78,7 @@ class MiniMediaPlayer extends LitElement {
       hide_power: false,
       hide_volume: false,
       icon: false,
+      idle_view: false,
       max_volume: 100,
       more_info: true,
       power_color: false,
@@ -92,6 +93,9 @@ class MiniMediaPlayer extends LitElement {
       volume_stateless: false
     }, config);
     conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
+    conf.idle_view = conf.idle_view
+      || conf.consider_idle_after
+      || conf.consider_pause_idle;
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.collapse = (conf.hide_controls || conf.hide_volume)
     conf.short_info = (conf.short_info || conf.scroll_info || conf.collapse);
@@ -480,28 +484,37 @@ class MiniMediaPlayer extends LitElement {
     return this.entity.state === 'playing';
   }
 
+  _isIdle() {
+    return this.entity.state === 'idle';
+  }
+
   _isActive(inactive = false) {
-    if (this.config.consider_idle_after || this.config.consider_pause_idle)
-      this.idle = this._isIdle();
+    if (this.config.idle_view)
+      this.idle = this._computeIdle();
     return ( this.entity.state !== 'off'
       && this.entity.state !== 'unavailable'
       && !this.idle) || false;
   }
 
-  _isIdle() {
-    if (this.config.consider_pause_idle && this._isPaused())
+  _computeIdle({config} = this) {
+    if (config.idle_view && this._isIdle())
+      return true
+    if (config.consider_pause_idle && this._isPaused())
       return true
 
     const updated = this.entity.attributes.media_position_updated_at;
-    if (!updated || !this.config.consider_idle_after) return false;
+    if (!updated || !config.consider_idle_after)
+      return false;
 
     const diff = (Date.now() - new Date(updated).getTime()) / 1000;
-    if (diff > this.config.consider_idle_after) return true;
+    if (diff > config.consider_idle_after)
+      return true;
+
     if (!this._inactiveTracker) {
       this._inactiveTracker = setTimeout(() => {
         this.position = 0;
         this._inactiveTracker = null;
-      }, (this.config.consider_idle_after - diff) * 1000)
+      }, (config.consider_idle_after - diff) * 1000)
     }
     return false;
   }
