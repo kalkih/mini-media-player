@@ -1,3 +1,10 @@
+## v0.9.2
+- Changed: volume button icons, to not confuse with mute #26
+- Changed: adjusted scroll speed for *(scroll_info)*
+- Fixed: improved browser compatibility by removing object spread syntax #25 #27
+- Fixed: alignment of shuffle button while `volume_stateless` set to `true`
+- Fixed: alignment of source button in HA > 0.81.6
+
 ## v0.9.1
 - Added: hide_media_info option #23
 - Added: consider_pause_idle option, to render the player idle while it's paused

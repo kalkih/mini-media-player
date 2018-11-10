@@ -15,7 +15,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.1
+    - url: /local/mini-media-player-bundle.js?v=0.9.2
       type: module
   ```
 
@@ -26,14 +26,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 - Grab `mini-media-player-bundle.js`
 
   ```
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.2/mini-media-player-bundle.js
   ```
 
 - Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.1
+    - url: /local/mini-media-player-bundle.js?v=0.9.2
       type: module
   ```
 
@@ -47,7 +47,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   custom_updater:
     card_urls:
       - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
-```
+  ```
 
 ## Updating
  **Important:** If you are updating from a version prior to v0.5, make sure you change `- type: js` to `- type: module` in your reference to the card in your `ui-lovelace.ysml`.
@@ -60,7 +60,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.1
+    - url: /local/mini-media-player-bundle.js?v=0.9.2
       type: module
   ```
 
