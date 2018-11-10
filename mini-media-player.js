@@ -56,6 +56,7 @@ class MiniMediaPlayer extends LitElement {
   set overflow(overflow) {
     if (overflow !== this._overflow)
       this._overflow = overflow;
+      this.idle = false;
   }
 
   setConfig(config) {
@@ -130,7 +131,7 @@ class MiniMediaPlayer extends LitElement {
           style=${artwork ? `background-image: url("${this._computeCover(artwork)}");` : ''}>
         </div>
         <header>${config.title}</header>
-        <div class='entity flex'>
+        <div class='entity flex' ?inactive=${!this.active}>
           ${this._renderIcon(artwork)}
           <div class='entity__info' ?short=${config.short_info || !this.active}>
             <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
@@ -199,12 +200,12 @@ class MiniMediaPlayer extends LitElement {
     `;
   }
 
-  _renderPower() {
+  _renderPowerButton() {
     return html`
       <paper-icon-button class='power-button'
         .icon=${ICON.power}
         @click='${e => this._handlePower(e)}'
-        ?color=${this.config.power_color && this.active}>
+        ?color=${this.config.power_color && (this.active || this.idle)}>
       </paper-icon-button>`;
   }
 
@@ -225,8 +226,8 @@ class MiniMediaPlayer extends LitElement {
     }).filter(item => item.info !== '');
 
     return html`
-      <div class='entity__info__media' ?inactive=${!this.active}
-        ?scroll=${this._overflow} style='animation-duration: ${this._overflow}s;'>
+      <div class='entity__info__media' ?scroll=${this._overflow}
+        style='animation-duration: ${this._overflow}s;'>
         ${this.config.scroll_info ? html`
           <div>
             <div class='marquee'>
@@ -244,9 +245,9 @@ class MiniMediaPlayer extends LitElement {
       </paper-progress>`;
   }
 
-  _renderString(label, fallback = 'Unknown') {
+  _renderLabel(label, fallback = 'Unknown') {
     return html`
-      <span class='string'>
+      <span class='label'>
         ${this._getLabel(label, fallback)}
       </span>`;
   }
@@ -255,7 +256,7 @@ class MiniMediaPlayer extends LitElement {
     if (this._isPaused())
       return this._renderPlayButton();
     else
-      return this._renderString('state.media_player.idle', 'Idle');
+      return this._renderLabel('state.media_player.idle', 'Idle');
   }
 
   _renderShuffle() {
@@ -269,15 +270,15 @@ class MiniMediaPlayer extends LitElement {
 
   _renderPowerStrip({config} = this) {
     if (this.entity.state == 'unavailable')
-      this._renderString('state.default.unavailable', 'Unavailable');
+      this._renderLabel('state.default.unavailable', 'Unavailable');
 
     return html`
       <div class='select flex'>
         ${this.active && config.collapse ? this._renderControlRow() : html``}
         <div class='flex right'>
-          ${config.show_source ? this._renderSource() : html``}
           ${this.idle ? this._renderIdleStatus() : html``}
-          ${!config.hide_power ? this._renderPower() : html``}
+          ${config.show_source ? this._renderSource() : html``}
+          ${!config.hide_power ? this._renderPowerButton() : html``}
         <div>
       </div>`;
   }
@@ -683,9 +684,15 @@ class MiniMediaPlayer extends LitElement {
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-        .entity__info__media[inactive] {
+        .entity[inactive] .entity__info__media {
           color: var(--primary-text-color);
           opacity: .5;
+        }
+        .entity[inactive] .entity__info__media {
+          max-width: 200px;
+        }
+        .entity[inactive] .source-menu__source {
+          display: none;
         }
         .entity__info__media[scroll] > span {
           visibility: hidden;
@@ -825,7 +832,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[state='paused'] paper-progress {
           --paper-progress-active-color: var(--disabled-text-color, rgba(150,150,150,.5));
         }
-        .string {
+        .label {
           margin: 0 8px;
           white-space: nowrap;
         }
