@@ -776,6 +776,7 @@ class MiniMediaPlayer extends LitElement {
         }
         .source-menu {
           height: 40px;
+          line-height: 20px;
           padding: 0;
         }
         .source-menu[focused] iron-icon {
