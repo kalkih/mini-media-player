@@ -63,7 +63,7 @@ class MiniMediaPlayer extends LitElement {
     if (!config.entity || config.entity.split('.')[0] !== 'media_player')
       throw new Error('Specify an entity from within the media_player domain.');
 
-    const conf = Object.assign({
+    const conf = {
       artwork: 'default',
       artwork_border: false,
       background: false,
@@ -90,8 +90,9 @@ class MiniMediaPlayer extends LitElement {
       show_tts: false,
       title: '',
       toggle_power: true,
-      volume_stateless: false
-    }, config);
+      volume_stateless: false,
+      ...config
+    };
     conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
     conf.idle_view = conf.idle_view
       || conf.consider_idle_after
@@ -223,10 +224,11 @@ class MiniMediaPlayer extends LitElement {
   _renderMediaInfo() {
     if (this.config.hide_media_info) return;
     const items = MEDIA_INFO.map(item => {
-      return Object.assign({
+      return {
         info: this._getAttribute(item.attr),
-        prefix: item.prefix || ''
-      }, item);
+        prefix: item.prefix || '',
+        ...item
+      };
     }).filter(item => item.info !== '');
 
     return html`

@@ -6,7 +6,7 @@ export default {
   input: 'mini-media-player.js',
   output: {
     file: 'mini-media-player-bundle.js',
-    format: 'esm'
+    format: 'umd'
   },
   plugins: [
     replace({
