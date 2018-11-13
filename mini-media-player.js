@@ -546,6 +546,7 @@ class MiniMediaPlayer extends LitElement {
           padding: 16px;
           position: relative;
           transition: padding .5s;
+          overflow: hidden;
         }
         header {
           display: none;
@@ -635,6 +636,7 @@ class MiniMediaPlayer extends LitElement {
           margin-left: 8px;
           display: block;
           position: relative;
+          overflow: hidden;
         }
         .rows {
           margin-left: 56px;
@@ -693,6 +695,8 @@ class MiniMediaPlayer extends LitElement {
         }
         .entity__info__media {
           color: var(--secondary-text-color);
+          word-break: break-word;
+          max-height: 6em;
         }
         .entity__info[short] .entity__info__media {
           overflow: hidden;
@@ -777,6 +781,13 @@ class MiniMediaPlayer extends LitElement {
         }
         .entity__control-row--top paper-slider {
           height: 40px;
+        }
+        .control-row {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .control-row .vol-control {
+          margin-right: auto;
         }
         .vol-control {
           flex: 1;
@@ -882,7 +893,7 @@ class MiniMediaPlayer extends LitElement {
           from { transform: translateX(100%); }
           to { transform: translateX(0); }
         }
-        @media screen and (max-width: 325px) {
+        @media screen and (max-width: 350px) {
           .rows {
             margin-left: 0;
           }
