@@ -1,4 +1,5 @@
 import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.2/lit-element.js?module';
+import ResizeObserver from 'https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.0/dist/ResizeObserver.es.js';
 
 const MEDIA_INFO = [
   { attr: 'media_title' },
@@ -31,6 +32,11 @@ class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
     this._overflow = false;
+    this.idle = false;
+    this.rect = {
+      h: -1,
+      w: 500
+    }
   }
 
   static get properties() {
@@ -42,7 +48,11 @@ class MiniMediaPlayer extends LitElement {
       position: Number,
       active: Boolean,
       idle: Boolean,
-      _overflow: Boolean
+      _overflow: Boolean,
+      _rect: {
+        h: Number,
+        w: Number
+      }
     };
   }
 
@@ -56,7 +66,11 @@ class MiniMediaPlayer extends LitElement {
   set overflow(overflow) {
     if (overflow !== this._overflow)
       this._overflow = overflow;
-      this.idle = false;
+  }
+
+  set rect(rect) {
+    if (rect !== this._rect)
+      this._rect = rect;
   }
 
   setConfig(config) {
@@ -109,7 +123,8 @@ class MiniMediaPlayer extends LitElement {
       && (changedProps.has('entity')
       || changedProps.has('source')
       || changedProps.has('position')
-      || changedProps.has('_overflow'));
+      || changedProps.has('_overflow')
+      || changedProps.has('_rect'));
 
     if (update) {
       this.active = this._isActive();
@@ -118,41 +133,49 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
-  updated() {
-    if (this.config.scroll_info) this._computeOverflow();
+  firstUpdated() {
+    const ro = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const {left, top, width, height} = entry.contentRect;
+        if (this.config.scroll_info) this._computeOverflow();
+        this.rect = {h: height + top * 2, w: width + left * 2};
+      }
+    });
+    ro.observe(this.shadowRoot.querySelector('.player'));
   }
 
   render({_hass, config, entity} = this) {
     const artwork = this._computeArtwork();
+    const height = artwork && this.config.artwork === 'full-cover' ? this._rect.w : this._rect.h;
 
     return html`
       ${this._style()}
-      <ha-card ?group=${config.group}
+      <ha-card ?bg=${this.config.background} ?group=${config.group} 
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
         ?hide-icon=${config.hide_icon} ?hide-info=${this.config.hide_info}
-        @click='${(e) => this._handleMore()}'>
-        <div class='bg' ?bg=${config.background}
-          style=${artwork ? `background-image: url("${this._computeCover(artwork)}");` : ''}>
-        </div>
+        @click='${(e) => this._handleMore()}' style=${`height: ${height}px;`}>
+        ${this._renderArtwork(artwork)}
         <header>${config.title}</header>
-        <div class='entity flex' ?inactive=${!this.active}>
-          ${this._renderIcon(artwork)}
-          <div class='entity__info' ?short=${config.short_info || !this.active}>
-            <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
-              ${this._computeName()}
+        <div class='player'>
+          <div class='entity flex' ?inactive=${!this.active}>
+            ${this._renderIcon(artwork)}
+            <div class='entity__info' ?short=${config.short_info || !this.active}>
+              <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
+                ${this._computeName()}
+              </div>
+              ${this._renderMediaInfo()}
             </div>
-            ${this._renderMediaInfo()}
+            <div class='entity__control-row--top flex'>
+              ${this._renderPowerStrip()}
+            </div>
           </div>
-          <div class='entity__control-row--top flex'>
-            ${this._renderPowerStrip()}
+          <div class='rows'>
+            <div class='control-row flex flex-wrap justify' ?wrap=${this.config.volume_stateless}>
+              ${!config.collapse && this.active ? this._renderControlRow() : ''}
+            </div>
+            ${config.show_tts ? this._renderTts() : ''}
           </div>
-        </div>
-        <div class='rows'>
-          <div class='control-row flex flex-wrap justify' ?wrap=${this.config.volume_stateless}>
-            ${!config.collapse && this.active ? this._renderControlRow() : ''}
-          </div>
-          ${config.show_tts ? this._renderTts() : ''}
         </div>
         ${config.show_progress && this._showProgress ? this._renderProgress() : ''}
       </ha-card>`;
@@ -160,10 +183,6 @@ class MiniMediaPlayer extends LitElement {
 
   _computeName() {
     return this.config.name || this.entity.attributes.friendly_name;
-  }
-
-  _computeCover(artwork) {
-    return (artwork && this.config.artwork == 'cover') ? artwork : this.config.background;
   }
 
   _computeArtwork() {
@@ -189,20 +208,29 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
+  _renderArtwork(artwork) {
+    console.log(this.config.background)
+    if (!artwork && !this.config.background)
+      return html`<div class='bg'></div>`;
+
+    const img = artwork || this.config.background;
+
+    return html`<div class='bg' style='background-image: url(${img});'></div>`;
+  }
+
   _renderIcon(artwork) {
     if (this.config.hide_icon) return;
-    if (this.active && artwork && this.config.artwork == 'default') {
+    if (this.active && artwork && this.config.artwork == 'default')
       return html`
         <div class='entity__artwork' ?border=${this.config.artwork_border}
           style='background-image: url("${artwork}")'
           state=${this.entity.state}>
         </div>`;
-    }
+
     return html`
       <div class='entity__icon'>
-        <ha-icon icon='${this._computeIcon()}'></ha-icon>
-      </div>
-    `;
+        <ha-icon icon=${this._computeIcon()}></ha-icon>
+      </div>`;
   }
 
   _renderPowerButton() {
@@ -276,7 +304,7 @@ class MiniMediaPlayer extends LitElement {
 
   _renderPowerStrip({config} = this) {
     if (this.entity.state == 'unavailable')
-      this._renderLabel('state.default.unavailable', 'Unavailable');
+      return this._renderLabel('state.default.unavailable', 'Unavailable');
 
     return html`
       <div class='select flex'>
@@ -543,10 +571,11 @@ class MiniMediaPlayer extends LitElement {
       <style>
         div:empty { display: none; }
         ha-card {
-          padding: 16px;
+          padding: 0;
           position: relative;
-          transition: padding .5s;
           overflow: hidden;
+          height: auto;
+          display: flex;
         }
         header {
           display: none;
@@ -560,61 +589,70 @@ class MiniMediaPlayer extends LitElement {
           padding: 24px 16px 16px;
           position: relative;
         }
-        ha-card[has-title] {
-          padding-top: 0px;
-        }
         ha-card[group] {
-          background: none;
           box-shadow: none;
+        }
+        .player {
+          box-sizing: border-box;
+          position: relative;
+          padding: 16px;
+          transition: padding .5s;
+          align-self: flex-end;
+          width: 100%;
+        }
+        .player:before {
+          content: '';
+          position: absolute;
+          top: 0; right: 0; bottom: 0; left: 0;
+          background: var(--paper-card-background-color, white);
+          transition: background .5s ease-in;
+        }
+        ha-card[bg] .player:before {
+          background: transparent;
+        }
+        ha-card[artwork='cover'][has-artwork] .player:before {
+          background: rgba(0,0,0,.5);
+        }
+        ha-card[artwork='full-cover'][has-artwork] .player:before {
+          background: rgba(0,0,0,.75);
+        }
+        ha-card[artwork*='cover'][has-artwork] .bg,
+        ha-card[bg] .bg {
+          display: block;
+        }
+        .bg {
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+          display: none;
+          position: absolute;
+          top: 0; right: 0; bottom: 0; left: 0;
+        }
+        ha-card[group] .player  {
           padding: 0;
         }
-        ha-card[group][artwork='cover'][has-artwork] {
+        ha-card[group][artwork*='cover'][has-artwork] .player {
           padding: 8px 0;
+        }
+        ha-card[has-title] .player {
+          padding-top: 0px;
         }
         ha-card[more-info] {
           cursor: pointer;
         }
-        ha-card[artwork='cover'][has-artwork] .bg,
-        .bg[bg] {
-          opacity: 1;
-          transition: all .5s ease-in;
-        }
-        ha-card[artwork='cover'][has-artwork] paper-icon-button,
-        ha-card[artwork='cover'][has-artwork] ha-icon,
-        ha-card[artwork='cover'][has-artwork] .entity__info,
-        ha-card[artwork='cover'][has-artwork] .entity__info__name,
-        ha-card[artwork='cover'][has-artwork] paper-button,
-        ha-card[artwork='cover'][has-artwork] header,
-        ha-card[artwork='cover'][has-artwork] .select span,
-        ha-card[artwork='cover'][has-artwork] .source-menu__button[focused] iron-icon {
+        ha-card[artwork*='cover'][has-artwork] paper-icon-button,
+        ha-card[artwork*='cover'][has-artwork] ha-icon,
+        ha-card[artwork*='cover'][has-artwork] .entity__info,
+        ha-card[artwork*='cover'][has-artwork] .entity__info__name,
+        ha-card[artwork*='cover'][has-artwork] paper-button,
+        ha-card[artwork*='cover'][has-artwork] header,
+        ha-card[artwork*='cover'][has-artwork] .select span,
+        ha-card[artwork*='cover'][has-artwork] .source-menu__button[focused] iron-icon {
           color: #FFFFFF;
         }
-        ha-card[artwork='cover'][has-artwork] paper-input {
+        ha-card[artwork*='cover'][has-artwork] paper-input {
           --paper-input-container-color: #FFFFFF;
           --paper-input-container-input-color: #FFFFFF;
-        }
-        .bg {
-          background: transparent;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: center center;
-          opacity: 0;
-          transition: all .5s ease-in;
-          position: absolute;
-          top: 0; right: 0; bottom: 0; left: 0;
-        }
-        .bg:before {
-          background: #000000;
-          content: '';
-          opacity: 0;
-          position: absolute;
-          top: 0; left: 0; bottom: 0; right: 0;
-          transition: all .5s ease-in;
-          visibility: hidden;
-        }
-        ha-card[artwork='cover'][has-artwork] .bg:before {
-          opacity: .5;
-          visibility: visible;
         }
         .flex {
           display: flex;
@@ -737,7 +775,7 @@ class MiniMediaPlayer extends LitElement {
           position: absolute;
           white-space: nowrap;
         }
-        ha-card[artwork='cover'][has-artwork] .entity__info__media,
+        ha-card[artwork*='cover'][has-artwork] .entity__info__media,
         paper-icon-button[color] {
           color: var(--accent-color) !important;
         }

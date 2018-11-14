@@ -11,7 +11,8 @@ export default {
   plugins: [
     replace({
       include: 'mini-media-player.js',
-      'https://unpkg.com/@polymer/lit-element@^0.6.2/lit-element.js?module': '@polymer/lit-element'
+      'https://unpkg.com/@polymer/lit-element@^0.6.2/lit-element.js?module': '@polymer/lit-element',
+      'https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.0/dist/ResizeObserver.es.js': 'resize-observer-polyfill'
     }),
     resolve(),
     terser()
