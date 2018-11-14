@@ -150,7 +150,8 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       ${this._style()}
-      <ha-card ?bg=${this.config.background} ?group=${config.group} 
+      <ha-card ?break=${this._rect.w < 350}
+        ?bg=${this.config.background} ?group=${config.group} 
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
         ?hide-icon=${config.hide_icon} ?hide-info=${this.config.hide_info}
@@ -931,13 +932,11 @@ class MiniMediaPlayer extends LitElement {
           from { transform: translateX(100%); }
           to { transform: translateX(0); }
         }
-        @media screen and (max-width: 350px) {
-          .rows {
-            margin-left: 0;
-          }
-          .source-menu__source {
-            display: none;
-          }
+        ha-card[break] .rows {
+          margin-left: 0;
+        }
+        ha-card[break] .source-menu__source {
+          display: none;
         }
       </style>
     `;
