@@ -137,11 +137,14 @@ class MiniMediaPlayer extends LitElement {
     const ro = new ResizeObserver(entries => {
       for (const entry of entries) {
         const {left, top, width, height} = entry.contentRect;
-        if (this.config.scroll_info) this._computeOverflow();
         this.rect = {h: height + top * 2, w: width + left * 2};
       }
     });
     ro.observe(this.shadowRoot.querySelector('.player'));
+  }
+
+  updated() {
+    if (this.config.scroll_info) this._computeOverflow();
   }
 
   render({_hass, config, entity} = this) {
@@ -151,7 +154,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       ${this._style()}
       <ha-card ?break=${this._rect.w < 350}
-        ?bg=${this.config.background} ?group=${config.group} 
+        ?bg=${this.config.background} ?group=${config.group}
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
         ?hide-icon=${config.hide_icon} ?hide-info=${this.config.hide_info}
@@ -210,7 +213,6 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderArtwork(artwork) {
-    console.log(this.config.background)
     if (!artwork && !this.config.background)
       return html`<div class='bg'></div>`;
 
