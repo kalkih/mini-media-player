@@ -190,11 +190,11 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeArtwork() {
-    return (this.entity.attributes.entity_picture
-      && this.entity.attributes.entity_picture != '')
+    const picture = this.entity.attributes.entity_picture;
+    return (picture && picture != '')
       && this.config.artwork !== 'none'
       && this.active
-      ? this.entity.attributes.entity_picture
+      ? picture
       : false;
   }
 
@@ -945,7 +945,9 @@ class MiniMediaPlayer extends LitElement {
   }
 
   getCardSize() {
-    return 1;
+    if (this.config.collapse)
+      return 1;
+    return 2;
   }
 }
 
