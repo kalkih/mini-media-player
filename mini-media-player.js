@@ -541,7 +541,7 @@ class MiniMediaPlayer extends LitElement {
   _isActive(inactive = false) {
     if (this.config.idle_view)
       this.idle = this._computeIdle();
-    return ( this.entity.state !== 'off'
+    return (this.entity.state !== 'off'
       && this.entity.state !== 'unavailable'
       && !this.idle) || false;
   }
@@ -589,7 +589,6 @@ class MiniMediaPlayer extends LitElement {
   _style() {
     return html`
       <style>
-        div:empty { display: none; }
         ha-card {
           padding: 0;
           position: relative;
@@ -614,18 +613,18 @@ class MiniMediaPlayer extends LitElement {
           box-shadow: none;
         }
         .player {
+          align-self: flex-end;
           box-sizing: border-box;
           position: relative;
           padding: 16px;
           transition: padding .5s;
-          align-self: flex-end;
           width: 100%;
         }
         .player:before {
+          background: var(--paper-card-background-color, white);
           content: '';
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
-          background: var(--paper-card-background-color, white);
           transition: background .5s ease-in;
         }
         ha-card[bg] .player:before {
@@ -693,6 +692,9 @@ class MiniMediaPlayer extends LitElement {
         .hidden {
           display: none;
         }
+        .entity {
+          position: relative;
+        }
         .entity__info {
           margin-left: 8px;
           display: block;
@@ -755,8 +757,8 @@ class MiniMediaPlayer extends LitElement {
         }
         .entity__info__media {
           color: var(--secondary-text-color);
-          word-break: break-word;
           max-height: 6em;
+          word-break: break-word;
         }
         .entity__info[short] .entity__info__media {
           overflow: hidden;
@@ -769,9 +771,6 @@ class MiniMediaPlayer extends LitElement {
         }
         .entity[inactive] .entity__info__media {
           max-width: 200px;
-        }
-        .entity[inactive] .source-menu__source {
-          display: none;
         }
         .entity__info__media[scroll] > span {
           visibility: hidden;
@@ -837,9 +836,6 @@ class MiniMediaPlayer extends LitElement {
           width: auto;
         }
         .entity__control-row--top paper-slider {
-          flex: 1;
-        }
-        .entity__control-row--top paper-slider {
           height: 40px;
         }
         .control-row {
@@ -903,11 +899,9 @@ class MiniMediaPlayer extends LitElement {
           max-width: none;
         }
         paper-progress {
-          bottom: 0;
+          left: 0; right: 0; bottom: 0;
           height: var(--paper-progress-height, 4px);
-          left: 0;
           position: absolute;
-          right: 0;
           width: 100%;
           --paper-progress-active-color: var(--accent-color);
           --paper-progress-container-color: rgba(150,150,150,0.25);
@@ -922,11 +916,6 @@ class MiniMediaPlayer extends LitElement {
           margin: 0 8px;
           white-space: nowrap;
         }
-        ha-card[hide-info] .entity__info,
-        ha-card[hide-info] .entity__artwork,
-        ha-card[hide-info] .entity__icon {
-          display: none;
-        }
         ha-card[hide-info] .entity__control-row--top,
         ha-card[hide-info] .select {
           justify-content: space-between;
@@ -938,6 +927,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[hide-info] .entity__control-row--top,
         ha-card[hide-info] .select,
         .entity__control-row--top,
+        .entity__control-row--top paper-slider,
         .select {
           flex: 1
         }
@@ -959,7 +949,12 @@ class MiniMediaPlayer extends LitElement {
         ha-card[break] .tts {
           margin-left: 8px;
         }
-        ha-card[break] .source-menu__source {
+        div:empty,
+        ha-card[break] .source-menu__source,
+        ha-card[hide-info] .entity__info,
+        ha-card[hide-info] .entity__artwork,
+        ha-card[hide-info] .entity__icon,
+        .entity[inactive] .source-menu__source {
           display: none;
         }
       </style>
