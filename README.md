@@ -15,7 +15,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.2
+    - url: /local/mini-media-player-bundle.js?v=0.9.3
       type: module
   ```
 
@@ -26,14 +26,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 - Grab `mini-media-player-bundle.js`
 
   ```
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.2/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.3/mini-media-player-bundle.js
   ```
 
 - Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.2
+    - url: /local/mini-media-player-bundle.js?v=0.9.3
       type: module
   ```
 
@@ -60,7 +60,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.2
+    - url: /local/mini-media-player-bundle.js?v=0.9.3
       type: module
   ```
 
@@ -83,19 +83,20 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | show_progress | boolean | false | v0.8.3 | Display a progress bar when media progress information is available.
 | show_shuffle | boolean | false | v0.8.9 | Display a shuffle button (only for players with `shuffle_set` support).
 | hide_power | boolean | false | v0.7 | Hide the power button.
-| hide_controls | boolean | false | v0.8 | Hide media control buttons (*force `short_info` to `true`*).
-| hide_volume | boolean | false | v0.8 | Hide volume controls. (*force `short_info` to `true`*).
+| hide_controls | boolean | false | v0.8 | Hide media control buttons (*sets `short_info` to `true`*).
+| hide_volume | boolean | false | v0.8 | Hide volume controls. (*sets `short_info` to `true`*).
 | hide_media_info | boolean | false | v0.9.1 | Hide media information.
 | hide_mute | boolean | false | v0.8.1 | Hide the mute button.
 | hide_info | boolean | false | v0.8.4 | Hide entity icon, entity name & media information.
 | hide_icon | boolean | false | v0.8.8 | Hide the entity icon.
-| artwork | string | default | v0.4 | `cover` to have artwork displayed as the card background, `none` to hide artwork.
+| artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `none` to hide artwork.
 | short_info | boolean | false | v0.8 | Limit media information to one row.
 | scroll_info | boolean | false | v0.8 | Limit media information to one row, scroll through the overflow.
 | power_color | boolean | false | v0.4 | Make power button change color based on on/off state.
 | artwork_border | boolean | false | v0.3 | Display a border around the `default` media artwork.
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
 | toggle_power | boolean | true | v0.8.9 | Change power button behaviour `turn_off` / `turn_on` or `toggle`
+| idle_view | boolean | false | v0.9.3 | Display a less cluttered view when player is idle.
 | consider_idle_after | number | optional | v0.8.9 | Specify a number (minutes) *only supported on players with `media_position_updated_at`)* after which the player displays as idle.
 | consider_pause_idle | boolean | false | v0.9.1 | Display the player as idle when player is paused
 | more_info | boolean | true | v0.1 | Enable the "more info" dialog when pressing on the card.
@@ -189,9 +190,17 @@ The `mini-media-player-bundle.js` will be rebuilt and ready.
 ## Getting errors?
 Make sure you have `javascript_version: latest` in your `configuration.yaml` under `frontend:`.
 
-Make sure you have the latest version of `mini-media-player.js`.
+Make sure you have the latest version of `mini-media-player-bundle.js`.
 
 If you have issues after updating the card, try clearing your browsers cache or restart Home Assistant.
+
+If you are getting "Custom element doesn't exist: mini-media-player" or running older browsers try replacing `type: module` with `type: js` in your resource reference, like below.
+
+```yaml
+resources:
+  - url: /local/mini-media-player-bundle.js?v=...
+    type: js
+```
 
 ## Inspiration
 - [@ciotlosm](https://github.com/ciotlosm) - [custom-lovelace](https://github.com/ciotlosm/custom-lovelace)

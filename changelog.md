@@ -1,3 +1,9 @@
+## v0.9.3
+- Addle: `artwork: full-cover` option to display the full artwork #31
+- Added: `idle_view` option to render an alternate view while player state is `idle`
+- Fixed: issue where power button color would not display correctly in idle view and `power_color` enabled
+- Fixed: responsive design improvements #30
+
 ## v0.9.2
 - Changed: volume button icons, to not confuse with mute #26
 - Changed: adjusted scroll speed for *(scroll_info)*
