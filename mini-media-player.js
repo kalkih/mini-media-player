@@ -35,7 +35,7 @@ class MiniMediaPlayer extends LitElement {
     this.idle = false;
     this.rect = {
       h: -1,
-      w: 325
+      w: 0
     }
   }
 
@@ -137,18 +137,17 @@ class MiniMediaPlayer extends LitElement {
     const ro = new ResizeObserver(entries => {
       for (const entry of entries) {
         window.requestAnimationFrame(() => {
-          if (this.config.artwork !== 'full-cover') {
-            this._resizeEntry = entry;
-            if (!this._resizeTimer) {
-              this._computeRect(entry)
-              this._resizeTimer = setTimeout(() => {
-                this._resizeTimer = null;
-                this._computeRect(this._resizeEntry)
-              }, 1000)
-            }
-          } else {
-            this._computeRect(entry)
+          if (this.config.artwork === 'full-cover')
+            return this._computeRect(entry);
+
+          if (!this._resizeTimer) {
+            this._computeRect(entry);
+            this._resizeTimer = setTimeout(() => {
+              this._resizeTimer = null;
+              this._computeRect(this._resizeEntry);
+            }, 250)
           }
+          this._resizeEntry = entry;
         });
       }
     });
@@ -613,12 +612,15 @@ class MiniMediaPlayer extends LitElement {
           box-shadow: none;
         }
         .player {
-          align-self: flex-end;
+          align-self: flex-start;
           box-sizing: border-box;
           position: relative;
           padding: 16px;
           transition: padding .5s;
           width: 100%;
+        }
+        ha-card[artwork='full-cover'] .player {
+          align-self: flex-end;
         }
         .player:before {
           background: var(--paper-card-background-color, white);
