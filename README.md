@@ -15,7 +15,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.3
+    - url: /local/mini-media-player-bundle.js?v=0.9.4
       type: module
   ```
 
@@ -26,14 +26,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 - Grab `mini-media-player-bundle.js`
 
   ```
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.3/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.4/mini-media-player-bundle.js
   ```
 
 - Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.3
+    - url: /local/mini-media-player-bundle.js?v=0.9.4
       type: module
   ```
 
@@ -60,7 +60,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.3
+    - url: /local/mini-media-player-bundle.js?v=0.9.4
       type: module
   ```
 

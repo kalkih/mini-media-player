@@ -1,5 +1,8 @@
+## v0.9.4
+- Fixed: card not resizing properly in some browsers #33
+
 ## v0.9.3
-- Addle: `artwork: full-cover` option to display the full artwork #31
+- Added: `artwork: full-cover` option to display the full artwork #31
 - Added: `idle_view` option to render an alternate view while player state is `idle`
 - Fixed: issue where power button color would not display correctly in idle view and `power_color` enabled
 - Fixed: responsive design improvements #30
