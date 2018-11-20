@@ -160,7 +160,7 @@ class MiniMediaPlayer extends LitElement {
 
   render({_hass, config, entity} = this) {
     const artwork = this._computeArtwork();
-    const height = artwork && this.config.artwork === 'full-cover' ? this._rect.w : this._rect.h;
+    const height = artwork && this.config.artwork === 'full-cover' ? this._rect.w : 0;
 
     return html`
       ${this._style()}
@@ -702,6 +702,7 @@ class MiniMediaPlayer extends LitElement {
           display: block;
           position: relative;
           overflow: hidden;
+          user-select: none;
         }
         .rows {
           margin-left: 56px;
@@ -718,6 +719,7 @@ class MiniMediaPlayer extends LitElement {
           color: var(--paper-item-icon-color, #44739e);
         }
         .entity__artwork, .entity__icon {
+          animation: fade-in .15s ease-out;
           background-position: center center;
           background-repeat: no-repeat;
           background-size: cover;
@@ -944,6 +946,10 @@ class MiniMediaPlayer extends LitElement {
         @keyframes move {
           from { transform: translateX(100%); }
           to { transform: translateX(0); }
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
         ha-card[break] .rows {
           margin-left: 0;
