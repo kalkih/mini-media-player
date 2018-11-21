@@ -629,7 +629,8 @@ class MiniMediaPlayer extends LitElement {
           top: 0; right: 0; bottom: 0; left: 0;
           transition: background .5s ease-in;
         }
-        ha-card[bg] .player:before {
+        ha-card[bg] .player:before,
+        ha-card[group] .player:before {
           background: transparent;
         }
         ha-card[artwork='cover'][has-artwork] .player:before {
