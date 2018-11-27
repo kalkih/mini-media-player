@@ -33,10 +33,12 @@ class MiniMediaPlayer extends LitElement {
     super();
     this._overflow = false;
     this.idle = false;
-    this.rect = {
-      h: -1,
+    this._rect = {
+      h: 0,
       w: 0
-    }
+    };
+    this.break = true;
+    this.initial = true;
   }
 
   static get properties() {
@@ -52,7 +54,9 @@ class MiniMediaPlayer extends LitElement {
       _rect: {
         h: Number,
         w: Number
-      }
+      },
+      break: Boolean,
+      initial: Boolean
     };
   }
 
@@ -69,7 +73,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   set rect(rect) {
-    if (rect !== this._rect)
+    if (rect.h !== this._rect.h || rect.w !== this._rect.w)
       this._rect = rect;
   }
 
@@ -124,7 +128,10 @@ class MiniMediaPlayer extends LitElement {
       || changedProps.has('source')
       || changedProps.has('position')
       || changedProps.has('_overflow')
-      || changedProps.has('_rect'));
+      || (changedProps.has('_rect')
+          && this.entity.attributes.entity_picture
+          && this.config.artwork === 'full-cover')
+      || changedProps.has('break'));
 
     if (update) {
       this.active = this._isActive();
@@ -137,6 +144,7 @@ class MiniMediaPlayer extends LitElement {
     const ro = new ResizeObserver(entries => {
       for (const entry of entries) {
         window.requestAnimationFrame(() => {
+          if (this.config.scroll_info) this._computeOverflow();
           if (this.config.artwork === 'full-cover')
             return this._computeRect(entry);
 
@@ -152,6 +160,7 @@ class MiniMediaPlayer extends LitElement {
       }
     });
     ro.observe(this.shadowRoot.querySelector('.player'));
+    setTimeout(() => this.initial = false, 250)
   }
 
   updated() {
@@ -160,15 +169,15 @@ class MiniMediaPlayer extends LitElement {
 
   render({_hass, config, entity} = this) {
     const artwork = this._computeArtwork();
-    const height = artwork && this.config.artwork === 'full-cover' ? this._rect.w : 0;
+    const height = artwork && config.artwork === 'full-cover' ? this._rect.w : 0;
 
     return html`
       ${this._style()}
-      <ha-card ?break=${this._rect.w < 350}
-        ?bg=${this.config.background} ?group=${config.group}
+      <ha-card ?break=${this.break} ?initial=${this.initial}
+        ?bg=${config.background} ?group=${config.group}
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
-        ?hide-icon=${config.hide_icon} ?hide-info=${this.config.hide_info}
+        ?hide-icon=${config.hide_icon} ?hide-info=${config.hide_info}
         @click='${(e) => this._handleMore()}' style=${`min-height: ${height}px;`}>
         ${this._renderArtwork(artwork)}
         <header>${config.title}</header>
@@ -186,7 +195,7 @@ class MiniMediaPlayer extends LitElement {
             </div>
           </div>
           <div class='rows'>
-            <div class='control-row flex flex-wrap justify' ?wrap=${this.config.volume_stateless}>
+            <div class='control-row flex flex-wrap justify' ?wrap=${config.volume_stateless}>
               ${!config.collapse && this.active ? this._renderControlRow() : ''}
             </div>
             ${config.show_tts ? this._renderTts() : ''}
@@ -225,7 +234,8 @@ class MiniMediaPlayer extends LitElement {
 
   _computeRect(entry) {
     const {left, top, width, height} = entry.contentRect;
-    this.rect = {h: height + top * 2 , w: width + left * 2}
+    this.rect = {h: 0, w: width + left * 2};
+    this.break = (width + left * 2) < 350;
   }
 
   _renderArtwork(artwork) {
@@ -593,8 +603,10 @@ class MiniMediaPlayer extends LitElement {
           position: relative;
           overflow: hidden;
           display: flex;
-          transition: min-height .25s ease-out;
           background: transparent;
+        }
+        ha-card[initial] * {
+          animation-duration: .00001s;
         }
         header {
           display: none;
@@ -732,6 +744,7 @@ class MiniMediaPlayer extends LitElement {
           position: relative;
           text-align: center;
           width: 40px;
+          transition: border-color .25s ease-out;
         }
         .entity__artwork[border] {
           border: 2px solid var(--primary-text-color);
@@ -971,9 +984,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   getCardSize() {
-    if (this.config.collapse)
-      return 1;
-    return 2;
+    return this.config.collapse ? 1 : 2;
   }
 }
 
