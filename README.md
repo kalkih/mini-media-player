@@ -78,7 +78,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | name | string | optional | v0.6 | Override the entities friendly name.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
 | group | boolean | false | v0.1 | Disable paddings and box-shadow.
-| show_tts | string | optional | v0.2 | Show Text-To-Speech input, specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `show_tts: google` or `show_tts: amazon_polly`.
+| show_tts | string | optional | v0.2 | Show Text-To-Speech input, specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, or `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component.
 | show_source | string | false | v0.7 | `true` display source select, `small` to only display the source button (v0.8.1), `full` display the full source name (v0.9.1).
 | show_progress | boolean | false | v0.8.3 | Display a progress bar when media progress information is available.
 | show_shuffle | boolean | false | v0.8.9 | Display a shuffle button (only for players with `shuffle_set` support).
