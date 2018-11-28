@@ -11,6 +11,7 @@ const MEDIA_INFO = [
 
 const ICON = {
   dropdown: 'mdi:chevron-down',
+  menu: 'mdi:menu-down',
   mute: {
     true: 'mdi:volume-off',
     false: 'mdi:volume-high'
@@ -102,6 +103,8 @@ class MiniMediaPlayer extends LitElement {
       power_color: false,
       scroll_info: false,
       short_info: false,
+      media_buttons: false,
+      media_list: false,
       show_progress: false,
       show_shuffle: false,
       show_source: false,
@@ -200,6 +203,8 @@ class MiniMediaPlayer extends LitElement {
             <div class='control-row flex flex-wrap justify' ?wrap=${config.volume_stateless}>
               ${!config.collapse && this.active ? this._renderControlRow() : ''}
             </div>
+            ${config.media_buttons ? this._renderButtons() : ''}
+            ${config.media_list ? this._renderList() : ''}
             ${config.show_tts ? this._renderTts() : ''}
           </div>
         </div>
@@ -454,6 +459,39 @@ class MiniMediaPlayer extends LitElement {
       </div>`;
   }
 
+  _renderList() {
+    const items = this.config.media_list;
+    return html`
+      <paper-menu-button class='media-dropdown'
+        noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
+        @click='${(e) => e.stopPropagation()}'>
+        <paper-button class='media-dropdown__button' slot='dropdown-trigger'>
+          <span class='media-dropdown__label'>
+            ${'Select media...'}
+          </span>
+          <iron-icon class='media-dropdown__icon' .icon=${ICON.menu}></iron-icon>
+        </paper-button>
+        <paper-listbox slot="dropdown-content" class="media-dropdown-trigger"
+          @click='${e => this._handleSelect(e, 'media_list', e.target.getAttribute('value'))}'>
+          ${items.map((item, i) => html`<paper-item value=${i}>${item.name}</paper-item>`)}
+        </paper-listbox>
+      </paper-menu-button>`;
+  }
+
+  _renderButtons() {
+    const items = this.config.media_buttons;
+
+    return html`
+      <div class='media-buttons'>
+        ${items.map((item, i) => html`
+          <paper-button raised
+            @click='${e => this._handleSelect(e, 'media_buttons', i)}'>
+            <span class='media-dropdown__label'>${item.name}</span>
+          </paper-button>`
+        )}
+      </div>`;
+  }
+
   _callService(e, service, options, component = 'media_player') {
     e.stopPropagation();
     options = (options === null || options === undefined) ? {} : options;
@@ -483,6 +521,14 @@ class MiniMediaPlayer extends LitElement {
     const options = { message: input.value };
     this._callService(e, this.config.show_tts + '_say' , options, 'tts');
     input.value = '';
+  }
+
+  _handleSelect(e, list, id) {
+    const options = {
+      'media_content_type': this.config[list][id].type,
+      'media_content_id': this.config[list][id].url
+    };
+    this._callService(e, 'play_media' , options);
   }
 
   _handleMore({config} = this) {
@@ -633,7 +679,7 @@ class MiniMediaPlayer extends LitElement {
           transition: padding .5s;
           width: 100%;
         }
-        ha-card[artwork='full-cover'] .player {
+        ha-card[artwork*='full-cover'] .player {
           align-self: flex-end;
         }
         .player:before {
@@ -690,8 +736,16 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork*='cover'][has-artwork] paper-button,
         ha-card[artwork*='cover'][has-artwork] header,
         ha-card[artwork*='cover'][has-artwork] .select span,
-        ha-card[artwork*='cover'][has-artwork] .source-menu__button[focused] iron-icon {
+        ha-card[artwork*='cover'][has-artwork] paper-menu-button paper-button[focused] iron-icon {
           color: #FFFFFF;
+          border-color: #FFFFFF;
+        }
+        ha-card[artwork*='cover'][has-artwork] paper-input {
+          --paper-input-container-focus-color: #FFFFFF;
+        }
+        ha-card[artwork*='cover'][has-artwork] .media-buttons paper-button {
+          background: rgba(255,255,255,.65);
+          color: black;
         }
         ha-card[artwork*='cover'][has-artwork] paper-input {
           --paper-input-container-color: #FFFFFF;
@@ -727,8 +781,8 @@ class MiniMediaPlayer extends LitElement {
           margin-left: 56px;
           position: relative;
         }
-        ha-card[hide-icon] .rows {
-          margin-left: 0;
+        .rows > *:nth-child(2) {
+          margin-top: 0px;
         }
         .entity__info[short] {
           max-height: 40px;
@@ -778,6 +832,7 @@ class MiniMediaPlayer extends LitElement {
         .select span {
           color: var(--primary-text-color);
           position: relative;
+          transition: background .5s ease-out, color .25s ease-out;
         }
         .entity__info__media {
           color: var(--secondary-text-color);
@@ -844,10 +899,84 @@ class MiniMediaPlayer extends LitElement {
         .source-menu span:empty {
           display: none;
         }
+        .tts {
+          align-items: center;
+          margin-top: 8px;
+        }
         .tts__input {
           cursor: text;
           flex: 1;
-          -webkit-flex: 1;
+          margin-right: 8px;
+          --paper-input-container-input: {
+            font-size: 1em;
+          };
+        }
+        .tts paper-button {
+          margin: 0;
+          padding: .4em;
+        }
+        .media-dropdown {
+          box-sizing: border-box;
+          padding: 0;
+          width: 100%;
+          margin-top: 8px;
+        }
+        .media-dropdown__button {
+          border-bottom: 1px solid var(--primary-text-color);
+          display: flex;
+          font-size: 1em;
+          justify-content: space-between;
+          margin: 0;
+          opacity: .75;
+          padding: 0 8px 0 0;
+          width: 100%;
+          border-radius: 0;
+        }
+        .media-dropdown[focused] paper-button {
+          opacity: 1;
+        }
+        .media-dropdown[focused] paper-button[focused] {
+          opacity: .75;
+        }
+        .media-dropdown__label {
+          overflow: hidden;
+          padding: .2em .2em .2em 0;
+          text-align: left;
+          text-overflow: ellipsis;
+          text-transform: none;
+          white-space: nowrap;
+        }
+        .media-dropdown__icon {
+          height: 24px;
+          width: 24px;
+        }
+        .media-buttons {
+          box-sizing: border-box;
+          display: flex;
+          flex-wrap: wrap;
+          margin-top: 8px;
+          padding-top: 8px;
+        }
+        .media-buttons > paper-button {
+          background-color: var(--primary-background-color);
+          background-color: var(--paper-slider-active-color);
+          background-color: rgba(255,255,255,0.1);
+          border-radius: 0;
+          box-sizing: border-box;
+          margin: 8px 0 0 0;
+          min-width: 0;
+          padding: .2em 1em;
+          width: calc(50% - 4px);
+        }
+        .media-buttons > paper-button:nth-child(odd) {
+          margin-right: 8px;
+        }
+        .media-buttons > paper-button:nth-child(-n+2) {
+          margin-top: 0;
+        }
+        .media-buttons > paper-button:nth-last-child(1):nth-child(odd) {
+          margin: 8px 0 0 0;
+          width: 100%;
         }
         .select .vol-control {
           max-width: 200px;
@@ -883,7 +1012,10 @@ class MiniMediaPlayer extends LitElement {
         paper-input {
           opacity: .75;
           --paper-input-container-color: var(--primary-text-color);
-          --paper-input-container-focus-color: var(--accent-color);
+          --paper-input-container-focus-color: var(--primary-text-color);
+          --paper-input-container: {
+            padding: 0;
+          };
         }
         paper-input[focused] {
           opacity: 1;
@@ -893,11 +1025,11 @@ class MiniMediaPlayer extends LitElement {
           line-height: 20px;
           padding: 0;
         }
-        .source-menu[focused] iron-icon {
+        paper-menu-button[focused] iron-icon {
           color: var(--accent-color);
           transform: rotate(180deg);
         }
-        .source-menu__button[focused] iron-icon {
+        paper-menu-button paper-button[focused] iron-icon {
           color: var(--primary-text-color);
           transform: rotate(0deg);
         }
@@ -940,6 +1072,7 @@ class MiniMediaPlayer extends LitElement {
         .label {
           margin: 0 8px;
           overflow: hidden;
+          text-overflow: ellipsis;
           white-space: nowrap;
         }
         ha-card[hide-info] .entity__control-row--top,
@@ -973,11 +1106,24 @@ class MiniMediaPlayer extends LitElement {
           from { opacity: 0; }
           to { opacity: 1; }
         }
-        ha-card[break] .rows {
+        ha-card[break] .rows,
+        ha-card[hide-info] .rows,
+        ha-card[hide-icon] .rows {
           margin-left: 0;
         }
-        ha-card[break] .tts {
-          margin-left: 8px;
+        ha-card[hide-info] .tts,
+        ha-card[hide-icon] .tts,
+        ha-card[break] .tts,
+        ha-card[hide-info] .media-dropdown,
+        ha-card[hide-icon] .media-dropdown,
+        ha-card[break] .media-dropdown {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+        ha-card[hide-info] .media-dropdown__button,
+        ha-card[hide-icon] .media-dropdown__button,
+        ha-card[break] .media-dropdown__button {
+          padding-right: 0;
         }
         div:empty,
         ha-card[break] .source-menu__source,
