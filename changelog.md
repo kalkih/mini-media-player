@@ -1,3 +1,18 @@
+## v0.9.5
+- Added: `media_list` option to display a dropdown list with items to quickly play specified media
+- Added: `media_buttons` option to display buttons to quickly play specified media
+- Added: `full-cover-fit` option parameter for the `artwork` option, this option does not crop/zoom the artwork like `artwork-cover` #36 (@Rocka84)
+- Addeed: tts support for the "Alexa as Media Player" custom_component #37
+- Changed: removed animations on initial page load
+- Fixed: less re-rendering -> better performance
+- Fixed: made card background transparent if `group: true` is set
+- Fixed: setting `hide_info` to `true` now make the cards content fill the entire width
+- Fixed: text labels not cutting off when no space is available
+
+  <img src="https://user-images.githubusercontent.com/457678/49184546-f9038400-f35f-11e8-979d-2a8d745229e2.png" width="500px" alt="V0.9.5 example 1">
+
+  <img src="https://user-images.githubusercontent.com/457678/49185197-97441980-f361-11e8-988c-07ade1d128ae.png" width="500px" alt="V0.9.5 example 2">”
+
 ## v0.9.4
 - Fixed: card not resizing properly in some browsers #33
 

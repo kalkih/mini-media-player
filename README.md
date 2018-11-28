@@ -1,5 +1,5 @@
 # Mini Media Player
-A minimalistic yet powerful & customizable media player card for [Home Assistant](https://github.com/home-assistant/home-assistant) Lovelace UI.
+A minimalistic yet customizable media player card for [Home Assistant](https://github.com/home-assistant/home-assistant) Lovelace UI.
 
 Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t/custom-ui-mini-media-player/40135) and [custom-lovelace](https://github.com/ciotlosm/custom-lovelace).
 
@@ -15,7 +15,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.4
+    - url: /local/mini-media-player-bundle.js?v=0.9.5
       type: module
   ```
 
@@ -26,14 +26,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 - Grab `mini-media-player-bundle.js`
 
   ```
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.4/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.5/mini-media-player-bundle.js
   ```
 
 - Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.4
+    - url: /local/mini-media-player-bundle.js?v=0.9.5
       type: module
   ```
 
@@ -60,7 +60,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.4
+    - url: /local/mini-media-player-bundle.js?v=0.9.5
       type: module
   ```
 
@@ -70,6 +70,8 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ### Options
 
+#### Card options
+
 | Name | Type | Default | Since | Description |
 |------|:----:|:-------:|:-----:|-------------|
 | type | string | **required** | v0.1 | `custom:mini-media-player`
@@ -78,6 +80,9 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | name | string | optional | v0.6 | Override the entities friendly name.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
 | group | boolean | false | v0.1 | Disable paddings and box-shadow.
+| artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `none` to hide artwork, `full-cover-fit` for full cover without cropping.
+| media_list | list | optional | v0.9.5 | A list containing media items, to quickly play specified media, see [Media item options](#media-item-options).
+| media_buttons | list | optional | v0.9.5 | Display media buttons, to quickly play specified media, see [Media item options](#media-item-options).
 | show_tts | string | optional | v0.2 | Show Text-To-Speech input, specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, or `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component.
 | show_source | string | false | v0.7 | `true` display source select, `small` to only display the source button (v0.8.1), `full` display the full source name (v0.9.1).
 | show_progress | boolean | false | v0.8.3 | Display a progress bar when media progress information is available.
@@ -89,7 +94,6 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | hide_mute | boolean | false | v0.8.1 | Hide the mute button.
 | hide_info | boolean | false | v0.8.4 | Hide entity icon, entity name & media information.
 | hide_icon | boolean | false | v0.8.8 | Hide the entity icon.
-| artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `none` to hide artwork.
 | short_info | boolean | false | v0.8 | Limit media information to one row.
 | scroll_info | boolean | false | v0.8 | Limit media information to one row, scroll through the overflow.
 | power_color | boolean | false | v0.4 | Make power button change color based on on/off state.
@@ -98,14 +102,26 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | toggle_power | boolean | true | v0.8.9 | Change power button behaviour `turn_off` / `turn_on` or `toggle`
 | idle_view | boolean | false | v0.9.3 | Display a less cluttered view when player is idle.
 | consider_idle_after | number | optional | v0.8.9 | Specify a number (minutes) *only supported on players with `media_position_updated_at`)* after which the player displays as idle.
-| consider_pause_idle | boolean | false | v0.9.1 | Display the player as idle when player is paused
+| consider_pause_idle | boolean | false | v0.9.1 | Display the player as idle when player is paused.
 | more_info | boolean | true | v0.1 | Enable the "more info" dialog when pressing on the card.
 | max_volume | number | true | v0.8.2 | Max volume for the volume slider (number between 1 - 100).
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
 
+#### Media item options
+
+| Name | Type | Default | Description |
+|------|:----:|:-------:|:------------|
+| name | string | **required** | A display name.
+| type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel` or `playlist`. For example, to play music you would set.
+| url | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify.
+
+
 ### Example usage
 
 #### Single player
+
+<img src="https://user-images.githubusercontent.com/457678/47515832-256d4180-d884-11e8-97a6-267c5c63c000.png" width="500px" alt="Example 1" />
+
 ```yaml
 - type: custom:mini-media-player
   entity: media_player.avr
@@ -114,10 +130,11 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   show_source: true
 ```
 
-<img src="https://user-images.githubusercontent.com/457678/47515832-256d4180-d884-11e8-97a6-267c5c63c000.png" width="500px" />
-
 #### Compact player
 Setting either `hide_volume` and/or `hide_controls` to `true` will make the  player collapse into one row.
+
+<img src="https://user-images.githubusercontent.com/457678/47516141-fc997c00-d884-11e8-9bc9-eb9b0818f28b.png" width="500px" alt="Example 2" />
+
 ```yaml
 - type: custom:mini-media-player
   entity: media_player.spotify
@@ -128,10 +145,38 @@ Setting either `hide_volume` and/or `hide_controls` to `true` will make the  pla
   show_progress: true
 ```
 
-<img src="https://user-images.githubusercontent.com/457678/47516141-fc997c00-d884-11e8-9bc9-eb9b0818f28b.png" width="500px" />
+#### Player with media buttons
+
+<img src="https://user-images.githubusercontent.com/457678/49184546-f9038400-f35f-11e8-979d-2a8d745229e2.png" width="500px" alt="Example 3">
+
+```yaml
+- type: custom:mini-media-player
+  entity: media_player.spotify
+  name: Spotify Player
+  artwork: cover
+  show_source: full
+  media_buttons:
+    - name: Lowkeee
+      type: playlist
+      url: spotify:user:kalkih:playlist:1HsopVo0BO6p5Qg52ly5oq
+    - name: RapCaviar
+      type: playlist
+      url: spotify:user:spotify:playlist:37i9dQZF1DX0XUsuxWHRQd
+    - name: Lil Pump - Gucci Gang
+      type: music
+      url: spotify:track:43ZyHQITOjhciSUUNPVRHc
+    - name: This is XXXTENTACION
+      type: playlist
+      url: spotify:user:spotify:playlist:37i9dQZF1DX893Xy4cp22W
+    - name: This is Juice WRLD
+      type: playlist
+      url: spotify:user:spotify:playlist:37i9dQZF1DZ06evO2O09Hg
+```
 
 #### Grouping players
 Set the `group` option to `true` when nesting the mini media player(s) inside  cards that already have margins/paddings.
+
+<img src="https://user-images.githubusercontent.com/457678/47516557-08d20900-d886-11e8-8922-4973c0aab94a.png" width="500px" alt="Example 4" />
 
 ```yaml
 - type: entities
@@ -150,8 +195,6 @@ Set the `group` option to `true` when nesting the mini media player(s) inside  c
       hide_controls: true
       group: true
 ```
-
-<img src="https://user-images.githubusercontent.com/457678/47516557-08d20900-d886-11e8-8922-4973c0aab94a.png" width="500px" />
 
 ## Development
 
