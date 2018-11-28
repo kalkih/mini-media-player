@@ -852,6 +852,7 @@ class MiniMediaPlayer extends LitElement {
           margin-right: 0;
           margin-left: auto;
           width: auto;
+          max-width: 100%;
         }
         .entity__control-row--top paper-slider {
           height: 40px;
@@ -932,6 +933,7 @@ class MiniMediaPlayer extends LitElement {
         }
         .label {
           margin: 0 8px;
+          overflow: hidden;
           white-space: nowrap;
         }
         ha-card[hide-info] .entity__control-row--top,
