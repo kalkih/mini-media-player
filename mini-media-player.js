@@ -130,7 +130,7 @@ class MiniMediaPlayer extends LitElement {
       || changedProps.has('_overflow')
       || (changedProps.has('_rect')
           && this.entity.attributes.entity_picture
-          && this.config.artwork === 'full-cover')
+          && this.config.artwork.substring(0,10) === 'full-cover')
       || changedProps.has('break'));
 
     if (update) {
@@ -145,7 +145,7 @@ class MiniMediaPlayer extends LitElement {
       for (const entry of entries) {
         window.requestAnimationFrame(() => {
           if (this.config.scroll_info) this._computeOverflow();
-          if (this.config.artwork === 'full-cover')
+          if (this.config.artwork.substring(0,10) === 'full-cover')
             return this._computeRect(entry);
 
           if (!this._resizeTimer) {
@@ -169,7 +169,9 @@ class MiniMediaPlayer extends LitElement {
 
   render({_hass, config, entity} = this) {
     const artwork = this._computeArtwork();
-    const height = artwork && config.artwork === 'full-cover' ? this._rect.w : 0;
+    const height = artwork && config.artwork.substring(0,10) === 'full-cover'
+      ? this._rect.w
+      : 0;
 
     return html`
       ${this._style()}
@@ -648,10 +650,14 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork='cover'][has-artwork] .player:before {
           background: rgba(0,0,0,.5);
         }
-        ha-card[artwork='full-cover'][has-artwork] .player:before {
+        ha-card[artwork*='full-cover'][has-artwork] .player:before {
           background: rgba(0,0,0,.75);
           background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
           transition: background 0s ease-in;
+        }
+        ha-card[artwork='full-cover-fit'][has-artwork] .bg {
+          background-color: black;
+          background-size: contain;
         }
         ha-card[artwork*='cover'][has-artwork] .bg,
         ha-card[bg] .bg {
