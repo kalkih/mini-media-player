@@ -653,7 +653,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card {
           padding: 0;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
           display: flex;
           background: transparent;
         }
@@ -995,6 +995,7 @@ class MiniMediaPlayer extends LitElement {
         }
         .entity__control-row--top paper-slider {
           height: 40px;
+          line-height: initial;
         }
         .control-row {
           flex-wrap: wrap;
