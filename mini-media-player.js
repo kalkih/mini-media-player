@@ -287,13 +287,18 @@ class MiniMediaPlayer extends LitElement {
 
   _renderMediaInfo() {
     if (this.config.hide_media_info) return;
-    const items = MEDIA_INFO.map(item => {
+    let items = MEDIA_INFO.map(item => {
       return {
         info: this._getAttribute(item.attr),
         prefix: item.prefix || '',
         ...item
       };
     }).filter(item => item.info !== '');
+    if (items.length === 0 && this.entity.attributes.app_name)
+      items.push({
+        info: this.entity.attributes.app_name,
+        prefix: ''
+      });
 
     return html`
       <div class='entity__info__media' ?scroll=${this._overflow}
@@ -634,7 +639,8 @@ class MiniMediaPlayer extends LitElement {
     const items = MEDIA_INFO.map(item => {
       return this._getAttribute(item.attr);
     }).filter(item => item !== '');
-    return items.length !== 0 && !this.config.hide_media_info ? true : false;
+    return (items.length !== 0 && !this.config.hide_media_info)
+      || this.entity.attributes.app_name ? true : false;
   }
 
   _getAttribute(attr, {entity} = this) {
