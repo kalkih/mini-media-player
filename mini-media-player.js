@@ -34,10 +34,6 @@ class MiniMediaPlayer extends LitElement {
     super();
     this._overflow = false;
     this.idle = false;
-    this._rect = {
-      h: 0,
-      w: 0
-    };
     this.break = true;
     this.initial = true;
   }
@@ -52,10 +48,6 @@ class MiniMediaPlayer extends LitElement {
       active: Boolean,
       idle: Boolean,
       _overflow: Boolean,
-      _rect: {
-        h: Number,
-        w: Number
-      },
       break: Boolean,
       initial: Boolean
     };
@@ -71,11 +63,6 @@ class MiniMediaPlayer extends LitElement {
   set overflow(overflow) {
     if (overflow !== this._overflow)
       this._overflow = overflow;
-  }
-
-  set rect(rect) {
-    if (rect.h !== this._rect.h || rect.w !== this._rect.w)
-      this._rect = rect;
   }
 
   setConfig(config) {
@@ -131,9 +118,6 @@ class MiniMediaPlayer extends LitElement {
       || changedProps.has('source')
       || changedProps.has('position')
       || changedProps.has('_overflow')
-      || (changedProps.has('_rect')
-          && this.entity.attributes.entity_picture
-          && this.config.artwork.substring(0,10) === 'full-cover')
       || changedProps.has('break'));
 
     if (update) {
@@ -148,8 +132,6 @@ class MiniMediaPlayer extends LitElement {
       for (const entry of entries) {
         window.requestAnimationFrame(() => {
           if (this.config.scroll_info) this._computeOverflow();
-          if (this.config.artwork.substring(0,10) === 'full-cover')
-            return this._computeRect(entry);
 
           if (!this._resizeTimer) {
             this._computeRect(entry);
@@ -172,9 +154,6 @@ class MiniMediaPlayer extends LitElement {
 
   render({_hass, config, entity} = this) {
     const artwork = this._computeArtwork();
-    const height = artwork && config.artwork.substring(0,10) === 'full-cover'
-      ? this._rect.w
-      : 0;
 
     return html`
       ${this._style()}
@@ -183,7 +162,8 @@ class MiniMediaPlayer extends LitElement {
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
         ?hide-icon=${config.hide_icon} ?hide-info=${config.hide_info}
-        @click='${(e) => this._handleMore()}' style=${`min-height: ${height}px;`}>
+        content=${this._computeContent()}
+        @click='${(e) => this._handleMore()}'>
         ${this._renderArtwork(artwork)}
         <header>${config.title}</header>
         <div class='player'>
@@ -210,6 +190,10 @@ class MiniMediaPlayer extends LitElement {
         </div>
         ${config.show_progress && this._showProgress ? this._renderProgress() : ''}
       </ha-card>`;
+  }
+
+  _computeContent() {
+    return this.entity.attributes.media_content_type || 'none';
   }
 
   _computeName() {
@@ -241,7 +225,6 @@ class MiniMediaPlayer extends LitElement {
 
   _computeRect(entry) {
     const {left, top, width, height} = entry.contentRect;
-    this.rect = {h: 0, w: width + left * 2};
     this.break = (width + left * 2) < 350;
   }
 
@@ -657,11 +640,16 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <style>
         ha-card {
-          padding: 0;
-          position: relative;
-          overflow: visible;
           display: flex;
           background: transparent;
+          overflow: visible;
+          padding: 0;
+          position: relative;
+        }
+        ha-card:before {
+          content: '';
+          padding-top: 0px;
+          transition: padding-top .5s;
         }
         ha-card[initial] * {
           animation-duration: .00001s;
@@ -682,15 +670,24 @@ class MiniMediaPlayer extends LitElement {
           box-shadow: none;
         }
         .player {
-          align-self: flex-start;
+          align-self: flex-end;
           box-sizing: border-box;
           position: relative;
           padding: 16px;
           transition: padding .5s;
           width: 100%;
         }
-        ha-card[artwork*='full-cover'] .player {
-          align-self: flex-end;
+        ha-card[artwork*='full-cover'][has-artwork] .player {
+          position: absolute;
+        }
+        ha-card[artwork='full-cover'][has-artwork]:before {
+          padding-top: 56%;
+        }
+        ha-card[artwork='full-cover'][has-artwork][content='music']:before {
+          padding-top: 100%;
+        }
+        ha-card[artwork='full-cover-fit'][has-artwork]:before {
+          padding-top: 100%;
         }
         .player:before {
           background: var(--paper-card-background-color, white);
@@ -709,6 +706,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork*='full-cover'][has-artwork] .player:before {
           background: rgba(0,0,0,.75);
           background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+          top: -10px;
           transition: background 0s ease-in;
         }
         ha-card[artwork='full-cover-fit'][has-artwork] .bg {
