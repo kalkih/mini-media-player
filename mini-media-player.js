@@ -36,6 +36,8 @@ class MiniMediaPlayer extends LitElement {
     this.idle = false;
     this.break = true;
     this.initial = true;
+    this.picture = false;
+    this.thumbnail = false;
   }
 
   static get properties() {
@@ -49,7 +51,9 @@ class MiniMediaPlayer extends LitElement {
       idle: Boolean,
       _overflow: Boolean,
       break: Boolean,
-      initial: Boolean
+      initial: Boolean,
+      picture: String,
+      thumbnail: String
     };
   }
 
@@ -118,7 +122,8 @@ class MiniMediaPlayer extends LitElement {
       || changedProps.has('source')
       || changedProps.has('position')
       || changedProps.has('_overflow')
-      || changedProps.has('break'));
+      || changedProps.has('break')
+      || changedProps.has('thumbnail'));
 
     if (update) {
       this.active = this._isActive();
@@ -162,7 +167,7 @@ class MiniMediaPlayer extends LitElement {
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
         ?hide-icon=${config.hide_icon} ?hide-info=${config.hide_info}
-        content=${this._computeContent()}
+        content=${this._computeContent()} ?collapsed=${config.collapse}
         @click='${(e) => this._handleMore()}'>
         ${this._renderArtwork(artwork)}
         <header>${config.title}</header>
@@ -202,11 +207,19 @@ class MiniMediaPlayer extends LitElement {
 
   _computeArtwork() {
     const picture = this.entity.attributes.entity_picture;
-    return (picture && picture != '')
+    const artwork = (picture && picture !== '')
       && this.config.artwork !== 'none'
       && this.active
-      ? picture
+      && !this.idle
+      ? true
       : false;
+
+    if (artwork && picture !== this.picture) {
+      this._fetchThumbnail();
+      this.picture = picture;
+    }
+
+    return artwork && this.thumbnail ? true : false;
   }
 
   _computeIcon() {
@@ -229,20 +242,23 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderArtwork(artwork) {
-    if (!artwork && !this.config.background)
+    if (!this.thumbnail && !this.config.background)
       return html`<div class='bg'></div>`;
 
-    const img = artwork || this.config.background;
+    const url = this.config.background
+      && (!artwork || this.config.artwork === 'default')
+      ? `url(${this.config.background})`
+      : this.thumbnail;
 
-    return html`<div class='bg' style='background-image: url(${img});'></div>`;
+    return html`<div class='bg' style='background-image: ${url};'></div>`;
   }
 
   _renderIcon(artwork) {
     if (this.config.hide_icon) return;
-    if (this.active && artwork && this.config.artwork == 'default')
+    if (this.active && artwork && this.config.artwork === 'default')
       return html`
         <div class='entity__artwork' ?border=${this.config.artwork_border}
-          style='background-image: url("${artwork}")'
+          style='background-image: ${this.thumbnail};'
           state=${this.entity.state}>
         </div>`;
 
@@ -636,20 +652,39 @@ class MiniMediaPlayer extends LitElement {
     return (resources && resources[label] ? resources[label] : fallback);
   }
 
+  async _fetchThumbnail() {
+    try {
+      const { content_type: contentType, content } = await this._hass.callWS({
+        type: 'media_player_thumbnail',
+        entity_id: this.config.entity,
+      });
+      this.thumbnail = `url(data:${contentType};base64,${content})`;
+    } catch (err) {
+      this.thumbnail = false;
+    }
+  }
+
   _style() {
     return html`
       <style>
         ha-card {
           display: flex;
           background: transparent;
-          overflow: visible;
+          min-height: 72px;
+          overflow: hidden;
           padding: 0;
           position: relative;
+        }
+        ha-card[collapsed] {
+          overflow: visible;
         }
         ha-card:before {
           content: '';
           padding-top: 0px;
           transition: padding-top .5s;
+        }
+        ha-card[initial]:before {
+          transition: none;
         }
         ha-card[initial] * {
           animation-duration: .00001s;
@@ -694,7 +729,7 @@ class MiniMediaPlayer extends LitElement {
           content: '';
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
-          transition: background .5s ease-in;
+          transition: background .5s ease-out;
         }
         ha-card[bg] .player:before,
         ha-card[group] .player:before {
@@ -707,21 +742,16 @@ class MiniMediaPlayer extends LitElement {
           background: rgba(0,0,0,.75);
           background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
           top: -10px;
-          transition: background 0s ease-in;
         }
         ha-card[artwork='full-cover-fit'][has-artwork] .bg {
           background-color: black;
           background-size: contain;
         }
-        ha-card[artwork*='cover'][has-artwork] .bg,
-        ha-card[bg] .bg {
-          display: block;
-        }
         .bg {
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center center;
-          display: none;
+          display: block !important;
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
         }
