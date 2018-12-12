@@ -15,7 +15,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.5
+    - url: /local/mini-media-player-bundle.js?v=0.9.6
       type: module
   ```
 
@@ -26,14 +26,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 - Grab `mini-media-player-bundle.js`
 
   ```
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.5/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.6/mini-media-player-bundle.js
   ```
 
 - Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.5
+    - url: /local/mini-media-player-bundle.js?v=0.9.6
       type: module
   ```
 
@@ -60,7 +60,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.5
+    - url: /local/mini-media-player-bundle.js?v=0.9.6
       type: module
   ```
 
@@ -71,7 +71,6 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 ### Options
 
 #### Card options
-
 | Name | Type | Default | Since | Description |
 |------|:----:|:-------:|:-----:|-------------|
 | type | string | **required** | v0.1 | `custom:mini-media-player`
@@ -106,20 +105,25 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | more_info | boolean | true | v0.1 | Enable the "more info" dialog when pressing on the card.
 | max_volume | number | true | v0.8.2 | Max volume for the volume slider (number between 1 - 100).
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
+| sonos_grouping | list | optional | v0.9.6 | A list containing Sonos entities, to enable group management of Sonos speakers, see [Sonos item options](#sonos-item-options) and [Example usage](#sonos-group-joinunjoin).
 
 #### Media item options
-
 | Name | Type | Default | Description |
 |------|:----:|:-------:|:------------|
 | name | string | **required** | A display name.
 | type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel` or `playlist`. For example, to play music you would set.
 | url | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify.
 
+#### Sonos item options
+| Name | Type | Default | Description |
+|------|:----:|:-------:|:------------|
+| name | string | **required** | A display name.
+| entity_id | string | **required** | The *entity_id* for the Sonos entity.
+
 
 ### Example usage
 
 #### Single player
-
 <img src="https://user-images.githubusercontent.com/457678/47515832-256d4180-d884-11e8-97a6-267c5c63c000.png" width="500px" alt="Example 1" />
 
 ```yaml
@@ -196,7 +200,37 @@ Set the `group` option to `true` when nesting the mini media player(s) inside  c
       group: true
 ```
 
+#### Sonos group join/unjoin
+Specify all your Sonos entities in a list under the `sonos_grouping` option.
+
+* The card does only allow changes to be made to groups where the entity of the card is the coordinator/master speaker.
+* Checking a speakers in the list will make it join the group of the card entity. (*`media_player.sonos_patio`* in the example below).
+* Unchecking a speaker in the list will remove it from any group it's a part of.
+
+<img src="https://user-images.githubusercontent.com/457678/49844296-a778e180-fdc2-11e8-911f-97533b680605.gif" width="500px" alt="Example 5">
+
+```yaml
+- entity: media_player.sonos_patio
+  type: custom:mini-media-player
+  hide_power: true
+  sonos_grouping:
+    - entity_id: media_player.sonos_patio
+      name: Sonos Patio
+    - entity_id: media_player.sonos_livingroom
+      name: Sonos Livingroom
+    - entity_id: media_player.sonos_kitchen
+      name: Sonos Kitchen
+    - entity_id: media_player.sonos_bathroom
+      name: Sonos Bathroom
+    - entity_id: media_player.sonos_bedroom
+      name: Sonos Bedroom
+```
+
+If you are planning to use the `sonos_grouping` option in several cards, creating a separate yaml file for the list is ideal, as this will make `ui-lovelace.yaml` less cluttered and also make it easier to manage and maintain.
+You can then simply reference this file using `sonos_grouping: !include filename.yaml` for every occurrence of `sonos_grouping` in your `ui-lovelace.yaml`.
+
 ## Development
+*If you plan to contribute back to this repo, please fork & create the PR against the [dev](https://github.com/kalkih/mini-media-player/tree/dev) branch.*
 
 **Clone this repository into your `config/www` folder using git.**
 

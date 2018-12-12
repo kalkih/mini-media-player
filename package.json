@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "rollup -c && babel mini-media-player-bundle.js --out-file mini-media-player-bundle.js",
-    "rollup": "rollup -c"
+    "rollup": "rollup -c",
+    "watch": "rollup -c --watch"
   }
 }

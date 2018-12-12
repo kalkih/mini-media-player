@@ -1,8 +1,16 @@
+## v0.9.6
+- Added: `sonos_grouping` option for Sonos group management
+- Added: showing `app_name` if no other media information is available #38
+- Changed: artwork images renders in base64, should result in faster rendering
+- Fixed: improvements to artwork logic, should result in smoother transitions
+- Fixed: `artwork: full-cover` now displays *"non music"* artwork in a 16:9 aspect ratio
+- Fixed: paper slider pin now displays correctly even in collapsed view
+
 ## v0.9.5
 - Added: `media_list` option to display a dropdown list with items to quickly play specified media
 - Added: `media_buttons` option to display buttons to quickly play specified media
-- Added: `full-cover-fit` option parameter for the `artwork` option, this option does not crop/zoom the artwork like `artwork-cover` #36 (@Rocka84)
-- Addeed: tts support for the "Alexa as Media Player" custom_component #37
+- Added: `full-cover-fit` option parameter for the `artwork` option, this option does not crop/zoom the artwork like `full-cover` #36
+- Added: tts support for the "Alexa as Media Player" custom_component #37 (@Rocka84)
 - Changed: removed animations on initial page load
 - Fixed: less re-rendering -> better performance
 - Fixed: made card background transparent if `group: true` is set
@@ -11,7 +19,7 @@
 
   <img src="https://user-images.githubusercontent.com/457678/49184546-f9038400-f35f-11e8-979d-2a8d745229e2.png" width="500px" alt="V0.9.5 example 1">
 
-  <img src="https://user-images.githubusercontent.com/457678/49185197-97441980-f361-11e8-988c-07ade1d128ae.png" width="500px" alt="V0.9.5 example 2">”
+  <img src="https://user-images.githubusercontent.com/457678/49185197-97441980-f361-11e8-988c-07ade1d128ae.png" width="500px" alt="V0.9.5 example 2">
 
 ## v0.9.4
 - Fixed: card not resizing properly in some browsers #33
