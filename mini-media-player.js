@@ -782,6 +782,7 @@ class MiniMediaPlayer extends LitElement {
         }
         ha-card[group] {
           box-shadow: none;
+          min-height: 56px;
         }
         .player {
           align-self: flex-end;
