@@ -1,15 +1,15 @@
 {
     "mini-media-player": {
       "updated_at": "2018-12-12",
-      "version": "0.9.6",
+      "version": "0.9.7",
       "remote_location": "https://raw.githubusercontent.com/kalkih/mini-media-player/master/mini-media-player.js",
       "visit_repo": "https://github.com/kalkih/mini-media-player",
       "changelog": "https://github.com/kalkih/mini-media-player/releases/latest"
     },
     "mini-media-player-bundle": {
       "updated_at": "2018-12-12",
-      "version": "0.9.6",
-      "remote_location": "https://github.com/kalkih/mini-media-player/releases/download/v0.9.6/mini-media-player-bundle.js",
+      "version": "0.9.7",
+      "remote_location": "https://github.com/kalkih/mini-media-player/releases/download/v0.9.7/mini-media-player-bundle.js",
       "visit_repo": "https://github.com/kalkih/mini-media-player",
       "changelog": "https://github.com/kalkih/mini-media-player/releases/latest"
     }

@@ -1,3 +1,7 @@
+## v0.9.7
+- Fixed: card will now grow taller instead of clipping content if more space is needed when using `artwork: full-cover`
+- Fixed: height issue while using `group` option
+
 ## v0.9.6
 - Added: `sonos_grouping` option for Sonos group management
 - Added: showing `app_name` if no other media information is available #38
@@ -5,6 +9,8 @@
 - Fixed: improvements to artwork logic, should result in smoother transitions
 - Fixed: `artwork: full-cover` now displays *"non music"* artwork in a 16:9 aspect ratio
 - Fixed: paper slider pin now displays correctly even in collapsed view
+
+  <img src="https://user-images.githubusercontent.com/457678/49844296-a778e180-fdc2-11e8-911f-97533b680605.gif" width="500px" alt="V0.9.6 example 1">
 
 ## v0.9.5
 - Added: `media_list` option to display a dropdown list with items to quickly play specified media
