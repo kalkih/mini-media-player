@@ -174,7 +174,9 @@ class MiniMediaPlayer extends LitElement {
         ?hide-icon=${config.hide_icon} ?hide-info=${config.hide_info}
         content=${this._computeContent()} ?collapsed=${config.collapse}
         @click='${(e) => this._handleMore()}'>
-        ${this._renderArtwork(artwork)}
+        <div class='bg'>
+          ${this._renderArtwork(artwork)}
+        </div>
         <header>${config.title}</header>
         <div class='player'>
           <div class='entity flex' ?inactive=${!this.active}>
@@ -249,14 +251,14 @@ class MiniMediaPlayer extends LitElement {
 
   _renderArtwork(artwork) {
     if (!this.thumbnail && !this.config.background)
-      return html`<div class='bg'></div>`;
+      return;
 
     const url = this.config.background
       && (!artwork || this.config.artwork === 'default')
       ? `url(${this.config.background})`
       : this.thumbnail;
 
-    return html`<div class='bg' style='background-image: ${url};'></div>`;
+    return html`<div class='cover' style='background-image: ${url};'></div>`;
   }
 
   _renderIcon(artwork) {
@@ -749,10 +751,15 @@ class MiniMediaPlayer extends LitElement {
         ha-card {
           display: flex;
           background: transparent;
-          min-height: 72px;
           overflow: hidden;
           padding: 0;
           position: relative;
+        }
+        ha-card[group] {
+          box-shadow: none;
+        }
+        ha-card[more-info] {
+          cursor: pointer;
         }
         ha-card[collapsed] {
           overflow: visible;
@@ -762,11 +769,13 @@ class MiniMediaPlayer extends LitElement {
           padding-top: 0px;
           transition: padding-top .5s;
         }
-        ha-card[initial]:before {
-          transition: none;
+        ha-card[initial] .entity__artwork,
+        ha-card[initial] .entity__icon {
+          animation-duration: .0000001s;
         }
-        ha-card[initial] * {
-          animation-duration: .00001s;
+        ha-card[initial]:before,
+        ha-card[initial] .player {
+          transition: none;
         }
         header {
           display: none;
@@ -780,72 +789,75 @@ class MiniMediaPlayer extends LitElement {
           padding: 24px 16px 16px;
           position: relative;
         }
-        ha-card[group] {
-          box-shadow: none;
-          min-height: 56px;
-        }
-        .player {
-          align-self: flex-end;
-          box-sizing: border-box;
-          position: relative;
-          padding: 16px;
-          transition: padding .5s;
-          width: 100%;
-        }
-        ha-card[artwork*='full-cover'][has-artwork] .player {
-          position: absolute;
-        }
         ha-card[artwork='full-cover'][has-artwork]:before {
           padding-top: 56%;
         }
-        ha-card[artwork='full-cover'][has-artwork][content='music']:before {
-          padding-top: 100%;
-        }
+        ha-card[artwork='full-cover'][has-artwork][content='music']:before,
         ha-card[artwork='full-cover-fit'][has-artwork]:before {
           padding-top: 100%;
         }
-        .player:before {
+        .bg {
           background: var(--paper-card-background-color, white);
-          content: '';
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
-          transition: background .5s ease-out;
         }
-        ha-card[bg] .player:before,
-        ha-card[group] .player:before {
+        ha-card[group] .bg {
           background: transparent;
         }
-        ha-card[artwork='cover'][has-artwork] .player:before {
-          background: rgba(0,0,0,.5);
+        .cover,
+        .cover:before {
+          display: block;
+          opacity: 0;
+          position: absolute;
+          top: 0; right: 0; bottom: 0; left: 0;
+          transition: opacity .5s ease-out;
         }
-        ha-card[artwork*='full-cover'][has-artwork] .player:before {
-          background: rgba(0,0,0,.75);
-          background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
-          top: -10px;
-        }
-        ha-card[artwork='full-cover-fit'][has-artwork] .bg {
-          background-color: black;
-          background-size: contain;
-        }
-        .bg {
+        .cover {
+          animation: fade-in .5s ease-out;
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center center;
-          display: block !important;
-          position: absolute;
-          top: 0; right: 0; bottom: 0; left: 0;
         }
-        ha-card[group] .player  {
+        .cover:before {
+          background: rgba(0,0,0,.5);
+          content: '';
+        }
+        ha-card[artwork*='full-cover'][has-artwork] .player {
+          background: rgba(0,0,0,.75);
+          background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+        }
+        ha-card[has-artwork] .cover,
+        ha-card[has-artwork][artwork='cover'] .cover:before,
+        ha-card[bg] .cover{
+          opacity: 1;
+        }
+        ha-card[artwork='default'] .cover {
+          display: none;
+        }
+        ha-card[bg] .cover{
+          display: block;
+        }
+        ha-card[artwork='full-cover-fit'][has-artwork] .cover {
+          background-color: black;
+          background-size: contain;
+        }
+        .player {
+          align-self: flex-end;
+          background: transparent;
+          box-sizing: border-box;
+          position: relative;
+          padding: 16px;
+          transition: padding .25s ease-out, background .5s ease-out;
+          width: 100%;
+        }
+        ha-card[group] .player {
           padding: 0;
-        }
-        ha-card[group][artwork*='cover'][has-artwork] .player {
-          padding: 8px 0;
         }
         ha-card[has-title] .player {
           padding-top: 0;
         }
-        ha-card[more-info] {
-          cursor: pointer;
+        ha-card[group][artwork*='cover'][has-artwork] .player {
+          padding: 8px 0;
         }
         ha-card[artwork*='cover'][has-artwork] paper-icon-button,
         ha-card[artwork*='cover'][has-artwork] ha-icon,
@@ -1294,7 +1306,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[break] .media-dropdown__button {
           padding-right: 0;
         }
-        div:empty,
+        .player div:empty,
         ha-card[break] .source-menu__source,
         ha-card[hide-info] .entity__info,
         ha-card[hide-info] .entity__artwork,
