@@ -11,6 +11,7 @@ const MEDIA_INFO = [
 
 const ICON = {
   dropdown: 'mdi:chevron-down',
+  group: 'mdi:google-circles-communities',
   menu: 'mdi:menu-down',
   mute: {
     true: 'mdi:volume-off',
@@ -38,6 +39,7 @@ class MiniMediaPlayer extends LitElement {
     this.initial = true;
     this.picture = false;
     this.thumbnail = false;
+    this.edit = false;
   }
 
   static get properties() {
@@ -53,7 +55,8 @@ class MiniMediaPlayer extends LitElement {
       break: Boolean,
       initial: Boolean,
       picture: String,
-      thumbnail: String
+      thumbnail: String,
+      edit: Boolean
     };
   }
 
@@ -100,6 +103,7 @@ class MiniMediaPlayer extends LitElement {
       show_shuffle: false,
       show_source: false,
       show_tts: false,
+      sonos_grouping: false,
       title: '',
       toggle_power: true,
       volume_stateless: false,
@@ -123,7 +127,8 @@ class MiniMediaPlayer extends LitElement {
       || changedProps.has('position')
       || changedProps.has('_overflow')
       || changedProps.has('break')
-      || changedProps.has('thumbnail'));
+      || changedProps.has('thumbnail')
+      || changedProps.has('edit'));
 
     if (update) {
       this.active = this._isActive();
@@ -191,6 +196,7 @@ class MiniMediaPlayer extends LitElement {
             ${config.media_buttons ? this._renderButtons() : ''}
             ${config.media_list ? this._renderList() : ''}
             ${config.show_tts ? this._renderTts() : ''}
+            ${this.edit ? this._renderGroupList() : ''}
           </div>
         </div>
         ${config.show_progress && this._showProgress ? this._renderProgress() : ''}
@@ -352,9 +358,67 @@ class MiniMediaPlayer extends LitElement {
         <div class='flex right'>
           ${this.idle ? this._renderIdleStatus() : html``}
           ${config.show_source ? this._renderSource() : html``}
+          ${config.sonos_grouping ? this._renderGroupButton() : html``}
           ${!config.hide_power ? this._renderPowerButton() : html``}
         <div>
       </div>`;
+  }
+
+  _renderGroupButton() {
+    const grouped = !this.entity.attributes.sonos_group
+      || this.entity.attributes.sonos_group.length <= 1
+
+    return html`
+      <paper-icon-button .icon=${ICON.group}
+        ?opaque=${grouped}
+        ?color=${this.edit}
+        @click='${e => this._handleGroupButton(e)}'>
+      </paper-icon-button>`;
+  }
+
+  _renderGroupList() {
+    const entities = this.config.sonos_grouping;
+    const group = this.entity.attributes.sonos_group || [];
+    const master = group[0] || this.config.entity;
+    const isMaster = master === this.config.entity;
+
+    return html`
+      <div class='speaker-select'>
+        <span>Group speakers</span>
+        ${entities.map(item => this._renderGroupListItem(item, group, master))}
+        <div class='buttons'>
+          <paper-button
+            raised
+            ?disabled=${group.length < 2}
+            @click='${e =>
+              this._handleGroupItemChange(e, isMaster ? group : this.config.entity, false)}'>
+            ${isMaster ? html`Ungroup` : html`Leave`}
+          </paper-button>
+          <paper-button
+            raised
+            ?disabled=${!isMaster}
+            @click='${e =>
+              this._handleGroupItemChange(e, entities.map(item => item.entity_id), true)}'>
+            Group all
+          </paper-button>
+        </div>
+      </div>`;
+  }
+
+  _renderGroupListItem(item, group, master) {
+    const checked = item.entity_id === this.config.entity
+      || group.includes(item.entity_id);
+    const disabled = item.entity_id === this.config.entity
+      || master !== this.config.entity;
+
+    return html`
+      <paper-checkbox
+        ?checked=${checked}
+        ?disabled=${disabled}
+        @click='${e => this._handleGroupItemChange(e, item.entity_id, !checked)}'>
+        ${item.name}
+        ${item.entity_id === master ? html`<span>(master)</span>` : ''}
+      </paper-checkbox>`;
   }
 
   _renderSource({entity} = this) {
@@ -547,8 +611,23 @@ class MiniMediaPlayer extends LitElement {
   _handleSource(e) {
     const source = e.target.getAttribute('value');
     const options = { 'source': source };
-    this._callService(e, 'select_source' , options);
+    this._callService(e, 'select_source', options);
     this.source = source;
+  }
+
+  _handleGroupButton(e) {
+    e.stopPropagation();
+    this.edit = !this.edit;
+  }
+
+  _handleGroupItemChange(e, entity, checked) {
+    let options = { entity_id: entity };
+    if (checked) {
+      options.master = this.config.entity;
+      this._callService(e, 'SONOS_JOIN', options);
+    } else {
+      this._callService(e, 'SONOS_UNJOIN', options);
+    }
   }
 
   _fire(type, detail, options) {
@@ -774,6 +853,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork*='cover'][has-artwork] paper-button,
         ha-card[artwork*='cover'][has-artwork] header,
         ha-card[artwork*='cover'][has-artwork] .select span,
+        ha-card[artwork*='cover'][has-artwork] .speaker-select > span,
         ha-card[artwork*='cover'][has-artwork] paper-menu-button paper-button[focused] iron-icon {
           color: #FFFFFF;
           border-color: #FFFFFF;
@@ -781,7 +861,15 @@ class MiniMediaPlayer extends LitElement {
         ha-card[artwork*='cover'][has-artwork] paper-input {
           --paper-input-container-focus-color: #FFFFFF;
         }
-        ha-card[artwork*='cover'][has-artwork] .media-buttons paper-button {
+        ha-card[artwork*='cover'][has-artwork] paper-checkbox[disabled] {
+          --paper-checkbox-checkmark-color: rgba(0,0,0,.5);
+        }
+        ha-card[artwork*='cover'][has-artwork] paper-checkbox {
+          --paper-checkbox-unchecked-color: #FFFFFF;
+          --paper-checkbox-label-color: #FFFFFF;
+        }
+        ha-card[artwork*='cover'][has-artwork] .media-buttons paper-button,
+        ha-card[artwork*='cover'][has-artwork] .speaker-select paper-button {
           background: rgba(255,255,255,.65);
           color: black;
         }
@@ -917,6 +1005,12 @@ class MiniMediaPlayer extends LitElement {
         paper-icon-button[color] {
           color: var(--accent-color) !important;
         }
+        paper-icon-button[opaque] {
+          opacity: .5;
+        }
+        paper-icon-button[color][opaque] {
+          opacity: 1;
+        }
         paper-icon-button {
           transition: color .25s ease-in-out;
         }
@@ -996,8 +1090,6 @@ class MiniMediaPlayer extends LitElement {
           padding-top: 8px;
         }
         .media-buttons > paper-button {
-          background-color: var(--primary-background-color);
-          background-color: var(--paper-slider-active-color);
           background-color: rgba(255,255,255,0.1);
           border-radius: 0;
           box-sizing: border-box;
@@ -1042,6 +1134,40 @@ class MiniMediaPlayer extends LitElement {
           flex: 1;
           min-width: 140px;
           max-height: 40px;
+        }
+        .speaker-select {
+          display: flex;
+          flex-direction: column;
+        }
+        .speaker-select > span {
+          font-weight: 500;
+          margin-top: 12px;
+          text-transform: uppercase;
+        }
+        .speaker-select paper-checkbox {
+          padding: 8px 0;
+        }
+        .speaker-select .buttons {
+          display: flex;
+          flex-dirction: row;
+        }
+        .speaker-select paper-button {
+          background-color: rgba(255,255,255,0.1);
+          margin: 8px 8px 0 0;
+          min-width: 0;
+          padding: .5em 1em;
+          text-transform: uppercase;
+          text-align: center;
+          width: 50%;
+        }
+        .speaker-select paper-button[disabled] {
+          opacity: .5;
+        }
+        .speaker-select paper-button:nth-child(even) {
+          margin: 8px 0 0 8px;
+        }
+        .speaker-select > paper-checkbox > span {
+          font-weight: 600;
         }
         paper-slider {
           max-width: 400px;
@@ -1155,7 +1281,10 @@ class MiniMediaPlayer extends LitElement {
         ha-card[break] .tts,
         ha-card[hide-info] .media-dropdown,
         ha-card[hide-icon] .media-dropdown,
-        ha-card[break] .media-dropdown {
+        ha-card[break] .media-dropdown,
+        ha-card[hide-info] .speaker-select,
+        ha-card[hide-icon] .speaker-select,
+        ha-card[break] .speaker-select {
           padding-left: 8px;
           padding-right: 8px;
         }
