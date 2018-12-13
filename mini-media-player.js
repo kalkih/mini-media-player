@@ -767,11 +767,12 @@ class MiniMediaPlayer extends LitElement {
         ha-card:before {
           content: '';
           padding-top: 0px;
-          transition: padding-top .5s;
+          transition: padding-top .5s ease-in;
+          will-change: padding-top;
         }
         ha-card[initial] .entity__artwork,
         ha-card[initial] .entity__icon {
-          animation-duration: .0000001s;
+          animation-duration: .001s;
         }
         ha-card[initial]:before,
         ha-card[initial] .player {
@@ -810,7 +811,8 @@ class MiniMediaPlayer extends LitElement {
           opacity: 0;
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
-          transition: opacity .5s ease-out;
+          transition: opacity .25s ease-out;
+          will-change: opacity;
         }
         .cover {
           animation: fade-in .5s ease-out;
@@ -847,8 +849,9 @@ class MiniMediaPlayer extends LitElement {
           box-sizing: border-box;
           position: relative;
           padding: 16px;
-          transition: padding .25s ease-out, background .5s ease-out;
+          transition: padding .25s ease-out;
           width: 100%;
+          will-change: padding;
         }
         ha-card[group] .player {
           padding: 0;
@@ -883,7 +886,7 @@ class MiniMediaPlayer extends LitElement {
         }
         ha-card[artwork*='cover'][has-artwork] .media-buttons paper-button,
         ha-card[artwork*='cover'][has-artwork] .speaker-select paper-button {
-          background: rgba(255,255,255,.65);
+          background-color: rgba(255,255,255,.65);
           color: black;
         }
         ha-card[artwork*='cover'][has-artwork] paper-input {
@@ -943,6 +946,7 @@ class MiniMediaPlayer extends LitElement {
           position: relative;
           text-align: center;
           width: 40px;
+          will-change: border-color;
           transition: border-color .25s ease-out;
         }
         .entity__artwork[border] {
@@ -971,7 +975,6 @@ class MiniMediaPlayer extends LitElement {
         .select span {
           color: var(--primary-text-color);
           position: relative;
-          transition: background .5s ease-out, color .25s ease-out;
         }
         .entity__info__media {
           color: var(--secondary-text-color);
@@ -1026,6 +1029,7 @@ class MiniMediaPlayer extends LitElement {
         }
         paper-icon-button {
           transition: color .25s ease-in-out;
+          will-change: color;
         }
         paper-icon-button.shuffle {
           align-self: center;
