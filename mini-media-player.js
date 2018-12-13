@@ -346,7 +346,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <paper-icon-button class='shuffle' .icon=${ICON.shuffle} ?color=${shuffle}
         @click='${e => this._callService(e, "shuffle_set",
-          { shuffle: !shuffle })}'>
+          { shuffle: !shuffle }) }'>
       </paper-icon-button>`;
   }
 
@@ -576,24 +576,21 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handlePower(e) {
-    if (this.config.toggle_power) {
-      this._callService(e, 'toggle');
-    } else {
-      if (this.entity.state === 'off')
-        this._callService(e, 'turn_on');
-      else
-        this._callService(e, 'turn_off');
-    }
+    if (this.config.toggle_power)
+      return this._callService(e, 'toggle');
+    if (this.entity.state === 'off')
+      this._callService(e, 'turn_on');
+    else
+      this._callService(e, 'turn_off');
   }
 
   _handleTts(e) {
     const input = this.shadowRoot.querySelector('.tts paper-input');
     const options = { message: input.value };
-    if (this.config.show_tts === 'alexa') {
+    if (this.config.show_tts === 'alexa')
       this._callService(e, 'alexa_tts' , options);
-    } else {
+    else
       this._callService(e, this.config.show_tts + '_say' , options, 'tts');
-    }
     input.value = '';
   }
 
@@ -606,7 +603,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handleMore({config} = this) {
-    if(config.more_info)
+    if (config.more_info)
       this._fire('hass-more-info', { entityId: config.entity });
   }
 
@@ -685,8 +682,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _isActive(inactive = false) {
-    if (this.config.idle_view)
-      this.idle = this._computeIdle();
+    if (this.config.idle_view) this.idle = this._computeIdle();
     return (this.entity.state !== 'off'
       && this.entity.state !== 'unavailable'
       && !this.idle) || false;
@@ -958,7 +954,11 @@ class MiniMediaPlayer extends LitElement {
         .entity__artwork[state='playing'] {
           border-color: var(--accent-color);
         }
-        .entity__info__name {
+        .entity__info__name,
+        .entity__info[short] .entity__info__media,
+        .source-menu__source,
+        .media-dropdown__label,
+        .label {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -980,11 +980,6 @@ class MiniMediaPlayer extends LitElement {
           color: var(--secondary-text-color);
           max-height: 6em;
           word-break: break-word;
-        }
-        .entity__info[short] .entity__info__media {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
         .entity[inactive] .entity__info__media {
           color: var(--primary-text-color);
@@ -1088,12 +1083,9 @@ class MiniMediaPlayer extends LitElement {
           opacity: .75;
         }
         .media-dropdown__label {
-          overflow: hidden;
           padding: .2em .2em .2em 0;
           text-align: left;
-          text-overflow: ellipsis;
           text-transform: none;
-          white-space: nowrap;
         }
         .media-dropdown__icon {
           height: 24px;
@@ -1225,11 +1217,8 @@ class MiniMediaPlayer extends LitElement {
         .source-menu__source {
           display: block;
           max-width: 60px;
-          overflow: hidden;
           position: relative;
-          text-overflow: ellipsis;
           width: auto;
-          white-space: nowrap;
         }
         .source-menu__source[show="small"] {
           display: none;
@@ -1253,9 +1242,6 @@ class MiniMediaPlayer extends LitElement {
         }
         .label {
           margin: 0 8px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
         ha-card[hide-info] .entity__control-row--top,
         ha-card[hide-info] .select {
@@ -1293,17 +1279,16 @@ class MiniMediaPlayer extends LitElement {
         ha-card[hide-icon] .rows {
           margin-left: 0;
         }
-        ha-card[hide-info] .tts,
-        ha-card[hide-icon] .tts,
-        ha-card[break] .tts,
-        ha-card[hide-info] .media-dropdown,
-        ha-card[hide-icon] .media-dropdown,
-        ha-card[break] .media-dropdown,
-        ha-card[hide-info] .speaker-select,
-        ha-card[hide-icon] .speaker-select,
-        ha-card[break] .speaker-select {
+        ha-card[hide-info] .rows > *,
+        ha-card[hide-icon] .rows > *,
+        ha-card[break] .rows > * {
           padding-left: 8px;
           padding-right: 8px;
+        }
+        ha-card[hide-info] .rows > .control-row,
+        ha-card[hide-icon] .rows > .control-row,
+        ha-card[break] .rows > .control-row {
+          padding: 0;
         }
         ha-card[hide-info] .media-dropdown__button,
         ha-card[hide-icon] .media-dropdown__button,
