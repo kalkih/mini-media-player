@@ -173,7 +173,7 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
         ?hide-icon=${config.hide_icon} ?hide-info=${config.hide_info}
         content=${this._computeContent()} ?collapsed=${config.collapse}
-        @click='${(e) => this._handleMore()}'>
+        @click='${e => this._handleMore(e)}'>
         <div class='bg'>
           ${this._renderArtwork(artwork)}
         </div>
@@ -602,9 +602,10 @@ class MiniMediaPlayer extends LitElement {
     this._callService(e, 'play_media' , options);
   }
 
-  _handleMore({config} = this) {
+  _handleMore(e, {config} = this) {
     if (config.more_info)
-      this._fire('hass-more-info', { entityId: config.entity });
+      return this._fire('hass-more-info', { entityId: config.entity });
+    e.stopPropagation();
   }
 
   _handleSource(e) {
@@ -745,6 +746,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <style>
         ha-card {
+          cursor: default;
           display: flex;
           background: transparent;
           overflow: hidden;
