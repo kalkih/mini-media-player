@@ -26,7 +26,7 @@ const ICON = {
   POWER: 'mdi:power',
   PREV: 'mdi:skip-previous',
   SEND: 'mdi:send',
-  SHUFFLE: 'mdi:shuffle-variant',
+  SHUFFLE: 'mdi:shuffle',
   VOL_DOWN: 'mdi:volume-minus',
   VOL_UP: 'mdi:volume-plus'
 };
