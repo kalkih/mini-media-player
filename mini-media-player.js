@@ -27,6 +27,7 @@ const ICON = {
   PREV: 'mdi:skip-previous',
   SEND: 'mdi:send',
   SHUFFLE: 'mdi:shuffle',
+  STOP: 'mdi:stop',
   VOL_DOWN: 'mdi:volume-minus',
   VOL_UP: 'mdi:volume-plus'
 };
@@ -439,8 +440,16 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderMuteButton(muted) {
-    const options = { is_volume_muted: !muted }
     if (this.config.hide_mute) return;
+    switch (this.config.replace_mute) {
+      case 'play':
+        return this._renderButton(ICON.PLAY[this._isPlaying()], 'media_play_pause');
+      case 'stop':
+        return this._renderButton(ICON.STOP, 'media_stop');
+      case 'next':
+        return this._renderButton(ICON.NEXT, 'media_next_track');
+    }
+    const options = { is_volume_muted: !muted }
     return this._renderButton(ICON.MUTE[muted], 'volume_mute', options);
   }
 
