@@ -6,7 +6,8 @@ const MEDIA_INFO = [
   { attr: 'media_artist' },
   { attr: 'media_series_title' },
   { attr: 'media_season', prefix: 'S' },
-  { attr: 'media_episode', prefix: 'E'}
+  { attr: 'media_episode', prefix: 'E'},
+  { attr: 'app_name' }
 ];
 
 const ICON = {
@@ -153,7 +154,7 @@ class MiniMediaPlayer extends LitElement {
           <div class='entity flex' ?inactive=${!this.active}>
             ${this._renderIcon(artwork)}
             <div class='entity__info' ?short=${config.short_info || !this.active}>
-              <div class='entity__info__name' ?has-info=${this._hasMediaInfo()}>
+              <div class='entity__info__name'>
                 ${this._computeName()}
               </div>
               ${this._renderMediaInfo()}
@@ -216,7 +217,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeRect(entry) {
-    const {left, top, width, height} = entry.contentRect;
+    const {left, width} = entry.contentRect;
     this.break = (width + left * 2) < 350;
   }
 
@@ -265,29 +266,24 @@ class MiniMediaPlayer extends LitElement {
 
   _renderMediaInfo() {
     if (this.config.hide_media_info) return;
-    let items = MEDIA_INFO.map(item => {
+    const items = MEDIA_INFO.map(item => {
       return {
-        info: this._getAttribute(item.attr),
-        prefix: item.prefix || '',
+        text: this._getAttribute(item.attr),
+        prefix: '',
         ...item
       };
-    }).filter(item => item.info !== '');
-    if (items.length === 0 && this.entity.attributes.app_name)
-      items.push({
-        info: this.entity.attributes.app_name,
-        prefix: ''
-      });
-
+    }).filter(item => item.text);
     return html`
       <div class='entity__info__media' ?scroll=${this._overflow}
         style='animation-duration: ${this._overflow}s;'>
         ${this.config.scroll_info ? html`
           <div>
             <div class='marquee'>
-              ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
+              ${items.map(i => html`<span class=${'attr__'+i.attr}>${i.prefix + i.text}</span>`)}
             </div>
-          </div>` : '' }
-          ${items.map(item => html`<span>${item.prefix + item.info}</span>`)}
+          </div>` : ''
+        }
+        ${items.map(i => html`<span class=${'attr__'+i.attr}>${i.prefix + i.text}</span>`)}
       </div>`;
   }
 
@@ -674,16 +670,8 @@ class MiniMediaPlayer extends LitElement {
     return false;
   }
 
-  _hasMediaInfo() {
-    const items = MEDIA_INFO.map(item => {
-      return this._getAttribute(item.attr);
-    }).filter(item => item !== '');
-    return (items.length !== 0 && !this.config.hide_media_info)
-      || this.entity.attributes.app_name ? true : false;
-  }
-
-  _getAttribute(attr, {entity} = this) {
-    return entity.attributes[attr] || '';
+  _getAttribute(attr) {
+    return this.entity.attributes[attr] || '';
   }
 
   _getLabel(label, fallback = 'unknown') {
