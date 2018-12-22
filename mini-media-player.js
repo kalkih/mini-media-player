@@ -556,7 +556,7 @@ class MiniMediaPlayer extends LitElement {
   _handleSelect(e, list, id) {
     const options = {
       'media_content_type': this.config[list][id].type,
-      'media_content_id': this.config[list][id].url
+      'media_content_id': this.config[list][id].id || this.config[list][id].url
     };
     this._callService(e, 'play_media' , options);
   }
