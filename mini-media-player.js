@@ -503,7 +503,12 @@ class MiniMediaPlayer extends LitElement {
         </paper-button>
         <paper-listbox slot="dropdown-content" class="media-dropdown-trigger"
           @click='${e => this._handleSelect(e, 'media_list', e.target.getAttribute('value'))}'>
-          ${items.map((item, i) => html`<paper-item value=${i}>${item.name}</paper-item>`)}
+          ${items.map((item, i) => html`
+            <paper-item value=${i}>
+              ${item.name}
+              ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
+            </paper-item>`
+          )}
         </paper-listbox>
       </paper-menu-button>`;
   }
@@ -516,6 +521,7 @@ class MiniMediaPlayer extends LitElement {
           <paper-button raised
             @click='${e => this._handleSelect(e, 'media_buttons', i)}'>
             <span class='media-dropdown__label'>${item.name}</span>
+            ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
           </paper-button>`
         )}
       </div>`;
@@ -1134,7 +1140,7 @@ class MiniMediaPlayer extends LitElement {
           line-height: 20px;
           padding: 0;
         }
-        paper-menu-button[focused] iron-icon {
+        paper-menu-button[focused] paper-button > iron-icon {
           color: var(--accent-color);
           transform: rotate(180deg);
         }
