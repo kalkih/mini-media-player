@@ -1,3 +1,14 @@
+## v0.9.8
+- Added: `replace_mute` option #43
+- Added: `icon` option to media object (media buttons/list)
+- Changed: made `name` option for media object (media buttons/list) optional
+- Changed: renamed media item object `url` option to `id` (you can still use url for now)
+- Changed: new shuffle icon style
+- Fixed: `more_info` not working when using card inside entities card #44
+- Fixed: animation improvements
+- Fixed: cleaned up & removed redundant code
+- Fixed: bumped dependencies
+
 ## v0.9.7
 - Fixed: card will now grow taller instead of clipping content if more space is needed when using `artwork: full-cover`
 - Fixed: height issue while using `group` option

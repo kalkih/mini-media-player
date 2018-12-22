@@ -11,11 +11,11 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 
-- Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
+* Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.7
+    - url: /local/mini-media-player-bundle.js?v=0.9.8
       type: module
   ```
 
@@ -23,17 +23,17 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 1. Move into your `config/www` directory
 
-- Grab `mini-media-player-bundle.js`
+* Grab `mini-media-player-bundle.js`
 
   ```
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.7/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v0.9.8/mini-media-player-bundle.js
   ```
 
-- Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
+* Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.7
+    - url: /local/mini-media-player-bundle.js?v=0.9.8
       type: module
   ```
 
@@ -41,7 +41,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 1. Make sure you've the [custom_updater](https://github.com/custom-components/custom_updater) component installed and working.
 
-- Add a new reference under `card_urls` in your `custom_updater` configuration in `configuration.yaml`.
+* Add a new reference under `card_urls` in your `custom_updater` configuration in `configuration.yaml`.
 
   ```yaml
   custom_updater:
@@ -54,13 +54,13 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 1. Find your `mini-media-player-bundle.js` file in `config/www` or wherever you ended up storing it.
 
-- Replace the local file with the latest one attached in the [latest release](https://github.com/kalkih/mini-media-player/releases/latest).
+* Replace the local file with the latest one attached in the [latest release](https://github.com/kalkih/mini-media-player/releases/latest).
 
-- Add the new version number to the end of the cards reference url in your `ui-lovelace.yaml` like below.
+* Add the new version number to the end of the cards reference url in your `ui-lovelace.yaml` like below.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=0.9.7
+    - url: /local/mini-media-player-bundle.js?v=0.9.8
       type: module
   ```
 
@@ -80,8 +80,8 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
 | group | boolean | false | v0.1 | Disable paddings and box-shadow.
 | artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `none` to hide artwork, `full-cover-fit` for full cover without cropping.
-| media_list | list | optional | v0.9.5 | A list containing media items, to quickly play specified media, see [Media item options](#media-item-options).
-| media_buttons | list | optional | v0.9.5 | Display media buttons, to quickly play specified media, see [Media item options](#media-item-options).
+| media_list | list | optional | v0.9.5 | A list containing media items, to quickly play specified media, see [Media object options](#media-object-options).
+| media_buttons | list | optional | v0.9.5 | Display media button(s), to quickly play specified media, see [Media object options](#media-object-options).
 | show_tts | string | optional | v0.2 | Show Text-To-Speech input, specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, or `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component.
 | show_source | string | false | v0.7 | `true` display source select, `small` to only display the source button (v0.8.1), `full` display the full source name (v0.9.1).
 | show_progress | boolean | false | v0.8.3 | Display a progress bar when media progress information is available.
@@ -98,6 +98,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | power_color | boolean | false | v0.4 | Make power button change color based on on/off state.
 | artwork_border | boolean | false | v0.3 | Display a border around the `default` media artwork.
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
+| replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play`, `stop`, `next`.
 | toggle_power | boolean | true | v0.8.9 | Change power button behaviour `turn_off` / `turn_on` or `toggle`
 | idle_view | boolean | false | v0.9.3 | Display a less cluttered view when player is idle.
 | consider_idle_after | number | optional | v0.8.9 | Specify a number (minutes) *only supported on players with `media_position_updated_at`)* after which the player displays as idle.
@@ -105,16 +106,17 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | more_info | boolean | true | v0.1 | Enable the "more info" dialog when pressing on the card.
 | max_volume | number | true | v0.8.2 | Max volume for the volume slider (number between 1 - 100).
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
-| sonos_grouping | list | optional | v0.9.6 | A list containing Sonos entities, to enable group management of Sonos speakers, see [Sonos item options](#sonos-item-options) and [Example usage](#sonos-group-joinunjoin).
+| sonos_grouping | list | optional | v0.9.6 | A list containing Sonos entities, to enable group management of Sonos speakers, see [Sonos object options](#sonos-object-options) and [Example usage](#sonos-group-joinunjoin).
 
-#### Media item options
+#### Media object options
 | Name | Type | Default | Description |
 |------|:----:|:-------:|:------------|
-| name | string | **required** | A display name.
+| name | string | optional | A display name.
+| icon | string | optional | A display icon *(any mdi icon)*.
 | type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel` or `playlist`. For example, to play music you would set.
-| url | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify.
+| id | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify.
 
-#### Sonos item options
+#### Sonos object options
 | Name | Type | Default | Description |
 |------|:----:|:-------:|:------------|
 | name | string | **required** | A display name.
@@ -226,8 +228,10 @@ Specify all your Sonos entities in a list under the `sonos_grouping` option.
       name: Sonos Bedroom
 ```
 
-If you are planning to use the `sonos_grouping` option in several cards, creating a separate yaml file for the list is ideal, as this will make `ui-lovelace.yaml` less cluttered and also make it easier to manage and maintain.
+If you are planning to use the `sonos_grouping` option in several cards, creating a separate yaml file for the list is ideal, as this will result in a less cluttered `ui-lovelace.yaml` and also make the list easier to manage and maintain.
 You can then simply reference this file using `sonos_grouping: !include filename.yaml` for every occurrence of `sonos_grouping` in your `ui-lovelace.yaml`.
+
+This will however only function if you have lovelace mode set to yaml, see [Lovelace YAML mode](https://www.home-assistant.io/lovelace/yaml-mode/)
 
 ## Development
 *If you plan to contribute back to this repo, please fork & create the PR against the [dev](https://github.com/kalkih/mini-media-player/tree/dev) branch.*
@@ -275,7 +279,7 @@ If you are getting "Custom element doesn't exist: mini-media-player" or running 
 
 ```yaml
 resources:
-  - url: /local/mini-media-player-bundle.js?v=...
+  - url: ...
     type: js
 ```
 
