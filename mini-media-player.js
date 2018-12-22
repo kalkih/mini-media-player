@@ -715,7 +715,7 @@ class MiniMediaPlayer extends LitElement {
         ha-card:before {
           content: '';
           padding-top: 0px;
-          transition: padding-top .5s ease-in;
+          transition: padding-top .5s cubic-bezier(.21,.61,.35,1);
           will-change: padding-top;
         }
         ha-card[initial] .entity__artwork,
@@ -759,11 +759,11 @@ class MiniMediaPlayer extends LitElement {
           opacity: 0;
           position: absolute;
           top: 0; right: 0; bottom: 0; left: 0;
-          transition: opacity .25s ease-out;
+          transition: opacity .75s cubic-bezier(.21,.61,.35,1);
           will-change: opacity;
         }
         .cover {
-          animation: fade-in .5s ease-out;
+          animation: fade-in .5s cubic-bezier(.21,.61,.35,1);
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center center;
@@ -774,12 +774,12 @@ class MiniMediaPlayer extends LitElement {
         }
         ha-card[artwork*='full-cover'][has-artwork] .player {
           background: rgba(0,0,0,.75);
-          background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+          background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.5) 50%, transparent 100%);
         }
         ha-card[has-artwork] .cover,
         ha-card[has-artwork][artwork='cover'] .cover:before,
         ha-card[bg] .cover {
-          opacity: 0.999;
+          opacity: .999;
         }
         ha-card[artwork='default'] .cover {
           display: none;
@@ -860,8 +860,10 @@ class MiniMediaPlayer extends LitElement {
           position: relative;
         }
         .entity__info {
+          justify-content: center;
+          display: flex;
+          flex-direction: column;
           margin-left: 8px;
-          display: block;
           position: relative;
           overflow: hidden;
           user-select: none;
@@ -881,7 +883,7 @@ class MiniMediaPlayer extends LitElement {
           color: var(--paper-item-icon-color, #44739e);
         }
         .entity__artwork, .entity__icon {
-          animation: fade-in .15s ease-out;
+          animation: fade-in .25s ease-out;
           background-position: center center;
           background-repeat: no-repeat;
           background-size: cover;
@@ -914,10 +916,10 @@ class MiniMediaPlayer extends LitElement {
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-        .entity__info__name[has-info] {
+        .entity__info__name {
           line-height: 20px;
         }
-        .entity__info__name, .entity__control-row--top {
+        .entity__control-row--top {
           line-height: 40px;
         }
         .entity[inactive] .entity__info__media,
@@ -933,6 +935,12 @@ class MiniMediaPlayer extends LitElement {
           max-height: 6em;
           word-break: break-word;
         }
+        .attr__app_name {
+          display: none;
+        }
+        .attr__app_name:first-child {
+          display: inline-block;
+        }
         .entity[inactive] .entity__info__media {
           opacity: .5;
         }
@@ -944,11 +952,12 @@ class MiniMediaPlayer extends LitElement {
         }
         .entity__info__media[scroll] > div {
           animation: move linear infinite;
-          animation-duration: inherit;
-          overflow: visible;
         }
         .entity__info__media[scroll] .marquee {
           animation: slide linear infinite;
+        }
+        .entity__info__media[scroll] .marquee,
+        .entity__info__media[scroll] > div {
           animation-duration: inherit;
           visibility: visible;
         }
@@ -970,13 +979,6 @@ class MiniMediaPlayer extends LitElement {
         paper-icon-button {
           transition: color .25s ease-in-out;
           will-change: color;
-        }
-        paper-icon-button.shuffle {
-          align-self: center;
-          height: 38px;
-          min-width: 38px;
-          text-align: center;
-          width: 38px;
         }
         .entity__info__media span:before {
           content: ' - ';
@@ -1038,7 +1040,7 @@ class MiniMediaPlayer extends LitElement {
           padding-top: 8px;
         }
         .media-buttons > paper-button {
-          background-color: rgba(255,255,255,0.1);
+          background-color: rgba(255,255,255,.1);
           border-radius: 0;
           box-sizing: border-box;
           margin: 8px 0 0 0;
@@ -1100,7 +1102,7 @@ class MiniMediaPlayer extends LitElement {
           flex-dirction: row;
         }
         .speaker-select paper-button {
-          background-color: rgba(255,255,255,0.1);
+          background-color: rgba(255,255,255,.1);
           margin: 8px 8px 0 0;
           min-width: 0;
           padding: .5em 1em;
@@ -1165,7 +1167,7 @@ class MiniMediaPlayer extends LitElement {
           position: absolute;
           width: 100%;
           --paper-progress-active-color: var(--accent-color);
-          --paper-progress-container-color: rgba(150,150,150,0.25);
+          --paper-progress-container-color: rgba(150,150,150,.25);
           --paper-progress-transition-duration: 1s;
           --paper-progress-transition-timing-function: linear;
           --paper-progress-transition-delay: 0s;
