@@ -8,6 +8,9 @@
     "@babel/preset-env": "^7.2.3",
     "@polymer/lit-element": "0.6.3",
     "babel-preset-minify": "^0.5.0",
+    "eslint": "^5.11.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "resize-observer-polyfill": "^1.5.1",
     "rollup": "^0.66.6",
     "rollup-plugin-node-resolve": "^3.4.0",
@@ -15,8 +18,10 @@
     "rollup-plugin-terser": "^3.0.0"
   },
   "scripts": {
-    "build": "rollup -c && babel mini-media-player-bundle.js --out-file mini-media-player-bundle.js",
+    "build": "npm run lint && npm run rollup && npm run babel",
     "rollup": "rollup -c",
+    "babel": "babel mini-media-player-bundle.js --out-file mini-media-player-bundle.js",
+    "lint": "eslint mini-media-player.js",
     "watch": "rollup -c --watch"
   }
 }

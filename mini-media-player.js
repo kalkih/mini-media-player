@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
 import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.3/lit-element.js?module';
+// eslint-disable-next-line
 import ResizeObserver from 'https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.1/dist/ResizeObserver.es.js';
 
 const MEDIA_INFO = [
@@ -6,8 +8,8 @@ const MEDIA_INFO = [
   { attr: 'media_artist' },
   { attr: 'media_series_title' },
   { attr: 'media_season', prefix: 'S' },
-  { attr: 'media_episode', prefix: 'E'},
-  { attr: 'app_name' }
+  { attr: 'media_episode', prefix: 'E' },
+  { attr: 'app_name' },
 ];
 
 const ICON = {
@@ -17,12 +19,12 @@ const ICON = {
   MENU: 'mdi:menu-down',
   MUTE: {
     true: 'mdi:volume-off',
-    false: 'mdi:volume-high'
+    false: 'mdi:volume-high',
   },
   NEXT: 'mdi:skip-next',
   PLAY: {
     true: 'mdi:pause',
-    false: 'mdi:play'
+    false: 'mdi:play',
   },
   POWER: 'mdi:power',
   PREV: 'mdi:skip-previous',
@@ -30,11 +32,11 @@ const ICON = {
   SHUFFLE: 'mdi:shuffle',
   STOP: 'mdi:stop',
   VOL_DOWN: 'mdi:volume-minus',
-  VOL_UP: 'mdi:volume-plus'
+  VOL_UP: 'mdi:volume-plus',
 };
 
 const UPDATE_PROPS = ['entity', 'source', 'position', '_overflow',
-                      'break', 'thumbnail', 'edit']
+  'break', 'thumbnail', 'edit'];
 
 class MiniMediaPlayer extends LitElement {
   constructor() {
@@ -62,15 +64,14 @@ class MiniMediaPlayer extends LitElement {
       initial: Boolean,
       picture: String,
       thumbnail: String,
-      edit: Boolean
+      edit: Boolean,
     };
   }
 
   set hass(hass) {
     const entity = hass.states[this.config.entity];
     this._hass = hass;
-    if (entity && this.entity !== entity)
-      this.entity = entity;
+    if (entity && this.entity !== entity) this.entity = entity;
   }
 
   set overflow(overflow) {
@@ -87,7 +88,7 @@ class MiniMediaPlayer extends LitElement {
       more_info: true,
       title: '',
       toggle_power: true,
-      ...config
+      ...config,
     };
     conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
     conf.idle_view = conf.idle_view
@@ -107,11 +108,12 @@ class MiniMediaPlayer extends LitElement {
       if (this.config.show_progress) this._checkProgress();
       return true;
     }
+    return false;
   }
 
   firstUpdated() {
-    const ro = new ResizeObserver(entries => {
-      for (const entry of entries) {
+    const ro = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
         window.requestAnimationFrame(() => {
           if (this.config.scroll_info) this._computeOverflow();
 
@@ -120,21 +122,21 @@ class MiniMediaPlayer extends LitElement {
             this._resizeTimer = setTimeout(() => {
               this._resizeTimer = null;
               this._computeRect(this._resizeEntry);
-            }, 250)
+            }, 250);
           }
           this._resizeEntry = entry;
         });
-      }
+      });
     });
     ro.observe(this.shadowRoot.querySelector('.player'));
-    setTimeout(() => this.initial = false, 250)
+    setTimeout(() => this.initial = false, 250);
   }
 
   updated() {
     if (this.config.scroll_info) this._computeOverflow();
   }
 
-  render({_hass, config, entity} = this) {
+  render({ config, entity } = this) {
     const artwork = this._computeArtwork();
 
     return html`
@@ -187,19 +189,17 @@ class MiniMediaPlayer extends LitElement {
 
   _computeArtwork() {
     const picture = this.entity.attributes.entity_picture;
-    const artwork = (picture && picture !== '')
+    const artwork = !!((picture && picture !== '')
       && this.config.artwork !== 'none'
       && this.active
-      && !this.idle
-      ? true
-      : false;
+      && !this.idle);
 
     if (artwork && picture !== this.picture) {
       this._fetchThumbnail();
       this.picture = picture;
     }
 
-    return artwork && this.thumbnail ? true : false;
+    return !!(artwork && this.thumbnail);
   }
 
   _computeIcon() {
@@ -217,7 +217,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeRect(entry) {
-    const {left, width} = entry.contentRect;
+    const { left, width } = entry.contentRect;
     this.break = (width + left * 2) < 350;
   }
 
@@ -266,24 +266,21 @@ class MiniMediaPlayer extends LitElement {
 
   _renderMediaInfo() {
     if (this.config.hide_media_info) return;
-    const items = MEDIA_INFO.map(item => {
-      return {
-        text: this._getAttribute(item.attr),
-        prefix: '',
-        ...item
-      };
-    }).filter(item => item.text);
+    const items = MEDIA_INFO.map(item => ({
+      text: this._getAttribute(item.attr),
+      prefix: '',
+      ...item,
+    })).filter(item => item.text);
     return html`
       <div class='entity__info__media' ?scroll=${this._overflow}
         style='animation-duration: ${this._overflow}s;'>
         ${this.config.scroll_info ? html`
           <div>
             <div class='marquee'>
-              ${items.map(i => html`<span class=${'attr__'+i.attr}>${i.prefix + i.text}</span>`)}
+              ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
             </div>
-          </div>` : ''
-        }
-        ${items.map(i => html`<span class=${'attr__'+i.attr}>${i.prefix + i.text}</span>`)}
+          </div>` : ''}
+        ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
       </div>`;
   }
 
@@ -310,12 +307,12 @@ class MiniMediaPlayer extends LitElement {
 
   _renderShuffleButton() {
     const shuffle = this.entity.attributes.shuffle || false;
-    const options = { shuffle: !this.entity.attributes.shuffle }
+    const options = { shuffle: !this.entity.attributes.shuffle };
     return this._renderButton(ICON.SHUFFLE, 'shuffle_set', options, shuffle);
   }
 
-  _renderPowerStrip({config} = this) {
-    if (this.entity.state == 'unavailable')
+  _renderPowerStrip({ config } = this) {
+    if (this.entity.state === 'unavailable')
       return this._renderLabel('state.default.unavailable', 'Unavailable');
 
     return html`
@@ -332,7 +329,7 @@ class MiniMediaPlayer extends LitElement {
 
   _renderGroupButton() {
     const grouped = !this.entity.attributes.sonos_group
-      || this.entity.attributes.sonos_group.length <= 1
+      || this.entity.attributes.sonos_group.length <= 1;
 
     return html`
       <paper-icon-button .icon=${ICON.GROUP}
@@ -356,15 +353,13 @@ class MiniMediaPlayer extends LitElement {
           <paper-button
             raised
             ?disabled=${group.length < 2}
-            @click='${e =>
-              this._handleGroupItemChange(e, isMaster ? group : this.config.entity, false)}'>
+            @click='${e => this._handleGroupItemChange(e, isMaster ? group : this.config.entity, false)}'>
             ${isMaster ? html`Ungroup` : html`Leave`}
           </paper-button>
           <paper-button
             raised
             ?disabled=${!isMaster}
-            @click='${e =>
-              this._handleGroupItemChange(e, entities.map(item => item.entity_id), true)}'>
+            @click='${e => this._handleGroupItemChange(e, entities.map(item => item.entity_id), true)}'>
             Group all
           </paper-button>
         </div>
@@ -387,9 +382,9 @@ class MiniMediaPlayer extends LitElement {
       </paper-checkbox>`;
   }
 
-  _renderSource({entity} = this) {
-    const sources = entity.attributes['source_list'] || false;
-    const source = entity.attributes['source'] || '';
+  _renderSource({ entity } = this) {
+    const sources = entity.attributes.source_list || false;
+    const source = entity.attributes.source || '';
     if (!sources) return;
 
     const selected = sources.indexOf(source);
@@ -397,7 +392,7 @@ class MiniMediaPlayer extends LitElement {
       <paper-menu-button class='source-menu' slot='dropdown-trigger'
         .horizontalAlign=${'right'} .verticalAlign=${'top'}
         .verticalOffset=${40} .noAnimations=${true}
-        @click='${(e) => e.stopPropagation()}'>
+        @click='${e => e.stopPropagation()}'>
         <paper-button class='source-menu__button' slot='dropdown-trigger'>
           <span class='source-menu__source' show=${this.config.show_source}>
             ${this.source || source}
@@ -405,7 +400,7 @@ class MiniMediaPlayer extends LitElement {
           <iron-icon .icon=${ICON.DROPDOWN}></iron-icon>
         </paper-button>
         <paper-listbox slot='dropdown-content' selected=${selected}
-          @click='${(e) => this._handleSource(e)}'>
+          @click='${e => this._handleSource(e)}'>
           ${sources.map(item => html`<paper-item value=${item}>${item}</paper-item>`)}
         </paper-listbox>
       </paper-menu-button>`;
@@ -437,6 +432,7 @@ class MiniMediaPlayer extends LitElement {
 
   _renderMuteButton(muted) {
     if (this.config.hide_mute) return;
+    const options = { is_volume_muted: !muted };
     switch (this.config.replace_mute) {
       case 'play':
         return this._renderButton(ICON.PLAY[this._isPlaying()], 'media_play_pause');
@@ -444,9 +440,9 @@ class MiniMediaPlayer extends LitElement {
         return this._renderButton(ICON.STOP, 'media_stop');
       case 'next':
         return this._renderButton(ICON.NEXT, 'media_next_track');
+      default:
+        return this._renderButton(ICON.MUTE[muted], 'volume_mute', options);
     }
-    const options = { is_volume_muted: !muted }
-    return this._renderButton(ICON.MUTE[muted], 'volume_mute', options);
   }
 
   _renderVolSlider(muted = false) {
@@ -457,8 +453,8 @@ class MiniMediaPlayer extends LitElement {
           ${this._renderMuteButton(muted)}
         </div>
         <paper-slider ?disabled=${muted}
-          @change='${(e) => this._handleVolumeChange(e)}'
-          @click='${(e) => e.stopPropagation()}'
+          @change='${e => this._handleVolumeChange(e)}'
+          @click='${e => e.stopPropagation()}'
           min='0' max=${this.config.max_volume} value=${volSliderVal}
           ignore-bar-touch pin>
         </paper-slider>
@@ -479,10 +475,10 @@ class MiniMediaPlayer extends LitElement {
       <div class='tts flex justify'>
         <paper-input class='tts__input' no-label-float
           placeholder=${this._getLabel('ui.card.media_player.text_to_speak', 'Say')}...
-          @click='${(e) => e.stopPropagation()}'>
+          @click='${e => e.stopPropagation()}'>
         </paper-input>
         <div>
-          <paper-button @click='${(e) => this._handleTts(e)}'>
+          <paper-button @click='${e => this._handleTts(e)}'>
             SEND
           </paper-button>
         </div>
@@ -494,7 +490,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <paper-menu-button class='media-dropdown'
         noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
-        @click='${(e) => e.stopPropagation()}'>
+        @click='${e => e.stopPropagation()}'>
         <paper-button class='media-dropdown__button' slot='dropdown-trigger'>
           <span class='media-dropdown__label'>
             ${'Select media...'}
@@ -507,8 +503,7 @@ class MiniMediaPlayer extends LitElement {
             <paper-item value=${i}>
               ${item.name}
               ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
-            </paper-item>`
-          )}
+            </paper-item>`)}
         </paper-listbox>
       </paper-menu-button>`;
   }
@@ -522,29 +517,30 @@ class MiniMediaPlayer extends LitElement {
             @click='${e => this._handleSelect(e, 'media_buttons', i)}'>
             <span class='media-dropdown__label'>${item.name}</span>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
-          </paper-button>`
-        )}
+          </paper-button>`)}
       </div>`;
   }
 
-  _callService(e, service, options, component = 'media_player') {
+  _callService(e, service, inOptions, component = 'media_player') {
     e.stopPropagation();
-    options = (options === null || options === undefined) ? {} : options;
-    options.entity_id = options.entity_id || this.config.entity;
+    const options = {
+      entity_id: this.config.entity,
+      ...inOptions,
+    };
     this._hass.callService(component, service, options);
   }
 
   _handleVolumeChange(e) {
     const volPercentage = parseFloat(e.target.value);
     const vol = volPercentage > 0 ? volPercentage / 100 : 0;
-    this._callService(e, 'volume_set', { volume_level: vol })
+    this._callService(e, 'volume_set', { volume_level: vol });
   }
 
   _handlePower(e) {
     if (this.config.toggle_power)
       return this._callService(e, 'toggle');
     if (this.entity.state === 'off')
-      this._callService(e, 'turn_on');
+      return this._callService(e, 'turn_on');
     else
       this._callService(e, 'turn_off');
   }
@@ -553,21 +549,21 @@ class MiniMediaPlayer extends LitElement {
     const input = this.shadowRoot.querySelector('.tts paper-input');
     const options = { message: input.value };
     if (this.config.show_tts === 'alexa')
-      this._callService(e, 'alexa_tts' , options);
+      this._callService(e, 'alexa_tts', options);
     else
-      this._callService(e, this.config.show_tts + '_say' , options, 'tts');
+      this._callService(e, `${this.config.show_tts}_say`, options, 'tts');
     input.value = '';
   }
 
   _handleSelect(e, list, id) {
     const options = {
-      'media_content_type': this.config[list][id].type,
-      'media_content_id': this.config[list][id].id || this.config[list][id].url
+      media_content_type: this.config[list][id].type,
+      media_content_id: this.config[list][id].id || this.config[list][id].url,
     };
-    this._callService(e, 'play_media' , options);
+    this._callService(e, 'play_media', options);
   }
 
-  _handleMore(e, {config} = this) {
+  _handleMore(e, { config } = this) {
     if (config.more_info)
       return this._fire('hass-more-info', { entityId: config.entity });
     e.stopPropagation();
@@ -575,7 +571,7 @@ class MiniMediaPlayer extends LitElement {
 
   _handleSource(e) {
     const source = e.target.getAttribute('value');
-    const options = { 'source': source };
+    const options = { source };
     this._callService(e, 'select_source', options);
     this.source = source;
   }
@@ -586,7 +582,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handleGroupItemChange(e, entity, checked) {
-    let options = { entity_id: entity };
+    const options = { entity_id: entity };
     if (checked) {
       options.master = this.config.entity;
       this._callService(e, 'SONOS_JOIN', options);
@@ -595,13 +591,11 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
-  _fire(type, detail, options) {
-    options = options || {};
-    detail = (detail === null || detail === undefined) ? {} : detail;
+  _fire(type, detail = {}, options = {}) {
     const e = new Event(type, {
       bubbles: options.bubbles === undefined ? true : options.bubbles,
       cancelable: Boolean(options.cancelable),
-      composed: options.composed === undefined ? true : options.composed
+      composed: options.composed === undefined ? true : options.composed,
     });
     e.detail = detail;
     this.dispatchEvent(e);
@@ -611,8 +605,7 @@ class MiniMediaPlayer extends LitElement {
   _checkProgress() {
     if (this._isPlaying() && this._showProgress) {
       if (!this._positionTracker) {
-        this._positionTracker = setInterval(() =>
-          this.position = this._currentProgress, 1000);
+        this._positionTracker = setInterval(() => this.position = this._currentProgress, 1000);
       }
     } else if (this._positionTracker) {
       clearInterval(this._positionTracker);
@@ -647,14 +640,14 @@ class MiniMediaPlayer extends LitElement {
     return this.entity.state === 'idle';
   }
 
-  _isActive(inactive = false) {
+  _isActive() {
     if (this.config.idle_view) this.idle = this._computeIdle();
     return (this.entity.state !== 'off'
       && this.entity.state !== 'unavailable'
       && !this.idle) || false;
   }
 
-  _computeIdle({config} = this) {
+  _computeIdle({ config } = this) {
     if (config.idle_view && this._isIdle()
       || config.consider_pause_idle && this._isPaused())
       return true;
@@ -671,7 +664,7 @@ class MiniMediaPlayer extends LitElement {
       this._inactiveTracker = setTimeout(() => {
         this.position = 0;
         this._inactiveTracker = null;
-      }, (config.consider_idle_after - diff) * 1000)
+      }, (config.consider_idle_after - diff) * 1000);
     }
     return false;
   }
