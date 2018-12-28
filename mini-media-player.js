@@ -87,6 +87,7 @@ class MiniMediaPlayer extends LitElement {
       max_volume: 100,
       more_info: true,
       sonos_group: {},
+      quick_select: {},
       title: '',
       toggle_power: true,
       ...config,
@@ -171,8 +172,8 @@ class MiniMediaPlayer extends LitElement {
             <div class='control-row flex flex-wrap justify' ?wrap=${config.volume_stateless}>
               ${!config.collapse && this.active ? this._renderControlRow() : ''}
             </div>
-            ${config.media_buttons ? this._renderButtons() : ''}
-            ${config.media_list ? this._renderList() : ''}
+            ${config.quick_select.buttons ? this._renderButtons() : ''}
+            ${config.quick_select.list ? this._renderList() : ''}
             ${config.show_tts ? this._renderTts() : ''}
             ${this.edit ? this._renderGroupList() : ''}
           </div>
@@ -342,7 +343,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderGroupList() {
-    const entities = this.config.sonos_group.entities;
+    const { entities } = this.config.sonos_group;
     const group = this.entity.attributes.sonos_group || [];
     const master = group[0] || this.config.entity;
     const isMaster = master === this.config.entity;
@@ -488,7 +489,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderList() {
-    const items = this.config.media_list;
+    if (this.config.quick_select.list.hide_when_off && !this.active) return;
+    const { items } = this.config.quick_select.list;
     return html`
       <paper-menu-button class='media-dropdown'
         noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
@@ -500,7 +502,7 @@ class MiniMediaPlayer extends LitElement {
           <iron-icon class='media-dropdown__icon' .icon=${ICON.MENU}></iron-icon>
         </paper-button>
         <paper-listbox slot="dropdown-content" class="media-dropdown-trigger"
-          @click='${e => this._handleSelect(e, 'media_list', e.target.getAttribute('value'))}'>
+          @click='${e => this._handleQuickSelect(e, 'list', e.target.getAttribute('value'))}'>
           ${items.map((item, i) => html`
             <paper-item value=${i}>
               ${item.name}
@@ -511,12 +513,13 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderButtons() {
-    const items = this.config.media_buttons;
+    if (this.config.quick_select.buttons.hide_when_off && !this.active) return;
+    const { items } = this.config.quick_select.buttons;
     return html`
       <div class='media-buttons'>
         ${items.map((item, i) => html`
           <paper-button raised
-            @click='${e => this._handleSelect(e, 'media_buttons', i)}'>
+            @click='${e => this._handleQuickSelect(e, 'buttons', i)}'>
             <span class='media-dropdown__label'>${item.name}</span>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
           </paper-button>`)}
@@ -563,10 +566,11 @@ class MiniMediaPlayer extends LitElement {
     input.value = '';
   }
 
-  _handleSelect(e, list, id) {
+  _handleQuickSelect(e, entity, i) {
+    const { type, id } = this.config.quick_select[entity].items[i];
     const options = {
-      media_content_type: this.config[list][id].type,
-      media_content_id: this.config[list][id].id || this.config[list][id].url,
+      media_content_type: type,
+      media_content_id: id,
     };
     this._callService(e, 'play_media', options);
   }
