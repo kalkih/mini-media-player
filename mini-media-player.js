@@ -86,6 +86,7 @@ class MiniMediaPlayer extends LitElement {
       artwork: 'default',
       max_volume: 100,
       more_info: true,
+      sonos_group: {},
       title: '',
       toggle_power: true,
       ...config,
@@ -321,7 +322,7 @@ class MiniMediaPlayer extends LitElement {
         <div class='flex right'>
           ${this.idle ? this._renderIdleStatus() : html``}
           ${config.show_source ? this._renderSource() : html``}
-          ${config.sonos_grouping ? this._renderGroupButton() : html``}
+          ${config.sonos_group.entities ? this._renderGroupButton() : html``}
           ${!config.hide_power ? this._renderPowerButton() : html``}
         <div>
       </div>`;
@@ -340,7 +341,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderGroupList() {
-    const entities = this.config.sonos_grouping;
+    const entities = this.config.sonos_group.entities;
     const group = this.entity.attributes.sonos_group || [];
     const master = group[0] || this.config.entity;
     const isMaster = master === this.config.entity;
@@ -533,7 +534,13 @@ class MiniMediaPlayer extends LitElement {
   _handleVolumeChange(e) {
     const volPercentage = parseFloat(e.target.value);
     const vol = volPercentage > 0 ? volPercentage / 100 : 0;
-    this._callService(e, 'volume_set', { volume_level: vol });
+    const entity = this.config.sonos_group.sync_volume
+      ? this.entity.sonos_group
+      : this.config.entity;
+    this._callService(e, 'volume_set', {
+      entity_id: entity,
+      volume_level: vol,
+    });
   }
 
   _handlePower(e) {
