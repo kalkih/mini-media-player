@@ -131,6 +131,7 @@ class MiniMediaPlayer extends LitElement {
     });
     ro.observe(this.shadowRoot.querySelector('.player'));
     setTimeout(() => this.initial = false, 250);
+    this.edit = this.config.sonos_group.expanded || false;
   }
 
   updated() {
