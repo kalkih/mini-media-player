@@ -403,7 +403,7 @@ class MiniMediaPlayer extends LitElement {
           <iron-icon .icon=${ICON.DROPDOWN}></iron-icon>
         </paper-button>
         <paper-listbox slot='dropdown-content' selected=${selected}
-          @click='${e => this._handleSource(e)}'>
+          @click='${e => this._handleSource(e, e.target.getAttribute('value'))}'>
           ${sources.map(item => html`<paper-item value=${item}>${item}</paper-item>`)}
         </paper-listbox>
       </paper-menu-button>`;
@@ -568,6 +568,7 @@ class MiniMediaPlayer extends LitElement {
 
   _handleQuickSelect(e, entity, i) {
     const { type, id } = this.config.quick_select[entity].items[i];
+    if (type === 'source') return this._handleSource(e, id);
     const options = {
       media_content_type: type,
       media_content_id: id,
@@ -581,10 +582,8 @@ class MiniMediaPlayer extends LitElement {
     e.stopPropagation();
   }
 
-  _handleSource(e) {
-    const source = e.target.getAttribute('value');
-    const options = { source };
-    this._callService(e, 'select_source', options);
+  _handleSource(e, source) {
+    this._callService(e, 'select_source', { source });
     this.source = source;
   }
 
