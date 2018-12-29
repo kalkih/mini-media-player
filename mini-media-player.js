@@ -85,6 +85,7 @@ class MiniMediaPlayer extends LitElement {
     const conf = {
       artwork: 'default',
       hide: [],
+      info: 'default',
       max_volume: 100,
       more_info: true,
       sonos_group: {},
@@ -105,7 +106,7 @@ class MiniMediaPlayer extends LitElement {
     }), {});
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.collapse = (conf.hide.controls || conf.hide.volume);
-    conf.short_info = (conf.short_info || conf.scroll_info || conf.collapse);
+    conf.info = conf.collapse && conf.info !== 'scroll' ? 'short' : conf.info;
     conf.flow = (conf.hide.icon && conf.hide.name && conf.hide.info);
     this.config = conf;
   }
@@ -124,7 +125,7 @@ class MiniMediaPlayer extends LitElement {
     const ro = new ResizeObserver((entries) => {
       entries.forEach((entry) => {
         window.requestAnimationFrame(() => {
-          if (this.config.scroll_info) this._computeOverflow();
+          if (this.config.info === 'scroll') this._computeOverflow();
 
           if (!this._resizeTimer) {
             this._computeRect(entry);
@@ -143,7 +144,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   updated() {
-    if (this.config.scroll_info) this._computeOverflow();
+    if (this.config.info === 'scroll') this._computeOverflow();
   }
 
   render({ config, entity } = this) {
@@ -159,7 +160,6 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
         ?flow=${config.flow} ?collapse=${config.collapse}
         content=${this._computeContent()}
-        hide=${Object.keys(config.hide)}
         @click='${e => this._handleMore(e)}'>
         <div class='bg'>
           ${this._renderArtwork(artwork)}
@@ -168,7 +168,7 @@ class MiniMediaPlayer extends LitElement {
         <div class='player'>
           <div class='entity flex' ?inactive=${!this.active}>
             ${this._renderIcon(artwork)}
-            <div class='entity__info' ?short=${config.short_info || !this.active}>
+            <div class='entity__info'>
               ${this._renderEntityName()}
               ${this._renderMediaInfo()}
             </div>
@@ -289,9 +289,10 @@ class MiniMediaPlayer extends LitElement {
       ...item,
     })).filter(item => item.text);
     return html`
-      <div class='entity__info__media' ?scroll=${this._overflow}
+      <div class='entity__info__media'
+        ?short=${this.config.info === 'short' || !this.active} ?scroll=${this._overflow}
         style='animation-duration: ${this._overflow}s;'>
-        ${this.config.scroll_info ? html`
+        ${this.config.info === 'scroll' ? html`
           <div>
             <div class='marquee'>
               ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
@@ -898,8 +899,8 @@ class MiniMediaPlayer extends LitElement {
         .rows > *:nth-child(2) {
           margin-top: 0px;
         }
-        .entity__info[short] {
-          max-height: 40px;
+        .entity__info__media[short] {
+          max-height: 20px;
           overflow: hidden;
         }
         .entity__icon {
@@ -931,7 +932,7 @@ class MiniMediaPlayer extends LitElement {
           border-color: var(--accent-color);
         }
         .entity__info__name,
-        .entity__info[short] .entity__info__media,
+        .entity__info__media[short],
         .source-menu__source,
         .media-dropdown__label,
         .label {
