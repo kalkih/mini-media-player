@@ -338,12 +338,12 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div class='control-row--top flex'>
         ${this.active && config.collapse ? this._renderControlRow() : ''}
-        <div class='flex'>
+        <div class='power-row flex'>
           ${this.idle ? this._renderIdleStatus() : ''}
           ${this._renderSource()}
           ${config.sonos_group.entities ? this._renderGroupButton() : ''}
           ${!config.hide.power ? this._renderPowerButton() : ''}
-        <div>
+        </div>
       </div>`;
   }
 
@@ -1220,6 +1220,9 @@ class MiniMediaPlayer extends LitElement {
         }
         ha-card[flow] .control-row--top {
           justify-content: space-between;
+        }
+        ha-card[flow] .power-row {
+          margin-left: auto;
         }
         ha-card[flow] .entity__info {
           display: none;
