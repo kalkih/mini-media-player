@@ -89,6 +89,7 @@ class MiniMediaPlayer extends LitElement {
       more_info: true,
       sonos_group: {},
       quick_select: {},
+      source: 'default',
       title: '',
       toggle_power: true,
       ...config,
@@ -147,10 +148,12 @@ class MiniMediaPlayer extends LitElement {
 
   render({ config, entity } = this) {
     const artwork = this._computeArtwork();
+    const responsive = this.break ? 'break-width' : config.hide.icon
+      ? 'break-icon' : 'none';
 
     return html`
       ${this._style()}
-      <ha-card ?break=${this.break || config.hide.icon} ?initial=${this.initial}
+      <ha-card break=${responsive} ?initial=${this.initial}
         ?bg=${config.background} ?group=${config.group}
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
         artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
@@ -398,7 +401,7 @@ class MiniMediaPlayer extends LitElement {
 
   _renderSource({ entity } = this) {
     const sources = entity.attributes.source_list || false;
-    if (!sources) return;
+    if (!sources || this.config.hide.source) return;
 
     const source = entity.attributes.source || '';
     const selected = sources.indexOf(source);
@@ -408,7 +411,7 @@ class MiniMediaPlayer extends LitElement {
         .verticalOffset=${40} .noAnimations=${true}
         @click='${e => e.stopPropagation()}'>
         <paper-button class='source-menu__button' slot='dropdown-trigger'>
-          <span class='source-menu__source' show=${this.config.show_source}>
+          <span class='source-menu__source' display=${this.config.source}>
             ${this.source || source}
           </span>
           <iron-icon .icon=${ICON.DROPDOWN}></iron-icon>
@@ -1172,10 +1175,10 @@ class MiniMediaPlayer extends LitElement {
           position: relative;
           width: auto;
         }
-        .source-menu__source[show="small"] {
+        .source-menu__source[display="icon"] {
           display: none;
         }
-        .source-menu__source[show="full"] {
+        .source-menu__source[display="full"] {
           max-width: none;
         }
         paper-progress {
@@ -1210,26 +1213,29 @@ class MiniMediaPlayer extends LitElement {
         ha-card[flow] .control-row--top {
           justify-content: space-between;
         }
+        ha-card[flow] .entity__info {
+          display: none;
+        }
         ha-card[flow] paper-slider,
         ha-card[flow] .vol-control {
           width: 100%;
           max-width: none;
         }
-        ha-card[break] .rows {
+        ha-card[break*="break"] .rows {
           margin-left: 0;
         }
-        ha-card[break] .rows > * {
+        ha-card[break*="break"] .rows > * {
           padding-left: 8px;
           padding-right: 8px;
         }
-        ha-card[break] .rows > .control-row {
+        ha-card[break*="break"] .rows > .control-row {
           padding: 0;
         }
-        ha-card[break] .media-dropdown__button {
+        ha-card[break*="break"] .media-dropdown__button {
           padding-right: 0;
         }
         .player div:empty,
-        ha-card[break] .source-menu__source,
+        ha-card[break="break-width"] .source-menu__source,
         .entity[inactive] .source-menu__source {
           display: none;
         }
