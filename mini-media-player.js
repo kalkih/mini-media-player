@@ -180,7 +180,7 @@ class MiniMediaPlayer extends LitElement {
             </div>
             ${config.quick_select.buttons ? this._renderButtons() : ''}
             ${config.quick_select.list ? this._renderList() : ''}
-            ${config.show_tts ? this._renderTts() : ''}
+            ${config.tts ? this._renderTts() : ''}
             ${this.edit ? this._renderGroupList() : ''}
           </div>
         </div>
@@ -574,10 +574,10 @@ class MiniMediaPlayer extends LitElement {
   _handleTts(e) {
     const input = this.shadowRoot.querySelector('.tts paper-input');
     const options = { message: input.value };
-    if (this.config.show_tts === 'alexa')
+    if (this.config.tts === 'alexa')
       this._callService(e, 'alexa_tts', options);
     else
-      this._callService(e, `${this.config.show_tts}_say`, options, 'tts');
+      this._callService(e, `${this.config.tts}_say`, options, 'tts');
     input.value = '';
   }
 
