@@ -324,9 +324,9 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderShuffleButton() {
-    const shuffle = this.entity.attributes.shuffle || false;
-    const options = { shuffle: !this.entity.attributes.shuffle };
-    return this._renderButton(ICON.SHUFFLE, 'shuffle_set', options, shuffle);
+    if (typeof this.entity.attributes.shuffle === 'undefined') return;
+    const shuffle = !this.entity.attributes.shuffle || false;
+    return this._renderButton(ICON.SHUFFLE, 'shuffle_set', { shuffle }, !shuffle);
   }
 
   _renderPowerStrip({ config } = this) {
@@ -428,7 +428,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       ${!this.config.hide.volume ? this._renderVolControls() : ''}
       <div class='flex'>
-        ${this.config.show_shuffle ? this._renderShuffleButton() : ''}
+        ${!this.config.hide.shuffle ? this._renderShuffleButton() : ''}
         ${!this.config.hide.controls ? this._renderMediaControls() : ''}
       </div>`;
   }
