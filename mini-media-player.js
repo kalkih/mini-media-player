@@ -520,8 +520,8 @@ class MiniMediaPlayer extends LitElement {
           @click='${e => this._handleQuickSelect(e, 'list', e.target.getAttribute('value'))}'>
           ${items.map((item, i) => html`
             <paper-item value=${i}>
-              ${item.name}
               ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
+              ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}
             </paper-item>`)}
         </paper-listbox>
       </paper-menu-button>`;
@@ -535,8 +535,8 @@ class MiniMediaPlayer extends LitElement {
         ${items.map((item, i) => html`
           <paper-button raised
             @click='${e => this._handleQuickSelect(e, 'buttons', i)}'>
-            <span class='media-dropdown__label'>${item.name}</span>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
+            ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}
           </paper-button>`)}
       </div>`;
   }
@@ -935,6 +935,7 @@ class MiniMediaPlayer extends LitElement {
         .entity__info__media[short],
         .source-menu__source,
         .media-dropdown__label,
+        .media-label,
         .label {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -1070,6 +1071,10 @@ class MiniMediaPlayer extends LitElement {
           min-width: 0;
           padding: .2em 1em;
           width: calc(50% - 4px);
+        }
+        .media-buttons > paper-button > *:nth-child(2),
+        .media-dropdown paper-item > *:nth-child(2) {
+          margin-left: 4px;
         }
         .media-buttons > paper-button:nth-child(odd) {
           margin-right: 8px;
