@@ -38,6 +38,8 @@ const ICON = {
 const UPDATE_PROPS = ['entity', 'source', 'position', '_overflow',
   'break', 'thumbnail', 'edit'];
 
+const BREAKPOINT = 390;
+
 class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
@@ -227,7 +229,7 @@ class MiniMediaPlayer extends LitElement {
 
   _computeRect(entry) {
     const { left, width } = entry.contentRect;
-    this.break = (width + left * 2) < 350;
+    this.break = (width + left * 2) < BREAKPOINT;
   }
 
   _renderArtwork(artwork) {
