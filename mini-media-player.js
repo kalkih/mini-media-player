@@ -35,9 +35,9 @@ const ICON = {
   VOL_UP: 'mdi:volume-plus',
 };
 
-const UPDATE_PROPS = ['entity', 'source', 'position', '_overflow',
+const UPDATE_PROPS = ['entity', 'source', '_progress', '_pos', '_overflow',
   'break', 'thumbnail', 'edit'];
-
+const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
 const BREAKPOINT = 390;
 
 class MiniMediaPlayer extends LitElement {
@@ -54,11 +54,10 @@ class MiniMediaPlayer extends LitElement {
 
   static get properties() {
     return {
-      _hass: Object,
-      config: Object,
-      entity: Object,
+      _hass: {},
+      config: {},
+      entity: {},
       source: String,
-      position: Number,
       active: Boolean,
       idle: Boolean,
       _overflow: Boolean,
@@ -67,17 +66,50 @@ class MiniMediaPlayer extends LitElement {
       picture: String,
       thumbnail: String,
       edit: Boolean,
+      _progress: Boolean,
+      _pos: Number,
     };
   }
 
   set hass(hass) {
     const entity = hass.states[this.config.entity];
     this._hass = hass;
-    if (entity && this.entity !== entity) this.entity = entity;
+    if (entity && this.entity !== entity) {
+      this.entity = entity;
+      this.active = this._isActive();
+      this.progress = this._hasProgress();
+    }
   }
 
-  set overflow(overflow) {
-    if (overflow !== this._overflow) this._overflow = overflow;
+  get hass() {
+    return this._hass;
+  }
+
+  set overflow(v) {
+    if (this._overflow !== v) this._overflow = v;
+  }
+
+  get overflow() {
+    return this._overflow;
+  }
+
+  set progress(v) {
+    if (this._progress !== v) {
+      this._progress = v;
+      if (this.progress === true) this._updateProgress();
+    }
+  }
+
+  get progress() {
+    return this._progress;
+  }
+
+  set pos(v) {
+    if (this._pos !== v) this._pos = v;
+  }
+
+  get pos() {
+    return this._pos;
   }
 
   setConfig(config) {
@@ -115,12 +147,7 @@ class MiniMediaPlayer extends LitElement {
 
   shouldUpdate(changedProps) {
     const update = UPDATE_PROPS.some(prop => changedProps.has(prop));
-    if (update && this.entity) {
-      this.active = this._isActive();
-      if (this.config.show_progress) this._checkProgress();
-      return true;
-    }
-    return false;
+    return update && this.entity;
   }
 
   firstUpdated() {
@@ -128,7 +155,6 @@ class MiniMediaPlayer extends LitElement {
       entries.forEach((entry) => {
         window.requestAnimationFrame(() => {
           if (this.config.info === 'scroll') this._computeOverflow();
-
           if (!this._resizeTimer) {
             this._computeRect(entry);
             this._resizeTimer = setTimeout(() => {
@@ -147,6 +173,10 @@ class MiniMediaPlayer extends LitElement {
 
   updated() {
     if (this.config.info === 'scroll') this._computeOverflow();
+  }
+
+  disconnectedCallback() {
+    clearInterval(this._progressTracker);
   }
 
   render({ config, entity } = this) {
@@ -186,7 +216,7 @@ class MiniMediaPlayer extends LitElement {
             ${this.edit ? this._renderGroupList() : ''}
           </div>
         </div>
-        ${config.show_progress && this._showProgress ? this._renderProgress() : ''}
+        ${this.progress ? this._renderProgress() : ''}
       </ha-card>`;
   }
 
@@ -292,8 +322,8 @@ class MiniMediaPlayer extends LitElement {
     })).filter(item => item.text);
     return html`
       <div class='entity__info__media'
-        ?short=${this.config.info === 'short' || !this.active} ?scroll=${this._overflow}
-        style='animation-duration: ${this._overflow}s;'>
+        ?short=${this.config.info === 'short' || !this.active} ?scroll=${this.overflow}
+        style='animation-duration: ${this.overflow}s;'>
         ${this.config.info === 'scroll' ? html`
           <div>
             <div class='marquee'>
@@ -305,10 +335,13 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderProgress() {
+    if (this.idle) return;
     return html`
-      <paper-progress class='progress transiting' value=${this.position}
-        max=${this.entity.attributes.media_duration}>
-      </paper-progress>`;
+      <div class='progress'>
+        <paper-progress class='transiting' value=${this.pos}
+          max=${this.entity.attributes.media_duration}>
+        </paper-progress>
+      </div>`;
   }
 
   _renderLabel(label, fallback = 'Unknown') {
@@ -549,7 +582,7 @@ class MiniMediaPlayer extends LitElement {
       entity_id: this.config.entity,
       ...inOptions,
     };
-    this._hass.callService(component, service, options);
+    this.hass.callService(component, service, options);
   }
 
   _handleVolumeChange(e) {
@@ -630,30 +663,27 @@ class MiniMediaPlayer extends LitElement {
     return e;
   }
 
-  _checkProgress() {
-    if (this._isPlaying() && this._showProgress) {
-      if (!this._positionTracker) {
-        this._positionTracker = setInterval(() => this.position = this._currentProgress, 1000);
-      }
-    } else if (this._positionTracker) {
-      clearInterval(this._positionTracker);
-      this._positionTracker = null;
+  _updateProgress() {
+    this.pos = this._computeProgress;
+    if (!this._progressTracker)
+      this._progressTracker = setInterval(() => this._updateProgress(), 1000);
+    if (!this._isPlaying()) {
+      this.progress = 'paused';
+      clearInterval(this._progressTracker);
+      this._progressTracker = null;
     }
-    this.position = this._currentProgress;
   }
 
-  get _showProgress() {
-    return (
-      (this._isPlaying() || this._isPaused()) && this.active
-      && 'media_duration' in this.entity.attributes
-      && 'media_position' in this.entity.attributes
-      && 'media_position_updated_at' in this.entity.attributes);
+  _hasProgress() {
+    return !this.config.hide.progress
+      && !this.idle
+      && PROGRESS_PROPS.every(prop => prop in this.entity.attributes);
   }
 
-  get _currentProgress() {
+  get _computeProgress() {
     const updated = this.entity.attributes.media_position_updated_at;
-    const position = this.entity.attributes.media_position;
-    return position + (Date.now() - new Date(updated).getTime()) / 1000.0;
+    const pos = this.entity.attributes.media_position;
+    return pos + (Date.now() - new Date(updated).getTime()) / 1000.0;
   }
 
   _isPaused() {
@@ -702,14 +732,14 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _getLabel(label, fallback = 'unknown') {
-    const lang = this._hass.selectedLanguage || this._hass.language;
-    const resources = this._hass.resources[lang];
+    const lang = this.hass.selectedLanguage || this.hass.language;
+    const resources = this.hass.resources[lang];
     return (resources && resources[label] ? resources[label] : fallback);
   }
 
   async _fetchThumbnail() {
     try {
-      const { content_type: contentType, content } = await this._hass.callWS({
+      const { content_type: contentType, content } = await this.hass.callWS({
         type: 'media_player_thumbnail',
         entity_id: this.config.entity,
       });
@@ -1189,13 +1219,17 @@ class MiniMediaPlayer extends LitElement {
         .source-menu__source[display="full"] {
           max-width: none;
         }
-        paper-progress {
+        .progress {
           left: 0; right: 0; bottom: 0;
+          position: absolute;
+        }
+        paper-progress {
           height: var(--paper-progress-height, 4px);
+          bottom: 0;
           position: absolute;
           width: 100%;
           --paper-progress-active-color: var(--accent-color);
-          --paper-progress-container-color: rgba(150,150,150,.25);
+          --paper-progress-container-color: rgba(100,100,100,.15);
           --paper-progress-transition-duration: 1s;
           --paper-progress-transition-timing-function: linear;
           --paper-progress-transition-delay: 0s;
