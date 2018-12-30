@@ -204,10 +204,12 @@ class MiniMediaPlayer extends LitElement {
               ${this._renderEntityName()}
               ${this._renderMediaInfo()}
             </div>
-            ${this._renderPowerStrip()}
+            <div class='control-row--top flex'>
+              ${this._renderPowerStrip()}
+            </div>
           </div>
           <div class='rows'>
-            <div class='control-row flex flex-wrap justify' ?wrap=${config.volume_stateless}>
+            <div class='control-row flex'>
               ${!config.collapse && this.active ? this._renderControlRow() : ''}
             </div>
             ${config.quick_select.buttons ? this._renderButtons() : ''}
@@ -369,14 +371,12 @@ class MiniMediaPlayer extends LitElement {
       return this._renderLabel('state.default.unavailable', 'Unavailable');
 
     return html`
-      <div class='control-row--top flex'>
-        ${this.active && config.collapse ? this._renderControlRow() : ''}
-        <div class='power-row flex'>
-          ${this.idle ? this._renderIdleStatus() : ''}
-          ${this._renderSource()}
-          ${config.sonos_group.entities ? this._renderGroupButton() : ''}
-          ${!config.hide.power ? this._renderPowerButton() : ''}
-        </div>
+      ${this.active && config.collapse ? this._renderControlRow() : ''}
+      <div class='power-row flex'>
+        ${this.idle ? this._renderIdleStatus() : ''}
+        ${this._renderSource()}
+        ${config.sonos_group.entities ? this._renderGroupButton() : ''}
+        ${!config.hide.power ? this._renderPowerButton() : ''}
       </div>`;
   }
 
@@ -462,8 +462,10 @@ class MiniMediaPlayer extends LitElement {
   _renderControlRow() {
     return html`
       ${!this.config.hide.volume ? this._renderVolControls() : ''}
-      <div class='flex'>
+      <div class='flex shuffle'>
         ${!this.config.hide.shuffle ? this._renderShuffleButton() : ''}
+      </div>
+      <div class='flex'>
         ${!this.config.hide.controls ? this._renderMediaControls() : ''}
       </div>`;
   }
@@ -516,7 +518,7 @@ class MiniMediaPlayer extends LitElement {
 
   _renderVolButtons(muted = false) {
     return html`
-      <div class='flex'>
+      <div class='vol-control--stateless flex'>
         ${this._renderMuteButton(muted)}
         ${this._renderButton(ICON.VOL_DOWN, 'volume_down')}
         ${this._renderButton(ICON.VOL_UP, 'volume_up')}
@@ -908,9 +910,6 @@ class MiniMediaPlayer extends LitElement {
           display: -webkit-flex;
           flex-direction: row;
         }
-        .flex-wrap[wrap] {
-          flex-wrap: wrap;
-        }
         .justify {
           -webkit-justify-content: space-between;
           justify-content: space-between;
@@ -1001,7 +1000,7 @@ class MiniMediaPlayer extends LitElement {
           display: none;
         }
         .attr__app_name:first-child {
-          display: inline-block;
+          display: inline;
         }
         .entity[inactive] .entity__info__media {
           opacity: .5;
@@ -1144,9 +1143,20 @@ class MiniMediaPlayer extends LitElement {
           flex-wrap: wrap;
           justify-content: center;
         }
+        .control-row > .flex {
+          flex: 1;
+          justify-content: space-between;
+        }
+        .control-row > .shuffle {
+          flex: 3;
+          flex-shrink: 200;
+          justify-content: center;
+        }
+        .control-row > .vol-control {
+          flex: 100;
+        }
         .vol-control {
           flex: 1;
-          min-width: 140px;
           max-height: 40px;
         }
         .speaker-select {
