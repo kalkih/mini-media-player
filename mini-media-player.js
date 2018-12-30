@@ -337,7 +337,7 @@ class MiniMediaPlayer extends LitElement {
   _renderProgress() {
     if (this.idle) return;
     return html`
-      <div class='progress'>
+      <div class='progress' @click=${e => this._handleSeek(e)}>
         <paper-progress class='transiting' value=${this.pos}
           max=${this.entity.attributes.media_duration}>
         </paper-progress>
@@ -595,6 +595,12 @@ class MiniMediaPlayer extends LitElement {
       entity_id: entity,
       volume_level: vol,
     });
+  }
+
+  _handleSeek(e) {
+    const duration = this.entity.attributes.media_duration || 0;
+    const pos = (e.offsetX / e.target.offsetWidth) * duration;
+    this._callService(e, 'media_seek', { seek_position: pos });
   }
 
   _handlePower(e) {
@@ -1220,6 +1226,8 @@ class MiniMediaPlayer extends LitElement {
           max-width: none;
         }
         .progress {
+          height: 12px;
+          cursor: pointer;
           left: 0; right: 0; bottom: 0;
           position: absolute;
         }
