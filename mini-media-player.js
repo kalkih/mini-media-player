@@ -1,4 +1,4 @@
-import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.3/lit-element.js?module';
+import { LitElement, html } from 'https://unpkg-gcp.firebaseapp.com/@polymer/lit-element@0.5.2/lit-element.js?module';
 import ResizeObserver from 'https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.1/dist/ResizeObserver.es.js';
 
 const MEDIA_INFO = [
