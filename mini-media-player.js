@@ -866,7 +866,7 @@ class MiniMediaPlayer extends LitElement {
           will-change: padding;
         }
         ha-card[group] .player {
-          padding: 0;
+          padding: 2px 0;
         }
         ha-card[has-title] .player {
           padding-top: 0;
@@ -1240,6 +1240,13 @@ class MiniMediaPlayer extends LitElement {
           cursor: pointer;
           left: 0; right: 0; bottom: 0;
           position: absolute;
+        }
+        ha-card[group] .progress {
+          bottom: -2px;
+          height: 5px;
+        }
+        ha-card[group] paper-progress {
+          height: var(--paper-progress-height, 2px);
         }
         paper-progress {
           height: var(--paper-progress-height, 4px);
