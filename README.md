@@ -82,8 +82,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `none` to hide artwork, `full-cover-fit` for full cover without cropping.
 | media_list | list | optional | v0.9.5 | A list containing media items, to quickly play specified media, see [Media object options](#media-object-options).
 | media_buttons | list | optional | v0.9.5 | Display media button(s), to quickly play specified media, see [Media object options](#media-object-options).
-| show_tts | string | optional | v0.2 | Show Text-To-Speech input, specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, or `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component.
-| tts_entity | string | optional | v0.x | The entity to send the TTS output to
+| tts | Object | optional | v0.9.9 | Show Text-To-Speech input, see [TTS object options](#tts-object-options)
 | show_source | string | false | v0.7 | `true` display source select, `small` to only display the source button (v0.8.1), `full` display the full source name (v0.9.1).
 | show_progress | boolean | false | v0.8.3 | Display a progress bar when media progress information is available.
 | show_shuffle | boolean | false | v0.8.9 | Display a shuffle button (only for players with `shuffle_set` support).
@@ -116,6 +115,13 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | icon | string | optional | A display icon *(any mdi icon)*.
 | type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel` or `playlist`. For example, to play music you would set.
 | id | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify.
+
+#### TTS object options
+| Name | Type | Default | Description |
+|------|:----:|:-------:|:-----------:|
+| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, or `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component.
+| language | string | optional | The output language.
+| entity_id | string | optional | The *entity_id* for the output player.
 
 #### Sonos object options
 | Name | Type | Default | Description |
