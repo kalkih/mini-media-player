@@ -118,7 +118,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 #### TTS object options
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:-----------:|
+|------|:----:|:-------:|:------------|
 | platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, or `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component.
 | language | string | optional | The output language.
 | entity_id | string | optional | The *entity_id* for the output player.
