@@ -871,9 +871,6 @@ class MiniMediaPlayer extends LitElement {
         ha-card[has-title] .player {
           padding-top: 0;
         }
-        ha-card[group][artwork*='cover'][has-artwork] .player {
-          padding: 8px 0;
-        }
         ha-card[artwork*='cover'][has-artwork] paper-icon-button,
         ha-card[artwork*='cover'][has-artwork] ha-icon,
         ha-card[artwork*='cover'][has-artwork] .entity__info,
