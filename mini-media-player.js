@@ -617,6 +617,9 @@ class MiniMediaPlayer extends LitElement {
   _handleTts(e) {
     const input = this.shadowRoot.querySelector('.tts paper-input');
     const options = { message: input.value };
+    if (this.config.tts_entity) {
+      options.entity_id = this.config.tts_entity;
+    }
     if (this.config.tts === 'alexa')
       this._callService(e, 'alexa_tts', options);
     else
