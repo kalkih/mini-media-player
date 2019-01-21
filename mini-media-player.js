@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/no-unresolved
-import { LitElement, html } from 'https://unpkg.com/@polymer/lit-element@^0.6.3/lit-element.js?module';
-// eslint-disable-next-line
-import ResizeObserver from 'https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.1/dist/ResizeObserver.es.js';
+import { LitElement, html } from '@polymer/lit-element';
+import ResizeObserver from 'resize-observer-polyfill';
 
 const MEDIA_INFO = [
   { attr: 'media_title' },
