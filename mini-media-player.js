@@ -224,6 +224,13 @@ class MiniMediaPlayer extends LitElement {
     return this.config.name || this.entity.attributes.friendly_name;
   }
 
+  _computeNameExtra() {
+    if (this.config.sonos.change_name && this.entity.attributes.sonos_group) {
+      const num = this.entity.attributes.sonos_group.length - 1 || 0;
+      return num ? ` +${num}` : '';
+    }
+  }
+
   _computeArtwork() {
     const picture = this.entity.attributes.entity_picture;
     const artwork = !!((picture && picture !== '')
@@ -306,6 +313,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div class='entity__info__name'>
         ${this._computeName()}
+        ${this._computeNameExtra()}
       </div>`;
   }
 
