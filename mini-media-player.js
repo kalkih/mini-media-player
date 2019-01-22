@@ -127,11 +127,6 @@ class MiniMediaPlayer extends LitElement {
       toggle_power: true,
       ...config,
     };
-
-    conf.consider_idle_after = Number(conf.consider_idle_after) * 60 || false;
-    conf.idle_view = conf.idle_view
-      || conf.consider_idle_after
-      || conf.consider_pause_idle;
     conf.hide = conf.hide.reduce((obj, val) => ({
       [val]: true,
       ...obj,
@@ -140,6 +135,7 @@ class MiniMediaPlayer extends LitElement {
     conf.collapse = (conf.hide.controls || conf.hide.volume);
     conf.info = conf.collapse && conf.info !== 'scroll' ? 'short' : conf.info;
     conf.flow = (conf.hide.icon && conf.hide.name && conf.hide.info);
+
     this.config = conf;
   }
 
@@ -717,25 +713,26 @@ class MiniMediaPlayer extends LitElement {
       && !this.idle) || false;
   }
 
-  _computeIdle({ config } = this) {
-    if (config.idle_view && this._isIdle()
-      || config.consider_pause_idle && this._isPaused())
+  _computeIdle() {
+    const idle = this.config.idle_view;
+    if (idle.when_idle && this._isIdle()
+      || idle.when_paused && this._isPaused())
       return true;
 
     const updated = this.entity.attributes.media_position_updated_at;
-    if (!updated || !config.consider_idle_after)
+    if (!updated || !idle.after || this._isPlaying())
       return false;
 
     const diff = (Date.now() - new Date(updated).getTime()) / 1000;
-    if (diff > config.consider_idle_after)
+    if (diff > idle.after * 60)
       return true;
 
-    if (!this._inactiveTracker) {
-      this._inactiveTracker = setTimeout(() => {
-        this.position = 0;
-        this._inactiveTracker = null;
-      }, (config.consider_idle_after - diff) * 1000);
-    }
+    if (this._inactiveTracker) clearTimeout(this._inactiveTracker);
+    this._inactiveTracker = setTimeout(() => {
+      this.active = this._isActive();
+      this._inactiveTracker = null;
+    }, ((idle.after * 60) - diff) * 1000);
+
     return false;
   }
 
