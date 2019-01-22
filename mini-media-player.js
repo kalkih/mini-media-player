@@ -121,7 +121,7 @@ class MiniMediaPlayer extends LitElement {
       max_volume: 100,
       more_info: true,
       sonos: {},
-      quick_select: {},
+      shortcuts: {},
       source: 'default',
       title: '',
       toggle_power: true,
@@ -206,8 +206,8 @@ class MiniMediaPlayer extends LitElement {
             <div class='control-row flex'>
               ${!config.collapse && this.active ? this._renderControlRow() : ''}
             </div>
-            ${config.quick_select.buttons ? this._renderButtons() : ''}
-            ${config.quick_select.list ? this._renderList() : ''}
+            ${config.shortcuts.buttons ? this._renderButtons() : ''}
+            ${config.shortcuts.list ? this._renderList() : ''}
             ${config.tts ? this._renderTts() : ''}
             ${this.edit ? this._renderGroupList() : ''}
           </div>
@@ -535,8 +535,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderList() {
-    if (this.config.quick_select.list.hide_when_off && !this.active) return;
-    const { items } = this.config.quick_select.list;
+    if (this.config.shortcuts.list.hide_when_off && !this.active) return;
+    const { items } = this.config.shortcuts.list;
     return html`
       <paper-menu-button class='media-dropdown'
         noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
@@ -559,8 +559,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderButtons() {
-    if (this.config.quick_select.buttons.hide_when_off && !this.active) return;
-    const { items } = this.config.quick_select.buttons;
+    if (this.config.shortcuts.buttons.hide_when_off && !this.active) return;
+    const { items } = this.config.shortcuts.buttons;
     return html`
       <div class='media-buttons'>
         ${items.map((item, i) => html`
@@ -625,7 +625,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handleQuickSelect(e, entity, i) {
-    const { type, id } = this.config.quick_select[entity].items[i];
+    const { type, id } = this.config.shortcuts[entity].items[i];
     if (type === 'source') return this._handleSource(e, id);
     const options = {
       media_content_type: type,
