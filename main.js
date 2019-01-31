@@ -121,13 +121,16 @@ class MiniMediaPlayer extends LitElement {
       info: 'default',
       max_volume: 100,
       more_info: true,
-      sonos: {},
       shortcuts: {},
       source: 'default',
       title: '',
       toggle_power: true,
       ...config,
       hide: { ...DEFAULT_HIDE, ...config.hide },
+      sonos: {
+        show_group_count: true,
+        ...config.sonos,
+      },
     };
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.collapse = (conf.hide.controls || conf.hide.volume);
@@ -223,8 +226,9 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeNameExtra() {
-    if (this.config.sonos.change_name && this.entity.attributes.sonos_group) {
-      const num = this.entity.attributes.sonos_group.length - 1 || 0;
+    const group = this.entity.attributes.sonos_group;
+    if (this.config.sonos.show_group_count && group) {
+      const num = group.length - 1 || 0;
       return num ? ` +${num}` : '';
     }
   }
