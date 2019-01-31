@@ -349,6 +349,9 @@ export default function style() {
         padding: .2em 1em;
         width: calc(50% - 4px);
       }
+      .media-buttons > paper-button > span {
+        line-height: 24px;
+      }
       .media-buttons > paper-button > *:nth-child(2),
       .media-dropdown paper-item > *:nth-child(2) {
         margin-left: 4px;
