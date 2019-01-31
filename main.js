@@ -2,6 +2,9 @@ import { LitElement, html } from '@polymer/lit-element';
 import ResizeObserver from 'resize-observer-polyfill';
 import style from './style';
 
+const DEFAULT_HIDE = {
+  shuffle: true,
+};
 const MEDIA_INFO = [
   { attr: 'media_title' },
   { attr: 'media_artist' },
@@ -115,7 +118,6 @@ class MiniMediaPlayer extends LitElement {
 
     const conf = {
       artwork: 'default',
-      hide: [],
       info: 'default',
       max_volume: 100,
       more_info: true,
@@ -125,11 +127,8 @@ class MiniMediaPlayer extends LitElement {
       title: '',
       toggle_power: true,
       ...config,
+      hide: { ...DEFAULT_HIDE, ...config.hide },
     };
-    conf.hide = conf.hide.reduce((obj, val) => ({
-      [val]: true,
-      ...obj,
-    }), {});
     conf.max_volume = Number(conf.max_volume) || 100;
     conf.collapse = (conf.hide.controls || conf.hide.volume);
     conf.info = conf.collapse && conf.info !== 'scroll' ? 'short' : conf.info;
