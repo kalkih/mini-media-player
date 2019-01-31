@@ -545,8 +545,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderList() {
-    if (this.config.shortcuts.list.hide_when_off && !this.active) return;
-    const { items } = this.config.shortcuts.list;
+    if (this.config.shortcuts.hide_when_off && !this.active) return;
+    const items = this.config.shortcuts.list;
     return html`
       <paper-menu-button class='media-dropdown'
         noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
@@ -569,8 +569,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderButtons() {
-    if (this.config.shortcuts.buttons.hide_when_off && !this.active) return;
-    const { items } = this.config.shortcuts.buttons;
+    if (this.config.shortcuts.hide_when_off && !this.active) return;
+    const items = this.config.shortcuts.buttons;
     return html`
       <div class='media-buttons'>
         ${items.map((item, i) => html`
