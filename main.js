@@ -4,6 +4,7 @@ import style from './style';
 
 const DEFAULT_HIDE = {
   shuffle: true,
+  power_state: true,
 };
 const MEDIA_INFO = [
   { attr: 'media_title' },
@@ -118,7 +119,6 @@ class MiniMediaPlayer extends LitElement {
 
     const conf = {
       artwork: 'default',
-      artwork_border: true,
       info: 'default',
       max_volume: 100,
       more_info: true,
@@ -284,7 +284,7 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.hide.icon) return;
     if (this.active && artwork && this.config.artwork === 'default')
       return html`
-        <div class='entity__artwork' ?border=${this.config.artwork_border}
+        <div class='entity__artwork' ?border=${!this.config.hide.artwork_border}
           style='background-image: ${this.thumbnail};'
           state=${this.entity.state}>
         </div>`;
@@ -300,7 +300,7 @@ class MiniMediaPlayer extends LitElement {
       <paper-icon-button class='power-button'
         .icon=${ICON.POWER}
         @click='${e => this._handlePower(e)}'
-        ?color=${this.config.power_color && (this.active || this.idle)}>
+        ?color=${!this.config.hide.power_state && (this.active || this.idle)}>
       </paper-icon-button>`;
   }
 
