@@ -1,3 +1,41 @@
+## v1.0.0
+- NEW: Ability to seek through media by pressing on the progress bar
+- NEW: Option `hide` (#50)
+- NEW: `source`, `name`, `progress`, `artwork_border`, `power_state` `mute` & `shuffle` parameters to `hide` option object (#50)
+- NEW: Option `shortcuts`, replaces `media_list` & `media_buttons`
+- NEW: Ability to switch source through `shortcuts` list/buttons (#47)
+- NEW: Option `hide_when_off` added to the `shortcuts` option to specify visibility when entity is off (#49)
+- NEW: Option `source` to modify how source & source select is displayed
+- NEW: Option `info` to modify how media info is displayed (#51)
+- NEW: Option `tts` (#61) (@Devqon)
+- NEW: Two optional TTS options `language` & `entity_id` options for TTS (#61) (@Devqon)
+- NEW: Option `sync_volume` option to `sonos` object to sync volume across grouped Sonos speakers (#48)
+- NEW: Option `show_group_count` added to `sonos` option object to display the number of grouped speakers (if any) in the name
+- NEW: Option `expanded` to `sonos` option object to specify default state of the list
+- CHANGE: Responsive design breakpoint changed from 350px to 390px
+- CHANGE: Improved responsive design
+- CHANGE: Icons inside `shortcuts` list items & buttons is now displayed to the left
+- CHANGE: Progress bar background color is now slightly more transparent
+- CHANGE: Source & source select is now visible by default (if supported & available)
+- CHANGE: Progress bar is now visible by default (if supported & available)
+- CHANGE: Artwork border is now visible by default
+- CHANGE: Renamed and reworked `sonos_grouping` option to `sonos` **(BREAKING CHANGE)**
+- CHANGE: The `idle_view` option now takes an object **(BREAKING CHANGE)**
+- FIXED: Progress bar layout when used with group option (#56)
+- FIXED: Issue where `consider_idle_after` (now `idle_view` -> `after`) option would not always work properly
+- FIXED: Inconsistent height of card while using group option and artwork cover (#54)
+- REMOVED: The following options were removed `hide_info`, `hide_power`, `hide_icon`, `hide_media_info`, `hide_volume`, `hide_controls` & `hide_mute` options (#50) **(BREAKING CHANGE)**
+- REMOVED: `consider_idle_after` & `consider_pause_idle` options were removed, see new `idle_view` option **(BREAKING CHANGE)**
+- REMOVED: `artwork_border` option, see new `hide` option **(BREAKING CHANGE)**
+- REMOVED: `power_color` option, see new `hide` option **(BREAKING CHANGE)**
+- REMOVED: `show_source` option, see new `hide` & `source` option (#50) **(BREAKING CHANGE)**
+- REMOVED: `show_progress` option, see new `hide` option (#50) **(BREAKING CHANGE)**
+- REMOVED: `show_shuffle` option, see new `hide` option (#50) **(BREAKING CHANGE)**
+- REMOVED: `show_tts` option, see new `tts` option **(BREAKING CHANGE)**
+- REMOVED: `media_list` & `media_buttons` options were removed, see new `shortcuts` option **(BREAKING CHANGE)**
+- REMOVED: `scroll_info` & `short_info` options were removed, see new `info` option (#51) **(BREAKING CHANGE)**
+- REMOVED: Ability to run the source directly was removed, if you haven't migrated to the built bundle yet, it's time to do it now **(BREAKING CHANGE)**
+
 ## v0.9.8
 - Added: `replace_mute` option #43
 - Added: `icon` option to media object (media buttons/list)
