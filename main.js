@@ -181,7 +181,7 @@ class MiniMediaPlayer extends LitElement {
       ? 'break-icon' : 'none';
 
     return html`
-      ${style()}
+      ${style}
       <ha-card break=${responsive} ?initial=${this.initial}
         ?bg=${config.background} ?group=${config.group}
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
