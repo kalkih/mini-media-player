@@ -717,6 +717,10 @@ class MiniMediaPlayer extends LitElement {
     return this.entity.state === 'idle';
   }
 
+  _isStandby() {
+    return this.entity.state === 'standby';
+  }
+
   _isActive() {
     if (this.config.idle_view) this.idle = this._computeIdle();
     return (this.entity.state !== 'off'
@@ -727,6 +731,7 @@ class MiniMediaPlayer extends LitElement {
   _computeIdle() {
     const idle = this.config.idle_view;
     if (idle.when_idle && this._isIdle()
+      || idle.when_standby && this._isStandby()
       || idle.when_paused && this._isPaused())
       return true;
 
