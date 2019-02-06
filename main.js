@@ -596,10 +596,11 @@ class MiniMediaPlayer extends LitElement {
     const volPercentage = parseFloat(e.target.value);
     const vol = volPercentage > 0 ? volPercentage / 100 : 0;
     const entity = this.config.sonos.sync_volume
-      ? this.entity.sonos_group
+      ? this.entity.attributes.sonos_group
       : this.config.entity;
+
     this._callService(e, 'volume_set', {
-      entity_id: entity,
+      entity_id: entity || this.config.entity,
       volume_level: vol,
     });
   }
