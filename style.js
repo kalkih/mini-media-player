@@ -482,7 +482,7 @@ const style = html`
       left: 0; right: 0; bottom: 0;
       position: absolute;
     }
-    ha-card[group] .progress {
+    ha-card[group][collapse] .progress {
       bottom: -2px;
       height: 5px;
     }
