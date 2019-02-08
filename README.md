@@ -94,7 +94,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
 | sonos | object | optional | v1.0.0 | Sonos group management, see [Sonos object](#sonos-object) for available options.
-| shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcut-object) for available options.
+| shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
 
 #### Idle object
 | Name | Type | Default | Description |
