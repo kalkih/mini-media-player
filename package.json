@@ -12,11 +12,12 @@
     "custom-cards"
   ],
   "main": "main.js",
+  "module": "main.js",
   "repository": "git@github.com:kalkih/mini-media-player.git",
   "author": "Karl Kihlström <mrkihlstrom@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@polymer/lit-element": "0.6.3",
+    "lit-element": "^2.0.1",
     "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
@@ -39,7 +40,7 @@
     "build": "npm run lint && npm run rollup && npm run babel",
     "rollup": "rollup -c",
     "babel": "babel mini-media-player-bundle.js --out-file mini-media-player-bundle.js",
-    "lint": "eslint main.js",
+    "lint": "eslint main.js style.js",
     "watch": "rollup -c --watch"
   }
 }

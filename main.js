@@ -1,4 +1,4 @@
-import { LitElement, html } from '@polymer/lit-element';
+import { LitElement, html } from 'lit-element';
 import ResizeObserver from 'resize-observer-polyfill';
 import style from './style';
 
@@ -70,6 +70,10 @@ class MiniMediaPlayer extends LitElement {
       _progress: Boolean,
       _pos: Number,
     };
+  }
+
+  static get styles() {
+    return style;
   }
 
   set hass(hass) {
@@ -181,7 +185,6 @@ class MiniMediaPlayer extends LitElement {
       ? 'break-icon' : 'none';
 
     return html`
-      ${style}
       <ha-card break=${responsive} ?initial=${this.initial}
         ?bg=${config.background} ?group=${config.group}
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
