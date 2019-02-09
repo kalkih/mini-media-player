@@ -641,7 +641,10 @@ class MiniMediaPlayer extends LitElement {
 
   _handleQuickSelect(e, entity, i) {
     const { type, id } = this.config.shortcuts[entity][i];
-    if (type === 'source') return this._handleSource(e, id);
+    if (type === 'source')
+      return this._handleSource(e, id);
+    if (type === 'script')
+      return this._callService(e, 'turn_on', { entity_id: id }, 'script');
     const options = {
       media_content_type: type,
       media_content_id: id,
