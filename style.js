@@ -272,7 +272,8 @@ const style = css`
     white-space: nowrap;
   }
   ha-card[artwork*='cover'][has-artwork] .entity__info__media,
-  paper-icon-button[color] {
+  paper-icon-button[color],
+  ha-icon[color] {
     color: var(--accent-color) !important;
   }
   paper-icon-button {

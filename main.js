@@ -5,6 +5,7 @@ import style from './style';
 const DEFAULT_HIDE = {
   shuffle: true,
   power_state: true,
+  icon_state: true,
 };
 const MEDIA_INFO = [
   { attr: 'media_title' },
@@ -294,7 +295,10 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       <div class='entity__icon'>
-        <ha-icon icon=${this._computeIcon()}></ha-icon>
+        <ha-icon
+          icon=${this._computeIcon()}
+          ?color=${!this.config.hide.icon_state && (this.active || this.idle)}>
+        </ha-icon>
       </div>`;
   }
 
