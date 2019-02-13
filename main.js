@@ -5,6 +5,7 @@ import style from './style';
 const DEFAULT_HIDE = {
   shuffle: true,
   power_state: true,
+  artwork_border: true,
   icon_state: true,
 };
 const MEDIA_INFO = [
