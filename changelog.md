@@ -1,3 +1,14 @@
+## v1.0.1
+- NEW: Support for Standby state in idle view, see `idle_view` -> `when_standby` (#73)
+- NEW: Option `icon_state`, change icon color depending on entity state (#77)
+- NEW: Shortcut items can now trigger scripts (#76)
+- NEW: TTS Support for hass.io addon: Google Assistant Webserver and similar solutions
+- CHANGE: Artwork border is now hidden by default
+- FIXED: Sonos `sync_volume` not working as expected (#72)
+- FIXED: Progress not visible with `group` option and not collapsed (#71)
+- FIXED: Hide season and episode information if current media is a movie
+- UPDATE: LitElement dependency to v2.0.1
+
 ## v1.0.0
 - NEW: Ability to seek through media by pressing on the progress bar
 - NEW: Option `hide` (#50)

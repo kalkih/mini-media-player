@@ -1,8 +1,8 @@
 {
   "mini-media-player-bundle": {
-    "updated_at": "2018-02-03",
-    "version": "1.0.0",
-    "remote_location": "https://github.com/kalkih/mini-media-player/releases/download/v1.0.0/mini-media-player-bundle.js",
+    "updated_at": "2019-02-14",
+    "version": "1.0.1",
+    "remote_location": "https://github.com/kalkih/mini-media-player/releases/download/v1.0.1/mini-media-player-bundle.js",
     "visit_repo": "https://github.com/kalkih/mini-media-player",
     "changelog": "https://github.com/kalkih/mini-media-player/releases/latest"
   }

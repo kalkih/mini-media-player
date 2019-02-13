@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.0
+    - url: /local/mini-media-player-bundle.js?v=1.0.1
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.0/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.1/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.0
+    - url: /local/mini-media-player-bundle.js?v=1.0.1
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.0
+    - url: /local/mini-media-player-bundle.js?v=1.0.1
       type: module
   ```
 
@@ -101,14 +101,26 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 |------|:----:|:-------:|:------------|
 | when_idle | boolean | optional | Render the idle view when player state is `idle`.
 | when_paused | boolean | optional | Render the idle view when player state is `paused`
+| when_standby | boolean | optional | Render the idle view when player state is `standby`
 | after | string | optional | Specify a number (minutes) after which the card renders as idle *(only supported on platforms exposing `media_position_updated_at`)*.
 
 #### TTS object
 | Name | Type | Default | Description |
 |------|:----:|:-------:|:------------|
-| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, or `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component.
+| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component or `ga` for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay).
 | language | string | optional | The output language.
-| entity_id | string | optional | The *entity_id* for the output player.
+| entity_id | string/list | optional | The *entity_id* of the desired output entity or a list of *entity_id's*, can also be `all` to broadcast to all entities.
+
+Using the `ga` platform will restrict the use of `language` & `entity_id` options.
+It also requires that a custom notify service is set up with the name `ga_broadcast`, example below.
+
+```yaml
+# configuration.yaml
+notify:
+  - name: ga_broadcast
+    platform: rest
+    resource: http://[xxx.x.x.xxx]:5000/broadcast_message
+```
 
 #### Sonos object
 See [Sonos group management](#sonos-group-management) for example usage.
@@ -140,14 +152,14 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 |------|:----:|:-------:|:------------|
 | name | string | optional | A display name.
 | icon | string | optional | A display icon *(any mdi icon)*.
-| type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel`, `playlist` or `source`
-| id | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify. A source name can also be specified to change source, use together with type `source`
+| type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel`, `playlist`, `source` or `script`
+| id | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify. A source name can also be specified to change source, use together with type `source` or a script entity for use with `script`.
 
 #### Hide object
 | Name | Type | Default | Description |
 |------|:----:|:-------:|:------------|
 | name | boolean | false | The name.
-| icon | boolean | false | The icon.
+| icon | boolean | false | The entity icon.
 | info | boolean | false | The media information.
 | power | boolean | false | The power button.
 | source | boolean | false | The source button.
@@ -155,8 +167,9 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | volume | boolean | false | The volume controls.
 | mute | boolean | false | The mute button.
 | progress | boolean | false | The progress bar.
-| artwork_border | boolean | false | The border of the `default` artwork picture.
-| power_state | boolean | true | The accent of the power button when the device is powered on.
+| artwork_border | boolean | true | The border of the `default` artwork picture.
+| power_state | boolean | true | Dynamic color of the power button to indicate on/off.
+| icon_state | boolean | true | Dynamic color of the entity icon to indicate on/off.
 | shuffle | boolean | true | The shuffle button (only for players with `shuffle_set` support).
 
 
