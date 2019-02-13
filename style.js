@@ -178,6 +178,10 @@ const style = css`
     max-height: 20px;
     overflow: hidden;
   }
+  ha-card[content='movie'] .attr__media_season,
+  ha-card[content='movie'] .attr__media_episode {
+    display: none;
+  }
   .entity__icon {
     color: var(--paper-item-icon-color, #44739e);
   }
