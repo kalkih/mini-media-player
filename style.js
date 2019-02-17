@@ -294,10 +294,13 @@ const style = css`
     position: absolute;
     white-space: nowrap;
   }
-  ha-card[artwork*='cover'][has-artwork] .entity__info__media,
   paper-icon-button[color],
   ha-icon[color] {
     color: var(--mmp-accent-color) !important;
+  }
+  ha-card[artwork*='cover'][has-artwork] .entity__info__media {
+    color: #FFFFFF;
+    opacity: .8;
   }
   paper-icon-button {
     transition: color .25s ease-in-out;
