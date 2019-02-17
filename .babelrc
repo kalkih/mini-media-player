@@ -11,6 +11,7 @@
     ],
     ["minify"]
   ],
+  "comments": false,
   "plugins": [
     [
       "@babel/plugin-proposal-decorators",
