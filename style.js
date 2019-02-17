@@ -44,6 +44,9 @@ const style = css`
     --mdc-theme-primary: transparent;
     background: rgba(255,255,255,.25);
   }
+  mwc-button[dense] {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0,0,0,.12);
+  }
   ha-card[has-title] header {
     display: block;
     font-size: var(--paper-font-headline_-_font-size);
@@ -357,15 +360,24 @@ const style = css`
     display: flex;
     flex-wrap: wrap;
     margin-top: 8px;
-    padding-top: 8px;
   }
   .media-buttons__button {
     background-color: rgba(255,255,255,.1);
-    border-radius: 0;
     box-sizing: border-box;
     margin: 8px 8px 0 0;
     min-width: 0;
-    width: calc(50% - 8px);
+    min-width: calc(50% - 8px);
+    flex: 1;
+    overflow: hidden;
+  }
+  .media-buttons__button[columns='0'] {
+    min-width: calc(100% - 8px);
+  }
+  .media-buttons__button[columns='3'] {
+    min-width: calc(33.33% - 8px);
+  }
+  .media-buttons__button[columns='4'] {
+    min-width: calc(25% - 8px);
   }
   .media-buttons__button > span {
     line-height: 24px;
@@ -374,14 +386,6 @@ const style = css`
   .media-buttons__button > *:nth-child(2),
   .media-dropdown paper-item > *:nth-child(2) {
     margin-left: 4px;
-  }
-  .media-buttons__button:nth-child(odd) {
-  }
-  .media-buttons__button:nth-child(-n+2) {
-    margin-top: 0;
-  }
-  .media-buttons__button:nth-last-child(1):nth-child(odd) {
-    width: 100%;
   }
   .control-row--top .vol-control {
     max-width: 200px;

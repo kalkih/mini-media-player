@@ -596,7 +596,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div class='media-buttons'>
         ${items.map((item, i) => html`
-          <mwc-button raised
+          <mwc-button dense raised columns=${this.config.shortcuts.columns}
             class='media-buttons__button'
             @click='${e => this._handleQuickSelect(e, 'buttons', i)}'>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
