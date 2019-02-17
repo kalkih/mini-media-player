@@ -2,6 +2,7 @@ import { css } from 'lit-element';
 
 const style = css`
   ha-card {
+    --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     cursor: default;
     display: flex;
     background: transparent;
@@ -223,7 +224,7 @@ const style = css`
     -webkit-box-sizing: border-box;
   }
   .entity__artwork[state='playing'] {
-    border-color: var(--accent-color);
+    border-color: var(--mmp-accent-color);
   }
   .entity__info__name,
   .entity__info__media[short],
@@ -293,7 +294,7 @@ const style = css`
   ha-card[artwork*='cover'][has-artwork] .entity__info__media,
   paper-icon-button[color],
   ha-icon[color] {
-    color: var(--accent-color) !important;
+    color: var(--mmp-accent-color) !important;
   }
   paper-icon-button {
     transition: color .25s ease-in-out;
@@ -466,7 +467,7 @@ const style = css`
   }
   paper-menu-button[focused] mwc-button > iron-icon,
   paper-menu-button[focused] paper-icon-button {
-    color: var(--accent-color);
+    color: var(--mmp-accent-color);
     transform: rotate(180deg);
   }
   paper-menu-button mwc-button:focus iron-icon,
@@ -515,7 +516,7 @@ const style = css`
     bottom: 0;
     position: absolute;
     width: 100%;
-    --paper-progress-active-color: var(--accent-color);
+    --paper-progress-active-color: var(--mmp-accent-color);
     --paper-progress-container-color: rgba(100,100,100,.15);
     --paper-progress-transition-duration: 1s;
     --paper-progress-transition-timing-function: linear;
