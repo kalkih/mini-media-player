@@ -365,10 +365,10 @@ const style = css`
     margin: 8px 8px 0 0;
     min-width: 0;
     width: calc(50% - 8px);
-    --mdc-button-horizontal-padding: 45px;
   }
   .media-buttons__button > span {
     line-height: 24px;
+    text-transform: initial;
   }
   .media-buttons__button > *:nth-child(2),
   .media-dropdown paper-item > *:nth-child(2) {
@@ -483,13 +483,13 @@ const style = css`
     line-height: 20px;
     margin: 0;
     min-width: 0;
-    text-transform: initial;
   }
   .source-menu__source {
     display: block;
     max-width: 60px;
     position: relative;
     width: auto;
+    text-transform: initial;
   }
   .source-menu__source[display="icon"] {
     display: none;
