@@ -35,6 +35,14 @@ const style = css`
   header {
     display: none;
   }
+  mwc-button {
+    --mdc-theme-primary: var(--primary-text-color);
+  }
+  mwc-button[raised] {
+    --mdc-theme-on-primary: var(--primary-text-color);
+    --mdc-theme-primary: transparent;
+    background: rgba(255,255,255,.25);
+  }
   ha-card[has-title] header {
     display: block;
     font-size: var(--paper-font-headline_-_font-size);
@@ -116,12 +124,16 @@ const style = css`
   ha-card[artwork*='cover'][has-artwork] ha-icon,
   ha-card[artwork*='cover'][has-artwork] .entity__info,
   ha-card[artwork*='cover'][has-artwork] .entity__info__name,
-  ha-card[artwork*='cover'][has-artwork] paper-button,
+  ha-card[artwork*='cover'][has-artwork] mwc-button,
   ha-card[artwork*='cover'][has-artwork] header,
   ha-card[artwork*='cover'][has-artwork] .speaker-select > span,
-  ha-card[artwork*='cover'][has-artwork] paper-menu-button paper-button[focused] iron-icon {
+  ha-card[artwork*='cover'][has-artwork] paper-menu-button mwc-button:focus iron-icon {
     color: #FFFFFF;
     border-color: #FFFFFF;
+  }
+  ha-card[artwork*='cover'][has-artwork] mwc-button {
+    --mdc-theme-primary: #FFFFFF;
+    --mdc-theme-on-primary: #FFFFFF;
   }
   ha-card[artwork*='cover'][has-artwork] paper-input {
     --paper-input-container-focus-color: #FFFFFF;
@@ -133,10 +145,13 @@ const style = css`
     --paper-checkbox-unchecked-color: #FFFFFF;
     --paper-checkbox-label-color: #FFFFFF;
   }
-  ha-card[artwork*='cover'][has-artwork] .media-buttons paper-button,
-  ha-card[artwork*='cover'][has-artwork] .speaker-select paper-button {
-    background-color: rgba(255,255,255,.65);
-    color: black;
+  ha-card[artwork*='cover'][has-artwork] .media-buttons__button,
+  ha-card[artwork*='cover'][has-artwork] .speaker-select__button {
+    background-color: rgba(255,255,255,.25);
+  }
+  ha-card[artwork*='cover'][has-artwork] mwc-button[raised] {
+    --mdc-theme-primary: transparent;
+    --mdc-theme-on-primary: #FFFFFF;
   }
   ha-card[artwork*='cover'][has-artwork] paper-input {
     --paper-input-container-color: #FFFFFF;
@@ -229,7 +244,7 @@ const style = css`
   .entity[inactive] .entity__info__media,
   .entity__info__name,
   paper-icon-button,
-  paper-button {
+  mwc-button {
     color: var(--primary-text-color);
     position: relative;
   }
@@ -306,7 +321,7 @@ const style = css`
       font-size: 1em;
     };
   }
-  .tts paper-button {
+  .tts__button {
     margin: 0;
     padding: .4em;
   }
@@ -343,30 +358,28 @@ const style = css`
     margin-top: 8px;
     padding-top: 8px;
   }
-  .media-buttons > paper-button {
+  .media-buttons__button {
     background-color: rgba(255,255,255,.1);
     border-radius: 0;
     box-sizing: border-box;
-    margin: 8px 0 0 0;
+    margin: 8px 8px 0 0;
     min-width: 0;
-    padding: .2em 1em;
-    width: calc(50% - 4px);
+    width: calc(50% - 8px);
+    --mdc-button-horizontal-padding: 45px;
   }
-  .media-buttons > paper-button > span {
+  .media-buttons__button > span {
     line-height: 24px;
   }
-  .media-buttons > paper-button > *:nth-child(2),
+  .media-buttons__button > *:nth-child(2),
   .media-dropdown paper-item > *:nth-child(2) {
     margin-left: 4px;
   }
-  .media-buttons > paper-button:nth-child(odd) {
-    margin-right: 8px;
+  .media-buttons__button:nth-child(odd) {
   }
-  .media-buttons > paper-button:nth-child(-n+2) {
+  .media-buttons__button:nth-child(-n+2) {
     margin-top: 0;
   }
-  .media-buttons > paper-button:nth-last-child(1):nth-child(odd) {
-    margin: 8px 0 0 0;
+  .media-buttons__button:nth-last-child(1):nth-child(odd) {
     width: 100%;
   }
   .control-row--top .vol-control {
@@ -420,17 +433,13 @@ const style = css`
   .speaker-select .buttons {
     display: flex;
   }
-  .speaker-select paper-button {
+  .speaker-select__button {
     background-color: rgba(255,255,255,.1);
     margin: 8px 8px 0 0;
     min-width: 0;
-    padding: .5em 1em;
     text-transform: uppercase;
     text-align: center;
     width: 50%;
-  }
-  .speaker-select paper-button:nth-child(even) {
-    margin: 8px 0 0 8px;
   }
   .speaker-select > paper-checkbox > span {
     font-weight: 600;
@@ -449,20 +458,28 @@ const style = css`
     };
   }
   .source-menu {
+    display: flex;
+    align-items: center;
     height: 40px;
     line-height: 20px;
     padding: 0;
   }
-  paper-menu-button[focused] paper-button > iron-icon {
+  paper-menu-button[focused] mwc-button > iron-icon,
+  paper-menu-button[focused] paper-icon-button {
     color: var(--accent-color);
     transform: rotate(180deg);
   }
-  paper-menu-button paper-button[focused] iron-icon {
+  paper-menu-button mwc-button:focus iron-icon,
+  paper-menu-button mwc-button[focused] iron-icon,
+  paper-menu-button[focused] paper-icon-button[focused] {
     color: var(--primary-text-color);
     transform: rotate(0deg);
   }
+  ha-card[has-artwork][artwork*='cover'] paper-menu-button[focused] paper-icon-button[focused] {
+    color: #FFFFFF;
+  }
   .source-menu__button {
-    height: 40px;
+    height: 36px;
     line-height: 20px;
     margin: 0;
     min-width: 0;
@@ -510,16 +527,16 @@ const style = css`
   .label {
     margin: 0 8px;
   }
-  .media-dropdown[focused] paper-button,
+  .media-dropdown[focused] mwc-button,
   paper-icon-button[color][opaque],
   paper-input[focused] {
     opacity: 1;
   }
-  .media-dropdown[focused] paper-button[focused] {
+  .media-dropdown[focused] mwc-button:focus {
     opacity: .75;
   }
   paper-icon-button[opaque],
-  .speaker-select paper-button[disabled] {
+  .speaker-select mwc-button[disabled] {
     opacity: .5;
   }
   ha-card[flow] .control-row--top {
@@ -541,7 +558,6 @@ const style = css`
   }
   ha-card[break*="break"] .rows > * {
     padding-left: 8px;
-    padding-right: 8px;
   }
   ha-card[break*="break"] .rows > .control-row {
     padding: 0;

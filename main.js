@@ -2,6 +2,13 @@ import { LitElement, html } from 'lit-element';
 import ResizeObserver from 'resize-observer-polyfill';
 import style from './style';
 
+if (!customElements.get('mwc-button')) {
+  customElements.define(
+    'mwc-button',
+    class extends customElements.get('paper-button') {},
+  );
+}
+
 const DEFAULT_HIDE = {
   shuffle: true,
   power_state: true,
@@ -416,18 +423,20 @@ class MiniMediaPlayer extends LitElement {
         <span>Group speakers</span>
         ${entities.map(item => this._renderGroupListItem(item, group, master))}
         <div class='buttons'>
-          <paper-button
+          <mwc-button
+            class='speaker-select__button'
             raised
             ?disabled=${group.length < 2}
             @click='${e => this._handleGroupItemChange(e, isMaster ? group : this.config.entity, false)}'>
             ${isMaster ? html`Ungroup` : html`Leave`}
-          </paper-button>
-          <paper-button
+          </mwc-button>
+          <mwc-button
+            class='speaker-select__button'
             raised
             ?disabled=${!isMaster}
             @click='${e => this._handleGroupItemChange(e, entities.map(item => item.entity_id), true)}'>
             Group all
-          </paper-button>
+          </mwc-button>
         </div>
       </div>`;
   }
@@ -454,17 +463,21 @@ class MiniMediaPlayer extends LitElement {
 
     const source = entity.attributes.source || '';
     const selected = sources.indexOf(source);
+    const button = this.config.source === 'icon' || this.config.collapse || this.break || this.idle
+      ? html`<paper-icon-button class='source-menu__button' slot='dropdown-trigger' .icon=${ICON.DROPDOWN}></paper-icon-button>`
+      : html`
+        <mwc-button class='source-menu__button' slot='dropdown-trigger'>
+          <span class='source-menu__source' display=${this.config.source}>
+            ${this.source || source}
+          </span>
+          <iron-icon .icon=${ICON.DROPDOWN}></iron-icon>
+        </mwc-button>`;
     return html`
       <paper-menu-button class='source-menu' slot='dropdown-trigger'
         .horizontalAlign=${'right'} .verticalAlign=${'top'}
         .verticalOffset=${40} .noAnimations=${true}
         @click='${e => e.stopPropagation()}'>
-        <paper-button class='source-menu__button' slot='dropdown-trigger'>
-          <span class='source-menu__source' display=${this.config.source}>
-            ${this.source || source}
-          </span>
-          <iron-icon .icon=${ICON.DROPDOWN}></iron-icon>
-        </paper-button>
+        ${button}
         <paper-listbox slot='dropdown-content' selected=${selected}
           @click='${e => this._handleSource(e, e.target.getAttribute('value'))}'>
           ${sources.map(item => html`<paper-item value=${item}>${item}</paper-item>`)}
@@ -546,9 +559,9 @@ class MiniMediaPlayer extends LitElement {
           @click='${e => e.stopPropagation()}'>
         </paper-input>
         <div>
-          <paper-button @click='${e => this._handleTts(e)}'>
+          <mwc-button class='tts_button' @click='${e => this._handleTts(e)}'>
             SEND
-          </paper-button>
+          </mwc-button>
         </div>
       </div>`;
   }
@@ -560,12 +573,12 @@ class MiniMediaPlayer extends LitElement {
       <paper-menu-button class='media-dropdown'
         noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
         @click='${e => e.stopPropagation()}'>
-        <paper-button class='media-dropdown__button' slot='dropdown-trigger'>
+        <mwc-button class='media-dropdown__button' slot='dropdown-trigger'>
           <span class='media-dropdown__label'>
             ${'Select media...'}
           </span>
           <iron-icon class='media-dropdown__icon' .icon=${ICON.MENU}></iron-icon>
-        </paper-button>
+        </mwc-button>
         <paper-listbox slot="dropdown-content" class="media-dropdown-trigger"
           @click='${e => this._handleQuickSelect(e, 'list', e.target.getAttribute('value'))}'>
           ${items.map((item, i) => html`
@@ -583,11 +596,12 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <div class='media-buttons'>
         ${items.map((item, i) => html`
-          <paper-button raised
+          <mwc-button raised
+            class='media-buttons__button'
             @click='${e => this._handleQuickSelect(e, 'buttons', i)}'>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
             ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}
-          </paper-button>`)}
+          </mwc-button>`)}
       </div>`;
   }
 
