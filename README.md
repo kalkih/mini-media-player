@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.1
+    - url: /local/mini-media-player-bundle.js?v=1.0.2
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.2/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.1
+    - url: /local/mini-media-player-bundle.js?v=1.0.2
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.1
+    - url: /local/mini-media-player-bundle.js?v=1.0.2
       type: module
   ```
 
@@ -74,7 +74,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 #### Card options
 | Name | Type | Default | Since | Description |
-|------|:----:|:-------:|:-----:|-------------|
+|------|------|---------|-------|-------------|
 | type | string | **required** | v0.1 | `custom:mini-media-player`
 | entity | string | **required** | v0.1 | An entity_id from an entity within the `media_player` domain.
 | title | string | optional | v0.1 | Set a custom card title.
@@ -98,7 +98,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 #### Idle object
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:------------|
+|------|------|---------|-------------|
 | when_idle | boolean | optional | Render the idle view when player state is `idle`.
 | when_paused | boolean | optional | Render the idle view when player state is `paused`
 | when_standby | boolean | optional | Render the idle view when player state is `standby`
@@ -106,7 +106,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 #### TTS object
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:------------|
+|------|------|---------|-------------|
 | platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component or `ga` for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay).
 | language | string | optional | The output language.
 | entity_id | string/list | optional | The *entity_id* of the desired output entity or a list of *entity_id's*, can also be `all` to broadcast to all entities.
@@ -126,7 +126,7 @@ notify:
 See [Sonos group management](#sonos-group-management) for example usage.
 
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:------------|
+|------|------|---------|-------------|
 | entities | list | **required** | A list containing Sonos entities, to enable group management of Sonos speakers.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
 | expanded | boolean | optional | Make the Sonos list expanded by default.
@@ -134,7 +134,7 @@ See [Sonos group management](#sonos-group-management) for example usage.
 
 #### Sonos entity object
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:------------|
+|------|------|---------|-------------|
 | entity_id | string | **required** | The *entity_id* for the Sonos entity.
 | name | string | **required** | A display name.
 
@@ -142,14 +142,15 @@ See [Sonos group management](#sonos-group-management) for example usage.
 See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:------------|
+|------|------|---------|-------------|
 | list | list | optional | A list of [shortcut items](#shortcut-item-object) to be presented as a list, see shortcut item object.
 | buttons | list | optional | A list of [shortcut items](#shortcut-item-object) to be presented as buttons.
 | hide_when_off | boolean | false | Hide the shortcuts while the entity is off.
+| columns | integer (1-4) | 2 | Specify the max number of buttons per row.
 
 #### Shortcut item object
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:------------|
+|------|------|---------|-------------|
 | name | string | optional | A display name.
 | icon | string | optional | A display icon *(any mdi icon)*.
 | type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel`, `playlist`, `source` or `script`
@@ -157,7 +158,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 
 #### Hide object
 | Name | Type | Default | Description |
-|------|:----:|:-------:|:------------|
+|------|------|---------|-------------|
 | name | boolean | false | The name.
 | icon | boolean | false | The entity icon.
 | info | boolean | false | The media information.
@@ -173,6 +174,15 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | shuffle | boolean | true | The shuffle button (only for players with `shuffle_set` support).
 
 
+### Theme variables
+The following variables are available and can be set in your theme to change the appearence of the card.
+| name | Default | Description |
+|------|---------|-------------|
+| mini-media-player-accent-color | var(--accent-color) | Accent color
+| mini-media-player-media-cover-info-color | white | Color of the media information while artwork cover exists
+
+*More coming...*
+
 ### Example usage
 
 #### Basic card
@@ -186,13 +196,13 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 #### Compact card
 Setting either `volume` and/or `controls` to `true` in the `hide` option object will render the player as a single row.
 
-<img src="https://user-images.githubusercontent.com/457678/52081833-800cec80-259b-11e9-88d8-2215d82d2e6c.png" width="500px" alt="Compact card example" />
+<img src="https://user-images.githubusercontent.com/457678/53042774-569efc80-3487-11e9-8242-03d388d40c34.png" width="500px" alt="Compact card example" />
 
 ```yaml
 - type: custom:mini-media-player
-  entity: media_player.spotify
+  entity: media_player.example
+  icon: mdi:spotify
   artwork: cover
-  source: icon
   hide:
     volume: true
     source: true
@@ -202,27 +212,31 @@ Setting either `volume` and/or `controls` to `true` in the `hide` option object 
 #### Card with media shortcuts
 You can specify media shortcuts through the `shortcuts` option, either as a list or as buttons or why not both?
 
-<img src="https://user-images.githubusercontent.com/457678/52081832-800cec80-259b-11e9-94c4-9025d1e38115.png" width="500px" alt="Card with media shortcuts example">
+<img src="https://user-images.githubusercontent.com/457678/53040712-5e0fd700-3482-11e9-9990-6ca13b871f50.png" width="500px" alt="Card with media shortcuts example">
 
 ```yaml
 - entity: media_player.spotify
   type: custom:mini-media-player
   artwork: cover
+  source: icon
   hide:
-    source: true
-    controls: true
+    volume: true
   shortcuts:
+    columns: 4 # Max buttons per row
     buttons:
       # Start predefined playlist
-      - name: Favorites
-        icon: mdi:heart
+      - icon: mdi:cat
         type: playlist
         id: spotify:user:spotify:playlist:37i9dQZF1DZ06evO2O09Hg
       # Change the source to bathroom
-      - name: Bathroom
-        icon: mdi:speaker-wireless
+      - icon: mdi:dog
         type: source
         id: Bathroom
+      # Trigger script
+      - icon: mdi:dog
+        type: script
+        id: script.script_name
+      ... # etc.
 ```
 
 #### Grouped cards

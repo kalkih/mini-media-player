@@ -1,3 +1,10 @@
+## v1.0.2
+- NEW: Added two theme variables
+- NEW: Option `columns` for shortcut buttons, to specify max amount of buttons per row (#78)
+- FIXED: Buttons to work with HA > v0.88.0 (#82)
+- CHANGE: Removed enforced uppercase for shortcut buttons (#74)
+- CHANGE: Changed color of media info when `artwork` is set to `cover` / `full-cover`
+
 ## v1.0.1
 - NEW: Support for Standby state in idle view, see `idle_view` -> `when_standby` (#73)
 - NEW: Option `icon_state`, change icon color depending on entity state (#77)
