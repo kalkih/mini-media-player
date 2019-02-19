@@ -299,8 +299,8 @@ const style = css`
     color: var(--mmp-accent-color) !important;
   }
   ha-card[artwork*='cover'][has-artwork] .entity__info__media {
-    color: #FFFFFF;
-    opacity: .8;
+    color: var(--mini-media-player-media-cover-info-color, #FFFFFF);
+    opacity: .85;
   }
   paper-icon-button {
     transition: color .25s ease-in-out;
