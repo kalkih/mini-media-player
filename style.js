@@ -334,20 +334,22 @@ const style = css`
   }
   .media-dropdown {
     box-sizing: border-box;
-    padding: 0;
     width: 100%;
-    margin-top: 8px;
+    padding: 8px 8px 0 0;
   }
   .media-dropdown__button {
-    border-bottom: 1px solid var(--primary-text-color);
-    border-radius: 0;
     display: flex;
     font-size: 1em;
     justify-content: space-between;
     margin: 0;
-    opacity: .75;
-    padding: 0 8px 0 0;
-    width: 100%;
+    border-bottom: 1px solid var(--primary-text-color);
+    opacity: .8;
+  }
+  .media-dropdown__button > div {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
   }
   .media-dropdown__label {
     padding: .2em .2em .2em 0;
@@ -473,13 +475,17 @@ const style = css`
     padding: 0;
   }
   paper-menu-button[focused] mwc-button > iron-icon,
-  paper-menu-button[focused] paper-icon-button {
+  paper-menu-button[focused] mwc-button > div > iron-icon,
+  paper-menu-button[focused] paper-icon-button,
+  ha-card[artwork*='cover'][has-artwork] paper-menu-button[focused] paper-icon-button {
     color: var(--mmp-accent-color);
     transform: rotate(180deg);
   }
   paper-menu-button mwc-button:focus iron-icon,
+  paper-menu-button mwc-button:focus > div iron-icon,
   paper-menu-button mwc-button[focused] iron-icon,
-  paper-menu-button[focused] paper-icon-button[focused] {
+  paper-menu-button[focused] paper-icon-button[focused],
+  ha-card[artwork*='cover'][has-artwork] paper-menu-button[focused] paper-icon-button[focused] {
     color: var(--primary-text-color);
     transform: rotate(0deg);
   }

@@ -574,14 +574,16 @@ class MiniMediaPlayer extends LitElement {
         noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
         @click='${e => e.stopPropagation()}'>
         <mwc-button class='media-dropdown__button' slot='dropdown-trigger'>
+          <div>
           <span class='media-dropdown__label'>
             ${'Select media...'}
           </span>
-          <iron-icon class='media-dropdown__icon' .icon=${ICON.MENU}></iron-icon>
+            <iron-icon class='media-dropdown__icon' .icon=${ICON.DROPDOWN}></iron-icon>
+          </div>
         </mwc-button>
         <paper-listbox slot="dropdown-content" class="media-dropdown-trigger">
           ${items.map((item, i) => html`
-            <paper-item value=${i} @click=${e => this._handleShortcut(e, 'list', i)}>
+            <paper-item @click=${e => this._handleShortcut(e, 'list', i)}>
               ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
               ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}
             </paper-item>`)}
