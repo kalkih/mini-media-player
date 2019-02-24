@@ -579,10 +579,9 @@ class MiniMediaPlayer extends LitElement {
           </span>
           <iron-icon class='media-dropdown__icon' .icon=${ICON.MENU}></iron-icon>
         </mwc-button>
-        <paper-listbox slot="dropdown-content" class="media-dropdown-trigger"
-          @click='${e => this._handleQuickSelect(e, 'list', e.target.getAttribute('value'))}'>
+        <paper-listbox slot="dropdown-content" class="media-dropdown-trigger">
           ${items.map((item, i) => html`
-            <paper-item value=${i}>
+            <paper-item value=${i} @click=${e => this._handleShortcut(e, 'list', i)}>
               ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
               ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}
             </paper-item>`)}
@@ -598,7 +597,7 @@ class MiniMediaPlayer extends LitElement {
         ${items.map((item, i) => html`
           <mwc-button dense raised columns=${this.config.shortcuts.columns}
             class='media-buttons__button'
-            @click='${e => this._handleQuickSelect(e, 'buttons', i)}'>
+            @click='${e => this._handleShortcut(e, 'buttons', i)}'>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
             ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}
           </mwc-button>`)}
@@ -659,7 +658,7 @@ class MiniMediaPlayer extends LitElement {
     input.value = '';
   }
 
-  _handleQuickSelect(e, entity, i) {
+  _handleShortcut(e, entity, i) {
     const { type, id } = this.config.shortcuts[entity][i];
     if (type === 'source')
       return this._handleSource(e, id);
