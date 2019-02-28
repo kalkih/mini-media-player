@@ -135,6 +135,9 @@ const style = css`
     color: #FFFFFF;
     border-color: #FFFFFF;
   }
+  ha-card[artwork*='cover'][has-artwork] paper-slider {
+    --paper-slider-container-color: rgba(255,255,255,.75);
+  }
   ha-card[artwork*='cover'][has-artwork] mwc-button {
     --mdc-theme-primary: #FFFFFF;
     --mdc-theme-on-primary: #FFFFFF;
