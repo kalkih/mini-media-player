@@ -206,15 +206,26 @@ export default class MediaPlayerObject {
   }
 
   setVolume(e) {
-    const vol = parseFloat(e.target.value) / 100;
-    const entity = this.config.sonos.sync_volume
-      ? this.group
-      : this.config.entity;
-
+    let vol = parseFloat(e.target.value) / 100;
+    if (this.config.sonos.sync_volume) {
+      this.group.forEach((entity) => {
+        const conf = this.config.sonos.entities.find(entry => (entry.entity_id === entity));
+        if (conf.volume_offset) {
+          vol += (conf.volume_offset / 100);
+          if (vol > 1) vol = 1;
+          if (vol < 0) vol = 0;
+        }
+        this.callService(e, 'volume_set', {
+          entity_id: entity,
+          volume_level: vol,
+        });
+      });
+    } else {
     this.callService(e, 'volume_set', {
-      entity_id: entity || this.config.entity,
+        entity_id: this.config.entity,
       volume_level: vol,
     });
+  }
   }
 
   callService(e, service, inOptions) {
