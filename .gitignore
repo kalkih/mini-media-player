@@ -1,3 +1,4 @@
 /node_modules/
+/dist/
 package-lock.json
-mini-media-player-bundle.js
+.DS_Store

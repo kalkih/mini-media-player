@@ -1,10 +1,11 @@
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  input: 'main.js',
+  input: 'src/main.js',
   output: {
-    file: 'mini-media-player-bundle.js',
+    file: 'dist/mini-media-player-bundle.js',
     format: 'umd',
+    name: 'MiniMediaPlayer',
   },
   plugins: [
     resolve(),

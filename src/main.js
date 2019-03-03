@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import ResizeObserver from 'resize-observer-polyfill';
+import MediaPlayerObject from './model';
 import style from './style';
 
 if (!customElements.get('mwc-button')) {
@@ -15,14 +16,6 @@ const DEFAULT_HIDE = {
   artwork_border: true,
   icon_state: true,
 };
-const MEDIA_INFO = [
-  { attr: 'media_title' },
-  { attr: 'media_artist' },
-  { attr: 'media_series_title' },
-  { attr: 'media_season', prefix: 'S' },
-  { attr: 'media_episode', prefix: 'E' },
-  { attr: 'app_name' },
-];
 const ICON = {
   DEFAULT: 'mdi:cast',
   DROPDOWN: 'mdi:chevron-down',
@@ -46,20 +39,19 @@ const ICON = {
   VOL_UP: 'mdi:volume-plus',
 };
 const UPDATE_PROPS = ['entity', 'source', '_progress', '_pos', '_overflow',
-  'break', 'thumbnail', 'edit'];
-const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
+  'break', 'thumbnail', 'edit', 'idleView'];
 const BREAKPOINT = 390;
 
 class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
     this._overflow = false;
-    this.idle = false;
     this.break = true;
     this.initial = true;
     this.picture = false;
     this.thumbnail = false;
     this.edit = false;
+    this.idleView = false;
   }
 
   static get properties() {
@@ -67,9 +59,8 @@ class MiniMediaPlayer extends LitElement {
       _hass: {},
       config: {},
       entity: {},
+      player: {},
       source: String,
-      active: Boolean,
-      idle: Boolean,
       _overflow: Boolean,
       break: Boolean,
       initial: Boolean,
@@ -78,6 +69,7 @@ class MiniMediaPlayer extends LitElement {
       edit: Boolean,
       _progress: Boolean,
       _pos: Number,
+      idleView: Boolean,
     };
   }
 
@@ -90,8 +82,10 @@ class MiniMediaPlayer extends LitElement {
     this._hass = hass;
     if (entity && this.entity !== entity) {
       this.entity = entity;
-      this.active = this._isActive();
-      this.progress = this._hasProgress();
+      this.player = new MediaPlayerObject(hass, this.config, entity);
+      this.progress = this.player.hasProgress;
+      this.idleView = this.player.idle;
+      if (this.player.trackIdle) this._updateIdle();
     }
   }
 
@@ -156,7 +150,7 @@ class MiniMediaPlayer extends LitElement {
 
   shouldUpdate(changedProps) {
     const update = UPDATE_PROPS.some(prop => changedProps.has(prop));
-    return update && this.entity;
+    return update && this.player;
   }
 
   firstUpdated() {
@@ -188,7 +182,7 @@ class MiniMediaPlayer extends LitElement {
     clearInterval(this._progressTracker);
   }
 
-  render({ config, entity } = this) {
+  render({ config } = this) {
     const artwork = this._computeArtwork();
     const responsive = this.break ? 'break-width' : config.hide.icon
       ? 'break-icon' : 'none';
@@ -197,16 +191,16 @@ class MiniMediaPlayer extends LitElement {
       <ha-card break=${responsive} ?initial=${this.initial}
         ?bg=${config.background} ?group=${config.group}
         ?more-info=${config.more_info} ?has-title=${config.title !== ''}
-        artwork=${config.artwork} ?has-artwork=${artwork} state=${entity.state}
+        artwork=${config.artwork} ?has-artwork=${artwork} state=${this.player.state}
         ?flow=${config.flow} ?collapse=${config.collapse}
-        content=${this._computeContent()}
+        content=${this.player.content}
         @click='${e => this._handleMore(e)}'>
         <div class='bg'>
           ${this._renderArtwork(artwork)}
         </div>
         <header>${config.title}</header>
         <div class='player'>
-          <div class='entity flex' ?inactive=${!this.active}>
+          <div class='entity flex' ?inactive=${this.player.idle}>
             ${this._renderIcon(artwork)}
             <div class='entity__info'>
               ${this._renderEntityName()}
@@ -218,7 +212,7 @@ class MiniMediaPlayer extends LitElement {
           </div>
           <div class='rows'>
             <div class='control-row flex'>
-              ${!config.collapse && this.active ? this._renderControlRow() : ''}
+              ${!config.collapse && this.player.active ? this._renderControlRow() : ''}
             </div>
             ${config.shortcuts.buttons ? this._renderButtons() : ''}
             ${config.shortcuts.list ? this._renderList() : ''}
@@ -230,40 +224,31 @@ class MiniMediaPlayer extends LitElement {
       </ha-card>`;
   }
 
-  _computeContent() {
-    return this.entity.attributes.media_content_type || 'none';
+  get name() {
+    return this.config.name || this.player.name;
   }
 
-  _computeName() {
-    return this.config.name || this.entity.attributes.friendly_name;
-  }
-
-  _computeNameExtra() {
-    const group = this.entity.attributes.sonos_group;
-    if (this.config.sonos.show_group_count && group) {
-      const num = group.length - 1 || 0;
-      return num ? ` +${num}` : '';
+  _speakerCount() {
+    if (this.config.sonos.show_group_count) {
+      const count = this.player.groupCount;
+      return count > 1 ? ` +${count - 1}` : '';
     }
   }
 
   _computeArtwork() {
-    const picture = this.entity.attributes.entity_picture;
-    const artwork = !!((picture && picture !== '')
-      && this.config.artwork !== 'none'
-      && this.active
-      && !this.idle);
-
-    if (artwork && picture !== this.picture) {
-      this._fetchThumbnail();
+    const { picture, hasArtwork } = this.player;
+    if (hasArtwork && picture !== this.picture) {
+      this.player.fetchThumbnail().then((res) => {
+        this.thumbnail = res;
+      });
       this.picture = picture;
     }
-
-    return !!(artwork && this.thumbnail);
+    return !!(hasArtwork && this.thumbnail);
   }
 
   _computeIcon() {
     return this.config.icon
-      ? this.config.icon : this.entity.attributes.icon
+      ? this.config.icon : this.player.icon
       || ICON.DEFAULT;
   }
 
@@ -271,7 +256,7 @@ class MiniMediaPlayer extends LitElement {
     const ele = this.shadowRoot.querySelector('.marquee');
     if (ele) {
       const status = ele.clientWidth > ele.parentNode.clientWidth;
-      this.overflow = status && this.active ? 7.5 + (ele.clientWidth / 50) : false;
+      this.overflow = status && this.player.active ? 7.5 + (ele.clientWidth / 50) : false;
     }
   }
 
@@ -294,18 +279,18 @@ class MiniMediaPlayer extends LitElement {
 
   _renderIcon(artwork) {
     if (this.config.hide.icon) return;
-    if (this.active && artwork && this.config.artwork === 'default')
+    if (this.player.active && artwork && this.config.artwork === 'default')
       return html`
         <div class='entity__artwork' ?border=${!this.config.hide.artwork_border}
           style='background-image: ${this.thumbnail};'
-          state=${this.entity.state}>
+          state=${this.player.state}>
         </div>`;
 
     return html`
       <div class='entity__icon'>
         <ha-icon
           icon=${this._computeIcon()}
-          ?color=${!this.config.hide.icon_state && (this.active || this.idle)}>
+          ?color=${!this.config.hide.icon_state && (this.player.active || this.idle)}>
         </ha-icon>
       </div>`;
   }
@@ -314,8 +299,8 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <paper-icon-button class='power-button'
         .icon=${ICON.POWER}
-        @click='${e => this._handlePower(e)}'
-        ?color=${!this.config.hide.power_state && (this.active || this.idle)}>
+        @click='${e => this.player.toggle(e)}'
+        ?color=${!this.config.hide.power_state && (this.player.active || this.idle)}>
       </paper-icon-button>`;
   }
 
@@ -330,21 +315,16 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.hide.name) return;
     return html`
       <div class='entity__info__name'>
-        ${this._computeName()}
-        ${this._computeNameExtra()}
+        ${this.name} ${this._speakerCount()}
       </div>`;
   }
 
   _renderMediaInfo() {
     if (this.config.hide.info) return;
-    const items = MEDIA_INFO.map(item => ({
-      text: this._getAttribute(item.attr),
-      prefix: '',
-      ...item,
-    })).filter(item => item.text);
+    const items = this.player.mediaInfo;
     return html`
       <div class='entity__info__media'
-        ?short=${this.config.info === 'short' || !this.active} ?scroll=${this.overflow}
+        ?short=${this.config.info === 'short' || !this.player.active} ?scroll=${this.overflow}
         style='animation-duration: ${this.overflow}s;'>
         ${this.config.info === 'scroll' ? html`
           <div>
@@ -357,11 +337,11 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderProgress() {
-    if (this.idle) return;
+    if (this.player.idle) return;
     return html`
       <div class='progress' @click=${e => this._handleSeek(e)}>
         <paper-progress class='transiting' value=${this.pos}
-          max=${this.entity.attributes.media_duration}>
+          max=${this.player.mediaDuration}>
         </paper-progress>
       </div>`;
   }
@@ -374,26 +354,26 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderIdleStatus() {
-    if (this._isPaused())
-      return this._renderButton(ICON.PLAY[this._isPlaying()], 'media_play_pause');
+    if (this.player.isPaused)
+      return this._renderButton(ICON.PLAY[this.player.isPlaying], 'media_play_pause');
     else
       return this._renderLabel('state.media_player.idle', 'Idle');
   }
 
   _renderShuffleButton() {
-    if (typeof this.entity.attributes.shuffle === 'undefined') return;
-    const shuffle = !this.entity.attributes.shuffle || false;
+    if (!this.player.supportShuffle) return;
+    const shuffle = !this.player.shuffle || false;
     return this._renderButton(ICON.SHUFFLE, 'shuffle_set', { shuffle }, !shuffle);
   }
 
   _renderPowerStrip({ config } = this) {
-    if (this.entity.state === 'unavailable')
+    if (this.player.isUnavailable)
       return this._renderLabel('state.default.unavailable', 'Unavailable');
 
     return html`
-      ${this.active && config.collapse ? this._renderControlRow() : ''}
+      ${this.player.active && config.collapse ? this._renderControlRow() : ''}
       <div class='power-row flex'>
-        ${this.idle ? this._renderIdleStatus() : ''}
+        ${this.player.idle ? this._renderIdleStatus() : ''}
         ${this._renderSource()}
         ${config.sonos.entities ? this._renderGroupButton() : ''}
         ${!config.hide.power ? this._renderPowerButton() : ''}
@@ -401,22 +381,17 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderGroupButton() {
-    const grouped = !this.entity.attributes.sonos_group
-      || this.entity.attributes.sonos_group.length <= 1;
-
     return html`
       <paper-icon-button .icon=${ICON.GROUP}
-        ?opaque=${grouped}
+        ?opaque=${this.player.groupCount}
         ?color=${this.edit}
-        @click='${e => this._handleGroupButton(e)}'>
+        @click=${e => this._handleGroupButton(e)}>
       </paper-icon-button>`;
   }
 
   _renderGroupList() {
     const { entities } = this.config.sonos;
-    const group = this.entity.attributes.sonos_group || [];
-    const master = group[0] || this.config.entity;
-    const isMaster = master === this.config.entity;
+    const { group, master, isMaster } = this.player;
 
     return html`
       <div class='speaker-select'>
@@ -457,13 +432,12 @@ class MiniMediaPlayer extends LitElement {
       </paper-checkbox>`;
   }
 
-  _renderSource({ entity } = this) {
-    const sources = entity.attributes.source_list || false;
-    if (!sources || this.config.hide.source) return;
+  _renderSource() {
+    const { source, sources } = this.player;
+    if (sources.length === 0 || this.config.hide.source) return;
 
-    const source = entity.attributes.source || '';
     const selected = sources.indexOf(source);
-    const button = this.config.source === 'icon' || this.config.collapse || this.break || this.idle
+    const button = this.config.source === 'icon' || this.config.collapse || this.break || this.player.idle
       ? html`<paper-icon-button class='source-menu__button' slot='dropdown-trigger' .icon=${ICON.DROPDOWN}></paper-icon-button>`
       : html`
         <mwc-button class='source-menu__button' slot='dropdown-trigger'>
@@ -499,44 +473,41 @@ class MiniMediaPlayer extends LitElement {
   _renderMediaControls() {
     return html`
       ${this._renderButton(ICON.PREV, 'media_previous_track')}
-      ${this._renderButton(ICON.PLAY[this._isPlaying()], 'media_play_pause')}
+      ${this._renderButton(ICON.PLAY[this.player.isPlaying], 'media_play_pause')}
       ${this._renderButton(ICON.NEXT, 'media_next_track')}`;
   }
 
   _renderVolControls() {
-    const muted = this.entity.attributes.is_volume_muted || false;
     if (this.config.volume_stateless)
-      return this._renderVolButtons(muted);
+      return this._renderVolButtons(this.player.muted);
     else
-      return this._renderVolSlider(muted);
+      return this._renderVolSlider(this.player.muted);
   }
 
   _renderMuteButton(muted) {
     if (this.config.hide.mute) return;
-    const options = { is_volume_muted: !muted };
     switch (this.config.replace_mute) {
       case 'play':
-        return this._renderButton(ICON.PLAY[this._isPlaying()], 'media_play_pause');
+        return this._renderButton(ICON.PLAY[this.player.isPlaying], 'media_play_pause');
       case 'stop':
         return this._renderButton(ICON.STOP, 'media_stop');
       case 'next':
         return this._renderButton(ICON.NEXT, 'media_next_track');
       default:
-        return this._renderButton(ICON.MUTE[muted], 'volume_mute', options);
+        return this._renderButton(ICON.MUTE[muted], 'volume_mute', { is_volume_muted: !muted });
     }
   }
 
   _renderVolSlider(muted = false) {
-    const volSliderVal = this.entity.attributes.volume_level * 100;
     return html`
       <div class='vol-control flex'>
         <div>
           ${this._renderMuteButton(muted)}
         </div>
         <paper-slider ?disabled=${muted}
-          @change='${e => this._handleVolumeChange(e)}'
-          @click='${e => e.stopPropagation()}'
-          min='0' max=${this.config.max_volume} value=${volSliderVal}
+          @change=${e => this.player.setVolume(e)}
+          @click=${e => e.stopPropagation()}
+          min='0' max=${this.config.max_volume} value=${this.player.vol * 100}
           ignore-bar-touch pin>
         </paper-slider>
       </div>`;
@@ -567,7 +538,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderList() {
-    if (this.config.shortcuts.hide_when_off && !this.active) return;
+    if (this.config.shortcuts.hide_when_off && !this.player.active) return;
     const items = this.config.shortcuts.list;
     return html`
       <paper-menu-button class='media-dropdown'
@@ -592,7 +563,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderButtons() {
-    if (this.config.shortcuts.hide_when_off && !this.active) return;
+    if (this.config.shortcuts.hide_when_off && !this.player.active) return;
     const items = this.config.shortcuts.buttons;
     return html`
       <div class='media-buttons'>
@@ -615,32 +586,10 @@ class MiniMediaPlayer extends LitElement {
     this.hass.callService(component, service, options);
   }
 
-  _handleVolumeChange(e) {
-    const volPercentage = parseFloat(e.target.value);
-    const vol = volPercentage > 0 ? volPercentage / 100 : 0;
-    const entity = this.config.sonos.sync_volume
-      ? this.entity.attributes.sonos_group
-      : this.config.entity;
-
-    this._callService(e, 'volume_set', {
-      entity_id: entity || this.config.entity,
-      volume_level: vol,
-    });
-  }
-
   _handleSeek(e) {
-    const duration = this.entity.attributes.media_duration || 0;
+    const duration = this.player.mediaDuration;
     const pos = (e.offsetX / e.target.offsetWidth) * duration;
     this._callService(e, 'media_seek', { seek_position: pos });
-  }
-
-  _handlePower(e) {
-    if (this.config.toggle_power)
-      return this._callService(e, 'toggle');
-    if (this.entity.state === 'off')
-      return this._callService(e, 'turn_on');
-    else
-      this._callService(e, 'turn_off');
   }
 
   _handleTts(e) {
@@ -673,14 +622,18 @@ class MiniMediaPlayer extends LitElement {
     this._callService(e, 'play_media', options);
   }
 
-  _handleMore(e, { config } = this) {
-    if (config.more_info)
-      return this._fire('hass-more-info', { entityId: config.entity });
+  _handleMore(e) {
     e.stopPropagation();
+    if (!this.config.more_info) return;
+    const ev = new Event('hass-more-info', {
+      composed: true,
+    });
+    ev.detail = { entityId: this.config.entity };
+    this.dispatchEvent(e);
   }
 
   _handleSource(e, source) {
-    this._callService(e, 'select_source', { source });
+    this.player.setSource(e, source);
     this.source = source;
   }
 
@@ -699,107 +652,30 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
-  _fire(type, detail = {}, options = {}) {
-    const e = new Event(type, {
-      bubbles: options.bubbles === undefined ? true : options.bubbles,
-      cancelable: Boolean(options.cancelable),
-      composed: options.composed === undefined ? true : options.composed,
-    });
-    e.detail = detail;
-    this.dispatchEvent(e);
-    return e;
-  }
-
   _updateProgress() {
-    this.pos = this._computeProgress;
+    this.pos = this.player.progress;
     if (!this._progressTracker)
       this._progressTracker = setInterval(() => this._updateProgress(), 1000);
-    if (!this._isPlaying()) {
+    if (!this.player.isPlaying) {
       this.progress = 'paused';
       clearInterval(this._progressTracker);
       this._progressTracker = null;
     }
   }
 
-  _hasProgress() {
-    return !this.config.hide.progress
-      && !this.idle
-      && PROGRESS_PROPS.every(prop => prop in this.entity.attributes);
-  }
-
-  get _computeProgress() {
-    const updated = this.entity.attributes.media_position_updated_at;
-    const pos = this.entity.attributes.media_position;
-    return pos + (Date.now() - new Date(updated).getTime()) / 1000.0;
-  }
-
-  _isPaused() {
-    return this.entity.state === 'paused';
-  }
-
-  _isPlaying() {
-    return this.entity.state === 'playing';
-  }
-
-  _isIdle() {
-    return this.entity.state === 'idle';
-  }
-
-  _isStandby() {
-    return this.entity.state === 'standby';
-  }
-
-  _isActive() {
-    if (this.config.idle_view) this.idle = this._computeIdle();
-    return (this.entity.state !== 'off'
-      && this.entity.state !== 'unavailable'
-      && !this.idle) || false;
-  }
-
-  _computeIdle() {
-    const idle = this.config.idle_view;
-    if (idle.when_idle && this._isIdle()
-      || idle.when_standby && this._isStandby()
-      || idle.when_paused && this._isPaused())
-      return true;
-
-    const updated = this.entity.attributes.media_position_updated_at;
-    if (!updated || !idle.after || this._isPlaying())
-      return false;
-
-    const diff = (Date.now() - new Date(updated).getTime()) / 1000;
-    if (diff > idle.after * 60)
-      return true;
-
-    if (this._inactiveTracker) clearTimeout(this._inactiveTracker);
-    this._inactiveTracker = setTimeout(() => {
-      this.active = this._isActive();
-      this._inactiveTracker = null;
-    }, ((idle.after * 60) - diff) * 1000);
-
-    return false;
-  }
-
-  _getAttribute(attr) {
-    return this.entity.attributes[attr] || '';
+  _updateIdle() {
+    if (this._idleTracker) clearTimeout(this._idleTracker);
+    const diff = (Date.now() - new Date(this.player.updatedAt).getTime()) / 1000;
+    this._idleTracker = setTimeout(() => {
+      this.idleView = this.player.checkIdleAfter(this.config.idle_view.after);
+      this._idleTracker = null;
+    }, ((this.config.idle_view.after * 60) - diff) * 1000);
   }
 
   _getLabel(label, fallback = 'unknown') {
     const lang = this.hass.selectedLanguage || this.hass.language;
     const resources = this.hass.resources[lang];
     return (resources && resources[label] ? resources[label] : fallback);
-  }
-
-  async _fetchThumbnail() {
-    try {
-      const { content_type: contentType, content } = await this.hass.callWS({
-        type: 'media_player_thumbnail',
-        entity_id: this.config.entity,
-      });
-      this.thumbnail = `url(data:${contentType};base64,${content})`;
-    } catch (err) {
-      this.thumbnail = false;
-    }
   }
 
   getCardSize() {
