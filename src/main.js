@@ -194,7 +194,7 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork} state=${this.player.state}
         ?flow=${config.flow} ?collapse=${config.collapse}
         content=${this.player.content}
-        @click='${e => this._handleMore(e)}'>
+        @click=${() => this._handleMore()}>
         <div class='bg'>
           ${this._renderArtwork(artwork)}
         </div>
@@ -622,13 +622,10 @@ class MiniMediaPlayer extends LitElement {
     this._callService(e, 'play_media', options);
   }
 
-  _handleMore(e) {
-    e.stopPropagation();
+  _handleMore() {
     if (!this.config.more_info) return;
-    const ev = new Event('hass-more-info', {
-      composed: true,
-    });
-    ev.detail = { entityId: this.config.entity };
+    const e = new Event('hass-more-info', { composed: true });
+    e.detail = { entityId: this.config.entity };
     this.dispatchEvent(e);
   }
 
