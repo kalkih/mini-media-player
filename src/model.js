@@ -221,11 +221,11 @@ export default class MediaPlayerObject {
         });
       });
     } else {
-    this.callService(e, 'volume_set', {
+      this.callService(e, 'volume_set', {
         entity_id: this.config.entity,
-      volume_level: vol,
-    });
-  }
+        volume_level: vol,
+      });
+    }
   }
 
   callService(e, service, inOptions) {
