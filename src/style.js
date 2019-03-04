@@ -306,7 +306,7 @@ const style = css`
     opacity: .85;
   }
   paper-icon-button {
-    transition: color .25s ease-in-out;
+    transition: color .15s ease-in-out;
     will-change: color;
   }
   .entity__info__media span:before {
@@ -430,6 +430,10 @@ const style = css`
   .vol-control {
     flex: 1;
     max-height: 40px;
+  }
+  .group-button {
+    height: 85%;
+    margin: auto;
   }
   .speaker-select {
     display: flex;

@@ -19,7 +19,7 @@ const DEFAULT_HIDE = {
 const ICON = {
   DEFAULT: 'mdi:cast',
   DROPDOWN: 'mdi:chevron-down',
-  GROUP: 'mdi:google-circles-communities',
+  GROUP: 'mdi:speaker-multiple',
   MENU: 'mdi:menu-down',
   MUTE: {
     true: 'mdi:volume-off',
@@ -382,8 +382,8 @@ class MiniMediaPlayer extends LitElement {
 
   _renderGroupButton() {
     return html`
-      <paper-icon-button .icon=${ICON.GROUP}
-        ?opaque=${this.player.groupCount}
+      <paper-icon-button class='group-button' .icon=${ICON.GROUP}
+        ?opaque=${this.player.groupCount < 2}
         ?color=${this.edit}
         @click=${e => this._handleGroupButton(e)}>
       </paper-icon-button>`;
