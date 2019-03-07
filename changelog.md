@@ -1,3 +1,13 @@
+## v1.0.3
+- NEW: option `volume_offset` for sonos entity object for use with synced volume (#88)
+- NEW: Icon for speaker group button (#92)
+- NEW: TTS Support for modified sonos_say script (#86)
+- CHANGE: Volume slider color when cover artwork is present
+- FIXED: Shortcut list throwing errors
+- FIXED: Shortcut list dropdown button design for new mwx-button
+- FIXED: Minor flaws with scrolling media info (#93)
+- FIXED: Prevent unsupported tts parameters from being sent to alexa_tts (would cause errors in backend)
+
 ## v1.0.2
 - NEW: Added two theme variables
 - NEW: Option `columns` for shortcut buttons, to specify max amount of buttons per row (#78)

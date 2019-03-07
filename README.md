@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.2
+    - url: /local/mini-media-player-bundle.js?v=1.0.3
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.2/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.3/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.2
+    - url: /local/mini-media-player-bundle.js?v=1.0.3
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.2
+    - url: /local/mini-media-player-bundle.js?v=1.0.3
       type: module
   ```
 
@@ -107,12 +107,13 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 #### TTS object
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component or `ga` for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay).
+| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component, `ga` for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay), `sonos` for use with modified [sonos_say script](https://github.com/kalkih/mini-media-player/issues/86#issuecomment-465541825).
 | language | string | optional | The output language.
 | entity_id | string/list | optional | The *entity_id* of the desired output entity or a list of *entity_id's*, can also be `all` to broadcast to all entities.
+| volume | float | optional | Volume level of tts message (0 - 1), only supported by `sonos` at the moment.
 
-Using the `ga` platform will restrict the use of `language` & `entity_id` options.
-It also requires that a custom notify service is set up with the name `ga_broadcast`, example below.
+Using the `ga` platform will restrict the use of `language` & `entity_id` options, this also applies to `alexa` & `sonos` (sonos_say script).
+Using `ga` also requires that a custom notify service is set up with the name `ga_broadcast`, example below.
 
 ```yaml
 # configuration.yaml
@@ -137,6 +138,7 @@ See [Sonos group management](#sonos-group-management) for example usage.
 |------|------|---------|-------------|
 | entity_id | string | **required** | The *entity_id* for the Sonos entity.
 | name | string | **required** | A display name.
+| volume_offset | number | optional | Volume offset *(0-100)* when used with `sync_volume`.
 
 #### Shortcuts object
 See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
