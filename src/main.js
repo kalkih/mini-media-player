@@ -598,15 +598,22 @@ class MiniMediaPlayer extends LitElement {
 
   _handleTts(e) {
     const input = this.shadowRoot.querySelector('.tts paper-input');
-    const options = { message: input.value };
+    const message = input.value;
+    const options = { message };
     if (this.config.tts.entity_id)
       options.entity_id = this.config.tts.entity_id;
     if (this.config.tts.language)
       options.language = this.config.tts.language;
     if (this.config.tts.platform === 'alexa')
       this._callService(e, 'alexa_tts', options);
+    else if (this.config.tts.platform === 'sonos')
+      this.hass.callService('script', 'sonos_say', {
+        sonos_entity: this.config.entity,
+        volume: this.config.tts.volume || 0.5,
+        message,
+      });
     else if (this.config.tts.platform === 'ga')
-      this.hass.callService('notify', 'ga_broadcast', { message: input.value });
+      this.hass.callService('notify', 'ga_broadcast', { message });
     else
       this._callService(e, `${this.config.tts.platform}_say`, options, 'tts');
     e.stopPropagation();
