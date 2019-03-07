@@ -16,6 +16,10 @@ export default class MediaPlayerObject {
     this.entity = entity || {};
     this.state = this.entity.state;
     this.attr = entity.attributes;
+    // this.attr.sonos_group = [
+    //   "media_player.spotify",
+    //   "media_player.chromecast_kontor",
+    // ];
     this.idle = this.config.idle_view ? this.idleView : false;
     this.active = this.isActive;
   }
@@ -159,6 +163,7 @@ export default class MediaPlayerObject {
       this.active
       && !this.isPlaying
       && this.updatedAt
+      && this.config.idle_view
       && this.config.idle_view.after
     );
   }
