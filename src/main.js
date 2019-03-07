@@ -175,7 +175,10 @@ class MiniMediaPlayer extends LitElement {
   }
 
   updated() {
-    if (this.config.info === 'scroll') this._computeOverflow();
+    if (this.config.info === 'scroll')
+      setTimeout(() => {
+        this._computeOverflow();
+      }, 10);
   }
 
   disconnectedCallback() {
@@ -324,7 +327,8 @@ class MiniMediaPlayer extends LitElement {
     const items = this.player.mediaInfo;
     return html`
       <div class='entity__info__media'
-        ?short=${this.config.info === 'short' || !this.player.active} ?scroll=${this.overflow}
+        ?short=${this.config.info === 'short' || !this.player.active}
+        ?short-scroll=${this.config.info === 'scroll'} ?scroll=${this.overflow}
         style='animation-duration: ${this.overflow}s;'>
         ${this.config.info === 'scroll' ? html`
           <div>

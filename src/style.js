@@ -263,7 +263,8 @@ const style = css`
   .attr__app_name {
     display: none;
   }
-  .attr__app_name:first-child {
+  .attr__app_name:first-child,
+  .attr__app_name:first-of-type {
     display: inline;
   }
   .entity[inactive] .entity__info__media {
@@ -271,6 +272,10 @@ const style = css`
   }
   .entity[inactive] .entity__info__media {
     max-width: 200px;
+  }
+  .entity__info__media[short-scroll] {
+    max-height: 20px;
+    white-space: nowrap;
   }
   .entity__info__media[scroll] > span {
     visibility: hidden;
@@ -288,7 +293,6 @@ const style = css`
   }
   .entity__info__media[scroll] {
     animation-duration: 10s;
-    text-overflow: clip !important;
     mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
   }
