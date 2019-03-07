@@ -605,7 +605,7 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.tts.language)
       options.language = this.config.tts.language;
     if (this.config.tts.platform === 'alexa')
-      this._callService(e, 'alexa_tts', options);
+      this._callService(e, 'alexa_tts', { message });
     else if (this.config.tts.platform === 'sonos')
       this.hass.callService('script', 'sonos_say', {
         sonos_entity: this.config.entity,
