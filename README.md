@@ -368,7 +368,7 @@ $ git clone https://github.com/kalkih/mini-media-player.git
 
 ```yaml
 resources:
-  - url: /local/mini-media-player/mini-media-player-bundle.js
+  - url: /local/mini-media-player/dist/mini-media-player-bundle.js
     type: module
 ```
 
@@ -381,7 +381,7 @@ resources:
 $ cd mini-media-player && git checkout dev && npm install
 ```
 
-2. Make your changes to the source
+2. Make changes to the source
 
 3. Build the source by running
 ```console
@@ -390,11 +390,14 @@ $ npm run build
 
 4. Refresh the browser to see changes
 
-*To have the source automatically rebuilt on change*
+    *Make sure cache is cleared or disabled*
+
+5. *(Optional)* Watch the source and automatically rebuild on save
 ```console
 $ npm run watch
 ```
-*The `mini-media-player-bundle.js` will be rebuilt and ready.*
+
+*The new `mini-media-player-bundle.js` will be build and ready inside `/dist`.*
 
 
 ## Getting errors?
