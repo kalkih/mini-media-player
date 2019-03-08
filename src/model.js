@@ -16,10 +16,6 @@ export default class MediaPlayerObject {
     this.entity = entity || {};
     this.state = this.entity.state;
     this.attr = entity.attributes;
-    // this.attr.sonos_group = [
-    //   "media_player.spotify",
-    //   "media_player.chromecast_kontor",
-    // ];
     this.idle = this.config.idle_view ? this.idleView : false;
     this.active = this.isActive;
   }
@@ -211,18 +207,19 @@ export default class MediaPlayerObject {
   }
 
   setVolume(e) {
-    let vol = parseFloat(e.target.value) / 100;
+    const vol = parseFloat(e.target.value) / 100;
     if (this.config.sonos.sync_volume) {
       this.group.forEach((entity) => {
-        const conf = this.config.sonos.entities.find(entry => (entry.entity_id === entity));
+        const conf = this.config.sonos.entities.find(entry => (entry.entity_id === entity)) || {};
+        let offsetVol = vol;
         if (conf.volume_offset) {
-          vol += (conf.volume_offset / 100);
-          if (vol > 1) vol = 1;
-          if (vol < 0) vol = 0;
+          offsetVol += (conf.volume_offset / 100);
+          if (offsetVol > 1) offsetVol = 1;
+          if (offsetVol < 0) offsetVol = 0;
         }
         this.callService(e, 'volume_set', {
           entity_id: entity,
-          volume_level: vol,
+          volume_level: offsetVol,
         });
       });
     } else {
