@@ -466,7 +466,7 @@ const style = css`
     font-weight: 600;
   }
   paper-slider {
-    max-width: 400px;
+    max-width: none;
     min-width: 100px;
     width: 100%;
   }
