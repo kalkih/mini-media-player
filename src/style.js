@@ -223,6 +223,10 @@ const style = css`
     will-change: border-color;
     transition: border-color .25s ease-out;
   }
+  ha-card[rtl] .entity__artwork, ha-card[rtl] .entity__icon {
+    margin-right: auto;
+    margin-left: 8px;
+  }
   .entity__artwork[border] {
     border: 2px solid var(--primary-text-color);
     box-sizing: border-box;
@@ -410,7 +414,7 @@ const style = css`
     width: auto;
     max-width: 100%;
   }
-  .control-row--top paper-slider {
+  .control-row--top ha-slider {
     flex: 1;
     height: 40px;
     line-height: initial;
@@ -465,7 +469,7 @@ const style = css`
   .speaker-select > paper-checkbox > span {
     font-weight: 600;
   }
-  paper-slider {
+  ha-slider {
     max-width: none;
     min-width: 100px;
     width: 100%;
@@ -573,7 +577,7 @@ const style = css`
   ha-card[flow] .entity__info {
     display: none;
   }
-  ha-card[flow] paper-slider,
+  ha-card[flow] ha-slider,
   ha-card[flow] .vol-control {
     width: 100%;
     max-width: none;
@@ -605,6 +609,9 @@ const style = css`
   @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+  .media-controls {
+    direction: ltr;
   }`;
 
 export default style;

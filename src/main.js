@@ -171,6 +171,7 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork} state=${this.player.state}
         ?flow=${config.flow} ?collapse=${config.collapse}
         content=${this.player.content}
+        ?rtl=${this._computeRTL(this.hass)}
         @click=${() => this._handleMore()}>
         <div class='bg'>
           ${this._renderArtwork(artwork)}
@@ -240,6 +241,18 @@ class MiniMediaPlayer extends LitElement {
   _computeRect(entry) {
     const { left, width } = entry.contentRect;
     this.break = (width + left * 2) < BREAKPOINT;
+  }
+
+  _computeRTL(hass) {
+    const lang = hass.language || "en";
+    if (hass.translationMetadata.translations[lang]) {
+      return hass.translationMetadata.translations[lang].isRTL || false;
+    }
+    return false;
+  }
+
+  _computeRTLDirection(hass) {
+    return this._computeRTL(hass) ? "rtl" : "ltr";
   }
 
   _renderArtwork(artwork) {
@@ -443,7 +456,7 @@ class MiniMediaPlayer extends LitElement {
       <div class='flex shuffle'>
         ${!this.config.hide.shuffle ? this._renderShuffleButton() : ''}
       </div>
-      <div class='flex'>
+      <div class='flex media-controls'>
         ${!this.config.hide.controls ? this._renderMediaControls() : ''}
       </div>`;
   }
@@ -482,12 +495,13 @@ class MiniMediaPlayer extends LitElement {
         <div>
           ${this._renderMuteButton(muted)}
         </div>
-        <paper-slider ?disabled=${muted}
+        <ha-slider ?disabled=${muted}
           @change=${e => this.player.setVolume(e)}
           @click=${e => e.stopPropagation()}
           min='0' max=${this.config.max_volume} value=${this.player.vol * 100}
+          dir=${this._computeRTLDirection(this.hass)}
           ignore-bar-touch pin>
-        </paper-slider>
+        </ha-slider>
       </div>`;
   }
 
