@@ -111,6 +111,8 @@ class MiniMediaPlayer extends LitElement {
       hide: { ...DEFAULT_HIDE, ...config.hide },
       speaker_group: {
         show_group_count: true,
+        platform: 'sonos',
+        ...config.sonos,
         ...config.speaker_group,
       },
     };
