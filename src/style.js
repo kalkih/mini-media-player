@@ -435,7 +435,7 @@ const style = css`
     margin-right: auto;
     margin-left: 0;
   }
-  .control-row--top ha-slider {
+  .control-row--top paper-slider {
     flex: 1;
     height: 40px;
     line-height: initial;
@@ -490,7 +490,7 @@ const style = css`
   .speaker-select > paper-checkbox > span {
     font-weight: 600;
   }
-  ha-slider {
+  paper-slider {
     max-width: none;
     min-width: 100px;
     width: 100%;
@@ -601,7 +601,7 @@ const style = css`
   ha-card[flow] .entity__info {
     display: none;
   }
-  ha-card[flow] ha-slider,
+  ha-card[flow] paper-slider,
   ha-card[flow] .vol-control {
     width: 100%;
     max-width: none;
