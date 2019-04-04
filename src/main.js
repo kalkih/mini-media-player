@@ -161,7 +161,11 @@ class MiniMediaPlayer extends LitElement {
       setTimeout(() => {
         this._computeOverflow();
       }, 10);
-  }
+
+      if(this.rtl) {
+        this.patchSliderForRTL();
+      }
+    }
 
   disconnectedCallback() {
     clearInterval(this._progressTracker);
@@ -694,7 +698,7 @@ class MiniMediaPlayer extends LitElement {
 
   patchSliderForRTL() {
     const slider = this.shadowRoot.querySelector("paper-slider");
-    if (slider) {
+    if (slider && !slider.classList.contains("rtlPatched")) {
       slider.shadowRoot.querySelector("style").appendChild(
         document.createTextNode(`
         :host([dir="rtl"]) #sliderContainer.pin.expand > .slider-knob > .slider-knob-inner::after {
@@ -703,6 +707,8 @@ class MiniMediaPlayer extends LitElement {
           }
         `)
       );
+
+      slider.classList.add("rtlPatched");
     }
   }
 }
