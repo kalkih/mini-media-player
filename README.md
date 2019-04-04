@@ -93,7 +93,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | toggle_power | boolean | true | v0.8.9 | Set to `false` to change the power button behaviour to `media_player.turn_on`/`media_player.turn_off`.
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
-| sonos | object | optional | v1.0.0 | Sonos group management, see [Sonos object](#sonos-object) for available options.
+| speaker_group | object | optional | v1.0.0 | Speaker group management for supported platforms, see [Speaker_group object](#speaker_group-object) for available options.
 | shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
 
 #### Idle object
@@ -123,20 +123,21 @@ notify:
     resource: http://[xxx.x.x.xxx]:5000/broadcast_message
 ```
 
-#### Sonos object
-See [Sonos group management](#sonos-group-management) for example usage.
+#### Speaker_group object
+See [Speaker_group management](#speaker_group-management) for example usage.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| entities | list | **required** | A list containing Sonos entities, to enable group management of Sonos speakers.
+| entities | list | **required** | A list containing speaker entities of one of supported platforms, to enable group management of those speakers.
+| platform | string | optional | Specify a media_player platform that supports speaker grouping by using 'join' and 'unjoin' services. `sonos` is working and `yamaha_musiccast` will be added shortly in Home-assisstant. Curently default to `sonos`.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
-| expanded | boolean | optional | Make the Sonos list expanded by default.
+| expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
 
-#### Sonos entity object
+#### Speaker entity object
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| entity_id | string | **required** | The *entity_id* for the Sonos entity.
+| entity_id | string | **required** | The *entity_id* for the speaker entity.
 | name | string | **required** | A display name.
 | volume_offset | number | optional | Volume offset *(0-100)* when used with `sync_volume`.
 
@@ -319,8 +320,8 @@ By using vertical and horizontal stacks, you can achieve many different setups.
         icon: true
 ```
 
-#### Sonos group management
-Specify all your Sonos entities in a list under the option `sonos` -> `entities`.
+#### Speaker_group management
+Specify all your speaker entities in a list under the option `speaker_group` -> `entities`. They obviously need to be of the same platform.
 
 * The card does only allow changes to be made to groups where the entity of the card is the coordinator/master speaker.
 * Checking a speakers in the list will make it join the group of the card entity. (*`media_player.sonos_office`* in the example below).
@@ -335,7 +336,8 @@ Specify all your Sonos entities in a list under the option `sonos` -> `entities`
     power: true
     icon: true
     source: true
-  sonos:
+  speaker_group:
+    platform: sonos
     show_group_count: true
     entities:
       - entity_id: media_player.sonos_office
@@ -350,7 +352,7 @@ Specify all your Sonos entities in a list under the option `sonos` -> `entities`
         name: Sonos Bedroom
 ```
 
-If you are planning to use the `sonos` option in several cards, creating a separate yaml file for the list is highly recommended, this will result in a less cluttered `ui-lovelace.yaml` and also make the list easier to manage and maintain.
+If you are planning to use the `speaker_group` option in several cards, creating a separate yaml file for the list is highly recommended, this will result in a less cluttered `ui-lovelace.yaml` and also make the list easier to manage and maintain.
 You then simply reference the file containing the list using `entities: !include filename.yaml` for every occurrence of `entities` in your `ui-lovelace.yaml`.
 
 This is however only possible when you have lovelace mode set to yaml in your HA configuration, see [Lovelace YAML mode](https://www.home-assistant.io/lovelace/yaml-mode/) for more info.
