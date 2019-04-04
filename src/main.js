@@ -26,6 +26,7 @@ class MiniMediaPlayer extends LitElement {
     this.thumbnail = false;
     this.edit = false;
     this.idleView = false;
+    this.rtl = false;
   }
 
   static get properties() {
@@ -59,6 +60,7 @@ class MiniMediaPlayer extends LitElement {
       this.player = new MediaPlayerObject(hass, this.config, entity);
       this.progress = this.player.hasProgress;
       this.idleView = this.player.idle;
+      this.rtl = this._computeRTL(hass);
       if (this.player.trackIdle) this._updateIdle();
     }
   }
@@ -147,7 +149,9 @@ class MiniMediaPlayer extends LitElement {
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.sonos.expanded || false;
 
-    this.patchSliderForRTL();
+    if(this.rtl) {
+      this.patchSliderForRTL();
+    }
   }
 
   updated() {
@@ -173,7 +177,7 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork} state=${this.player.state}
         ?flow=${config.flow} ?collapse=${config.collapse}
         content=${this.player.content}
-        ?rtl=${this._computeRTL(this.hass)}
+        ?rtl=${this.rtl}
         @click=${() => this._handleMore()}>
         <div class='bg'>
           ${this._renderArtwork(artwork)}
