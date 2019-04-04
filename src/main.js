@@ -146,6 +146,8 @@ class MiniMediaPlayer extends LitElement {
     ro.observe(this.shadowRoot.querySelector('.player'));
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.sonos.expanded || false;
+
+    this.patchSliderForRTL();
   }
 
   updated() {
@@ -495,13 +497,13 @@ class MiniMediaPlayer extends LitElement {
         <div>
           ${this._renderMuteButton(muted)}
         </div>
-        <ha-slider ?disabled=${muted}
+        <paper-slider ?disabled=${muted}
           @change=${e => this.player.setVolume(e)}
           @click=${e => e.stopPropagation()}
           min='0' max=${this.config.max_volume} value=${this.player.vol * 100}
           dir=${this._computeRTLDirection(this.hass)}
           ignore-bar-touch pin>
-        </ha-slider>
+        </paper-slider>
       </div>`;
   }
 
@@ -681,6 +683,20 @@ class MiniMediaPlayer extends LitElement {
 
   getCardSize() {
     return this.config.collapse ? 1 : 2;
+  }
+
+  patchSliderForRTL() {
+    const slider = this.shadowRoot.querySelector("paper-slider");
+    if (slider) {
+      slider.shadowRoot.querySelector("style").appendChild(
+        document.createTextNode(`
+        :host([dir="rtl"]) #sliderContainer.pin.expand > .slider-knob > .slider-knob-inner::after {
+          -webkit-transform: scale(1) translate(0, -17px) scaleX(-1) !important;
+          transform: scale(1) translate(0, -17px) scaleX(-1) !important;
+          }
+        `)
+      );
+    }
   }
 }
 
