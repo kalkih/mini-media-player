@@ -111,9 +111,11 @@ class MiniMediaPlayer extends LitElement {
       toggle_power: true,
       ...config,
       hide: { ...DEFAULT_HIDE, ...config.hide },
-      sonos: {
+      speaker_group: {
         show_group_count: true,
+        platform: 'sonos',
         ...config.sonos,
+        ...config.speaker_group,
       },
     };
     conf.max_volume = Number(conf.max_volume) || 100;
@@ -147,7 +149,7 @@ class MiniMediaPlayer extends LitElement {
     });
     ro.observe(this.shadowRoot.querySelector('.player'));
     setTimeout(() => this.initial = false, 250);
-    this.edit = this.config.sonos.expanded || false;
+    this.edit = this.config.speaker_group.expanded || false;
 
     if(this.rtl) {
       this.patchSliderForRTL();
@@ -213,7 +215,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _speakerCount() {
-    if (this.config.sonos.show_group_count) {
+    if (this.config.speaker_group.show_group_count) {
       const count = this.player.groupCount;
       return count > 1 ? ` +${count - 1}` : '';
     }
@@ -372,7 +374,7 @@ class MiniMediaPlayer extends LitElement {
       <div class='power-row flex'>
         ${this.player.idle ? this._renderIdleStatus() : ''}
         ${this._renderSource()}
-        ${config.sonos.entities ? this._renderGroupButton() : ''}
+        ${config.speaker_group.entities ? this._renderGroupButton() : ''}
         ${!config.hide.power ? this._renderPowerButton() : ''}
       </div>`;
   }
@@ -387,7 +389,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderGroupList() {
-    const { entities } = this.config.sonos;
+    const { entities } = this.config.speaker_group;
     const { group, master, isMaster } = this.player;
 
     return html`
@@ -650,12 +652,13 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _handleGroupItemChange(e, entity, checked) {
+    const { platform } = this.config.speaker_group;
     const options = { entity_id: entity };
     if (checked) {
       options.master = this.config.entity;
-      this._callService(e, 'SONOS_JOIN', options);
+      this._callService(e, `${platform}_JOIN`, options);
     } else {
-      this._callService(e, 'SONOS_UNJOIN', options);
+      this._callService(e, `${platform}_UNJOIN`, options);
     }
   }
 

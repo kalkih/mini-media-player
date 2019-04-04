@@ -83,7 +83,8 @@ export default class MediaPlayerObject {
   }
 
   get group() {
-    return this.attr.sonos_group || [];
+    const groupName = `${this.config.speaker_group.platform}_group`;
+    return this.attr[groupName] || [];
   }
 
   get master() {
@@ -208,9 +209,10 @@ export default class MediaPlayerObject {
 
   setVolume(e) {
     const vol = parseFloat(e.target.value) / 100;
-    if (this.config.sonos.sync_volume) {
+    if (this.config.speaker_group.sync_volume) {
       this.group.forEach((entity) => {
-        const conf = this.config.sonos.entities.find(entry => (entry.entity_id === entity)) || {};
+        const conf = this.config.speaker_group.entities.find(entry => (entry.entity_id === entity))
+          || {};
         let offsetVol = vol;
         if (conf.volume_offset) {
           offsetVol += (conf.volume_offset / 100);
