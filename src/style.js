@@ -135,7 +135,7 @@ const style = css`
     color: #FFFFFF;
     border-color: #FFFFFF;
   }
-  ha-card[artwork*='cover'][has-artwork] paper-slider {
+  ha-card[artwork*='cover'][has-artwork] ha-slider {
     --paper-slider-container-color: rgba(255,255,255,.75);
   }
   ha-card[artwork*='cover'][has-artwork] mwc-button {
@@ -435,7 +435,7 @@ const style = css`
     margin-right: auto;
     margin-left: 0;
   }
-  .control-row--top paper-slider {
+  .control-row--top ha-slider {
     flex: 1;
     height: 40px;
     line-height: initial;
@@ -490,7 +490,7 @@ const style = css`
   .speaker-select > paper-checkbox > span {
     font-weight: 600;
   }
-  paper-slider {
+  ha-slider {
     max-width: none;
     min-width: 100px;
     width: 100%;
@@ -601,7 +601,7 @@ const style = css`
   ha-card[flow] .entity__info {
     display: none;
   }
-  ha-card[flow] paper-slider,
+  ha-card[flow] ha-slider,
   ha-card[flow] .vol-control {
     width: 100%;
     max-width: none;
