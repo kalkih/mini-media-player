@@ -151,7 +151,7 @@ class MiniMediaPlayer extends LitElement {
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.speaker_group.expanded || false;
 
-    if(this.rtl) {
+    if (this.rtl) {
       this.patchSliderForRTL();
     }
   }
@@ -162,10 +162,10 @@ class MiniMediaPlayer extends LitElement {
         this._computeOverflow();
       }, 10);
 
-      if(this.rtl) {
-        this.patchSliderForRTL();
-      }
+    if (this.rtl) {
+      this.patchSliderForRTL();
     }
+  }
 
   disconnectedCallback() {
     clearInterval(this._progressTracker);
@@ -256,15 +256,15 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeRTL(hass) {
-    const lang = hass.language || "en";
+    const lang = hass.language || 'en';
     if (hass.translationMetadata.translations[lang]) {
       return hass.translationMetadata.translations[lang].isRTL || false;
     }
     return false;
   }
 
-  _computeRTLDirection(hass) {
-    return this._computeRTL(hass) ? "rtl" : "ltr";
+  _computeRTLDirection() {
+    return this.rtl ? 'rtl' : 'ltr';
   }
 
   _renderArtwork(artwork) {
@@ -511,7 +511,7 @@ class MiniMediaPlayer extends LitElement {
           @change=${e => this.player.setVolume(e)}
           @click=${e => e.stopPropagation()}
           min='0' max=${this.config.max_volume} value=${this.player.vol * 100}
-          dir=${this._computeRTLDirection(this.hass)}
+          dir=${this._computeRTLDirection()}
           ignore-bar-touch pin>
         </paper-slider>
       </div>`;
@@ -697,10 +697,10 @@ class MiniMediaPlayer extends LitElement {
   }
 
   patchSliderForRTL() {
-    const slider = this.shadowRoot.querySelector("paper-slider");
-    if (slider && !slider.classList.contains("rtlPatched")) {
-      slider.shadowRoot.querySelector("style").appendChild(
-        document.createTextNode(`
+    const slider = this.shadowRoot.querySelector('paper-slider');
+    if (slider && !slider.classList.contains('rtlPatched')) {
+      slider.shadowRoot.querySelector('style').appendChild(
+        this.ownerDocument.createTextNode(`
         :host([dir="rtl"]) #sliderContainer.pin.expand > .slider-knob > .slider-knob-inner::after {
           -webkit-transform: scale(1) translate(0, -17px) scaleX(-1) !important;
           transform: scale(1) translate(0, -17px) scaleX(-1) !important;
