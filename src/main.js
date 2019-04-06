@@ -26,6 +26,7 @@ class MiniMediaPlayer extends LitElement {
     this.thumbnail = false;
     this.edit = false;
     this.idleView = false;
+    this.rtl = false;
   }
 
   static get properties() {
@@ -59,6 +60,7 @@ class MiniMediaPlayer extends LitElement {
       this.player = new MediaPlayerObject(hass, this.config, entity);
       this.progress = this.player.hasProgress;
       this.idleView = this.player.idle;
+      this.rtl = this._computeRTL(hass);
       if (this.player.trackIdle) this._updateIdle();
     }
   }
@@ -148,6 +150,10 @@ class MiniMediaPlayer extends LitElement {
     ro.observe(this.shadowRoot.querySelector('.player'));
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.speaker_group.expanded || false;
+
+    if (this.rtl) {
+      this.patchSliderForRTL();
+    }
   }
 
   updated() {
@@ -155,6 +161,10 @@ class MiniMediaPlayer extends LitElement {
       setTimeout(() => {
         this._computeOverflow();
       }, 10);
+
+    if (this.rtl) {
+      this.patchSliderForRTL();
+    }
   }
 
   disconnectedCallback() {
@@ -173,6 +183,7 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork} ?has-artwork=${artwork} state=${this.player.state}
         ?flow=${config.flow} ?collapse=${config.collapse}
         content=${this.player.content}
+        ?rtl=${this.rtl}
         @click=${() => this._handleMore()}>
         <div class='bg'>
           ${this._renderArtwork(artwork)}
@@ -242,6 +253,18 @@ class MiniMediaPlayer extends LitElement {
   _computeRect(entry) {
     const { left, width } = entry.contentRect;
     this.break = (width + left * 2) < BREAKPOINT;
+  }
+
+  _computeRTL(hass) {
+    const lang = hass.language || 'en';
+    if (hass.translationMetadata.translations[lang]) {
+      return hass.translationMetadata.translations[lang].isRTL || false;
+    }
+    return false;
+  }
+
+  _computeRTLDirection() {
+    return this.rtl ? 'rtl' : 'ltr';
   }
 
   _renderArtwork(artwork) {
@@ -445,7 +468,7 @@ class MiniMediaPlayer extends LitElement {
       <div class='flex shuffle'>
         ${!this.config.hide.shuffle ? this._renderShuffleButton() : ''}
       </div>
-      <div class='flex'>
+      <div class='flex media-controls'>
         ${!this.config.hide.controls ? this._renderMediaControls() : ''}
       </div>`;
   }
@@ -488,6 +511,7 @@ class MiniMediaPlayer extends LitElement {
           @change=${e => this.player.setVolume(e)}
           @click=${e => e.stopPropagation()}
           min='0' max=${this.config.max_volume} value=${this.player.vol * 100}
+          dir=${this._computeRTLDirection()}
           ignore-bar-touch pin>
         </paper-slider>
       </div>`;
@@ -670,6 +694,22 @@ class MiniMediaPlayer extends LitElement {
 
   getCardSize() {
     return this.config.collapse ? 1 : 2;
+  }
+
+  patchSliderForRTL() {
+    const slider = this.shadowRoot.querySelector('paper-slider');
+    if (slider && !slider.classList.contains('rtlPatched')) {
+      slider.shadowRoot.querySelector('style').appendChild(
+        this.ownerDocument.createTextNode(`
+        :host([dir="rtl"]) #sliderContainer.pin.expand > .slider-knob > .slider-knob-inner::after {
+          -webkit-transform: scale(1) translate(0, -17px) scaleX(-1) !important;
+          transform: scale(1) translate(0, -17px) scaleX(-1) !important;
+          }
+        `),
+      );
+
+      slider.classList.add('rtlPatched');
+    }
   }
 }
 
