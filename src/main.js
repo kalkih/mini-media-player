@@ -705,10 +705,10 @@ class MiniMediaPlayer extends LitElement {
           -webkit-transform: scale(1) translate(0, -17px) scaleX(-1) !important;
           transform: scale(1) translate(0, -17px) scaleX(-1) !important;
           }
-        `)
+        `),
       );
 
-      slider.classList.add("rtlPatched");
+      slider.classList.add('rtlPatched');
     }
   }
 }
