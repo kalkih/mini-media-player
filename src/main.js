@@ -27,7 +27,6 @@ class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
     this._overflow = false;
-    this.break = true;
     this.initial = true;
     this.picture = false;
     this.thumbnail = false;
@@ -135,8 +134,8 @@ class MiniMediaPlayer extends LitElement {
   }
 
   shouldUpdate(changedProps) {
-    const update = UPDATE_PROPS.some(prop => changedProps.has(prop));
-    return update && this.player;
+    if (this.break === undefined) this._computeRect(this);
+    return UPDATE_PROPS.some(prop => changedProps.has(prop)) && this.player;
   }
 
   firstUpdated() {
@@ -155,7 +154,7 @@ class MiniMediaPlayer extends LitElement {
         });
       });
     });
-    ro.observe(this.shadowRoot.querySelector('.player'));
+    ro.observe(this);
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.speaker_group.expanded || false;
   }
@@ -251,7 +250,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _computeRect(entry) {
-    const { left, width } = entry.contentRect;
+    const { left, width } = entry.contentRect || entry.getBoundingClientRect();
     this.break = (width + left * 2) < BREAKPOINT;
   }
 

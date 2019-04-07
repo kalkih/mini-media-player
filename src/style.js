@@ -1,6 +1,9 @@
 import { css } from 'lit-element';
 
 const style = css`
+  :host {
+    display: block;
+  }
   ha-card {
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     cursor: default;

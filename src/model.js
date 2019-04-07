@@ -92,7 +92,6 @@ export default class MediaPlayerObject {
   }
 
   get isMaster() {
-    // TODO: TEST ENTITY HERE
     return this.master === this.config.entity;
   }
 
