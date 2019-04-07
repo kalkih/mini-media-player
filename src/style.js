@@ -259,6 +259,7 @@ const style = css`
   }
   .control-row--top {
     line-height: 40px;
+    max-height: 40px;
   }
   .entity[inactive] .entity__info__media,
   .entity__info__name,
