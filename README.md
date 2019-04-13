@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.3
+    - url: /local/mini-media-player-bundle.js?v=1.0.4
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.3/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.4/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.3
+    - url: /local/mini-media-player-bundle.js?v=1.0.4
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.3
+    - url: /local/mini-media-player-bundle.js?v=1.0.4
       type: module
   ```
 
@@ -93,7 +93,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | toggle_power | boolean | true | v0.8.9 | Set to `false` to change the power button behaviour to `media_player.turn_on`/`media_player.turn_off`.
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
-| speaker_group | object | optional | v1.0.0 | Speaker group management for supported platforms, see [Speaker_group object](#speaker_group-object) for available options.
+| speaker_group | object | optional | v1.0.0 | Speaker group management for supported platforms, see [Speaker group object](#speaker-group-object) for available options.
 | shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
 
 #### Idle object
@@ -107,13 +107,17 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 #### TTS object
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, `alexa` for the ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639) custom_component, `ga` for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay), `sonos` for use with modified [sonos_say script](https://github.com/kalkih/mini-media-player/issues/86#issuecomment-465541825).
+| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google` or `amazon_polly`, `alexa`<sup>[1](#tts_foot1)</sup> for ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639), `ga`<sup>[2](#tts_foot2)</sup><sup>[3](#tts_foot3)</sup> for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay), `sonos`<sup>[2](#tts_foot2)</sup> for use with modified [sonos_say script](https://github.com/kalkih/mini-media-player/issues/86#issuecomment-465541825).
 | language | string | optional | The output language.
 | entity_id | string/list | optional | The *entity_id* of the desired output entity or a list of *entity_id's*, can also be `all` to broadcast to all entities.
-| volume | float | optional | Volume level of tts message (0 - 1), only supported by `sonos` at the moment.
+| volume | float | optional | Volume level of tts output (0 - 1), only supported by platform `sonos`.
+| type | string | optional | `tts`, `announce` or `push`, defaults to `tts`, only supported by platform `alexa`, more info [here](https://github.com/keatontaylor/alexa_media_player/wiki/Notification-Component#functionality).
 
-Using the `ga` platform will restrict the use of `language` & `entity_id` options, this also applies to `alexa` & `sonos` (sonos_say script).
-Using `ga` also requires that a custom notify service is set up with the name `ga_broadcast`, example below.
+<a name="tts_foot1"><sup>1</sup></a> Does not support the `language` option.
+
+<a name="tts_foot2"><sup>2</sup></a> Does not support `language` & `entity_id` options.
+
+<a name="tts_foot3"><sup>3</sup></a> Requires a custom notify service named `ga_broadcast`, see example below.
 
 ```yaml
 # configuration.yaml
@@ -123,16 +127,18 @@ notify:
     resource: http://[xxx.x.x.xxx]:5000/broadcast_message
 ```
 
-#### Speaker_group object
-See [Speaker_group management](#speaker_group-management) for example usage.
+#### Speaker group object
+See [Speaker group management](#speaker-group-management) for example usage.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| entities | list | **required** | A list containing speaker entities of one of supported platforms, to enable group management of those speakers.
-| platform | string | optional | Specify a media_player platform that supports speaker grouping by using 'join' and 'unjoin' services. `sonos` is working and `yamaha_musiccast` will be added shortly in Home-assisstant. Curently default to `sonos`.
+| entities | list | **required** | A list containing [speaker entities](#speaker-entity-object) of one of supported platforms, to enable group management of those speakers.
+| platform | string | 'sonos' | The media_player platform to control. `sonos` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
 | expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
+
+<a name="speaker_foot1"><sup>1</sup></a> Currently not yet available in Home Assistant, *soon™*
 
 #### Speaker entity object
 | Name | Type | Default | Description |
@@ -320,7 +326,7 @@ By using vertical and horizontal stacks, you can achieve many different setups.
         icon: true
 ```
 
-#### Speaker_group management
+#### Speaker group management
 Specify all your speaker entities in a list under the option `speaker_group` -> `entities`. They obviously need to be of the same platform.
 
 * The card does only allow changes to be made to groups where the entity of the card is the coordinator/master speaker.
