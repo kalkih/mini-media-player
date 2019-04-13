@@ -323,7 +323,6 @@ const style = css`
   }
   ha-card[artwork*='cover'][has-artwork] .entity__info__media {
     color: var(--mini-media-player-media-cover-info-color, #FFFFFF);
-    opacity: .85;
   }
   paper-icon-button {
     transition: color .15s ease-in-out;
