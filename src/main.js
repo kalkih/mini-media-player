@@ -449,9 +449,9 @@ class MiniMediaPlayer extends LitElement {
           <iron-icon .icon=${ICON.DROPDOWN}></iron-icon>
         </mwc-button>`;
     return html`
-      <paper-menu-button class='source-menu' slot='dropdown-trigger'
-        .horizontalAlign=${'right'} .verticalAlign=${'top'}
-        .verticalOffset=${40} .noAnimations=${true}
+      <paper-menu-button class='source-menu'
+        slot='dropdown-trigger' noink no-animations
+        .horizontalAlign=${'right'} .verticalAlign=${'top'} .verticalOffset=${40}
         @click='${e => e.stopPropagation()}'>
         ${button}
         <paper-listbox slot='dropdown-content' selected=${selected}
@@ -545,7 +545,9 @@ class MiniMediaPlayer extends LitElement {
     const items = this.config.shortcuts.list;
     return html`
       <paper-menu-button class='media-dropdown'
-        noink no-animations horizontal-align vertical-align .noLabelFloat=${true}
+        noink no-animations
+        .horizontalAlign=${'right'}
+        .verticalAlign=${'top'} .verticalOffset=${44} .horizontalOffset=${8}
         @click='${e => e.stopPropagation()}'>
         <mwc-button class='media-dropdown__button' slot='dropdown-trigger'>
           <div>
