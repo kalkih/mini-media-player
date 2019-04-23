@@ -547,7 +547,7 @@ class MiniMediaPlayer extends LitElement {
       <paper-menu-button class='media-dropdown'
         noink no-animations
         .horizontalAlign=${'right'}
-        .verticalAlign=${'top'} .verticalOffset=${44} .horizontalOffset=${8}
+        .verticalAlign=${'top'} .verticalOffset=${44}
         @click='${e => e.stopPropagation()}'>
         <mwc-button class='media-dropdown__button' slot='dropdown-trigger'>
           <div>

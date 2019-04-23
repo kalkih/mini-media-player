@@ -197,12 +197,12 @@ const style = css`
     margin-right: 8px;
   }
   .rows {
-    margin-left: 56px;
+    margin-left: 48px;
     position: relative;
   }
   ha-card[rtl] .rows {
     margin-left: auto;
-    margin-right: 56px;
+    margin-right: 48px;
   }
   .rows > *:nth-child(2) {
     margin-top: 0px;
@@ -361,15 +361,14 @@ const style = css`
   .media-dropdown {
     box-sizing: border-box;
     width: 100%;
-    padding: 8px 8px 0 0;
+    padding: 0;
   }
   .media-dropdown__button {
     display: flex;
     font-size: 1em;
     justify-content: space-between;
     margin: 0;
-    border-bottom: 1px solid var(--primary-text-color);
-    opacity: .8;
+    opacity: .75;
   }
   .media-dropdown__button > div {
     display: flex;
@@ -378,7 +377,6 @@ const style = css`
     align-items: center;
   }
   .media-dropdown__label {
-    padding: .2em .2em .2em 0;
     text-align: left;
     text-transform: none;
   }
@@ -395,7 +393,7 @@ const style = css`
   .media-buttons__button {
     background-color: rgba(255,255,255,.1);
     box-sizing: border-box;
-    margin: 8px 8px 0 0;
+    margin: 4px;
     min-width: 0;
     min-width: calc(50% - 8px);
     flex: 1;
@@ -464,16 +462,19 @@ const style = css`
     max-height: 40px;
   }
   .group-button {
-    height: 85%;
-    margin: auto;
+    height: 34px;
+    width: 34px;
+    margin: 3px;
   }
   .speaker-select {
     display: flex;
     flex-direction: column;
+    margin-left: 8px;
   }
   .speaker-select > span {
     font-weight: 500;
-    margin-top: 12px;
+    letter-spacing: .1em;
+    margin: 8px 0 4px;
     text-transform: uppercase;
   }
   .speaker-select paper-checkbox {
