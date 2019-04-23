@@ -329,9 +329,8 @@ const style = css`
     color: var(--mmp-accent-color) !important;
   }
   mwc-button[color] {
-    --mdc-theme-on-primary: var(--primary-text-color);
-    --mdc-theme-primary: transparent;
-    background: var(--mmp-accent-color);
+    --mdc-theme-on-primary: #ffffff;
+    background: var(--mini-media-player-accent-color, var(--primary-color));
     transition: background .25s;
   }
   ha-card[artwork*='cover'][has-artwork] .entity__info__media {
