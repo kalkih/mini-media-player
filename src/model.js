@@ -179,6 +179,10 @@ export default class MediaPlayerObject {
     return !(typeof this.attr.is_volume_muted === 'undefined');
   }
 
+  getAttribute(attribute) {
+    return this.attr[attribute] || '';
+  }
+
   async fetchThumbnail() {
     try {
       const { content_type: contentType, content } = await this.hass.callWS({

@@ -547,7 +547,9 @@ class MiniMediaPlayer extends LitElement {
 
   _renderList() {
     if (this.config.shortcuts.hide_when_off && !this.player.active) return;
-    const { list, label } = this.config.shortcuts;
+    const { list, label, attribute } = this.config.shortcuts;
+    const active = this.player.getAttribute(attribute);
+    const selected = list.map(item => item.id).indexOf(active);
     return html`
       <paper-menu-button
         class='media-dropdown'
@@ -559,14 +561,15 @@ class MiniMediaPlayer extends LitElement {
         <mwc-button class='media-dropdown__button' slot='dropdown-trigger'>
           <div>
             <span class='media-dropdown__label'>
-              ${label}
+              ${active || label}
             </span>
             <iron-icon class='media-dropdown__icon' .icon=${ICON.DROPDOWN}></iron-icon>
           </div>
         </mwc-button>
-        <paper-listbox slot="dropdown-content" class="media-dropdown-trigger">
+        <paper-listbox slot="dropdown-content" selected=${selected}
+          class="media-dropdown-trigger">
           ${list.map((item, i) => html`
-            <paper-item @click=${e => this._handleShortcut(e, 'list', i)}>
+            <paper-item value=${item.id} @click=${e => this._handleShortcut(e, 'list', i)}>
               ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
               ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}
             </paper-item>`)}
@@ -576,11 +579,13 @@ class MiniMediaPlayer extends LitElement {
 
   _renderButtons() {
     if (this.config.shortcuts.hide_when_off && !this.player.active) return;
-    const items = this.config.shortcuts.buttons;
+    const { buttons, attribute } = this.config.shortcuts;
+    const active = this.player.getAttribute(attribute);
     return html`
       <div class='media-buttons'>
-        ${items.map((item, i) => html`
+        ${buttons.map((item, i) => html`
           <mwc-button dense raised columns=${this.config.shortcuts.columns}
+            ?color=${item.id === active}
             class='media-buttons__button'
             @click='${e => this._handleShortcut(e, 'buttons', i)}'>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}

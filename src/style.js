@@ -163,9 +163,16 @@ const style = css`
     --mdc-theme-primary: transparent;
     --mdc-theme-on-primary: #FFFFFF;
   }
+  ha-card[artwork*='cover'][has-artwork] mwc-button[raised][color] {
+    background: rgba(255,255,255,0.5);
+    transition: background .5s;
+  }
   ha-card[artwork*='cover'][has-artwork] paper-input {
     --paper-input-container-color: #FFFFFF;
     --paper-input-container-input-color: #FFFFFF;
+  }
+  ha-card[artwork*='cover'][has-artwork] .media-dropdown__button {
+    opacity: 1;
   }
   .flex {
     display: flex;
@@ -321,6 +328,12 @@ const style = css`
   ha-icon[color] {
     color: var(--mmp-accent-color) !important;
   }
+  mwc-button[color] {
+    --mdc-theme-on-primary: var(--primary-text-color);
+    --mdc-theme-primary: transparent;
+    background: var(--mmp-accent-color);
+    transition: background .25s;
+  }
   ha-card[artwork*='cover'][has-artwork] .entity__info__media {
     color: var(--mini-media-player-media-cover-info-color, #FFFFFF);
   }
@@ -340,7 +353,7 @@ const style = css`
   }
   .tts {
     align-items: center;
-    margin-top: 8px;
+    margin-left: 8px;
   }
   .tts__input {
     cursor: text;
@@ -588,9 +601,6 @@ const style = css`
   paper-icon-button[color][opaque],
   paper-input[focused] {
     opacity: 1;
-  }
-  .media-dropdown[focused] mwc-button:focus {
-    opacity: .75;
   }
   paper-icon-button[opaque],
   .speaker-select mwc-button[disabled] {
