@@ -14,9 +14,9 @@ export default class MediaPlayerObject {
     this.hass = hass || {};
     this.config = config || {};
     this.entity = entity || {};
-    this.state = this.entity.state;
+    this.state = entity.state;
     this.attr = entity.attributes;
-    this.idle = this.config.idle_view ? this.idleView : false;
+    this.idle = config.idle_view ? this.idleView : false;
     this.active = this.isActive;
   }
 
@@ -200,6 +200,10 @@ export default class MediaPlayerObject {
 
   setSource(e, source) {
     this.callService(e, 'select_source', { source });
+  }
+
+  setSoundMode(e, name) {
+    this.callService(e, 'select_sound_mode', { sound_mode: name });
   }
 
   next(e) {

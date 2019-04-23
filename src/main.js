@@ -632,6 +632,8 @@ class MiniMediaPlayer extends LitElement {
       return this._handleSource(e, id);
     if (type === 'script')
       return this._callService(e, 'turn_on', { entity_id: id }, 'script');
+    if (type === 'sound_mode')
+      return this.player.setSoundMode(e, id);
     const options = {
       media_content_type: type,
       media_content_id: id,
