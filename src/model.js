@@ -171,8 +171,12 @@ export default class MediaPlayerObject {
     return this.idle;
   }
 
-  get supportShuffle() {
+  get supportsShuffle() {
     return !(typeof this.attr.shuffle === 'undefined');
+  }
+
+  get supportsMute() {
+    return !(typeof this.attr.is_volume_muted === 'undefined');
   }
 
   async fetchThumbnail() {

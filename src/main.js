@@ -367,7 +367,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   _renderShuffleButton() {
-    if (!this.player.supportShuffle) return;
+    if (!this.player.supportsShuffle) return;
     const shuffle = !this.player.shuffle || false;
     return this._renderButton(ICON.SHUFFLE, 'shuffle_set', { shuffle }, !shuffle);
   }
@@ -500,7 +500,8 @@ class MiniMediaPlayer extends LitElement {
       case 'next':
         return this._renderButton(ICON.NEXT, 'media_next_track');
       default:
-        return this._renderButton(ICON.MUTE[muted], 'volume_mute', { is_volume_muted: !muted });
+        if (this.player.supportsMute)
+          return this._renderButton(ICON.MUTE[muted], 'volume_mute', { is_volume_muted: !muted });
     }
   }
 
