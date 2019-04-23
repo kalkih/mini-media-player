@@ -7,6 +7,7 @@ import {
   ICON,
   UPDATE_PROPS,
   BREAKPOINT,
+  LABEL_SHORTCUT,
 } from './const';
 
 if (!customElements.get('mwc-button')) {
@@ -112,7 +113,6 @@ class MiniMediaPlayer extends LitElement {
       info: 'default',
       max_volume: 100,
       more_info: true,
-      shortcuts: {},
       source: 'default',
       title: '',
       toggle_power: true,
@@ -123,6 +123,10 @@ class MiniMediaPlayer extends LitElement {
         platform: 'sonos',
         ...config.sonos,
         ...config.speaker_group,
+      },
+      shortcuts: {
+        label: LABEL_SHORTCUT,
+        ...config.shortcuts,
       },
     };
     conf.max_volume = Number(conf.max_volume) || 100;
@@ -440,7 +444,7 @@ class MiniMediaPlayer extends LitElement {
 
     const selected = sources.indexOf(source);
     const button = this.config.source === 'icon' || this.config.collapse || this.break || this.player.idle
-      ? html`<paper-icon-button class='source-menu__button' slot='dropdown-trigger' .icon=${ICON.DROPDOWN}></paper-icon-button>`
+      ? html`<paper-icon-button class='source-menu__button icon' slot='dropdown-trigger' .icon=${ICON.DROPDOWN}></paper-icon-button>`
       : html`
         <mwc-button class='source-menu__button' slot='dropdown-trigger'>
           <span class='source-menu__source' display=${this.config.source}>
@@ -542,23 +546,25 @@ class MiniMediaPlayer extends LitElement {
 
   _renderList() {
     if (this.config.shortcuts.hide_when_off && !this.player.active) return;
-    const items = this.config.shortcuts.list;
+    const { list, label } = this.config.shortcuts;
     return html`
-      <paper-menu-button class='media-dropdown'
+      <paper-menu-button
+        class='media-dropdown'
         noink no-animations
         .horizontalAlign=${'right'}
-        .verticalAlign=${'top'} .verticalOffset=${44}
+        .verticalAlign=${'top'}
+        .verticalOffset=${44}
         @click='${e => e.stopPropagation()}'>
         <mwc-button class='media-dropdown__button' slot='dropdown-trigger'>
           <div>
-          <span class='media-dropdown__label'>
-            ${'Select media...'}
-          </span>
+            <span class='media-dropdown__label'>
+              ${label}
+            </span>
             <iron-icon class='media-dropdown__icon' .icon=${ICON.DROPDOWN}></iron-icon>
           </div>
         </mwc-button>
         <paper-listbox slot="dropdown-content" class="media-dropdown-trigger">
-          ${items.map((item, i) => html`
+          ${list.map((item, i) => html`
             <paper-item @click=${e => this._handleShortcut(e, 'list', i)}>
               ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
               ${item.name ? html`<span class='media-label'>${item.name}</span>` : ''}

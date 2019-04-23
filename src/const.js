@@ -30,9 +30,12 @@ const UPDATE_PROPS = ['entity', 'source', '_progress', '_pos', '_overflow',
   'break', 'thumbnail', 'edit', 'idleView'];
 const BREAKPOINT = 390;
 
+const LABEL_SHORTCUT = 'Shortcuts...';
+
 export {
   DEFAULT_HIDE,
   ICON,
   UPDATE_PROPS,
   BREAKPOINT,
+  LABEL_SHORTCUT,
 };

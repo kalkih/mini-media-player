@@ -538,6 +538,9 @@ const style = css`
     margin: 0;
     min-width: 0;
   }
+  .source-menu__button.icon {
+    height: 40px;
+  }
   .source-menu__source {
     display: block;
     max-width: 60px;
@@ -615,12 +618,6 @@ const style = css`
   }
   ha-card[break*="break"][rtl] .rows {
     margin-right: 0;
-  }
-  ha-card[break*="break"] .rows > * {
-    padding-left: 8px;
-  }
-  ha-card[break*="break"][rtl] .rows > * {
-    padding-right: 8px;
   }
   ha-card[break*="break"] .rows > .control-row {
     padding: 0;
