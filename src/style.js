@@ -62,15 +62,6 @@ const style = css`
   header {
     display: none;
   }
-  ha-card.--title header {
-    display: block;
-    font-size: var(--paper-font-headline_-_font-size);
-    font-weight: var(--paper-font-headline_-_font-weight);
-    letter-spacing: var(--paper-font-headline_-_letter-spacing);
-    line-height: var(--paper-font-headline_-_line-height);
-    padding: 24px 16px 16px;
-    position: relative;
-  }
   ha-card[artwork='full-cover'].--has-artwork:before {
     padding-top: 56%;
   }
@@ -135,9 +126,6 @@ const style = css`
   }
   ha-card.--group .mmp-player {
     padding: 2px 0;
-  }
-  ha-card.--title .mmp-player {
-    padding-top: 0;
   }
   .flex {
     display: flex;

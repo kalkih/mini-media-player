@@ -104,7 +104,6 @@ class MiniMediaPlayer extends LitElement {
       max_volume: 100,
       more_info: true,
       source: 'default',
-      title: '',
       toggle_power: true,
       ...config,
       hide: { ...DEFAULT_HIDE, ...config.hide },
@@ -172,7 +171,6 @@ class MiniMediaPlayer extends LitElement {
         <div class='mmp__bg'>
           ${this.renderArtwork(artwork)}
         </div>
-        <header>${config.title}</header>
         <div class='mmp-player'>
           <div class='mmp-player__core flex' ?inactive=${this.player.idle}>
             ${this.renderIcon(artwork)}
@@ -290,7 +288,6 @@ class MiniMediaPlayer extends LitElement {
       '--group': config.group,
       '--more-info': config.more_info,
       '--has-artwork': this.player.hasArtwork && this.thumbnail,
-      '--title': config.title !== '',
       '--flow': config.flow,
       '--collapse': config.collapse,
       '--rtl': this.rtl,
