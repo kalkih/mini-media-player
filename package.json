@@ -18,6 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.1.0",
+    "lit-html": "^1.0.0",
     "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {

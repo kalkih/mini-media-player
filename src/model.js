@@ -1,13 +1,4 @@
-const MEDIA_INFO = [
-  { attr: 'media_title' },
-  { attr: 'media_artist' },
-  { attr: 'media_series_title' },
-  { attr: 'media_season', prefix: 'S' },
-  { attr: 'media_episode', prefix: 'E' },
-  { attr: 'app_name' },
-];
-
-const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
+import { PROGRESS_PROPS, MEDIA_INFO } from './const';
 
 export default class MediaPlayerObject {
   constructor(hass, config, entity) {
@@ -18,6 +9,10 @@ export default class MediaPlayerObject {
     this.attr = entity.attributes;
     this.idle = config.idle_view ? this.idleView : false;
     this.active = this.isActive;
+  }
+
+  get id() {
+    return this.entity.entity_id;
   }
 
   get icon() {
@@ -80,6 +75,10 @@ export default class MediaPlayerObject {
 
   get groupCount() {
     return this.group.length;
+  }
+
+  get isGrouped() {
+    return this.group.length > 1;
   }
 
   get group() {
@@ -206,8 +205,24 @@ export default class MediaPlayerObject {
       this.callService(e, 'turn_off');
   }
 
+  toggleMute(e) {
+    this.callService(e, 'volume_mute', { is_volume_muted: !this.muted });
+  }
+
+  toggleShuffle(e) {
+    this.callService(e, 'shuffle_set', { shuffle: !this.shuffle });
+  }
+
   setSource(e, source) {
     this.callService(e, 'select_source', { source });
+  }
+
+  setMedia(e, opts) {
+    this.callService(e, 'play_media', { ...opts });
+  }
+
+  playPause(e) {
+    this.callService(e, 'media_play_pause');
   }
 
   setSoundMode(e, name) {
@@ -218,8 +233,27 @@ export default class MediaPlayerObject {
     this.callService(e, 'media_next_track');
   }
 
-  setVolume(e) {
-    const vol = parseFloat(e.target.value) / 100;
+  prev(e) {
+    this.callService(e, 'media_previous_track');
+  }
+
+  stop(e) {
+    this.callService(e, 'media_stop');
+  }
+
+  volumeUp(e) {
+    this.callService(e, 'volume_up');
+  }
+
+  volumeDown(e) {
+    this.callService(e, 'volume_down');
+  }
+
+  seek(e, pos) {
+    this.callService(e, 'media_seek', { seek_position: pos });
+  }
+
+  setVolume(e, vol) {
     if (this.config.speaker_group.sync_volume) {
       this.group.forEach((entity) => {
         const conf = this.config.speaker_group.entities.find(entry => (entry.entity_id === entity))
@@ -243,9 +277,24 @@ export default class MediaPlayerObject {
     }
   }
 
-  callService(e, service, inOptions) {
+  handleGroupChange(e, entity, checked) {
+    const { platform } = this.config.speaker_group;
+    const options = { entity_id: entity };
+    if (checked) {
+      options.master = this.config.entity;
+      this.callService(e, `${platform}_JOIN`, options);
+    } else {
+      this.callService(e, `${platform}_UNJOIN`, options);
+    }
+  }
+
+  toggleScript(e, id) {
+    this.callService(e, 'turn_on', { entity_id: id }, 'script');
+  }
+
+  callService(e, service, inOptions, domain = 'media_player') {
     e.stopPropagation();
-    this.hass.callService('media_player', service, {
+    this.hass.callService(domain, service, {
       entity_id: this.config.entity,
       ...inOptions,
     });
