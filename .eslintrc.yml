@@ -13,3 +13,4 @@ globals:
   window: true
   Event: true
   customElements: true
+  CustomEvent: true

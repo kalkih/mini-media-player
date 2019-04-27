@@ -26,16 +26,31 @@ const ICON = {
   VOL_DOWN: 'mdi:volume-minus',
   VOL_UP: 'mdi:volume-plus',
 };
-const UPDATE_PROPS = ['entity', 'source', '_progress', '_pos', '_overflow',
-  'break', 'thumbnail', 'edit', 'idleView'];
+const UPDATE_PROPS = ['entity', '_overflow',
+  'break', 'thumbnail', 'edit', 'idle'];
+
+const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
+
 const BREAKPOINT = 390;
 
 const LABEL_SHORTCUT = 'Shortcuts...';
+
+const MEDIA_INFO = [
+  { attr: 'media_title' },
+  { attr: 'media_artist' },
+  { attr: 'media_series_title' },
+  { attr: 'media_season', prefix: 'S' },
+  { attr: 'media_episode', prefix: 'E' },
+  { attr: 'app_name' },
+];
+
 
 export {
   DEFAULT_HIDE,
   ICON,
   UPDATE_PROPS,
+  PROGRESS_PROPS,
   BREAKPOINT,
   LABEL_SHORTCUT,
+  MEDIA_INFO,
 };
