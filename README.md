@@ -185,6 +185,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 
 ### Theme variables
 The following variables are available and can be set in your theme to change the appearence of the card.
+
 | name | Default | Description |
 |------|---------|-------------|
 | mini-media-player-accent-color | var(--accent-color) | Accent color
