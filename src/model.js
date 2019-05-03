@@ -288,8 +288,10 @@ export default class MediaPlayerObject {
     }
   }
 
-  toggleScript(e, id) {
-    this.callService(e, 'turn_on', { entity_id: id }, 'script');
+  toggleScript(e, id, data = {}) {
+    this.callService(e, id.split('.').pop(), {
+      ...data,
+    }, 'script');
   }
 
   callService(e, service, inOptions, domain = 'media_player') {
