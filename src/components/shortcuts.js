@@ -33,7 +33,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
     const { active } = this;
 
     const list = this.list ? html`
-      <mmp-dropdown class='mmp-shortcuts__dropdown' faded
+      <mmp-dropdown class='mmp-shortcuts__dropdown'
         @change=${this.handleShortcut}
         .items=${this.list}
         .label=${this.shortcuts.label}
