@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.4
+    - url: /local/mini-media-player-bundle.js?v=1.1.0
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.0.4/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.1.0/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.4
+    - url: /local/mini-media-player-bundle.js?v=1.1.0
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.0.4
+    - url: /local/mini-media-player-bundle.js?v=1.1.0
       type: module
   ```
 
@@ -77,7 +77,6 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 |------|------|---------|-------|-------------|
 | type | string | **required** | v0.1 | `custom:mini-media-player`
 | entity | string | **required** | v0.1 | An entity_id from an entity within the `media_player` domain.
-| title | string | optional | v0.1 | Set a custom card title.
 | name | string | optional | v0.6 | Override the entities friendly name.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
 | more_info | boolean | true | v0.1 | Enable the "more info" popup dialog when pressing on the card.
@@ -156,14 +155,21 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | buttons | list | optional | A list of [shortcut items](#shortcut-item-object) to be presented as buttons.
 | hide_when_off | boolean | false | Hide the shortcuts while the entity is off.
 | columns | integer (1-4) | 2 | Specify the max number of buttons per row.
+| label | string | `shortcuts...` | Specify a custom default label for the shortcut dropdown.
+| attribute | string | optional | Specify any attribute exposed by the media player entity. The attribute value (if exists) is compared with shortcut `id`'s to distinguish selected/active shortcut<sup>[1](#shortcuts_foot1)</sup>.
+
+<a name="shortcuts_foot1"><sup>1</sup></a> Examples, `source` for active source or `sound_mode` for active sound mode.
 
 #### Shortcut item object
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | name | string | optional | A display name.
 | icon | string | optional | A display icon *(any mdi icon)*.
-| type | string | **required** | A media type. Must be one of `music`, `tvshow`, `video`, `episode`, `channel`, `playlist`, `source` or `script`
-| id | string | **required** | A media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify. A source name can also be specified to change source, use together with type `source` or a script entity for use with `script`.
+| type | string | **required** | Type of shortcut. A media type: `music`, `tvshow`, `video`, `episode`, `channel`, `playlist` e.g. or an action type: `source`, `sound_mode`, `script`.
+| id | string | **required** | The media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify. A source/(sound mode) name can also be specified to change source/(sound mode), use together with type `source`/`sound_mode`. If type `script` specify the script name here.
+| data | list | optional | Extra service payload<sup>[1](#shortcut_foot1)</sup>.
+
+<a name="shortcut_foot1"><sup>1</sup></a> Only compatible with `script` shortcuts, useful for sending variables to script.
 
 #### Hide object
 | Name | Type | Default | Description |
@@ -179,7 +185,6 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | progress | boolean | false | The progress bar.
 | artwork_border | boolean | true | The border of the `default` artwork picture.
 | power_state | boolean | true | Dynamic color of the power button to indicate on/off.
-| icon_state | boolean | true | Dynamic color of the entity icon to indicate on/off.
 | shuffle | boolean | true | The shuffle button (only for players with `shuffle_set` support).
 
 

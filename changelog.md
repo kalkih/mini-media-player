@@ -1,17 +1,45 @@
+## v1.1.0
+### ADDED
+- New option `attribute` for shortcut object, to determine & display active/selected shortcut from an attribute, see [README](https://github.com/kalkih/mini-media-player#shortcuts-object)
+- New option `label` for shortcuts object, specify a custom shortcut list dropdown label
+- New parameter `sound_mode` for shortcut type option
+- New option `data` for shortcut object, specify extra service data (useful for script variables)
+
+### FIXED
+- Various layout & alignment fixes
+
+### CHANGED
+- Shortcut list dropdown is now aligned to the right (instead of left)
+- Removed the underline from the shortcut dropdown
+- Changed default shortcut list dropdown label from `Select Media...` to `Shortcuts...`
+- Mute button is now only visible if supported by the media player, `replace_mute` option will override this and can still be utilized
+- Major refactoring of the source code
+
+### REMOVED
+- `icon_state` option
+- `title` option (wasn't really working anyways 🤷‍)
+
 ## v1.0.4
-- NEW: Added new option `type` for the `tts` object, type of tts method, only for alexa atm (#99)
-- NEW: Option `speaker_group` replaces `sonos` option (#102) @hcoohb
-- NEW: Option `platform` in the `speaker_group` option object (#102) @hcoohb
-- NEW: Speaker group management support for the *yamaha_musiccast* platform (#102) @hcoohb
-- FIXED: `volume_offset` not working as expected (#88)
-- FIXED: RTL layout (#103) @yosilevy
-- FIXED: Got rid of jerky UI movement after initial render
-- FIXED: Missaligned speaker group button
-- CHANGED: Removed max width limit of the volume slider in normal view
-- CHANGED: Removed slight opacity of media info text while cover artwork is present
-- CHANGED: Deprecating `sonos` option replaced by `speaker_group` option (#102) @hcoohb
-- CHANGED: TTS service method for custom alexa component (old method is getting [deprecated](https://github.com/keatontaylor/alexa_media_player/wiki#text-to-speech)) (#96)
-- CHANGED: Updated dependencies
+### ADDED
+- Added new option `type` for the `tts` object, type of tts method, only for alexa atm (#99)
+- Option `speaker_group` replaces `sonos` option (#102) @hcoohb
+- Option `platform` in the `speaker_group` option object (#102) @hcoohb
+- Speaker group management support for the *yamaha_musiccast* platform (#102) @hcoohb
+
+### FIXED
+- `volume_offset` not working as expected (#88)
+- RTL layout (#103) @yosilevy
+- Got rid of jerky UI movement after initial render
+- Missaligned speaker group button
+
+### CHANGED
+- Removed max width limit of the volume slider in normal view
+- Removed slight opacity of media info text while cover artwork is present
+- TTS service method for custom alexa component (old method is getting [deprecated](https://github.com/keatontaylor/alexa_media_player/wiki#text-to-speech)) (#96)
+- Updated dependencies
+
+### DEPRECATED
+- Deprecating `sonos` option replaced by `speaker_group` option (#102) @hcoohb
 
 ## v1.0.3
 - NEW: Option `volume_offset` for sonos entity object for use with synced volume (#88)
