@@ -151,6 +151,9 @@ class MiniMediaPlayerMediaControls extends LitElement {
           flex: 100;
           max-height: 40px;
         }
+        .mmp-media-controls__volume.--buttons {
+          justify-content: left;
+        }
         .mmp-media-controls__media {
           direction: ltr;
         }
