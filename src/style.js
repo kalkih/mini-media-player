@@ -3,7 +3,7 @@ import { css } from 'lit-element';
 const style = css`
   :host {
     display: block;
-    --mmp-accent-color: var(--mini-media-player-accent-color, --accent-color, #f39c12);
+    --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     --mmp-text-color: var(--primary-text-color);
     --mmp-text-color-inverted: var(--disabled-text-color);
     --mmp-active-color: var(--mmp-accent-color);
