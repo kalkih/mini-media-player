@@ -1,3 +1,10 @@
+## v1.1.1
+### FIXED
+- Incorrect spacing between media buttons
+- Incorrect spacing between volume buttons
+- border-radius not applying when card was collapsed
+- icon colors not changing correctly with icon state
+
 ## v1.1.0
 ### ADDED
 - New option `attribute` for shortcut object, to determine & display active/selected shortcut from an attribute, see [README](https://github.com/kalkih/mini-media-player#shortcuts-object)
