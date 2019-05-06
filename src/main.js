@@ -170,6 +170,7 @@ class MiniMediaPlayer extends LitElement {
         content=${this.player.content}>
         <div class='mmp__bg'>
           ${this.renderArtwork(artwork)}
+          <mmp-progressbar .player=${this.player}></mmp-progressbar>
         </div>
         <div class='mmp-player'>
           <div class='mmp-player__core flex' ?inactive=${this.player.idle}>
@@ -213,7 +214,6 @@ class MiniMediaPlayer extends LitElement {
             </mmp-group-list>
           </div>
         </div>
-        <mmp-progressbar .player=${this.player}></mmp-progressbar>
       </ha-card>
     `;
   }

@@ -45,6 +45,9 @@ const style = css`
   ha-card.--collapse {
     overflow: visible;
   }
+  .mmp__bg, .mmp__player {
+    border-radius: var(--ha-card-border-radius, 0);
+  }
   ha-card:before {
     content: '';
     padding-top: 0px;
@@ -73,6 +76,7 @@ const style = css`
     background: var(--paper-card-background-color, white);
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
+    overflow: hidden;
   }
   ha-card.--group .mmp__bg {
     background: transparent;
