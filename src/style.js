@@ -77,6 +77,8 @@ const style = css`
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
     overflow: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
   ha-card.--group .mmp__bg {
     background: transparent;
