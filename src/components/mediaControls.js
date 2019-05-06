@@ -156,6 +156,9 @@ class MiniMediaPlayerMediaControls extends LitElement {
         }
         .mmp-media-controls__media {
           direction: ltr;
+          max-width: calc(40px * 3);
+          margin-right: 0;
+          margin-left: auto;
         }
         .mmp-media-controls__shuffle {
           flex: 3;
