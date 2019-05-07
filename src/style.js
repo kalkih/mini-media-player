@@ -108,13 +108,13 @@ const style = css`
   }
   ha-card.--has-artwork .cover,
   ha-card.--has-artwork[artwork='cover'] .cover:before,
-  ha-card[bg] .cover {
+  ha-card.--bg .cover {
     opacity: .999;
   }
   ha-card[artwork='default'] .cover {
     display: none;
   }
-  ha-card[bg] .cover {
+  ha-card.--bg .cover {
     display: block;
   }
   ha-card[artwork='full-cover-fit'].--has-artwork .cover {
