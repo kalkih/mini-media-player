@@ -15,6 +15,14 @@ class MiniMediaPlayerMediaControls extends LitElement {
     return !this.config.hide.shuffle && this.player.supportsShuffle;
   }
 
+  get maxVol() {
+    return this.config.max_volume || 100;
+  }
+
+  get minVol() {
+    return this.config.min_volume || 0;
+  }
+
   render() {
     const { hide } = this.config;
     return html`
@@ -63,7 +71,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           @change=${this.handleVolumeChange}
           @click=${e => e.stopPropagation()}
           ?disabled=${muted}
-          min='0' max=${this.config.max_volume}
+          min=${this.minVol} max=${this.maxVol}
           value=${this.player.vol * 100}
           dir=${'ltr'}
           ignore-bar-touch pin>

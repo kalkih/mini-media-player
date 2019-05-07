@@ -119,6 +119,7 @@ class MiniMediaPlayer extends LitElement {
       },
     };
     conf.max_volume = Number(conf.max_volume) || 100;
+    conf.min_volume = Number(conf.min_volume) || 0;
     conf.collapse = (conf.hide.controls || conf.hide.volume);
     conf.info = conf.collapse && conf.info !== 'scroll' ? 'short' : conf.info;
     conf.flow = (conf.hide.icon && conf.hide.name && conf.hide.info);
