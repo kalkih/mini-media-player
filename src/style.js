@@ -308,6 +308,12 @@ const style = css`
   ha-card.--responsive .mmp-player__adds > mmp-media-controls {
     padding: 0;
   }
+  ha-card.--runtime .mmp-player {
+    margin-bottom: 8px;
+  }
+  ha-card.--runtime.--group .mmp-player {
+    padding-bottom: 16px;
+  }
   .mmp-player div:empty {
     display: none;
   }

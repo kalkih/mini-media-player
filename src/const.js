@@ -4,6 +4,7 @@ const DEFAULT_HIDE = {
   artwork_border: true,
   icon_state: true,
   sound_mode: true,
+  runtime: true,
 };
 const ICON = {
   DEFAULT: 'mdi:cast',

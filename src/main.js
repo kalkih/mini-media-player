@@ -171,7 +171,10 @@ class MiniMediaPlayer extends LitElement {
         content=${this.player.content}>
         <div class='mmp__bg'>
           ${this.renderArtwork(artwork)}
-          <mmp-progress .player=${this.player}></mmp-progress>
+          <mmp-progress
+            .player=${this.player}
+            .showTime=${!this.config.hide.runtime}>
+          </mmp-progress>
         </div>
         <div class='mmp-player'>
           <div class='mmp-player__core flex' ?inactive=${this.player.idle}>
@@ -292,6 +295,7 @@ class MiniMediaPlayer extends LitElement {
       '--flow': config.flow,
       '--collapse': config.collapse,
       '--rtl': this.rtl,
+      '--runtime': !config.hide.runtime && this.player.hasProgress,
     });
   }
 

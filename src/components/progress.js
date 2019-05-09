@@ -1,10 +1,14 @@
 import { LitElement, html, css } from 'lit-element';
 
+import convertProgress from '../utils/getProgress';
+
 class MiniMediaPlayerProgress extends LitElement {
   static get properties() {
     return {
       _player: {},
+      showTime: Boolean,
       progress: Number,
+      duration: Number,
       tracker: {},
       track: Boolean,
     };
@@ -15,6 +19,10 @@ class MiniMediaPlayerProgress extends LitElement {
     if (this.hasProgress) {
       this.trackProgress();
     }
+  }
+
+  get duration() {
+    return this.player.mediaDuration;
   }
 
   get player() {
@@ -31,9 +39,15 @@ class MiniMediaPlayerProgress extends LitElement {
         <div class='mmp-progress'
           @click=${this.handleSeek}
           ?paused=${!this.player.isPlaying}>
+          ${this.showTime ? html`
+            <div class='mmp-progress__duration'>
+              <span>${(convertProgress(this.progress))}</span>
+              <span>${(convertProgress(this.duration))}</span>
+            </div>
+          ` : ''}
           <paper-progress class='transiting'
             value=${this.progress}
-            max=${this.player.mediaDuration}>
+            max=${this.duration}>
           </paper-progress>
         </div>
       `;
@@ -54,7 +68,7 @@ class MiniMediaPlayerProgress extends LitElement {
   }
 
   handleSeek(e) {
-    const duration = this.player.mediaDuration;
+    const { duration } = this;
     const pos = (e.offsetX / e.target.offsetWidth) * duration;
     this.player.seek(e, pos);
   }
@@ -66,17 +80,16 @@ class MiniMediaPlayerProgress extends LitElement {
   static get styles() {
     return css`
       .mmp-progress {
-        height: 12px;
         cursor: pointer;
         left: 0; right: 0; bottom: 0;
         position: absolute;
       }
-      ha-card[group][collapse] .mmp-progress {
-        bottom: -2px;
-        height: 5px;
-      }
-      ha-card[group] paper-progress {
-        height: var(--paper-progress-height, 2px);
+      .mmp-progress__duration {
+        display: flex;
+        justify-content: space-between;
+        font-size: .8em;
+        margin: 8px calc(var(--ha-card-border-radius, 4) / 2);
+        padding: 0 6px;
       }
       paper-progress {
         height: var(--paper-progress-height, 4px);
