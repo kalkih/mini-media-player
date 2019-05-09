@@ -1,9 +1,24 @@
+
+
+## v1.1.2
+### ADDED
+- Sound mode select, similar to source select (only for devices with support for sound_mode)
+- Optional progress/runtime indicators
+- New `min_volume` option (#116)
+- New `sound_mode` option, to change the appearance of sound select
+- New `sound_mode` option in `hide` option object, to set visibility of the sound_menu, hidden by default
+- New `runtime` option in `hide` option object, to set visibility of the runtime indicators, hidden by default
+
+### FIXED
+- Fixed background not displaying (#115)
+- Fixed alignment and button spacing of power button & media controls when (icon, name & info) are all hidden
+
 ## v1.1.1
 ### FIXED
 - Incorrect spacing between media buttons
-- Incorrect spacing between volume buttons
-- border-radius not applying when card was collapsed
-- icon colors not changing correctly with icon state
+- Incorrect spacing between volume buttons (#114)
+- Border-radius not applying when card was collapsed
+- Icon colors not changing correctly with icon state
 
 ## v1.1.0
 ### ADDED

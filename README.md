@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.1
+    - url: /local/mini-media-player-bundle.js?v=1.1.2
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.1.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.1.2/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.1
+    - url: /local/mini-media-player-bundle.js?v=1.1.2
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.1
+    - url: /local/mini-media-player-bundle.js?v=1.1.2
       type: module
   ```
 
@@ -84,10 +84,12 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | hide | object | optional | v1.0.0 | Manage visible UI elements, see [hide object](#hide-object) for available options.
 | artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `none` to hide artwork, `full-cover-fit` for full cover without cropping.
 | tts | object | optional | v1.0.0 | Show Text-To-Speech input, see [TTS object](#tts-object) for available options.
-| source | string | optional | v0.7 | Change how the source is shown, `icon` to only display the, `full` display the full source name.
+| source | string | optional | v0.7 | Change source select appearance, `icon` for just an icon, `full` for the full source name.
+| sound_mode | string | optional | v1.1.2 | Change sound mode select appearance, `icon` for just an icon, `full` for the full sound mode name.
 | info | string | optional | v1.0.0 | Change how the media information is displayed, `short` to limit media information to one row, `scroll` to scroll overflowing media info.
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
-| max_volume | number | true | v0.8.2 | Specify a volume limit for the volume slider (number between 1 - 100).
+| max_volume | number | optional | v0.8.2 | Specify the max vol limit of the volume slider (number between 1 - 100).
+| min_volume | number | optional | v1.1.2 | Specify the min vol limit of the volume slider (number between 1 - 100).
 | replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play`, `stop`, `next`.
 | toggle_power | boolean | true | v0.8.9 | Set to `false` to change the power button behaviour to `media_player.turn_on`/`media_player.turn_off`.
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
@@ -178,11 +180,13 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | icon | boolean | false | The entity icon.
 | info | boolean | false | The media information.
 | power | boolean | false | The power button.
-| source | boolean | false | The source button.
+| source | boolean | false | The source select.
+| sound_mode | boolean | true | The sound_mode select.
 | controls | boolean | false | The media playback controls.
 | volume | boolean | false | The volume controls.
 | mute | boolean | false | The mute button.
 | progress | boolean | false | The progress bar.
+| runtime | boolean | true | The media runtime indicators.
 | artwork_border | boolean | true | The border of the `default` artwork picture.
 | power_state | boolean | true | Dynamic color of the power button to indicate on/off.
 | shuffle | boolean | true | The shuffle button (only for players with `shuffle_set` support).
