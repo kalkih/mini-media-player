@@ -101,9 +101,9 @@ class MiniMediaPlayer extends LitElement {
     const conf = {
       artwork: 'default',
       info: 'default',
-      max_volume: 100,
       more_info: true,
       source: 'default',
+      sound_mode: 'default',
       toggle_power: true,
       ...config,
       hide: { ...DEFAULT_HIDE, ...config.hide },

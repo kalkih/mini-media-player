@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 
 import './sourceMenu';
+import './soundMenu';
 import './mediaControls';
 
 import { ICON } from '../const';
@@ -35,8 +36,16 @@ class MiniMediaPlayerPowerstrip extends LitElement {
     return (this.config.source === 'icon' || this.config.collapse || this.idle);
   }
 
+  get soundSize() {
+    return (this.config.sound_mode === 'icon' || this.config.collapse || this.idle);
+  }
+
   get hasSource() {
     return (this.player.sources.length > 0 && !this.config.hide.source);
+  }
+
+  get hasSoundMode() {
+    return (this.player.soundModes.length > 0 && !this.config.hide.sound_mode);
   }
 
   render() {
@@ -61,6 +70,12 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           .icon=${this.sourceSize}
           ?full=${this.config.source === 'full'}>
         </mmp-source-menu>` : ''}
+      ${this.hasSoundMode ? html`
+        <mmp-sound-menu
+          .player=${this.player}
+          .icon=${this.soundSize}
+          ?full=${this.config.sound_mode === 'full'}>
+        </mmp-sound-menu>` : ''}
       ${this.showGroupButton ? html`
         <paper-icon-button class='group-button'
           .icon=${ICON.GROUP}
@@ -121,7 +136,6 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         paper-icon-button {
           min-width: 40px;
         }
-
       `,
     ];
   }

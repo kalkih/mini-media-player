@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 
 import './dropdown';
 
-class MiniMediaPlayerSourceMenu extends LitElement {
+class MiniMediaPlayerSoundMenu extends LitElement {
   static get properties() {
     return {
       player: {},
@@ -11,33 +11,33 @@ class MiniMediaPlayerSourceMenu extends LitElement {
     };
   }
 
-  get source() {
-    return this.player.source;
+  get mode() {
+    return this.player.soundMode;
   }
 
-  get sources() {
-    return this.player.sources.map(source => ({
-      name: source,
-      id: source,
-      type: 'source',
+  get modes() {
+    return this.player.soundModes.map(mode => ({
+      name: mode,
+      id: mode,
+      type: 'soundMode',
     }));
   }
 
   render() {
     return html`
       <mmp-dropdown
-        @change=${this.handleSource}
-        .items=${this.sources}
-        .label=${this.source}
-        .selected=${this.selected || this.source}
+        @change=${this.handleChange}
+        .items=${this.modes}
+        .label=${this.mode}
+        .selected=${this.selected || this.mode}
         .icon=${this.icon}
       />
     `;
   }
 
-  handleSource(ev) {
+  handleChange(ev) {
     const { id } = ev.detail;
-    this.player.setSource(ev, id);
+    this.player.setSoundMode(ev, id);
     this.selected = id;
   }
 
@@ -54,4 +54,4 @@ class MiniMediaPlayerSourceMenu extends LitElement {
   }
 }
 
-customElements.define('mmp-source-menu', MiniMediaPlayerSourceMenu);
+customElements.define('mmp-sound-menu', MiniMediaPlayerSoundMenu);

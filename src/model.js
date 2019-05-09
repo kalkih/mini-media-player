@@ -102,6 +102,14 @@ export default class MediaPlayerObject {
     return this.attr.source || '';
   }
 
+  get soundModes() {
+    return this.attr.sound_mode_list || [];
+  }
+
+  get soundMode() {
+    return this.attr.sound_mode || '';
+  }
+
   get muted() {
     return this.attr.is_volume_muted || false;
   }

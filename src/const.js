@@ -3,6 +3,7 @@ const DEFAULT_HIDE = {
   power_state: true,
   artwork_border: true,
   icon_state: true,
+  sound_mode: true,
 };
 const ICON = {
   DEFAULT: 'mdi:cast',
