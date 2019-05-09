@@ -38,7 +38,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
         </div>
       ` : ''}
       ${!hide.controls ? html`
-        <div class='flex mmp-media-controls__media'>
+        <div class='flex mmp-media-controls__media' ?flow=${this.config.flow}>
           <paper-icon-button
             @click=${e => this.player.prev(e)}
             .icon=${ICON.PREV}>
@@ -167,6 +167,9 @@ class MiniMediaPlayerMediaControls extends LitElement {
           max-width: calc(40px * 3);
           margin-right: 0;
           margin-left: auto;
+        }
+        .mmp-media-controls__media[flow] {
+          max-width: none;
         }
         .mmp-media-controls__shuffle {
           flex: 3;
