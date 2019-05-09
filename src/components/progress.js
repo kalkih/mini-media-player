@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
-class MiniMediaPlayerProgressbar extends LitElement {
+class MiniMediaPlayerProgress extends LitElement {
   static get properties() {
     return {
       _player: {},
@@ -28,7 +28,7 @@ class MiniMediaPlayerProgressbar extends LitElement {
   render() {
     if (this.player.active && this.hasProgress) {
       return html`
-        <div class='mmp-progressbar'
+        <div class='mmp-progress'
           @click=${this.handleSeek}
           ?paused=${!this.player.isPlaying}>
           <paper-progress class='transiting'
@@ -65,13 +65,13 @@ class MiniMediaPlayerProgressbar extends LitElement {
 
   static get styles() {
     return css`
-      .mmp-progressbar {
+      .mmp-progress {
         height: 12px;
         cursor: pointer;
         left: 0; right: 0; bottom: 0;
         position: absolute;
       }
-      ha-card[group][collapse] .mmp-progressbar {
+      ha-card[group][collapse] .mmp-progress {
         bottom: -2px;
         height: 5px;
       }
@@ -89,11 +89,11 @@ class MiniMediaPlayerProgressbar extends LitElement {
         --paper-progress-transition-timing-function: linear;
         --paper-progress-transition-delay: 0s;
       }
-      .mmp-progressbar[paused] paper-progress {
+      .mmp-progress[paused] paper-progress {
         --paper-progress-active-color: var(--disabled-text-color, rgba(150,150,150,.5));
       }
     `;
   }
 }
 
-customElements.define('mmp-progressbar', MiniMediaPlayerProgressbar);
+customElements.define('mmp-progress', MiniMediaPlayerProgress);

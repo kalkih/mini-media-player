@@ -8,7 +8,7 @@ import './components/groupList';
 import './components/dropdown';
 import './components/shortcuts';
 import './components/tts';
-import './components/progressbar';
+import './components/progress';
 import './components/powerstrip';
 import './components/mediaControls';
 
@@ -171,7 +171,7 @@ class MiniMediaPlayer extends LitElement {
         content=${this.player.content}>
         <div class='mmp__bg'>
           ${this.renderArtwork(artwork)}
-          <mmp-progressbar .player=${this.player}></mmp-progressbar>
+          <mmp-progress .player=${this.player}></mmp-progress>
         </div>
         <div class='mmp-player'>
           <div class='mmp-player__core flex' ?inactive=${this.player.idle}>
