@@ -136,9 +136,6 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         paper-icon-button {
           min-width: 40px;
         }
-        .power-button {
-          margin-left: auto;
-        }
       `,
     ];
   }
