@@ -45,8 +45,17 @@ const style = css`
   ha-card.--collapse {
     overflow: visible;
   }
-  .mmp__bg, .mmp__player {
+  .mmp__bg, .mmp__player, .mmp__container {
     border-radius: var(--ha-card-border-radius, 0);
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  .mmp__container {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
   }
   ha-card:before {
     content: '';
@@ -105,6 +114,8 @@ const style = css`
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
     background: rgba(0,0,0,.75);
     background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.5) 50%, transparent 100%);
+    border-bottom-left-radius: var(--ha-card-border-radius, 0);
+    border-bottom-right-radius: var(--ha-card-border-radius, 0);
   }
   ha-card.--has-artwork .cover,
   ha-card.--has-artwork[artwork='cover'] .cover:before,
@@ -309,10 +320,10 @@ const style = css`
     padding: 0;
   }
   ha-card.--runtime .mmp-player {
-    margin-bottom: 8px;
+    padding-bottom: calc(16px + 8px);
   }
   ha-card.--runtime.--group .mmp-player {
-    padding-bottom: 16px;
+    padding-bottom: calc(16px + 8px);
   }
   .mmp-player div:empty {
     display: none;
