@@ -84,6 +84,7 @@ class MiniMediaPlayerProgress extends LitElement {
         left: 0; right: 0; bottom: 0;
         position: absolute;
         pointer-events: auto;
+        min-height: 10px;
       }
       .mmp-progress__duration {
         display: flex;
