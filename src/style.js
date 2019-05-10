@@ -4,6 +4,9 @@ const style = css`
   :host {
     display: block;
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
+    --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
+    --mmp-overlay-base-color: var(--mini-media-player-overlay-base-color, #fff);
+    --mmp-media-cover-info-color: var(--mini-media-player-media-cover-info-color, --mmp-text-color);
     --mmp-text-color: var(--primary-text-color);
     --mmp-text-color-inverted: var(--disabled-text-color);
     --mmp-active-color: var(--mmp-accent-color);
@@ -16,12 +19,12 @@ const style = css`
     color: var(--mmp-text-color);
   }
   ha-card.--has-artwork[artwork*='cover'] {
-    --mmp-text-color: #fff;
+    --mmp-text-color: var(--mmp-overlay-base-color);
     --mmp-text-color-inverted: #000;
     --mmp-active-color: rgba(255,255,255,.5);
     --mmp-icon-color: var(--mmp-text-color);
     --mmp-info-opacity: .75;
-    --paper-slider-container-color: rgba(255,255,255,.75);
+    --paper-slider-container-color: var(--mini-media-player-overlay-color, rgba(255,255,255,.75));
     --mdc-theme-primary: var(--mmp-text-color);
     --mdc-theme-on-primary: var(--mmp-text-color);
     --paper-checkbox-unchecked-color: var(--mmp-text-color);
@@ -108,12 +111,11 @@ const style = css`
     background-position: center center;
   }
   .cover:before {
-    background: rgba(0,0,0,.5);
+    background: var(--mmp-overlay-color);
     content: '';
   }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
-    background: rgba(0,0,0,.75);
-    background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.5) 50%, transparent 100%);
+    background: linear-gradient(to top, var(--mmp-overlay-color) 25%, transparent 100%);
     border-bottom-left-radius: var(--ha-card-border-radius, 0);
     border-bottom-right-radius: var(--ha-card-border-radius, 0);
   }
@@ -266,7 +268,7 @@ const style = css`
     white-space: nowrap;
   }
   ha-card[artwork*='cover'].--has-artwork .entity__info__media {
-    color: var(--mini-media-player-media-cover-info-color, var(--mmp-text-color));
+    color: var(--mmp-media-cover-info-color);
   }
   .entity__info__media span:before {
     content: ' - ';
