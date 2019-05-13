@@ -67,6 +67,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   set hass(hass) {
+    if (!hass) return;
     const entity = hass.states[this.config.entity];
     this._hass = hass;
     if (entity && this.entity !== entity) {
