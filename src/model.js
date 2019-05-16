@@ -290,8 +290,14 @@ export default class MediaPlayerObject {
     const options = { entity_id: entity };
     if (checked) {
       options.master = this.config.entity;
+      if (platform === 'sonos') {
+        return this.callService(e, 'join', options, platform);
+      }
       this.callService(e, `${platform}_JOIN`, options);
     } else {
+      if (platform === 'sonos') {
+        return this.callService(e, 'unjoin', options, platform);
+      }
       this.callService(e, `${platform}_UNJOIN`, options);
     }
   }
