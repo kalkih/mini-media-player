@@ -1,4 +1,20 @@
+## v1.1.3
+Sonos group management is now compatible with HA > 0.93.
+Sonos group management is no longer compatible with HA < 0.93.
 
+### BREAKING CHANGES
+- Adopted the [new](https://www.home-assistant.io/blog/2019/05/16/release-93/#sonos) Sonos join/unjoin service calls ([home-assistant#23670](https://github.com/home-assistant/home-assistant/pull/23670))
+
+### ADDED
+- New `mini-media-player-overlay-color` theme variable, artwork cover overlay color (#118)
+- New `mini-media-player-overlay-base-color` theme variable, artwork cover base UI color (#118)
+
+### CHANGED
+- Adjusted clickable/touchable seek area of the progress bar
+
+### FIXED
+- Fixed progress bar and full-cover artwork incompatibility
+- Added guard if hass is undefined
 
 ## v1.1.2
 ### ADDED

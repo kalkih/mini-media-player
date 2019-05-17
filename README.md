@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.2
+    - url: /local/mini-media-player-bundle.js?v=1.1.3
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.1.2/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.1.3/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.2
+    - url: /local/mini-media-player-bundle.js?v=1.1.3
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.2
+    - url: /local/mini-media-player-bundle.js?v=1.1.3
       type: module
   ```
 
@@ -194,13 +194,14 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 
 ### Theme variables
 The following variables are available and can be set in your theme to change the appearence of the card.
+Can be specified by color name, hexadecimal, rgb, rgba, hsl, hsla, basically anything supported by CSS.
 
 | name | Default | Description |
 |------|---------|-------------|
-| mini-media-player-accent-color | var(--accent-color) | Accent color
-| mini-media-player-media-cover-info-color | white | Color of the media information while artwork cover exists
-
-*More coming...*
+| mini-media-player-accent-color | var(--accent-color) | The accent color of UI elements
+| mini-media-player-overlay-color | rgba(0,0,0,0.5) | The color of the background overlay
+| mini-media-player-overlay-base-color | white | The base color of UI elements including text/icons/buttons while artwork cover is present
+| mini-media-player-media-cover-info-color | white | Color of the media information text while artwork cover is present
 
 ### Example usage
 
