@@ -90,7 +90,7 @@ class MiniMediaPlayerProgress extends LitElement {
         display: flex;
         justify-content: space-between;
         font-size: .8em;
-        margin: 8px calc(var(--ha-card-border-radius, 4) / 2);
+        margin: 8px calc(var(--ha-card-border-radius, 4px) / 2);
         margin-top: 0;
         padding: 0 6px;
       }
