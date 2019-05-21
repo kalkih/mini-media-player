@@ -344,11 +344,22 @@ class MiniMediaPlayer extends LitElement {
     this.edit = !this.edit;
   }
 
-  handleMoreInfo() {
-    if (!this.config.more_info) return;
-    const e = new Event('hass-more-info', { composed: true });
-    e.detail = { entityId: this.config.entity };
+  handleMoreInfo(e) {
+    e.stopPropagation();
+    if (this.config.more_info) this.fire('hass-more-info', { entityId: this.config.entity });
+  }
+
+  fire(type, inDetail, inOptions) {
+    const options = inOptions || {};
+    const detail = inDetail === null || inDetail === undefined ? {} : inDetail;
+    const e = new Event(type, {
+      bubbles: options.bubbles === undefined ? true : options.bubbles,
+      cancelable: Boolean(options.cancelable),
+      composed: options.composed === undefined ? true : options.composed,
+    });
+    e.detail = detail;
     this.dispatchEvent(e);
+    return e;
   }
 
   updateIdleStatus() {
