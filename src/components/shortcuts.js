@@ -29,7 +29,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
   }
 
   render() {
-    if (!this.show) return;
+    if (!this.show) return html``;
     const { active } = this;
 
     const list = this.list ? html`
@@ -49,7 +49,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
             columns=${this.shortcuts.columns}
             ?color=${item.id === active}
             class='mmp-shortcuts__button'
-            @click='${e => this.handleShortcut(e, item)}'>
+            @click=${e => this.handleShortcut(e, item)}>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
             ${item.name ? html`<span class="ellipsis">${item.name}</span>` : ''}
           </mwc-button>`)}
