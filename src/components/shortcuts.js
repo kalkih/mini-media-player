@@ -72,6 +72,8 @@ class MiniMediaPlayerShortcuts extends LitElement {
     const { type, id, data } = item || ev.detail;
     if (type === 'source')
       return this.player.setSource(ev, id);
+    if (type === 'service')
+      return this.player.toggleService(ev, id, data);
     if (type === 'script')
       return this.player.toggleScript(ev, id, data);
     if (type === 'sound_mode')
