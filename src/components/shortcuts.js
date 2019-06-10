@@ -29,6 +29,10 @@ class MiniMediaPlayerShortcuts extends LitElement {
     return this.player.getAttribute(this.shortcuts.attribute);
   }
 
+  get height() {
+    return this.shortcuts.column_height || 36;
+  }
+
   render() {
     if (!this.show) return html``;
     const { active } = this;
@@ -46,6 +50,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
       <div class='mmp-shortcuts__buttons'>
         ${this.buttons.map(item => html`
           <mmp-button
+            style=${`min-height: ${this.height}px;`}
             raised
             columns=${this.shortcuts.columns}
             ?color=${item.id === active}
