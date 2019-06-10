@@ -3,6 +3,7 @@ import { LitElement, html, css } from 'lit-element';
 import { ICON } from '../const';
 
 import sharedStyle from '../sharedStyle';
+import './button';
 
 class MiniMediaPlayerDropdown extends LitElement {
   static get properties() {
@@ -39,14 +40,14 @@ class MiniMediaPlayerDropdown extends LitElement {
             .icon=${ICON.DROPDOWN}>
           </paper-icon-button>
         ` : html`
-          <mwc-button class='mmp-dropdown__button' slot='dropdown-trigger'>
+          <mmp-button class='mmp-dropdown__button' slot='dropdown-trigger'>
             <div>
               <span class='mmp-dropdown__label ellipsis'>
                 ${this.selected || this.label}
               </span>
               <iron-icon class='mmp-dropdown__icon' .icon=${ICON.DROPDOWN}></iron-icon>
             </div>
-          </mwc-button>
+          </mmp-button>
         `}
         <paper-listbox slot="dropdown-content" selected=${this.selectedId}>
           ${this.items.map(item => html`
@@ -68,8 +69,18 @@ class MiniMediaPlayerDropdown extends LitElement {
         :host {
           display: block;
         }
-        :host([faded]) mwc-button {
+        :host([faded]) {
           opacity: .75;
+        }
+        :host[small] .mmp-dropdown__label {
+          max-width: 60px;
+          display: block;
+          position: relative;
+          width: auto;
+          text-transform: initial;
+        }
+        :host[full] .mmp-dropdown__label {
+          max-width: none;
         }
         .mmp-dropdown {
           padding: 0;
@@ -107,27 +118,17 @@ class MiniMediaPlayerDropdown extends LitElement {
         paper-item > *:nth-child(2) {
           margin-left: 4px;
         }
-
-        paper-menu-button[focused] mwc-button > div > iron-icon,
+        paper-menu-button[focused] mmp-button iron-icon {
+          color: var(--mmp-accent-color);
+          transform: rotate(180deg);
+        }
         paper-menu-button[focused] paper-icon-button {
           color: var(--mmp-accent-color);
           transform: rotate(180deg);
         }
-        paper-menu-button mwc-button:focus > div > iron-icon,
-        paper-menu-button mwc-button[focused] > div > iron-icon,
         paper-menu-button[focused] paper-icon-button[focused] {
           color: var(--mmp-text-color);
           transform: rotate(0deg);
-        }
-        :host[small] .mmp-dropdown__label {
-          max-width: 60px;
-          display: block;
-          position: relative;
-          width: auto;
-          text-transform: initial;
-        }
-        :host[full] .mmp-dropdown__label {
-          max-width: none;
         }
       `,
     ];

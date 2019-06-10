@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 
 import './groupItem';
+import './button';
 
 class MiniMediaPlayerGroupList extends LitElement {
   static get properties() {
@@ -41,20 +42,20 @@ class MiniMediaPlayerGroupList extends LitElement {
             .master=${item.entity_id === master}
           />`)}
         <div class='mmp-group-list__buttons'>
-          <mwc-button
+          <mmp-button
             class='mmp-group-list__button'
             raised
             ?disabled=${group.length < 2}
-            @click='${e => this.player.handleGroupChange(e, isMaster ? group : this.player.entity_id, false)}'>
-            ${isMaster ? html`Ungroup` : html`Leave`}
-          </mwc-button>
-          <mwc-button
+            @click=${e => this.player.handleGroupChange(e, isMaster ? group : this.player.entity_id, false)}>
+            <span>${isMaster ? html`Ungroup` : html`Leave`}</span>
+          </mmp-button>
+          <mmp-button
             class='mmp-group-list__button'
             raised
             ?disabled=${!isMaster}
-            @click='${e => this.player.handleGroupChange(e, this.entities.map(item => item.entity_id), true)}'>
-            Group all
-          </mwc-button>
+            @click=${e => this.player.handleGroupChange(e, this.entities.map(item => item.entity_id), true)}>
+            <span>Group all</span>
+          </mmp-button>
         </div>
       </div>
     ` : html``;

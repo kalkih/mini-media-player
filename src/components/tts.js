@@ -29,11 +29,9 @@ class MiniMediaPlayerTts extends LitElement {
         placeholder=${this.label}...
         @click=${e => e.stopPropagation()}>
       </paper-input>
-      <div>
-        <mwc-button class='mmp-tts__button' @click=${this.handleTts}>
-          SEND
-        </mwc-button>
-      </div>
+      <mmp-button class='mmp-tts__button' @click=${this.handleTts}>
+        <span>SEND</span>
+      </mmp-button>
     `;
   }
 
@@ -89,7 +87,8 @@ class MiniMediaPlayerTts extends LitElement {
       }
       .mmp-tts__button {
         margin: 0;
-        padding: .4em;
+        height: 30px;
+        padding: 0 .4em;
       }
       paper-input {
         opacity: .75;

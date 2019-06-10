@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 
 import './dropdown';
+import './button';
 
 import sharedStyle from '../sharedStyle';
 
@@ -44,15 +45,15 @@ class MiniMediaPlayerShortcuts extends LitElement {
     const buttons = this.buttons ? html`
       <div class='mmp-shortcuts__buttons'>
         ${this.buttons.map(item => html`
-          <mwc-button
-            dense raised
+          <mmp-button
+            raised
             columns=${this.shortcuts.columns}
             ?color=${item.id === active}
             class='mmp-shortcuts__button'
             @click=${e => this.handleShortcut(e, item)}>
             ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
             ${item.name ? html`<span class="ellipsis">${item.name}</span>` : ''}
-          </mwc-button>`)}
+          </mmp-button>`)}
       </div>
     ` : '';
 
@@ -87,25 +88,14 @@ class MiniMediaPlayerShortcuts extends LitElement {
           flex-wrap: wrap;
           margin-top: 8px;
         }
-        .mmp-shortcuts__button {
-          --mdc-theme-primary: transparent;
-          box-sizing: border-box;
-          margin: 4px;
-          min-width: 0;
-          min-width: calc(50% - 8px);
-          flex: 1;
-          overflow: hidden;
-          transition: background .5s;
-          background: rgba(255,255,255,0.25);
-          box-shadow:
-            0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-            0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-            0px 1px 5px 0px rgba(0,0,0,.12);
-        }
         .mmp-shortcuts__button[color] {
           background: var(--mmp-active-color);
         }
-        .mmp-shortcuts__button[columns='0'] {
+        .mmp-shortcuts__button {
+          min-width: calc(50% - 8px);
+          flex: 1;
+        }
+        .mmp-shortcuts__button[columns='1'] {
           min-width: calc(100% - 8px);
         }
         .mmp-shortcuts__button[columns='3'] {

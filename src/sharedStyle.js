@@ -19,10 +19,6 @@ const sharedStyle = css`
   paper-icon-button[inactive] {
     opacity: .5;
   }
-  mwc-button[color] {
-    background: var(--mmp-accent-color) !important;
-    transition: background .25s;
-  }
 `;
 
 export default sharedStyle;

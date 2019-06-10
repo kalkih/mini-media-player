@@ -20,13 +20,6 @@ import {
   LABEL_SHORTCUT,
 } from './const';
 
-if (!customElements.get('mwc-button')) {
-  customElements.define(
-    'mwc-button',
-    class extends customElements.get('paper-button') {},
-  );
-}
-
 if (!customElements.get('ha-paper-slider')) {
   customElements.define(
     'ha-paper-slider',
