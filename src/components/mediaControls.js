@@ -26,7 +26,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
   render() {
     const { hide } = this.config;
     return html`
-      ${!hide.volume ? this.renderVolControls(this.player.muted) : ''}
+      ${!hide.volume ? this.renderVolControls(this.player.muted) : html``}
       ${this.showShuffle ? html`
         <div class='flex mmp-media-controls__shuffle'>
           <paper-icon-button
@@ -36,7 +36,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
             ?color=${this.player.shuffle}>
           </paper-icon-button>
         </div>
-      ` : ''}
+      ` : html``}
       ${!hide.controls ? html`
         <div class='flex mmp-media-controls__media' ?flow=${this.config.flow}>
           <paper-icon-button
@@ -52,7 +52,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
             .icon=${ICON.NEXT}>
           </paper-icon-button>
         </div>
-      ` : ''}
+      ` : html``}
     `;
   }
 
