@@ -1,3 +1,19 @@
+## v1.2.0
+### ADDED
+- Added support for service calls through shortcuts (#121)
+- Added column height option to shortcuts object (#129)
+- Added the option parameter `5` to shortcuts column option
+- Added documentation for use with [HACS](https://github.com/custom-components/hacs)
+
+### CHANGED
+- Changed button component
+
+### FIXED
+- Fixed runtime misplacement (#119)
+- Fixed shortcuts not hiding properly
+- Fixed controls not hiding propertly if config changed in runtime
+- Fixed repeat popup-card issue (#122) (@iantrich)
+
 ## v1.1.3
 Sonos group management is now compatible with HA > 0.93.
 Sonos group management is no longer compatible with HA < 0.93.

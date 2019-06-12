@@ -19,7 +19,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.3
+    - url: /local/mini-media-player-bundle.js?v=1.2.0
       type: module
   ```
 
@@ -30,14 +30,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.1.3/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.2.0/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.3
+    - url: /local/mini-media-player-bundle.js?v=1.2.0
       type: module
   ```
 
@@ -62,7 +62,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.1.3
+    - url: /local/mini-media-player-bundle.js?v=1.2.0
       type: module
   ```
 
@@ -156,7 +156,8 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | list | list | optional | A list of [shortcut items](#shortcut-item-object) to be presented as a list, see shortcut item object.
 | buttons | list | optional | A list of [shortcut items](#shortcut-item-object) to be presented as buttons.
 | hide_when_off | boolean | false | Hide the shortcuts while the entity is off.
-| columns | integer (1-4) | 2 | Specify the max number of buttons per row.
+| columns | integer (1-5) | 2 | Specify the max number of buttons per row.
+| column_height | number | optional | Specify the column height in pixels.
 | label | string | `shortcuts...` | Specify a custom default label for the shortcut dropdown.
 | attribute | string | optional | Specify any attribute exposed by the media player entity. The attribute value (if exists) is compared with shortcut `id`'s to distinguish selected/active shortcut<sup>[1](#shortcuts_foot1)</sup>.
 
@@ -167,11 +168,11 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 |------|------|---------|-------------|
 | name | string | optional | A display name.
 | icon | string | optional | A display icon *(any mdi icon)*.
-| type | string | **required** | Type of shortcut. A media type: `music`, `tvshow`, `video`, `episode`, `channel`, `playlist` e.g. or an action type: `source`, `sound_mode`, `script`.
-| id | string | **required** | The media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify. A source/(sound mode) name can also be specified to change source/(sound mode), use together with type `source`/`sound_mode`. If type `script` specify the script name here.
+| type | string | **required** | Type of shortcut. A media type: `music`, `tvshow`, `video`, `episode`, `channel`, `playlist` e.g. or an action type: `source`, `sound_mode`, `script` or `service`.
+| id | string | **required** | The media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify. A source/(sound mode) name can also be specified to change source/(sound mode), use together with type `source`/`sound_mode`. If type `script` specify the script name here or `service` specify the `<domain>.<service>`.
 | data | list | optional | Extra service payload<sup>[1](#shortcut_foot1)</sup>.
 
-<a name="shortcut_foot1"><sup>1</sup></a> Only compatible with `script` shortcuts, useful for sending variables to script.
+<a name="shortcut_foot1"><sup>1</sup></a> Only compatible with `script` & `service` shortcuts, useful for sending variables to script.
 
 #### Hide object
 | Name | Type | Default | Description |
