@@ -67,7 +67,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
     return html`
       <div class='mmp-media-controls__volume --slider flex'>
         ${this.renderMuteButton(muted)}
-        <ha-paper-slider
+        <ha-slider
           @change=${this.handleVolumeChange}
           @click=${e => e.stopPropagation()}
           ?disabled=${muted}
@@ -75,7 +75,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           value=${this.player.vol * 100}
           dir=${'ltr'}
           ignore-bar-touch pin>
-        </ha-paper-slider>
+        </ha-slider>
       </div>`;
   }
 
@@ -147,7 +147,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           flex: 1;
           justify-content: space-between;
         }
-        ha-paper-slider {
+        ha-slider {
           max-width: none;
           min-width: 100px;
           width: 100%;

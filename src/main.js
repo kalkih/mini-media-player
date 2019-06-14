@@ -20,9 +20,9 @@ import {
   LABEL_SHORTCUT,
 } from './const';
 
-if (!customElements.get('ha-paper-slider')) {
+if (!customElements.get('ha-slider')) {
   customElements.define(
-    'ha-paper-slider',
+    'ha-slider',
     class extends customElements.get('paper-slider') {},
   );
 }
