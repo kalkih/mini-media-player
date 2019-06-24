@@ -5,19 +5,23 @@ const style = css`
     overflow: visible !important;
     display: block;
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
+    --mmp-base-color: var(--mini-media-player-base-color, var(--primary-text-color, #000));
     --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
     --mmp-overlay-base-color: var(--mini-media-player-overlay-base-color, #fff);
+    --mmp-text-color: var(--mmp-base-color, --primary-text-color);
     --mmp-media-cover-info-color: var(--mini-media-player-media-cover-info-color, --mmp-text-color);
-    --mmp-text-color: var(--primary-text-color);
     --mmp-text-color-inverted: var(--disabled-text-color);
     --mmp-active-color: var(--mmp-accent-color);
-    --mmp-icon-color: var(--paper-item-icon-color, #44739e);
+    --mmp-icon-color: var(--mmp-base-color, var(--paper-item-icon-color, #44739e));
     --mmp-info-opacity: 1;
     --mdc-theme-primary: var(--mmp-text-color);
     --mdc-theme-on-primary: var(--mmp-text-color);
     --paper-checkbox-unchecked-color: var(--mmp-text-color);
     --paper-checkbox-label-color: var(--mmp-text-color);
     color: var(--mmp-text-color);
+  }
+  ha-card.--bg {
+    --mmp-info-opacity: .75;
   }
   ha-card.--has-artwork[artwork*='cover'] {
     --mmp-text-color: var(--mmp-overlay-base-color);
@@ -39,6 +43,7 @@ const style = css`
     overflow: hidden;
     padding: 0;
     position: relative;
+    color: inherit;
   }
   ha-card.--group {
     box-shadow: none;
@@ -238,8 +243,6 @@ const style = css`
     max-width: 200px;
     opacity: .5;
   }
-  .mmp-player__core[inactive] .entity__info__media {
-  }
   .entity__info__media[short-scroll] {
     max-height: 20px;
     white-space: nowrap;
@@ -268,7 +271,8 @@ const style = css`
     position: absolute;
     white-space: nowrap;
   }
-  ha-card[artwork*='cover'].--has-artwork .entity__info__media {
+  ha-card[artwork*='cover'].--has-artwork .entity__info__media,
+  ha-card.--bg .entity__info__media {
     color: var(--mmp-media-cover-info-color);
   }
   .entity__info__media span:before {
