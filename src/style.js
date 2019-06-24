@@ -2,6 +2,7 @@ import { css } from 'lit-element';
 
 const style = css`
   :host {
+    overflow: visible !important;
     display: block;
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
