@@ -8,6 +8,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
     return {
       player: {},
       config: {},
+      break: Boolean,
     };
   }
 
@@ -38,7 +39,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
         </div>
       ` : html``}
       ${!hide.controls ? html`
-        <div class='flex mmp-media-controls__media' ?flow=${this.config.flow}>
+        <div class='flex mmp-media-controls__media' ?flow=${this.config.flow || this.break}>
           <paper-icon-button
             @click=${e => this.player.prev(e)}
             .icon=${ICON.PREV}>

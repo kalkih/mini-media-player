@@ -187,7 +187,8 @@ class MiniMediaPlayer extends LitElement {
             ${!config.collapse && this.player.active ? html`
               <mmp-media-controls
                 .player=${this.player}
-                .config=${config}>
+                .config=${config}
+                .break=${this.break}>
               </mmp-media-controls>
             ` : ''}
             <mmp-shortcuts
