@@ -8,6 +8,7 @@ const style = css`
     --mmp-base-color: var(--mini-media-player-base-color, var(--primary-text-color, #000));
     --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
     --mmp-overlay-base-color: var(--mini-media-player-overlay-base-color, #fff);
+    --mmp-overlay-accent-color: var(--mini-media-player-overlay-accent-color, --mmp-accent-color);
     --mmp-text-color: var(--mmp-base-color, --primary-text-color);
     --mmp-media-cover-info-color: var(--mini-media-player-media-cover-info-color, --mmp-text-color);
     --mmp-text-color-inverted: var(--disabled-text-color);
@@ -24,6 +25,7 @@ const style = css`
     --mmp-info-opacity: .75;
   }
   ha-card.--has-artwork[artwork*='cover'] {
+    --mmp-accent-color: var(--mmp-overlay-accent-color);
     --mmp-text-color: var(--mmp-overlay-base-color);
     --mmp-text-color-inverted: #000;
     --mmp-active-color: rgba(255,255,255,.5);
