@@ -11,6 +11,8 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ## Install
 
+*This card is available in [HACS](https://github.com/custom-components/hacs) (Home Assistant Community Store)*
+
 ### Simple install
 
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
@@ -19,7 +21,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.2.0
+    - url: /local/mini-media-player-bundle.js?v=1.2.1
       type: module
   ```
 
@@ -30,14 +32,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.2.0/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.2.1/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.2.0
+    - url: /local/mini-media-player-bundle.js?v=1.2.1
       type: module
   ```
 
@@ -62,7 +64,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.2.0
+    - url: /local/mini-media-player-bundle.js?v=1.2.1
       type: module
   ```
 
@@ -108,7 +110,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 #### TTS object
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google_translate` or `amazon_polly`, `alexa`<sup>[1](#tts_foot1)</sup> for ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639), `ga`<sup>[2](#tts_foot2)</sup><sup>[3](#tts_foot3)</sup> for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay), `sonos`<sup>[2](#tts_foot2)</sup> for use with modified [sonos_say script](https://github.com/kalkih/mini-media-player/issues/86#issuecomment-465541825).
+| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google_translate` or `amazon_polly`, `alexa`<sup>[1](#tts_foot1)</sup> for ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639), `ga`<sup>[2](#tts_foot2)</sup><sup>[3](#tts_foot3)</sup> for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay), `sonos`<sup>[2](#tts_foot2)</sup> for use with modified [sonos_say script](https://github.com/kalkih/mini-media-player/issues/86#issuecomment-465541825), `webos`<sup>[4](#tts_foot4)</sup>.
 | language | string | optional | The output language.
 | entity_id | string/list | optional | The *entity_id* of the desired output entity or a list of *entity_id's*, can also be `all` to broadcast to all entities.
 | volume | float | optional | Volume level of tts output (0 - 1), only supported by platform `sonos`.
@@ -119,6 +121,8 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 <a name="tts_foot2"><sup>2</sup></a> Does not support `language` & `entity_id` options.
 
 <a name="tts_foot3"><sup>3</sup></a> Requires a custom notify service named `ga_broadcast`, see example below.
+
+<a name="tts_foot4"><sup>4</sup></a> Requires the card entity name to match the notify service name, if they don't match please specify the notify service name in the `entity_id` option.
 
 ```yaml
 # configuration.yaml
@@ -160,6 +164,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | column_height | number | optional | Specify the column height in pixels.
 | label | string | `shortcuts...` | Specify a custom default label for the shortcut dropdown.
 | attribute | string | optional | Specify any attribute exposed by the media player entity. The attribute value (if exists) is compared with shortcut `id`'s to distinguish selected/active shortcut<sup>[1](#shortcuts_foot1)</sup>.
+| align_text | string | optional | Specify alignment of button icon/text `left`, `right`, `center`.
 
 <a name="shortcuts_foot1"><sup>1</sup></a> Examples, `source` for active source or `sound_mode` for active sound mode.
 
@@ -199,9 +204,11 @@ Can be specified by color name, hexadecimal, rgb, rgba, hsl, hsla, basically any
 
 | name | Default | Description |
 |------|---------|-------------|
+| mini-media-player-base-color | var(--primary-text-color) & var(--paper-item-icon-color) | The color of base text, icons & buttons
 | mini-media-player-accent-color | var(--accent-color) | The accent color of UI elements
 | mini-media-player-overlay-color | rgba(0,0,0,0.5) | The color of the background overlay
-| mini-media-player-overlay-base-color | white | The base color of UI elements including text/icons/buttons while artwork cover is present
+| mini-media-player-overlay-base-color | white | The color of base text, icons & buttons while artwork cover is present
+| mini-media-player-overlay-accent-color | white | The accent color of UI elements while artwork cover is present
 | mini-media-player-media-cover-info-color | white | Color of the media information text while artwork cover is present
 
 ### Example usage

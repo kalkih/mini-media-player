@@ -1,3 +1,20 @@
+## v1.2.1
+### ADDED
+- New base-color (`mini-media-player-base-color`) theme variable (#130)
+- New overlay-accent-color (`mini-media-player-overlay-accent-color`) theme variable (#118)
+- New `align_text` option to shortcuts object, to specify alignment of button content (text/icon) (#87)
+- Added support for `webos` notify as tts platform (#136)
+
+### CHANGED
+- Updated HACS readme
+
+### FIXED
+- Fixed `Cannot convert undefined` errors (#127)
+- Updated README with new default google tts name (#134) (@ngreis)
+- Prevent cut off volume pin when used in entities card (#131)
+- Respecting ha-card-background theme variable (if set)
+- Fixed alignment of playback buttons if limited card space
+
 ## v1.2.0
 ### ADDED
 - Added support for service calls through shortcuts (#121)
