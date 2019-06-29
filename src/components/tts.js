@@ -94,8 +94,8 @@ class MiniMediaPlayerTts extends LitElement {
       }
       paper-input {
         opacity: .75;
-        --paper-input-container-color: var(--primary-text-color);
-        --paper-input-container-focus-color: var(--primary-text-color);
+        --paper-input-container-color: var(--mmp-text-color);
+        --paper-input-container-focus-color: var(--mmp-text-color);
         --paper-input-container: {
           padding: 0;
         };
