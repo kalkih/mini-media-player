@@ -97,9 +97,6 @@ class MiniMediaPlayerShortcuts extends LitElement {
           flex-wrap: wrap;
           margin-top: 8px;
         }
-        .mmp-shortcuts__button[color] {
-          background: var(--mmp-active-color);
-        }
         .mmp-shortcuts__button {
           min-width: calc(50% - 8px);
           flex: 1;

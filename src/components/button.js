@@ -31,8 +31,9 @@ class MiniMediaPlayerButton extends LitElement {
           0px 1px 5px 0px rgba(0,0,0,.12);
       }
       :host([color]) {
-        background: var(--mmp-accent-color) !important;
+        background: var(--mmp-active-color);
         transition: background .25s;
+        opacity: 1;
       }
       :host([faded]) {
         opacity: .75;
