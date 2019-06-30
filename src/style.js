@@ -25,7 +25,7 @@ const style = css`
     --mmp-info-opacity: .75;
   }
   ha-card.--has-artwork[artwork*='cover'] {
-    --mmp-accent-color: var(--mmp-overlay-accent-color);
+    --mmp-accent-color: var(--mini-media-player-overlay-accent-color, var(--mini-media-player-accent-color, var(--accent-color, #f39c12)));
     --mmp-text-color: var(--mmp-overlay-base-color);
     --mmp-text-color-inverted: #000;
     --mmp-active-color: rgba(255,255,255,.5);
