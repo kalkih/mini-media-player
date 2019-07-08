@@ -1,3 +1,12 @@
+## v1.2.2
+### CHANGED
+- Adjusted tts text input color
+- Adjustements to active button color
+
+### FIXED
+- Fixed invisible progress bars (#138)
+- Preserve state-icon color on entity icon unless overridden
+
 ## v1.2.1
 ### ADDED
 - New base-color (`mini-media-player-base-color`) theme variable (#130)
