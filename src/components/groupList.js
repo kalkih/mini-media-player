@@ -67,6 +67,7 @@ class MiniMediaPlayerGroupList extends LitElement {
         display: flex;
         flex-direction: column;
         margin-left: 8px;
+        margin-bottom: 8px;
       }
       .mmp-group-list__title {
         font-weight: 500;
