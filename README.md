@@ -211,6 +211,7 @@ Can be specified by color name, hexadecimal, rgb, rgba, hsl, hsla, basically any
 | mini-media-player-overlay-base-color | white | The color of base text, icons & buttons while artwork cover is present
 | mini-media-player-overlay-accent-color | white | The accent color of UI elements while artwork cover is present
 | mini-media-player-media-cover-info-color | white | Color of the media information text while artwork cover is present
+| mini-media-player-artwork-opacity | 1 | Opacity of cover artwork
 
 ### Example usage
 

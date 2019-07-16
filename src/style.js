@@ -15,6 +15,7 @@ const style = css`
     --mmp-active-color: var(--mmp-accent-color);
     --mmp-icon-color: var(--mini-media-player-icon-color, var(--mini-media-player-base-color, var(--paper-item-icon-color, #44739e)));
     --mmp-info-opacity: 1;
+    --mmp-artwork-opacity: var(--mini-media-player-artwork-opacity, 1);
     --mdc-theme-primary: var(--mmp-text-color);
     --mdc-theme-on-primary: var(--mmp-text-color);
     --paper-checkbox-unchecked-color: var(--mmp-text-color);
@@ -99,6 +100,10 @@ const style = css`
     overflow: hidden;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+  }
+  ha-card[artwork*='cover'].--has-artwork .mmp__bg {
+    opacity: var(--mmp-artwork-opacity);
+    background: transparent;
   }
   ha-card.--group .mmp__bg {
     background: transparent;
