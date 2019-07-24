@@ -33,11 +33,21 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   }
 
   get sourceSize() {
-    return (this.config.source === 'icon' || this.config.collapse || this.idle);
+    return (this.config.source === 'icon'
+      || this.config.hide.controls !== this.config.hide.volume
+      || this.idle);
   }
 
   get soundSize() {
-    return (this.config.sound_mode === 'icon' || this.config.collapse || this.idle);
+    return (this.config.sound_mode === 'icon'
+      || this.config.hide.controls !== this.config.hide.volume
+      || this.idle);
+  }
+
+  get hasControls() {
+    return (this.config.collapse
+      && this.player.active
+      && this.config.hide.controls !== this.config.hide.volume);
   }
 
   get hasSource() {
@@ -58,7 +68,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
 
     return html`
       ${this.idle ? this.renderIdleView : ''}
-      ${this.config.collapse && this.player.active ? html`
+      ${this.hasControls ? html`
         <mmp-media-controls
           .player=${this.player}
           .config=${this.config}>
