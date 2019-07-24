@@ -20,6 +20,10 @@ class MiniMediaPlayerPowerstrip extends LitElement {
     };
   }
 
+  get icon() {
+    return this.config.speaker_group.icon || ICON.GROUP;
+  }
+
   get showGroupButton() {
     return this.config.speaker_group.entities;
   }
@@ -78,7 +82,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         </mmp-sound-menu>` : ''}
       ${this.showGroupButton ? html`
         <paper-icon-button class='group-button'
-          .icon=${ICON.GROUP}
+          .icon=${this.icon}
           ?inactive=${!this.player.isGrouped}
           ?color=${this.groupVisible}
           @click=${this.handleGroupClick}>

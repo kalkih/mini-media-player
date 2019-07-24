@@ -142,6 +142,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
 | expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
+| icon | string | optional | Override default group button icon *(any mdi icon)*.
 
 <a name="speaker_foot1"><sup>1</sup></a> Currently not yet available in Home Assistant, *soon™*
 
