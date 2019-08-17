@@ -290,15 +290,15 @@ export default class MediaPlayerObject {
     const options = { entity_id: entity };
     if (checked) {
       options.master = this.config.entity;
-      if (platform === 'sonos') {
-        return this.callService(e, 'join', options, platform);
+      if (platform === 'bluesound') {
+        return this.callService(e, `${platform}_JOIN`, options);
       }
-      this.callService(e, `${platform}_JOIN`, options);
+      this.callService(e, 'join', options, platform);
     } else {
-      if (platform === 'sonos') {
-        return this.callService(e, 'unjoin', options, platform);
+      if (platform === 'bluesound') {
+        return this.callService(e, `${platform}_UNJOIN`, options);
       }
-      this.callService(e, `${platform}_UNJOIN`, options);
+      this.callService(e, 'unjoin', options, platform);
     }
   }
 
