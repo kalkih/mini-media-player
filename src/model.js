@@ -309,10 +309,11 @@ export default class MediaPlayerObject {
   }
 
   toggleService(e, id, data = {}) {
-    const type = id.split('.');
-    this.callService(e, type[1], {
+    e.stopPropagation();
+    const [domain, service] = id.split('.');
+    this.hass.callService(domain, service, {
       ...data,
-    }, type[0]);
+    });
   }
 
   callService(e, service, inOptions, domain = 'media_player') {
