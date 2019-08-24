@@ -302,10 +302,7 @@ export default class MediaPlayerObject {
       }
       if (platform === 'soundtouch') {
         const service = this.isGrouped ? 'SOUNDTOUCH_ADD_ZONE_SLAVE' : 'SOUNDTOUCH_CREATE_ZONE';
-        return this.callService(e, service, {
-          master: this.config.entity,
-          slaves: [entity],
-        }, 'media_player', true);
+        return this.handleSoundtouch(e, service, entity);
       }
       this.callService(e, 'join', options, platform);
     } else {
@@ -313,13 +310,17 @@ export default class MediaPlayerObject {
         return this.callService(e, `${platform}_UNJOIN`, options);
       }
       if (platform === 'soundtouch') {
-        return this.callService(e, 'SOUNDTOUCH_REMOVE_ZONE_SLAVE', {
-          master: this.config.entity,
-          slaves: [entity],
-        }, 'media_player', true);
+        return this.handleSoundtouch(e, 'SOUNDTOUCH_REMOVE_ZONE_SLAVE', entity);
       }
       this.callService(e, 'unjoin', options, platform);
     }
+  }
+
+  handleSoundtouch(e, service, entity) {
+    return this.callService(e, service, {
+      master: this.config.entity,
+      slaves: entity,
+    }, 'media_player', true);
   }
 
   toggleScript(e, id, data = {}) {
