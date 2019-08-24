@@ -21,7 +21,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.2.2
+    - url: /local/mini-media-player-bundle.js?v=1.3.0
       type: module
   ```
 
@@ -32,14 +32,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.2.2/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.3.0/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.2.2
+    - url: /local/mini-media-player-bundle.js?v=1.3.0
       type: module
   ```
 
@@ -64,7 +64,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.2.2
+    - url: /local/mini-media-player-bundle.js?v=1.3.0
       type: module
   ```
 
@@ -96,7 +96,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | toggle_power | boolean | true | v0.8.9 | Set to `false` to change the power button behaviour to `media_player.turn_on`/`media_player.turn_off`.
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
-| speaker_group | object | optional | v1.0.0 | Speaker group management for supported platforms, see [Speaker group object](#speaker-group-object) for available options.
+| speaker_group | object | optional | v1.0.0 | Speaker group management/multiroom, see [Speaker group object](#speaker-group-object) for available options.
 | shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
 
 #### Idle object
@@ -135,16 +135,21 @@ notify:
 #### Speaker group object
 See [Speaker group management](#speaker-group-management) for example usage.
 
+**Supported platforms**
+- sonos
+- bluesound
+- snapcast
+
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | entities | list | **required** | A list containing [speaker entities](#speaker-entity-object) of one of supported platforms, to enable group management of those speakers.
-| platform | string | 'sonos' | The media_player platform to control. `sonos` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
+| platform | string | 'sonos' | The media_player platform to control. `sonos`, `snapcast`, `bluesound` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
 | expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
 | icon | string | optional | Override default group button icon *(any mdi icon)*.
 
-<a name="speaker_foot1"><sup>1</sup></a> Currently not yet available in Home Assistant, *soon™*
+<a name="speaker_foot1"><sup>1</sup></a> Currently not yet supported in Home Assistant, *soon™*
 
 #### Speaker entity object
 | Name | Type | Default | Description |

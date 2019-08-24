@@ -1,3 +1,17 @@
+## v1.3.0
+### ADDED
+- New independent icon color theme variable (#142)
+- New theme variable to adjust artwork opacity
+- New option to change speaker group button icon (#150)
+- Speaker group management/multiroom support for Snapcast & Bluesound platforms (#161) (@lyghtnox)
+
+### CHANGED
+- Allow dropdown text for source/sound mode if both controls and volume is hidden (#149) (#152) (@bernimoses)
+
+### FIXED
+- Overlapping progress-bar (#143)
+- No longer sending `entity_id` parameter by default with shortcut service calls (#164)
+
 ## v1.2.2
 ### CHANGED
 - Adjusted tts text input color
