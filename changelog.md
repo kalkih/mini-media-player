@@ -1,3 +1,7 @@
+## v1.3.1
+### FIXED
+- Duplicate controls with certain card configurations (#169)
+
 ## v1.3.0
 ### ADDED
 - New independent icon color theme variable (#142)
