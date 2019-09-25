@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 
 import convertProgress from '../utils/getProgress';
 
@@ -10,7 +11,10 @@ class MiniMediaPlayerProgress extends LitElement {
       progress: Number,
       duration: Number,
       tracker: {},
+      seekProgress: Number,
+      seekWidth: Number,
       track: Boolean,
+      ele: {},
     };
   }
 
@@ -33,29 +37,40 @@ class MiniMediaPlayerProgress extends LitElement {
     return this.player.hasProgress;
   }
 
-  render() {
-    if (this.player.active && this.hasProgress) {
-      return html`
-        <div class='mmp-progress'
-          @click=${this.handleSeek}
-          ?paused=${!this.player.isPlaying}>
-          ${this.showTime ? html`
-            <div class='mmp-progress__duration'>
-              <span>${(convertProgress(this.progress))}</span>
-              <span>${(convertProgress(this.duration))}</span>
-            </div>
-          ` : ''}
-          <paper-progress class='transiting'
-            value=${this.progress}
-            max=${this.duration}>
-          </paper-progress>
-        </div>
-      `;
-    } else {
-      return html``;
-    }
+  get width() {
+    return this.shadowRoot.querySelector('.mmp-progress').offsetWidth;
   }
 
+  get classes() {
+    return classMap({
+      transiting: !this.seekProgress,
+      seeking: this.seekProgress,
+    });
+  }
+
+  render() {
+    return html`
+      <div class='mmp-progress'
+        @touchstart=${this.initSeek}
+        @touchend=${this.handleSeek}
+        @mousedown=${this.initSeek}
+        @mouseup=${this.handleSeek}
+        @mouseleave=${this.resetSeek}
+        @click=${e => e.stopPropagation()}
+        ?paused=${!this.player.isPlaying}>
+        ${this.showTime ? html`
+          <div class='mmp-progress__duration'>
+            <span>${(convertProgress(this.seekProgress || this.progress))}</span>
+            <span>${(convertProgress(this.duration))}</span>
+          </div>
+        ` : ''}
+        <paper-progress class=${this.classes}
+          value=${this.seekProgress || this.progress}
+          max=${this.duration}>
+        </paper-progress>
+      </div>
+    `;
+  }
 
   trackProgress() {
     this.progress = this.player.progress;
@@ -67,14 +82,41 @@ class MiniMediaPlayerProgress extends LitElement {
     }
   }
 
+  initSeek(e) {
+    const x = e.clientX || e.touches[0].clientX;
+    this.seekWidth = this.width;
+    this.seekProgress = this.calcProgress(x);
+    this.addEventListener('touchmove', this.moveSeek);
+    this.addEventListener('mousemove', this.moveSeek);
+  }
+
+  resetSeek() {
+    this.seekProgress = null;
+    this.removeEventListener('touchmove', this.moveSeek);
+    this.removeEventListener('mousemove', this.moveSeek);
+  }
+
+  moveSeek(e) {
+    e.preventDefault();
+    const x = e.clientX || e.touches[0].clientX;
+    this.seekProgress = this.calcProgress(x);
+  }
+
   handleSeek(e) {
-    const { duration } = this;
-    const pos = (e.offsetX / e.target.offsetWidth) * duration;
+    this.resetSeek();
+    const x = e.clientX || e.changedTouches[0].clientX;
+    const pos = this.calcProgress(x);
     this.player.seek(e, pos);
   }
 
   disconnectedCallback() {
+    this.resetSeek();
     clearInterval(this.tracker);
+  }
+
+  calcProgress(x) {
+    const pos = (x / this.seekWidth) * this.duration;
+    return Math.min(Math.max(pos, 0.1), this.duration);
   }
 
   static get styles() {
@@ -99,11 +141,15 @@ class MiniMediaPlayerProgress extends LitElement {
         bottom: 0;
         position: absolute;
         width: 100%;
+        transition: transform .15s ease-out;
         --paper-progress-active-color: var(--mmp-accent-color);
         --paper-progress-container-color: rgba(100,100,100,.15);
         --paper-progress-transition-duration: 1s;
         --paper-progress-transition-timing-function: linear;
         --paper-progress-transition-delay: 0s;
+      }
+      paper-progress.seeking {
+        transform: scaleY(2);
       }
       .mmp-progress[paused] paper-progress {
         --paper-progress-active-color: var(--disabled-text-color, rgba(150,150,150,.5));

@@ -210,10 +210,12 @@ class MiniMediaPlayer extends LitElement {
           </div>
         </div>
         <div class='mmp__container'>
-          <mmp-progress
-            .player=${this.player}
-            .showTime=${!this.config.hide.runtime}>
-          </mmp-progress>
+          ${this.player.active && this.player.hasProgress ? html`
+            <mmp-progress
+              .player=${this.player}
+              .showTime=${!this.config.hide.runtime}>
+            </mmp-progress>
+          ` : ''}
         </div>
       </ha-card>
     `;
