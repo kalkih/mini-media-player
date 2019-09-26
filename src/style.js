@@ -16,6 +16,7 @@ const style = css`
     --mmp-icon-color: var(--mini-media-player-icon-color, var(--mini-media-player-base-color, var(--paper-item-icon-color, #44739e)));
     --mmp-info-opacity: 1;
     --mmp-artwork-opacity: var(--mini-media-player-artwork-opacity, 1);
+    --mmp-progress-height: var(--mini-media-player-progress-height, 6px);
     --mdc-theme-primary: var(--mmp-text-color);
     --mdc-theme-on-primary: var(--mmp-text-color);
     --paper-checkbox-unchecked-color: var(--mmp-text-color);
@@ -50,6 +51,7 @@ const style = css`
   }
   ha-card.--group {
     box-shadow: none;
+    --mmp-progress-height: var(--mini-media-player-progress-height, 4px);
   }
   ha-card.--more-info {
     cursor: pointer;
@@ -152,12 +154,14 @@ const style = css`
     box-sizing: border-box;
     position: relative;
     padding: 16px;
+    padding-bottom: calc(16px + calc(var(--mini-media-player-progress-height, 6px) - 6px));
     transition: padding .25s ease-out;
     width: 100%;
     will-change: padding;
   }
   ha-card.--group .mmp-player {
     padding: 10px 0;
+    padding-bottom: calc(10px + calc(var(--mini-media-player-progress-height, 6px) - 6px));
   }
   .flex {
     display: flex;
@@ -334,10 +338,16 @@ const style = css`
     padding: 0;
   }
   ha-card.--runtime .mmp-player {
-    padding-bottom: calc(16px + 8px);
+    padding-bottom: calc(16px + 16px + var(--mini-media-player-progress-height, 0px));
   }
   ha-card.--runtime.--group .mmp-player {
-    padding-bottom: calc(16px + 8px);
+    padding-bottom: calc(16px + 12px + var(--mini-media-player-progress-height, 0px));
+  }
+  ha-card.--inactive .mmp-player {
+    padding: 16px;
+  }
+  ha-card.--inactive.--group .mmp-player {
+    padding: 10px 0;
   }
   .mmp-player div:empty {
     display: none;

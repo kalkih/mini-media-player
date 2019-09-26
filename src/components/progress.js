@@ -126,22 +126,27 @@ class MiniMediaPlayerProgress extends LitElement {
         left: 0; right: 0; bottom: 0;
         position: absolute;
         pointer-events: auto;
-        min-height: 10px;
+        min-height: calc(var(--mmp-progress-height) + 10px);
       }
       .mmp-progress__duration {
+        left: calc(var(--ha-card-border-radius, 4px) / 2);
+        right: calc(var(--ha-card-border-radius, 4px) / 2);
+        bottom: calc(var(--mmp-progress-height) + 6px);
+        position: absolute;
         display: flex;
         justify-content: space-between;
         font-size: .8em;
-        margin: 8px calc(var(--ha-card-border-radius, 4px) / 2);
-        margin-top: 0;
         padding: 0 6px;
+        z-index: 2
       }
       paper-progress {
-        height: var(--paper-progress-height, 4px);
+        height: var(--mmp-progress-height);
+        --paper-progress-height: var(--mmp-progress-height);
         bottom: 0;
         position: absolute;
         width: 100%;
-        transition: transform .15s ease-out;
+        transition: height 0;
+        z-index: 1;
         --paper-progress-active-color: var(--mmp-accent-color);
         --paper-progress-container-color: rgba(100,100,100,.15);
         --paper-progress-transition-duration: 1s;
@@ -149,7 +154,9 @@ class MiniMediaPlayerProgress extends LitElement {
         --paper-progress-transition-delay: 0s;
       }
       paper-progress.seeking {
-        transform: scaleY(2);
+        transition: height .15s ease-out;
+        height: calc(var(--mmp-progress-height) + 4px);
+        --paper-progress-height: calc(var(--mmp-progress-height) + 4px);
       }
       .mmp-progress[paused] paper-progress {
         --paper-progress-active-color: var(--disabled-text-color, rgba(150,150,150,.5));

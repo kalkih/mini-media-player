@@ -295,6 +295,7 @@ class MiniMediaPlayer extends LitElement {
       '--collapse': config.collapse,
       '--rtl': this.rtl,
       '--runtime': !config.hide.runtime && this.player.hasProgress,
+      '--inactive': !this.player.isActive,
     });
   }
 
