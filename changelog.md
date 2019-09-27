@@ -1,3 +1,18 @@
+## v1.4.0
+### ADDED
+- Drag/swipe support on the progress bar to make fine adjustments easier.
+- New progress bar height theme variable `mini-media-player-progress-height`
+- Increased max columns of shortcut buttons to `6` (from `5`) (#163)
+
+### CHANGED
+- Changed progress bar height to `6px`, and `4px` with group option (from `4px`)
+- Increased top/bottom card padding with group option to `10px`
+- Progress bar will now move isntantly to the new position on user seek, instead of 1 sec of animation
+
+### FIXED
+- Misplaced volume knob text in certain configurations (#166)
+
+
 ## v1.3.1
 ### FIXED
 - Duplicate controls with certain card configurations (#169)
