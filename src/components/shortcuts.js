@@ -125,6 +125,9 @@ class MiniMediaPlayerShortcuts extends LitElement {
         .mmp-shortcuts__button[columns='5'] {
           min-width: calc(20% - 8px);
         }
+        .mmp-shortcuts__button[columns='6'] {
+          min-width: calc(16.66% - 8px);
+        }
         .mmp-shortcuts__button > div > span {
           line-height: 24px;
           text-transform: initial;

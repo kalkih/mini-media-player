@@ -166,7 +166,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | list | list | optional | A list of [shortcut items](#shortcut-item-object) to be presented as a list, see shortcut item object.
 | buttons | list | optional | A list of [shortcut items](#shortcut-item-object) to be presented as buttons.
 | hide_when_off | boolean | false | Hide the shortcuts while the entity is off.
-| columns | integer (1-5) | 2 | Specify the max number of buttons per row.
+| columns | integer (1-6) | 2 | Specify the max number of buttons per row.
 | column_height | number | optional | Specify the column height in pixels.
 | label | string | `shortcuts...` | Specify a custom default label for the shortcut dropdown.
 | attribute | string | optional | Specify any attribute exposed by the media player entity. The attribute value (if exists) is compared with shortcut `id`'s to distinguish selected/active shortcut<sup>[1](#shortcuts_foot1)</sup>.
