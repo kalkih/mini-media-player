@@ -14,7 +14,6 @@ class MiniMediaPlayerProgress extends LitElement {
       seekProgress: Number,
       seekWidth: Number,
       track: Boolean,
-      ele: {},
     };
   }
 
@@ -39,6 +38,10 @@ class MiniMediaPlayerProgress extends LitElement {
 
   get width() {
     return this.shadowRoot.querySelector('.mmp-progress').offsetWidth;
+  }
+
+  get offset() {
+    return this.getBoundingClientRect().left;
   }
 
   get classes() {
@@ -83,7 +86,7 @@ class MiniMediaPlayerProgress extends LitElement {
   }
 
   initSeek(e) {
-    const x = e.clientX || e.touches[0].clientX;
+    const x = e.offsetX || (e.touches[0].pageX - this.offset);
     this.seekWidth = this.width;
     this.seekProgress = this.calcProgress(x);
     this.addEventListener('touchmove', this.moveSeek);
@@ -98,13 +101,13 @@ class MiniMediaPlayerProgress extends LitElement {
 
   moveSeek(e) {
     e.preventDefault();
-    const x = e.clientX || e.touches[0].clientX;
+    const x = e.offsetX || (e.touches[0].pageX - this.offset);
     this.seekProgress = this.calcProgress(x);
   }
 
   handleSeek(e) {
     this.resetSeek();
-    const x = e.clientX || e.changedTouches[0].clientX;
+    const x = e.offsetX || (e.changedTouches[0].pageX - this.offset);
     const pos = this.calcProgress(x);
     this.player.seek(e, pos);
   }
