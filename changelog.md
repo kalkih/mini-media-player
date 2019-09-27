@@ -1,3 +1,8 @@
+## v1.4.1
+### FIXED
+- Fixed invalid progress bar seek position in multi column card setups
+
+
 ## v1.4.0
 ### ADDED
 - Drag/swipe support on the progress bar to make fine adjustments easier.
