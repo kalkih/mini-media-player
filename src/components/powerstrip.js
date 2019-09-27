@@ -134,6 +134,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         }
         mmp-media-controls {
           max-width: 200px;
+          line-height: initial;
         }
         .group-button {
           height: 34px;
