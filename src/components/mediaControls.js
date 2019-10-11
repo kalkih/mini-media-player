@@ -44,10 +44,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
             @click=${e => this.player.prev(e)}
             .icon=${ICON.PREV}>
           </paper-icon-button>
-          <paper-icon-button
-            @click=${e => this.player.playPause(e)}
-            .icon=${ICON.PLAY[this.player.isPlaying]}>
-          </paper-icon-button>
+          ${this.renderPlayButton()}
           <paper-icon-button
             @click=${e => this.player.next(e)}
             .icon=${ICON.NEXT}>
@@ -55,6 +52,22 @@ class MiniMediaPlayerMediaControls extends LitElement {
         </div>
       ` : html``}
     `;
+  }
+
+  renderPlayButton() {
+    if (this.config.replace_pause && this.player.isPlaying) {
+      return html`
+      <paper-icon-button
+      @click=${e => this.player.stop(e)}
+      .icon=${ICON.STOP}>
+      </paper-icon-button>`;
+    } else {
+      return html`
+      <paper-icon-button
+      @click=${e => this.player.playPause(e)}
+      .icon=${ICON.PLAY[this.player.isPlaying]}>
+      </paper-icon-button>`;
+    }
   }
 
   renderVolControls(muted) {
