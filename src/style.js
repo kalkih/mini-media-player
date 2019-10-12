@@ -7,6 +7,7 @@ const style = css`
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     --mmp-base-color: var(--mini-media-player-base-color, var(--primary-text-color, #000));
     --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
+    --mmp-overlay-color-stop: var(--mini-media-player-overlay-color-stop, 25%);
     --mmp-overlay-base-color: var(--mini-media-player-overlay-base-color, #fff);
     --mmp-overlay-accent-color: var(--mini-media-player-overlay-accent-color, --mmp-accent-color);
     --mmp-text-color: var(--mini-media-player-base-color, --primary-text-color);
@@ -130,7 +131,7 @@ const style = css`
     content: '';
   }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
-    background: linear-gradient(to top, var(--mmp-overlay-color) 25%, transparent 100%);
+    background: linear-gradient(to top, var(--mmp-overlay-color) var(--mmp-overlay-color-stop), transparent 100%);
     border-bottom-left-radius: var(--ha-card-border-radius, 0);
     border-bottom-right-radius: var(--ha-card-border-radius, 0);
   }
