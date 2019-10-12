@@ -92,7 +92,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
 | max_volume | number | optional | v0.8.2 | Specify the max vol limit of the volume slider (number between 1 - 100).
 | min_volume | number | optional | v1.1.2 | Specify the min vol limit of the volume slider (number between 1 - 100).
-| replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play`, `stop`, `next`.
+| replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play_pause` (previously `play`), `stop`, `play_stop`, `next`.
 | toggle_power | boolean | true | v0.8.9 | Set to `false` to change the power button behaviour to `media_player.turn_on`/`media_player.turn_off`.
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
@@ -195,6 +195,8 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | source | boolean | false | The source select.
 | sound_mode | boolean | true | The sound_mode select.
 | controls | boolean | false | The media playback controls.
+| play_pause | boolean | false | The play/pause button in media playback controls.
+| play_stop | boolean | true | The play/stop button in media playback controls.
 | volume | boolean | false | The volume controls.
 | mute | boolean | false | The mute button.
 | progress | boolean | false | The progress bar.
