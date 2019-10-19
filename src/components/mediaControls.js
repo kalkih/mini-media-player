@@ -44,10 +44,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
             @click=${e => this.player.prev(e)}
             .icon=${ICON.PREV}>
           </paper-icon-button>
-          <paper-icon-button
-            @click=${e => this.player.playPause(e)}
-            .icon=${ICON.PLAY[this.player.isPlaying]}>
-          </paper-icon-button>
+          ${this.renderPlayButtons()}
           <paper-icon-button
             @click=${e => this.player.next(e)}
             .icon=${ICON.NEXT}>
@@ -99,6 +96,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
     if (this.config.hide.mute) return;
     switch (this.config.replace_mute) {
       case 'play':
+      case 'play_pause':
         return html`
           <paper-icon-button
             @click=${e => this.player.playPause(e)}
@@ -109,7 +107,14 @@ class MiniMediaPlayerMediaControls extends LitElement {
         return html`
           <paper-icon-button
             @click=${e => this.player.stop(e)}
-            .icon=${ICON.STOP}>
+            .icon=${ICON.STOP.true}>
+          </paper-icon-button>
+        `;
+      case 'play_stop':
+        return html`
+          <paper-icon-button
+            @click=${e => this.player.playStop(e)}
+            .icon=${ICON.STOP[this.player.isPlaying]}>
           </paper-icon-button>
         `;
       case 'next':
@@ -128,6 +133,28 @@ class MiniMediaPlayerMediaControls extends LitElement {
           </paper-icon-button>
         `;
     }
+  }
+
+  renderPlayButtons() {
+    const { hide } = this.config;
+    return html`
+      ${!hide.play_pause ? html`
+        <paper-icon-button
+          @click=${e => this.player.playPause(e)}
+          .icon=${ICON.PLAY[this.player.isPlaying]}>
+        </paper-icon-button>
+      ` : html``}
+      ${!hide.play_stop ? html`
+        <paper-icon-button
+          @click=${e => this.handleStop(e)}
+          .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}>
+        </paper-icon-button>
+      ` : html``}
+    `;
+  }
+
+  handleStop(e) {
+    return this.config.hide.play_pause ? this.player.playStop(e) : this.player.stop(e);
   }
 
   handleVolumeChange(ev) {
@@ -164,8 +191,8 @@ class MiniMediaPlayerMediaControls extends LitElement {
           justify-content: left;
         }
         .mmp-media-controls__media {
-          direction: ltr;
-          max-width: calc(40px * 3);
+          justify-content: flex-end;
+          max-width: calc(40px * 4);
           margin-right: 0;
           margin-left: auto;
         }

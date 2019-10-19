@@ -233,6 +233,13 @@ export default class MediaPlayerObject {
     this.callService(e, 'media_play_pause');
   }
 
+  playStop(e) {
+    if (!this.isPlaying)
+      this.callService(e, 'media_play');
+    else
+      this.callService(e, 'media_stop');
+  }
+
   setSoundMode(e, name) {
     this.callService(e, 'select_sound_mode', { sound_mode: name });
   }
