@@ -198,6 +198,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
         }
         .mmp-media-controls__media[flow] {
           max-width: none;
+          justify-content: space-between;
         }
         .mmp-media-controls__shuffle {
           flex: 3;
