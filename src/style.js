@@ -155,14 +155,12 @@ const style = css`
     box-sizing: border-box;
     position: relative;
     padding: 16px;
-    padding-bottom: calc(16px + calc(var(--mini-media-player-progress-height, 6px) - 6px));
     transition: padding .25s ease-out;
     width: 100%;
     will-change: padding;
   }
   ha-card.--group .mmp-player {
     padding: 10px 0;
-    padding-bottom: calc(10px + calc(var(--mini-media-player-progress-height, 6px) - 6px));
   }
   .flex {
     display: flex;
@@ -337,6 +335,12 @@ const style = css`
   }
   ha-card.--responsive .mmp-player__adds > mmp-media-controls {
     padding: 0;
+  }
+  ha-card.--progress .mmp-player {
+    padding-bottom: calc(16px + calc(var(--mini-media-player-progress-height, 6px) - 6px));
+  }
+  ha-card.--progress.--group .mmp-player {
+    padding-bottom: calc(10px + calc(var(--mini-media-player-progress-height, 6px) - 6px));
   }
   ha-card.--runtime .mmp-player {
     padding-bottom: calc(16px + 16px + var(--mini-media-player-progress-height, 0px));
