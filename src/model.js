@@ -318,7 +318,7 @@ export default class MediaPlayerObject {
 
   handleSoundtouch(e, service, entity) {
     return this.callService(e, service, {
-      master: this.config.entity,
+      master: this.master,
       slaves: entity,
     }, 'media_player', true);
   }
