@@ -10,11 +10,14 @@ const style = css`
     --mmp-overlay-color-stop: var(--mini-media-player-overlay-color-stop, 25%);
     --mmp-overlay-base-color: var(--mini-media-player-overlay-base-color, #fff);
     --mmp-overlay-accent-color: var(--mini-media-player-overlay-accent-color, --mmp-accent-color);
-    --mmp-text-color: var(--mini-media-player-base-color, --primary-text-color);
+    --mmp-text-color: var(--mini-media-player-base-color, var(--primary-text-color, #000));
     --mmp-media-cover-info-color: var(--mini-media-player-media-cover-info-color, --mmp-text-color);
     --mmp-text-color-inverted: var(--disabled-text-color);
     --mmp-active-color: var(--mmp-accent-color);
-    --mmp-icon-color: var(--mini-media-player-icon-color, var(--mini-media-player-base-color, var(--paper-item-icon-color, #44739e)));
+    --mmp-icon-color:
+      var(--mini-media-player-icon-color,
+        var(--mini-media-player-base-color,
+          var(--paper-item-icon-colo, #44739e)));
     --mmp-info-opacity: 1;
     --mmp-artwork-opacity: var(--mini-media-player-artwork-opacity, 1);
     --mmp-progress-height: var(--mini-media-player-progress-height, 6px);

@@ -10,6 +10,7 @@ const sharedStyle = css`
     margin: 0 8px;
   }
   paper-icon-button {
+    color: var(--mmp-text-color);
     transition: color .25s;
   }
   paper-icon-button[color] {
