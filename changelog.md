@@ -1,7 +1,17 @@
+## v1.4.2
+
+### ADDED
+- Optional stop / play_stop button #167 (#177) - (@guillaumelamirand)
+- Theme variable for linear color stop in `full-cover` mode (#178) - (@guillaumelamirand)
+
+### FIXED
+- Fixed responsive spacing of media controls
+- Prevent the extra card padding when there's no progressbar present
+- Fixed overflowing artwork
+
 ## v1.4.1
 ### FIXED
 - Fixed invalid progress bar seek position in multi column card setups
-
 
 ## v1.4.0
 ### ADDED
@@ -16,7 +26,6 @@
 
 ### FIXED
 - Misplaced volume knob text in certain configurations (#166)
-
 
 ## v1.3.1
 ### FIXED

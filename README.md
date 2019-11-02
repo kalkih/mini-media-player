@@ -21,7 +21,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.4.1
+    - url: /local/mini-media-player-bundle.js?v=1.4.2
       type: module
   ```
 
@@ -32,14 +32,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.4.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.4.2/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.4.1
+    - url: /local/mini-media-player-bundle.js?v=1.4.2
       type: module
   ```
 
@@ -64,7 +64,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.4.1
+    - url: /local/mini-media-player-bundle.js?v=1.4.2
       type: module
   ```
 
@@ -137,8 +137,8 @@ See [Speaker group management](#speaker-group-management) for example usage.
 
 **Supported platforms**
 - sonos
-- bluesound
-- snapcast
+- bluesound<sup>[2](#speaker_foot2)</sup>
+- snapcast<sup>[2](#speaker_foot2)</sup>
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
@@ -150,6 +150,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 | icon | string | optional | Override default group button icon *(any mdi icon)*.
 
 <a name="speaker_foot1"><sup>1</sup></a> Currently not yet supported in Home Assistant, *soon™*
+<a name="speaker_foot2"><sup>2</sup></a> Some features are not yet supported.
 
 #### Speaker entity object
 | Name | Type | Default | Description |
