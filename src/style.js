@@ -57,9 +57,6 @@ const style = css`
   ha-card.--more-info {
     cursor: pointer;
   }
-  ha-card.--collapse {
-    overflow: visible;
-  }
   .mmp__bg, .mmp__player, .mmp__container {
     border-radius: var(--ha-card-border-radius, 0);
     -webkit-transform: translateZ(0);
