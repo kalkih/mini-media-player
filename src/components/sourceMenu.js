@@ -6,7 +6,6 @@ class MiniMediaPlayerSourceMenu extends LitElement {
   static get properties() {
     return {
       player: {},
-      selected: String,
       icon: Boolean,
     };
   }
@@ -29,16 +28,15 @@ class MiniMediaPlayerSourceMenu extends LitElement {
         @change=${this.handleSource}
         .items=${this.sources}
         .label=${this.source}
-        .selected=${this.selected || this.source}
+        .selected=${this.source}
         .icon=${this.icon}
-      />
+      ></mmp-dropdown>
     `;
   }
 
   handleSource(ev) {
     const { id } = ev.detail;
     this.player.setSource(ev, id);
-    this.selected = id;
   }
 
   static get styles() {
