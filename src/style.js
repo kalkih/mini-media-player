@@ -4,6 +4,8 @@ const style = css`
   :host {
     overflow: visible !important;
     display: block;
+    --mmp-unit: var(--mini-media-player-scale, 40px);
+    font-size: calc(var(--mmp-unit) * 0.35);
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     --mmp-base-color: var(--mini-media-player-base-color, var(--primary-text-color, #000));
     --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
@@ -183,7 +185,7 @@ const style = css`
   }
   ha-card.--rtl .entity__info {
     margin-left: auto;
-    margin-right: 8px;
+    margin-right: calc(var(--mmp-unit) / 5);
   }
   ha-card[content='movie'] .attr__media_season,
   ha-card[content='movie'] .attr__media_episode {
@@ -198,11 +200,11 @@ const style = css`
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 100%;
-    height: 40px;
-    width: 40px;
-    min-width: 40px;
-    line-height: 40px;
-    margin-right: 8px;
+    height: var(--mmp-unit);
+    width: var(--mmp-unit);
+    min-width: var(--mmp-unit);
+    line-height: var(--mmp-unit);
+    margin-right: calc(var(--mmp-unit) / 5);
     position: relative;
     text-align: center;
     will-change: border-color;
@@ -228,7 +230,7 @@ const style = css`
     white-space: nowrap;
   }
   .entity__info__name {
-    line-height: 20px;
+    line-height: calc(var(--mmp-unit) / 2);
     color: var(--mmp-text-color);
   }
   .entity__info__media {
@@ -239,7 +241,7 @@ const style = css`
     transition: color .5s;
   }
   .entity__info__media[short] {
-    max-height: 20px;
+    max-height: calc(var(--mmp-unit) / 2);
     overflow: hidden;
   }
   .attr__app_name {
@@ -255,7 +257,7 @@ const style = css`
     opacity: .5;
   }
   .entity__info__media[short-scroll] {
-    max-height: 20px;
+    max-height: calc(var(--mmp-unit) / 2);
     white-space: nowrap;
   }
   .entity__info__media[scroll] > span {
@@ -296,12 +298,12 @@ const style = css`
     display: none;
   }
   .mmp-player__adds {
-    margin-left: 48px;
+    margin-left: calc(var(--mmp-unit) * 1.2);
     position: relative;
   }
   ha-card.--rtl .mmp-player__adds {
     margin-left: auto;
-    margin-right: 48px;
+    margin-right: calc(var(--mmp-unit) * 1.2);
   }
   .mmp-player__adds > *:nth-child(2) {
     margin-top: 0px;
@@ -316,7 +318,6 @@ const style = css`
   }
   mmp-media-controls {
     flex-wrap: wrap;
-    justify-content: center;
   }
   ha-card.--flow mmp-powerstrip {
     justify-content: space-between;

@@ -169,6 +169,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
         :host {
           display: flex;
           width: 100%;
+          justify-content: space-between;
         }
         .flex {
           display: flex;
@@ -181,20 +182,19 @@ class MiniMediaPlayerMediaControls extends LitElement {
           width: 100%;
         }
         paper-icon-button {
-          min-width: 40px;
+          min-width: var(--mmp-unit);
         }
         .mmp-media-controls__volume {
           flex: 100;
-          max-height: 40px;
+          max-height: var(--mmp-unit);
         }
         .mmp-media-controls__volume.--buttons {
           justify-content: left;
         }
         .mmp-media-controls__media {
-          justify-content: flex-end;
-          max-width: calc(40px * 4);
           margin-right: 0;
           margin-left: auto;
+          justify-content: inherit;
         }
         .mmp-media-controls__media[flow] {
           max-width: none;

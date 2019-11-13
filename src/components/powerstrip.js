@@ -126,24 +126,25 @@ class MiniMediaPlayerPowerstrip extends LitElement {
       css`
         :host {
           display: flex;
-          line-height: 40px;
-          max-height: 40px;
+          line-height: var(--mmp-unit);
+          max-height: var(--mmp-unit);
         }
         :host([flow]) mmp-media-controls {
           max-width: unset;
         }
         mmp-media-controls {
-          max-width: 200px;
+          max-width: calc(var(--mmp-unit) * 5);
           line-height: initial;
+          justify-content: flex-end;
         }
         .group-button {
-          height: 34px;
-          width: 34px;
-          min-width: 34px;
+          height: calc(var(--mmp-unit) * .85);
+          width: calc(var(--mmp-unit) * .85);
+          min-width: calc(var(--mmp-unit) * .85);
           margin: 3px;
         }
         paper-icon-button {
-          min-width: 40px;
+          min-width: var(--mmp-unit);
         }
       `,
     ];

@@ -3,6 +3,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import ResizeObserver from 'resize-observer-polyfill';
 import MediaPlayerObject from './model';
 import style from './style';
+import sharedStyle from './sharedStyle';
 import handleClick from './utils/handleClick';
 
 import './components/groupList';
@@ -57,7 +58,10 @@ class MiniMediaPlayer extends LitElement {
   }
 
   static get styles() {
-    return style;
+    return [
+      sharedStyle,
+      style,
+    ];
   }
 
   set hass(hass) {

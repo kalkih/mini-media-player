@@ -31,7 +31,7 @@ class MiniMediaPlayerSoundMenu extends LitElement {
         .label=${this.mode}
         .selected=${this.selected || this.mode}
         .icon=${this.icon}
-      />
+      ></mmp-dropdown>
     `;
   }
 
@@ -45,7 +45,7 @@ class MiniMediaPlayerSoundMenu extends LitElement {
     return css`
       :host {
         max-width: 120px;
-        min-width: 40px;
+        min-width: var(--mmp-unit);
       }
       :host([full]) {
         max-width: none;

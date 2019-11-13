@@ -9,7 +9,13 @@ const sharedStyle = css`
   .label {
     margin: 0 8px;
   }
+  ha-icon {
+    width: calc(var(--mmp-unit) * .6);
+    height: calc(var(--mmp-unit) * .6);
+  }
   paper-icon-button {
+    width: var(--mmp-unit);
+    height: var(--mmp-unit);
     color: var(--mmp-text-color);
     transition: color .25s;
   }
