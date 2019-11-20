@@ -180,6 +180,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 |------|------|---------|-------------|
 | name | string | optional | A display name.
 | icon | string | optional | A display icon *(any mdi icon)*.
+| image | string | optional | A display image.
 | type | string | **required** | Type of shortcut. A media type: `music`, `tvshow`, `video`, `episode`, `channel`, `playlist` e.g. or an action type: `source`, `sound_mode`, `script` or `service`.
 | id | string | **required** | The media identifier. The format of this is component dependent. For example, you can provide URLs to Sonos & Cast but only a playlist ID to iTunes & Spotify. A source/(sound mode) name can also be specified to change source/(sound mode), use together with type `source`/`sound_mode`. If type `script` specify the script name here or `service` specify the `<domain>.<service>`.
 | data | list | optional | Extra service payload<sup>[1](#shortcut_foot1)</sup>.
