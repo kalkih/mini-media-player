@@ -57,6 +57,9 @@ const style = css`
     box-shadow: none;
     --mmp-progress-height: var(--mini-media-player-progress-height, 4px);
   }
+  ha-card.--more-info {
+    cursor: pointer;
+  }
   .mmp__bg, .mmp__player, .mmp__container {
     border-radius: var(--ha-card-border-radius, 0);
     -webkit-transform: translateZ(0);

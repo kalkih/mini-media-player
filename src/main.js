@@ -164,7 +164,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <ha-card
         class=${this.computeClasses()}
-        @click=${e => this.handlePopup(e, config.tap_action.entity || this.entity)}
+        @click=${e => this.handlePopup(e)}
         artwork=${config.artwork}
         content=${this.player.content}>
         <div class='mmp__bg'>
