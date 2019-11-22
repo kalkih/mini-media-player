@@ -186,6 +186,16 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 
 <a name="shortcut_foot1"><sup>1</sup></a> Only compatible with `script` & `service` shortcuts, useful for sending variables to script.
 
+#### Action object options
+| Name | Type | Default | Options | Description |
+|------|:----:|:-------:|:-----------:|-------------|
+| action | string | `more-info` | `more-info` / `navigate` / `call-service`  / `url` / `none` | Action to perform.
+| entity | string |  | Any entity id | Override default entity of `more-info`, when  `action` is defined as `more-info`.
+| service | string |  | Any service | Service to call (e.g. `media_player.toggle`) when `action` is defined as `call-service`.
+| service_data | object |  | Any service data | Service data to include with the service call (e.g. `entity_id: media_player.office`).
+| navigation_path | string |  | Any path | Path to navigate to (e.g. `/lovelace/0/`) when `action` is defined as `navigate`.
+| url | string |  | Any URL | URL to open when `action` is defined as `url`.
+
 #### Hide object
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
