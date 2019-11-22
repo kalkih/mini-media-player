@@ -164,7 +164,6 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <ha-card
         class=${this.computeClasses()}
-        ?hover=${config.tap_action.action !== 'none'}
         @click=${e => this.handlePopup(e, config.tap_action.entity || this.entity)}
         artwork=${config.artwork}
         content=${this.player.content}>
@@ -238,9 +237,9 @@ class MiniMediaPlayer extends LitElement {
     return html`<div class='cover' style='background-image: ${url};'></div>`;
   }
 
-  handlePopup(e, entity) {
+  handlePopup(e) {
     e.stopPropagation();
-    handleClick(this, this._hass, this.config, this.config.tap_action, entity.entity_id || entity);
+    handleClick(this, this._hass, this.config, this.config.tap_action, this.player.id);
   }
 
   renderIcon(artwork) {
@@ -299,6 +298,7 @@ class MiniMediaPlayer extends LitElement {
       '--initial': this.initial,
       '--bg': config.background,
       '--group': config.group,
+      '--more-info': config.tap_action !== 'none',
       '--has-artwork': this.player.hasArtwork && this.thumbnail,
       '--flow': config.flow,
       '--collapse': config.collapse,

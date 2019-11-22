@@ -4,7 +4,9 @@ export default (node, hass, config, actionConfig, entityId) => {
   switch (actionConfig.action) {
     case 'more-info': {
       e = new Event('hass-more-info', { composed: true });
-      e.detail = { entityId };
+      e.detail = {
+        entityId: actionConfig.entity || entityId,
+      };
       node.dispatchEvent(e);
       break;
     }
