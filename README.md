@@ -81,7 +81,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | entity | string | **required** | v0.1 | An entity_id from an entity within the `media_player` domain.
 | name | string | optional | v0.6 | Override the entities friendly name.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
-| more_info | boolean | true | v0.1 | Enable the "more info" popup dialog when pressing on the card.
+| tap_action | [action object](#action-object-options) | true | v0.7.0 | Action on click/tap.
 | group | boolean | optional | v0.1 | Removes paddings, background color and box-shadow.
 | hide | object | optional | v1.0.0 | Manage visible UI elements, see [hide object](#hide-object) for available options.
 | artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `none` to hide artwork, `full-cover-fit` for full cover without cropping.
@@ -186,6 +186,16 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | data | list | optional | Extra service payload<sup>[1](#shortcut_foot1)</sup>.
 
 <a name="shortcut_foot1"><sup>1</sup></a> Only compatible with `script` & `service` shortcuts, useful for sending variables to script.
+
+#### Action object options
+| Name | Type | Default | Options | Description |
+|------|:----:|:-------:|:-----------:|-------------|
+| action | string | `more-info` | `more-info` / `navigate` / `call-service`  / `url` / `none` | Action to perform.
+| entity | string |  | Any entity id | Override default entity of `more-info`, when  `action` is defined as `more-info`.
+| service | string |  | Any service | Service to call (e.g. `media_player.toggle`) when `action` is defined as `call-service`.
+| service_data | object |  | Any service data | Service data to include with the service call (e.g. `entity_id: media_player.office`).
+| navigation_path | string |  | Any path | Path to navigate to (e.g. `/lovelace/0/`) when `action` is defined as `navigate`.
+| url | string |  | Any URL | URL to open when `action` is defined as `url`.
 
 #### Hide object
 | Name | Type | Default | Description |
