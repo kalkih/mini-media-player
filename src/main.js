@@ -1,8 +1,10 @@
 import { LitElement, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
+import { styleMap } from 'lit-html/directives/style-map';
 import ResizeObserver from 'resize-observer-polyfill';
 import MediaPlayerObject from './model';
 import style from './style';
+import sharedStyle from './sharedStyle';
 import handleClick from './utils/handleClick';
 
 import './components/groupList';
@@ -57,7 +59,10 @@ class MiniMediaPlayer extends LitElement {
   }
 
   static get styles() {
-    return style;
+    return [
+      sharedStyle,
+      style,
+    ];
   }
 
   set hass(hass) {
@@ -164,6 +169,7 @@ class MiniMediaPlayer extends LitElement {
     return html`
       <ha-card
         class=${this.computeClasses()}
+        style=${this.computeStyles()}
         @click=${e => this.handlePopup(e)}
         artwork=${config.artwork}
         content=${this.player.content}>
@@ -306,6 +312,13 @@ class MiniMediaPlayer extends LitElement {
       '--progress': this.player.hasProgress,
       '--runtime': !config.hide.runtime && this.player.hasProgress,
       '--inactive': !this.player.isActive,
+    });
+  }
+
+  computeStyles() {
+    const { scale } = this.config;
+    return styleMap({
+      ...(scale && { '--mmp-unit': `${40 * scale}px` }),
     });
   }
 

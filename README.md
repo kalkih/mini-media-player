@@ -98,6 +98,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
 | speaker_group | object | optional | v1.0.0 | Speaker group management/multiroom, see [Speaker group object](#speaker-group-object) for available options.
 | shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
+| scale | number | optional | v1.5.0 | UI scale modifier, default is `1`.
 
 #### Idle object
 | Name | Type | Default | Description |
@@ -234,6 +235,7 @@ Can be specified by color name, hexadecimal, rgb, rgba, hsl, hsla, basically any
 | mini-media-player-media-cover-info-color | white | Color of the media information text while artwork cover is present
 | mini-media-player-artwork-opacity | 1 | Opacity of cover artwork
 | mini-media-player-progress-height | 6px | Progressbar height
+| mini-media-player-scale | 1 | Scale of the card
 
 
 ### Example usage
