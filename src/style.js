@@ -4,8 +4,8 @@ const style = css`
   :host {
     overflow: visible !important;
     display: block;
-    --mmp-unit: var(--mini-media-player-scale, 40px);
-    font-size: calc(var(--mmp-unit) * 0.35);
+    --mmp-scale: var(--mini-media-player-scale, 1);
+    --mmp-unit: calc(var(--mmp-scale) * 40px);
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     --mmp-base-color: var(--mini-media-player-base-color, var(--primary-text-color, #000));
     --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
@@ -54,6 +54,7 @@ const style = css`
     padding: 0;
     position: relative;
     color: inherit;
+    font-size: calc(var(--mmp-unit) * 0.35);
   }
   ha-card.--group {
     box-shadow: none;
