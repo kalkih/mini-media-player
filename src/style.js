@@ -19,7 +19,7 @@ const style = css`
     --mmp-icon-color:
       var(--mini-media-player-icon-color,
         var(--mini-media-player-base-color,
-          var(--paper-item-icon-colo, #44739e)));
+          var(--paper-item-icon-color, #44739e)));
     --mmp-info-opacity: 1;
     --mmp-bg-opacity: var(--mini-media-player-background-opacity, 1);
     --mmp-artwork-opacity: var(--mini-media-player-artwork-opacity, 1);
