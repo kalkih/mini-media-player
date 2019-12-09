@@ -173,7 +173,6 @@ const style = css`
   }
   .mmp-player__core {
     position: relative;
-    cursor: pointer;
   }
   .entity__info {
     justify-content: center;
