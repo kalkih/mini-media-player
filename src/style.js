@@ -51,7 +51,7 @@ const style = css`
     cursor: default;
     display: flex;
     background: transparent;
-    overflow: hidden;
+    overflow: visible;
     padding: 0;
     position: relative;
     color: inherit;
@@ -64,7 +64,7 @@ const style = css`
   ha-card.--more-info {
     cursor: pointer;
   }
-  .mmp__bg, .mmp__player, .mmp__container {
+  .mmp__bg, .mmp-player, .mmp__container {
     border-radius: var(--ha-card-border-radius, 0);
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
@@ -130,6 +130,8 @@ const style = css`
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    border-radius: var(--ha-card-border-radius, 0);
+    overflow: hidden;
   }
   .cover:before {
     background: var(--mmp-overlay-color);
