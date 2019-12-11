@@ -286,8 +286,7 @@ You can specify media shortcuts through the `shortcuts` option, either as a list
         data:
           entity_id: media_player.googlehome1234
           uri: spotify:playlist:37i9dQZF1DX9XiAcF7t1s5
-        }
-
+          
       ... # etc.
 ```
 _If you don't have Sonos, but want just a bit more control over playlists and so, a simple solution is to use the `type: service`-option, to trigger the`spotcast.start`-service. Remember to add the [required data](https://github.com/fondberg/spotcast#call-the-service), for spotcast to work. Also, kindly note that [spotcast](https://github.com/fondberg/spotcast) is required, for this to work. It's available in HACS.
