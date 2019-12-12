@@ -1,5 +1,18 @@
-## v1.4.2
+## v1.5.0
+### ADDED
+- Option to display image in shortcut #146 (#192) - (@tcarlsen)
+- Tap action option #174 (#191) - (@darkkatarsis)
+- Option for card UI scale #156 (#187)
+- Theme variable for card UI scale #156 (#187)
+- Theme variable for card background opacity #189
+- Shortcut example with service call (#196) - (@exetico)
 
+### FIXED
+- Source dropdown not updating with backend #184
+- Invalid icon color
+- Clipped/Cut off volume pin #185
+
+## v1.4.2
 ### ADDED
 - Optional stop / play_stop button #167 (#177) - (@guillaumelamirand)
 - Theme variable for linear color stop in `full-cover` mode (#178) - (@guillaumelamirand)
