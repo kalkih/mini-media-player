@@ -66,8 +66,6 @@ const style = css`
   }
   .mmp__bg, .mmp-player, .mmp__container {
     border-radius: var(--ha-card-border-radius, 0);
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
   }
   .mmp__container {
     overflow: hidden;
