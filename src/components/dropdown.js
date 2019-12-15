@@ -32,6 +32,7 @@ class MiniMediaPlayerDropdown extends LitElement {
         .horizontalAlign=${'right'}
         .verticalAlign=${'top'}
         .verticalOffset=${44}
+        .dynamicAlign=${true}
         @click=${e => e.stopPropagation()}>
         ${this.icon ? html`
           <paper-icon-button
