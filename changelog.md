@@ -1,3 +1,11 @@
+## v1.5.1
+### ADDED
+- Dynamic alignment of dropdown lists (#201)
+
+### FIXED
+- Broken dropdown lists (#201)
+- Invisible icons (maybe?)
+
 ## v1.5.0
 ### ADDED
 - Option to display image in shortcut #146 (#192) - (@tcarlsen)
