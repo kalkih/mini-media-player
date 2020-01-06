@@ -165,7 +165,7 @@ const style = css`
     will-change: padding;
   }
   ha-card.--group .mmp-player {
-    padding: 10px 0;
+    padding: 2px 0;
   }
   .flex {
     display: flex;
@@ -356,7 +356,7 @@ const style = css`
     padding: 16px;
   }
   ha-card.--inactive.--group .mmp-player {
-    padding: 10px 0;
+    padding: 2px 0;
   }
   .mmp-player div:empty {
     display: none;
