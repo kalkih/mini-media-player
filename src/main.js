@@ -258,9 +258,10 @@ class MiniMediaPlayer extends LitElement {
           state=${this.player.state}>
         </div>`;
 
+    const state = !this.config.hide.icon_state && this.player.isActive;
     return html`
-      <div class='entity__icon'>
-        <ha-icon .icon=${this.computeIcon()}></ha-icon>
+      <div class='entity__icon' ?color=${state}>
+        <ha-icon .icon=${this.computeIcon()} ></ha-icon>
       </div>`;
   }
 

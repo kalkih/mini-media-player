@@ -20,6 +20,7 @@ const style = css`
       var(--mini-media-player-icon-color,
         var(--mini-media-player-base-color,
           var(--paper-item-icon-color, #44739e)));
+    --mmp-icon-active-color: var(--paper-item-icon-active-color, --mmp-active-color);
     --mmp-info-opacity: 1;
     --mmp-bg-opacity: var(--mini-media-player-background-opacity, 1);
     --mmp-artwork-opacity: var(--mini-media-player-artwork-opacity, 1);
@@ -39,6 +40,7 @@ const style = css`
     --mmp-text-color-inverted: #000;
     --mmp-active-color: rgba(255,255,255,.5);
     --mmp-icon-color: var(--mmp-text-color);
+    --mmp-icon-active-color: var(--mmp-text-color);
     --mmp-info-opacity: .75;
     --paper-slider-container-color: var(--mini-media-player-overlay-color, rgba(255,255,255,.75));
     --mdc-theme-primary: var(--mmp-text-color);
@@ -195,6 +197,9 @@ const style = css`
   }
   .entity__icon {
     color: var(--mmp-icon-color);
+  }
+  .entity__icon[color] {
+    color: var(--mmp-icon-active-color);
   }
   .entity__artwork, .entity__icon {
     animation: fade-in .25s ease-out;
