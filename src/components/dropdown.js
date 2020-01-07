@@ -18,10 +18,14 @@ class MiniMediaPlayerDropdown extends LitElement {
     return this.items.map(item => item.id).indexOf(this.selected);
   }
 
-  onChange(item) {
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: item,
-    }));
+  onChange(e) {
+    const id = e.target.selected;
+    if (id !== this.selectedId && this.items[id]) {
+      this.dispatchEvent(new CustomEvent('change', {
+        detail: this.items[id],
+      }));
+      e.target.selected = -1;
+    }
   }
 
   render() {
@@ -50,11 +54,9 @@ class MiniMediaPlayerDropdown extends LitElement {
             </div>
           </mmp-button>
         `}
-        <paper-listbox slot="dropdown-content" selected=${this.selectedId}>
+        <paper-listbox slot="dropdown-content" .selected=${this.selectedId} @iron-select=${this.onChange}>
           ${this.items.map(item => html`
-            <paper-item
-              value=${item.id || item.name}
-              @click=${() => this.onChange(item)}>
+            <paper-item value=${item.id || item.name}>
               ${item.icon ? html`<iron-icon .icon=${item.icon}></iron-icon>` : ''}
               ${item.name ? html`<span class='mmp-dropdown__item__label'>${item.name}</span>` : ''}
             </paper-item>`)}
