@@ -1,3 +1,13 @@
+## v1.5.2
+### ADDED
+- New icon state option, change entity icon color depending on state, disabled by default, see `icon_state` in `hide` option #186 #144
+
+### CHANGED
+- Reduced card paddings when using group option #210
+
+### FIXED
+- Broken dropdown menus in latest iOS #207
+
 ## v1.5.1
 ### ADDED
 - Dynamic alignment of dropdown lists (#201)

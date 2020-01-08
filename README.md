@@ -21,7 +21,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.5.1
+    - url: /local/mini-media-player-bundle.js?v=1.5.2
       type: module
   ```
 
@@ -32,14 +32,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.5.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.5.2/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.5.1
+    - url: /local/mini-media-player-bundle.js?v=1.5.2
       type: module
   ```
 
@@ -64,7 +64,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.5.1
+    - url: /local/mini-media-player-bundle.js?v=1.5.2
       type: module
   ```
 
@@ -216,6 +216,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | runtime | boolean | true | The media runtime indicators.
 | artwork_border | boolean | true | The border of the `default` artwork picture.
 | power_state | boolean | true | Dynamic color of the power button to indicate on/off.
+| icon_state | boolean | true | Dynamic color of the entity icon to indicate entity state.
 | shuffle | boolean | true | The shuffle button (only for players with `shuffle_set` support).
 
 
