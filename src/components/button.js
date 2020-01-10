@@ -23,7 +23,7 @@ class MiniMediaPlayerButton extends LitElement {
         transition: background .5s;
       }
       :host([raised]) {
-        background: rgba(255,255,255,0.25);
+        background: var(--mmp-button-color);
         min-height: calc(var(--mmp-unit) * .8);
         box-shadow:
           0px 3px 1px -2px rgba(0, 0, 0, 0.2),

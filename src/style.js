@@ -16,6 +16,7 @@ const style = css`
     --mmp-media-cover-info-color: var(--mini-media-player-media-cover-info-color, --mmp-text-color);
     --mmp-text-color-inverted: var(--disabled-text-color);
     --mmp-active-color: var(--mmp-accent-color);
+    --mmp-button-color: var(--mini-media-player-button-color, rgba(255,255,255,0.25));
     --mmp-icon-color:
       var(--mini-media-player-icon-color,
         var(--mini-media-player-base-color,

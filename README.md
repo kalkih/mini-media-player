@@ -228,7 +228,8 @@ Can be specified by color name, hexadecimal, rgb, rgba, hsl, hsla, basically any
 |------|---------|-------------|
 | mini-media-player-base-color | var(--primary-text-color) & var(--paper-item-icon-color) | The color of base text & buttons
 | mini-media-player-accent-color | var(--accent-color) | The accent color of UI elements
-| mini-media-player-icon-color |  --mini-media-player-base-color, var(--paper-item-icon-color, #44739e) | The color for icons
+| mini-media-player-icon-color | --mini-media-player-base-color, var(--paper-item-icon-color, #44739e) | The color for icons
+| mini-media-player-button-color | rgba(255,255,255,0.25) | The background color of shortcut and group buttons.
 | mini-media-player-overlay-color | rgba(0,0,0,0.5) | The color of the background overlay
 | mini-media-player-overlay-color-stop | 25% | The gradient stop of the background overlay
 | mini-media-player-overlay-base-color | white | The color of base text, icons & buttons while artwork cover is present
