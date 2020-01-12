@@ -46,7 +46,7 @@ class MiniMediaPlayerGroupList extends LitElement {
             class='mmp-group-list__button'
             raised
             ?disabled=${group.length < 2}
-            @click=${e => this.player.handleGroupChange(e, isMaster ? group : this.player.entity_id, false)}>
+            @click=${e => this.player.handleGroupChange(e, isMaster ? group : this.player.id, false)}>
             <span>${isMaster ? html`Ungroup` : html`Leave`}</span>
           </mmp-button>
           <mmp-button
