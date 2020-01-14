@@ -239,6 +239,7 @@ Can be specified by color name, hexadecimal, rgb, rgba, hsl, hsla, basically any
 | mini-media-player-artwork-opacity | 1 | Opacity of cover artwork
 | mini-media-player-progress-height | 6px | Progressbar height
 | mini-media-player-scale | 1 | Scale of the card
+| mini-media-player-name-font-weight | 400 | Font weight of the entity name
 
 
 ### Example usage

@@ -6,6 +6,7 @@ const style = css`
     display: block;
     --mmp-scale: var(--mini-media-player-scale, 1);
     --mmp-unit: calc(var(--mmp-scale) * 40px);
+    --mmp-name-font-weight: var(--mini-media-player-name-font-weight, 400);
     --mmp-accent-color: var(--mini-media-player-accent-color, var(--accent-color, #f39c12));
     --mmp-base-color: var(--mini-media-player-base-color, var(--primary-text-color, #000));
     --mmp-overlay-color: var(--mini-media-player-overlay-color, rgba(0,0,0,0.5));
@@ -240,6 +241,7 @@ const style = css`
   .entity__info__name {
     line-height: calc(var(--mmp-unit) / 2);
     color: var(--mmp-text-color);
+    font-weight: var(--mmp-name-font-weight);
   }
   .entity__info__media {
     color: var(--secondary-text-color);
