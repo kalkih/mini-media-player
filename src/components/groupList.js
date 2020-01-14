@@ -34,23 +34,16 @@ class MiniMediaPlayerGroupList extends LitElement {
   }
 
   render() {
-    const {
-      group, master, isMaster, isGrouped,
-    } = this;
-    return this.visible ? html`
-      <div class='mmp-group-list' ?visible=${this.visible}>
+    if (!this.visible) return html``;
+    const { group, isMaster, isGrouped } = this;
+    const { id } = this.player;
+    return html`
+      <div class='mmp-group-list'>
         <span class='mmp-group-list__title'>Group speakers</span>
-        ${this.entities.map(item => html`
-          <mmp-group-item
-            @change=${this.handleGroupChange}
-            .item=${item}
-            .checked=${item.entity_id === this.player.id || group.includes(item.entity_id)}
-            .disabled=${item.entity_id === this.player.id || master !== this.player.id}
-            .master=${item.entity_id === master}
-          />`)}
+        ${this.entities.map(item => this.renderItem(item, id))}
         <div class='mmp-group-list__buttons'>
           <mmp-button raised ?disabled=${!isGrouped}
-            @click=${e => this.player.handleGroupChange(e, this.player.id, false)}>
+            @click=${e => this.player.handleGroupChange(e, id, false)}>
             <span>Leave</span>
           </mmp-button>
           ${isGrouped && isMaster ? html`
@@ -65,7 +58,19 @@ class MiniMediaPlayerGroupList extends LitElement {
           </mmp-button>
         </div>
       </div>
-    ` : html``;
+    `;
+  }
+
+  renderItem(item, id) {
+    const itemId = item.entity_id;
+    return html`
+      <mmp-group-item
+        @change=${this.handleGroupChange}
+        .item=${item}
+        .checked=${itemId === id || this.group.includes(itemId)}
+        .disabled=${itemId === id || !this.isMaster}
+        .master=${itemId === this.master}
+      />`;
   }
 
   static get styles() {
