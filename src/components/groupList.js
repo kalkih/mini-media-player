@@ -24,12 +24,19 @@ class MiniMediaPlayerGroupList extends LitElement {
     return this.player.isMaster;
   }
 
+  get isGrouped() {
+    return this.player.isGrouped;
+  }
+
   handleGroupChange(ev) {
     const { entity, checked } = ev.detail;
     this.player.handleGroupChange(ev, entity, checked);
   }
 
-  render({ group, master, isMaster } = this) {
+  render() {
+    const {
+      group, master, isMaster, isGrouped,
+    } = this;
     return this.visible ? html`
       <div class='mmp-group-list' ?visible=${this.visible}>
         <span class='mmp-group-list__title'>Group speakers</span>
@@ -42,17 +49,17 @@ class MiniMediaPlayerGroupList extends LitElement {
             .master=${item.entity_id === master}
           />`)}
         <div class='mmp-group-list__buttons'>
-          <mmp-button
-            class='mmp-group-list__button'
-            raised
-            ?disabled=${group.length < 2}
-            @click=${e => this.player.handleGroupChange(e, isMaster ? group : this.player.id, false)}>
-            <span>${isMaster ? html`Ungroup` : html`Leave`}</span>
+          <mmp-button raised ?disabled=${!isGrouped}
+            @click=${e => this.player.handleGroupChange(e, this.player.id, false)}>
+            <span>Leave</span>
           </mmp-button>
-          <mmp-button
-            class='mmp-group-list__button'
-            raised
-            ?disabled=${!isMaster}
+          ${isGrouped && isMaster ? html`
+            <mmp-button raised
+              @click=${e => this.player.handleGroupChange(e, group, false)}>
+              <span>Ungroup</span>
+            </mmp-button>
+          ` : html``}
+          <mmp-button raised ?disabled=${!isMaster}
             @click=${e => this.player.handleGroupChange(e, this.entities.map(item => item.entity_id), true)}>
             <span>Group all</span>
           </mmp-button>
@@ -78,7 +85,7 @@ class MiniMediaPlayerGroupList extends LitElement {
       .mmp-group-list__buttons {
         display: flex;
       }
-      .mmp-group-list__button {
+      mmp-button {
         margin: 8px 8px 0 0;
         min-width: 0;
         text-transform: uppercase;
