@@ -40,6 +40,10 @@ class MiniMediaPlayerButton extends LitElement {
       :host([faded]) {
         opacity: .75;
       }
+      :host([disabled]) {
+        opacity: .25;
+        pointer-events: none;
+      }
       .container {
         height: 100%;
         width: 100%;
