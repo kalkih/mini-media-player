@@ -21,6 +21,8 @@ class MiniMediaPlayerButton extends LitElement {
         min-width: 0;
         overflow: hidden;
         transition: background .5s;
+        border-radius: 4px;
+        font-weight: 500;
       }
       :host([raised]) {
         background: var(--mmp-button-color);
