@@ -1,3 +1,17 @@
+## v1.6.0
+### ADDED
+- Allow master speaker to leave speaker group #213
+- New theme variable for raised buttons #212
+- New theme variable for name font weight
+
+### CHANGED
+- Increased font weight of buttons
+
+### FIXED
+- Broken leave button for group management
+- Disabled buttons are now properly disabled
+
+
 ## v1.5.2
 ### ADDED
 - New icon state option, change entity icon color depending on state, disabled by default, see `icon_state` in `hide` option #186 #144
