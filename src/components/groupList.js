@@ -97,7 +97,6 @@ class MiniMediaPlayerGroupList extends LitElement {
         text-align: center;
         width: 50%;
         --mdc-theme-primary: transparent;
-        background: rgba(255,255,255,0.25);
       }
     `;
   }
