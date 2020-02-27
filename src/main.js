@@ -95,6 +95,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   setConfig(config) {
+    config = JSON.parse(JSON.stringify(config))
     if (!config.entity || config.entity.split('.')[0] !== 'media_player')
       throw new Error('Specify an entity from within the media_player domain.');
 
