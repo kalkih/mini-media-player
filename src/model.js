@@ -5,6 +5,21 @@ export default class MediaPlayerObject {
     this.hass = hass || {};
     this.config = config || {};
     this.entity = entity || {};
+
+    this.states = {
+      off: ['off'],
+      idle: ['idle'],
+      standby: ['standby'],
+      unavailable: ['unavailable'],
+    };
+
+    if (this.config.states) {
+      this.states.off = this.config.states.off || this.states.off;
+      this.states.idle = this.config.states.idle || this.states.idle;
+      this.states.standby = this.config.states.standby || this.states.standby;
+      this.states.unavailable = this.config.states.unavailable || this.states.unavailable;
+    }
+
     this.state = entity.state;
     this.attr = entity.attributes;
     this.idle = config.idle_view ? this.idleView : false;
@@ -28,19 +43,19 @@ export default class MediaPlayerObject {
   }
 
   get isIdle() {
-    return this.state === 'idle';
+    return this.states.idle.indexOf(this.state) >= 0;
   }
 
   get isStandby() {
-    return this.state === 'standby';
+    return this.states.standby.indexOf(this.state) >= 0;
   }
 
   get isUnavailable() {
-    return this.state === 'unavailable';
+    return this.states.unavailable.indexOf(this.state) >= 0;
   }
 
   get isOff() {
-    return this.state === 'off';
+    return this.states.off.indexOf(this.state) >= 0;
   }
 
   get isActive() {

@@ -99,6 +99,16 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | speaker_group | object | optional | v1.0.0 | Speaker group management/multiroom, see [Speaker group object](#speaker-group-object) for available options.
 | shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
 | scale | number | optional | v1.5.0 | UI scale modifier, default is `1`.
+| states | object | optional | v1.6.1 | custom entity states, See [States object](#states-object) for available options.
+
+
+#### States object
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| off | array | optional | States for mode `off`.
+| idle | array | optional | States for mode `idle`.
+| standby | array | optional | States for mode `standby`.
+| unavailable | array | optional | States for mode `unavailable`.
 
 #### Idle object
 | Name | Type | Default | Description |
