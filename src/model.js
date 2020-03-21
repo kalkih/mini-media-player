@@ -119,7 +119,7 @@ export default class MediaPlayerObject {
   }
 
   get picture() {
-    return this.attr.entity_picture;
+    return this.attr.entity_picture_local || this.attr.entity_picture;
   }
 
   get hasArtwork() {
@@ -190,18 +190,8 @@ export default class MediaPlayerObject {
     return this.attr[attribute] || '';
   }
 
-  async fetchThumbnail() {
-    try {
-      const { content_type: contentType, content } = await this.hass.callWS({
-        type: 'media_player_thumbnail',
-        entity_id: this.config.entity,
-      });
-      return `url(data:${contentType};base64,${content})`;
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('mini-media-player: Failed fetching thumbnail');
-      return false;
-    }
+  get artwork() {
+    return `url(${this.attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture})`;
   }
 
   toggle(e) {
