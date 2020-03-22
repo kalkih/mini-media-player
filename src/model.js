@@ -290,13 +290,27 @@ export default class MediaPlayerObject {
       if (platform === 'bluesound') {
         return this.callService(e, `${platform}_JOIN`, options);
       }
+      if (platform === 'soundtouch') {
+        const service = this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE';
+        return this.handleSoundtouch(e, service, entity);
+      }
       this.callService(e, 'join', options, platform);
     } else {
       if (platform === 'bluesound') {
         return this.callService(e, `${platform}_UNJOIN`, options);
       }
+      if (platform === 'soundtouch') {
+        return this.handleSoundtouch(e, 'REMOVE_ZONE_SLAVE', entity);
+      }
       this.callService(e, 'unjoin', options, platform);
     }
+  }
+
+  handleSoundtouch(e, service, entity) {
+    return this.callService(e, service, {
+      master: this.master,
+      slaves: entity,
+    }, 'soundtouch', true);
   }
 
   toggleScript(e, id, data = {}) {
@@ -313,10 +327,10 @@ export default class MediaPlayerObject {
     });
   }
 
-  callService(e, service, inOptions, domain = 'media_player') {
+  callService(e, service, inOptions, domain = 'media_player', omit = false) {
     e.stopPropagation();
     this.hass.callService(domain, service, {
-      entity_id: this.config.entity,
+      ...(!omit && { entity_id: this.config.entity }),
       ...inOptions,
     });
   }
