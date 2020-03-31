@@ -1,3 +1,12 @@
+## v1.7.0
+### ADDED
+- Support for Soundtouch multiroom (#165)
+
+### FIXED
+- Removed usage of deprecated thumbnail/artwork api endpoint #244 (#253)
+- Fixed button theme variable not sticking to speaker group buttons
+
+
 ## v1.6.0
 ### ADDED
 - Allow master speaker to leave speaker group #213

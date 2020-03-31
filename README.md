@@ -21,7 +21,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.6.0
+    - url: /local/mini-media-player-bundle.js?v=1.7.0
       type: module
   ```
 
@@ -32,14 +32,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.6.0/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.7.0/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.6.0
+    - url: /local/mini-media-player-bundle.js?v=1.7.0
       type: module
   ```
 
@@ -64,7 +64,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.6.0
+    - url: /local/mini-media-player-bundle.js?v=1.7.0
       type: module
   ```
 
@@ -138,13 +138,15 @@ See [Speaker group management](#speaker-group-management) for example usage.
 
 **Supported platforms**
 - sonos
+- soundtouch
+- yamaha_musiccast<sup>[1](#speaker_foot1)</sup>
 - bluesound<sup>[2](#speaker_foot2)</sup>
 - snapcast<sup>[2](#speaker_foot2)</sup>
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | entities | list | **required** | A list containing [speaker entities](#speaker-entity-object) of one of supported platforms, to enable group management of those speakers.
-| platform | string | 'sonos' | The media_player platform to control. `sonos`, `snapcast`, `bluesound` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
+| platform | string | 'sonos' | The media_player platform to control. `sonos`, `soundtouch`, `snapcast`, `bluesound` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
 | expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
