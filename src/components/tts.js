@@ -95,6 +95,7 @@ class MiniMediaPlayerTts extends LitElement {
       paper-input {
         opacity: .75;
         --paper-input-container-color: var(--mmp-text-color);
+        --paper-input-container-input-color: var(--mmp-text-color);
         --paper-input-container-focus-color: var(--mmp-text-color);
         --paper-input-container: {
           padding: 0;
@@ -105,11 +106,9 @@ class MiniMediaPlayerTts extends LitElement {
       }
 
       ha-card[artwork*='cover'][has-artwork] paper-input {
-        --paper-input-container-focus-color: #FFFFFF;
-      }
-      ha-card[artwork*='cover'][has-artwork] paper-input {
         --paper-input-container-color: #FFFFFF;
         --paper-input-container-input-color: #FFFFFF;
+        --paper-input-container-focus-color: #FFFFFF;
       }
     `;
   }
