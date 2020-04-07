@@ -40,15 +40,17 @@ class MiniMediaPlayerMediaControls extends LitElement {
       ` : html``}
       ${!hide.controls ? html`
         <div class='flex mmp-media-controls__media' ?flow=${this.config.flow || this.break}>
-          <paper-icon-button
-            @click=${e => this.player.prev(e)}
-            .icon=${ICON.PREV}>
-          </paper-icon-button>
+          ${!hide.prev ? html`
+            <paper-icon-button
+              @click=${e => this.player.prev(e)}
+              .icon=${ICON.PREV}>
+            </paper-icon-button>` : ''}
           ${this.renderPlayButtons()}
-          <paper-icon-button
-            @click=${e => this.player.next(e)}
-            .icon=${ICON.NEXT}>
-          </paper-icon-button>
+          ${!hide.next ? html`
+            <paper-icon-button
+              @click=${e => this.player.next(e)}
+              .icon=${ICON.NEXT}>
+            </paper-icon-button>` : ''}
         </div>
       ` : html``}
     `;
