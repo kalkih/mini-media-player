@@ -204,7 +204,16 @@ export default class MediaPlayerObject {
   }
 
   toggleMute(e) {
-    this.callService(e, 'volume_mute', { is_volume_muted: !this.muted });
+    if (this.config.speaker_group.sync_volume) {
+      this.group.forEach((entity) => {
+        this.callService(e, 'volume_mute', {
+          entity_id: entity,
+          is_volume_muted: !this.muted,
+        });
+      });
+    } else {
+      this.callService(e, 'volume_mute', { is_volume_muted: !this.muted });
+    }
   }
 
   toggleShuffle(e) {
