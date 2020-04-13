@@ -7,6 +7,7 @@ class MiniMediaPlayerTts extends LitElement {
     return {
       hass: {},
       config: {},
+      player: {},
     };
   }
 
@@ -39,7 +40,8 @@ class MiniMediaPlayerTts extends LitElement {
     const { config, message } = this;
     const opts = {
       message,
-      entity_id: config.entity_id || this.entity,
+      entity_id: config.entity_id || this.player.id,
+      ...(config.entity_id === 'group' && { entity_id: this.player.group }),
     };
     if (config.language) opts.language = config.language;
     if (config.platform === 'alexa')
