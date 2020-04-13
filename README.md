@@ -210,6 +210,8 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | source | boolean | false | The source select.
 | sound_mode | boolean | true | The sound_mode select.
 | controls | boolean | false | The media playback controls.
+| prev | boolean | false | The "previous" playback control button.
+| next | boolean | false | The "next" playback control button.
 | play_pause | boolean | false | The play/pause button in media playback controls.
 | play_stop | boolean | true | The play/stop button in media playback controls.
 | volume | boolean | false | The volume controls.

@@ -9,6 +9,8 @@ const DEFAULT_HIDE = {
   controls: false,
   play_pause: false,
   play_stop: true,
+  prev: false,
+  next: false,
 };
 const ICON = {
   DEFAULT: 'mdi:cast',
