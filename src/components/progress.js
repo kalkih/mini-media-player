@@ -113,8 +113,17 @@ class MiniMediaPlayerProgress extends LitElement {
   }
 
   disconnectedCallback() {
+    super.disconnectedCallback();
     this.resetSeek();
     clearInterval(this.tracker);
+    this.tracker = null;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.hasProgress) {
+      this.trackProgress();
+    }
   }
 
   calcProgress(x) {
