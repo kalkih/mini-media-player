@@ -247,11 +247,17 @@ export default class MediaPlayerObject {
   }
 
   volumeUp(e) {
-    this.callService(e, 'volume_up');
+    this.callService(e, 'volume_set', {
+      entity_id: this.config.entity,
+      volume_level: this.attr.volume_level + this.config.volume_step / 100,
+    });
   }
 
   volumeDown(e) {
-    this.callService(e, 'volume_down');
+    this.callService(e, 'volume_set', {
+      entity_id: this.config.entity,
+      volume_level: this.attr.volume_level - this.config.volume_step / 100,
+    });
   }
 
   seek(e, pos) {
