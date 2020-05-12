@@ -58,6 +58,8 @@ class MiniMediaPlayerTts extends LitElement {
       this.hass.callService('notify', opts.entity_id.split('.').slice(-1)[0], { message });
     else if (config.platform === 'ga')
       this.hass.callService('notify', 'ga_broadcast', { message });
+    else if (config.platform === 'google_translate')
+      this.hass.callService('tts', `google_say`, opts);
     else
       this.hass.callService('tts', `${config.platform}_say`, opts);
     e.stopPropagation();
