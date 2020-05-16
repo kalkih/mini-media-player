@@ -39,11 +39,11 @@ class MiniMediaPlayerDropdown extends LitElement {
         .dynamicAlign=${true}
         @click=${e => e.stopPropagation()}>
         ${this.icon ? html`
-          <paper-icon-button
+          <ha-icon-button
             class='mmp-dropdown__button icon'
             slot='dropdown-trigger'
             .icon=${ICON.DROPDOWN}>
-          </paper-icon-button>
+          </ha-icon-button>
         ` : html`
           <mmp-button class='mmp-dropdown__button' slot='dropdown-trigger'>
             <div>
@@ -125,11 +125,11 @@ class MiniMediaPlayerDropdown extends LitElement {
           color: var(--mmp-accent-color);
           transform: rotate(180deg);
         }
-        paper-menu-button[focused] paper-icon-button {
+        paper-menu-button[focused] ha-icon-button {
           color: var(--mmp-accent-color);
           transform: rotate(180deg);
         }
-        paper-menu-button[focused] paper-icon-button[focused] {
+        paper-menu-button[focused] ha-icon-button[focused] {
           color: var(--mmp-text-color);
           transform: rotate(0deg);
         }

@@ -13,17 +13,17 @@ const sharedStyle = css`
     width: calc(var(--mmp-unit) * .6);
     height: calc(var(--mmp-unit) * .6);
   }
-  paper-icon-button {
+  ha-icon-button {
     width: var(--mmp-unit);
     height: var(--mmp-unit);
     color: var(--mmp-text-color, var(--primary-text-color));
     transition: color .25s;
   }
-  paper-icon-button[color] {
+  ha-icon-button[color] {
     color: var(--mmp-accent-color, var(--accent-color)) !important;
     opacity: 1 !important;
   }
-  paper-icon-button[inactive] {
+  ha-icon-button[inactive] {
     opacity: .5;
   }
 `;
