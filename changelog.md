@@ -1,3 +1,18 @@
+## v1.8.0
+### ADDED
+- Options to hide previous and/or next playback controls #233 (#275)
+- Sync mute status on all speakers when `sync_volume` is enabled #262 (#274)
+- New `tts` option `entity_id` parameter to target currently grouped speakers #268 (#273)
+
+### FIXED
+- Resume progress tracking correcty after switching between tabs #269 (#272)
+- Fixed tts text color when artwork is present #270 (#271)
+- Changed button element for HA > 0.110.0 support #297 (#301)
+
+### DOCS
+- Removed deprecated custom_updater instructions (#290) @inverse
+
+
 ## v1.7.0
 ### ADDED
 - Support for Soundtouch multiroom (#165)
