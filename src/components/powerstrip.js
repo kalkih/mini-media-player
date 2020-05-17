@@ -85,18 +85,18 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           ?full=${this.config.sound_mode === 'full'}>
         </mmp-sound-menu>` : ''}
       ${this.showGroupButton ? html`
-        <paper-icon-button class='group-button'
+        <ha-icon-button class='group-button'
           .icon=${this.icon}
           ?inactive=${!this.player.isGrouped}
           ?color=${this.groupVisible}
           @click=${this.handleGroupClick}>
-        </paper-icon-button>` : ''}
+        </ha-icon-button>` : ''}
       ${this.showPowerButton ? html`
-        <paper-icon-button class='power-button'
+        <ha-icon-button class='power-button'
           .icon=${ICON.POWER}
           @click=${e => this.player.toggle(e)}
           ?color=${this.powerColor}>
-        </paper-icon-button>` : ''}
+        </ha-icon-button>` : ''}
     `;
   }
 
@@ -108,10 +108,10 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   get renderIdleView() {
     if (this.player.isPaused)
       return html`
-        <paper-icon-button
+        <ha-icon-button
           .icon=${ICON.PLAY[this.player.isPlaying]}
           @click=${e => this.player.playPause(e)}>
-        </paper-icon-button>`;
+        </ha-icon-button>`;
     else
       return html`
         <span class='label ellipsis'>
@@ -143,7 +143,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           min-width: calc(var(--mmp-unit) * .85);
           margin: 3px;
         }
-        paper-icon-button {
+        ha-icon-button {
           min-width: var(--mmp-unit);
         }
       `,
