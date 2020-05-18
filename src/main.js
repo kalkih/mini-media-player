@@ -79,8 +79,8 @@ class MiniMediaPlayer extends LitElement {
     this.edit = false;
     this.rtl = false;
     this.cardHeight = 0;
-    this.foregroundColor = 'transparent';
-    this.backgroundColor = 'transparent';
+    this.foregroundColor = '';
+    this.backgroundColor = '';
   }
 
   static get properties() {
@@ -361,7 +361,7 @@ class MiniMediaPlayer extends LitElement {
 
     if (this.player.active && artwork && this.config.artwork === 'contain')
       return html`
-        <div class='entity__icon' style='color: ${this.foregroundColor};'>
+        <div class='entity__icon' style='color: ${this.foregroundColor || ''};'>
           <ha-icon .icon=${this.computeIcon()} ></ha-icon>
         </div>`;
 
@@ -377,7 +377,7 @@ class MiniMediaPlayer extends LitElement {
 
     if (this.config.artwork === 'contain')
       return html`
-        <div class='entity__info__name' style='color: ${this.foregroundColor};'>
+        <div class='entity__info__name' style=${styleMap({ color: this.foregroundColor || '' })}>
           ${this.name} ${this.speakerCount()}
         </div>`;
 
@@ -397,7 +397,7 @@ class MiniMediaPlayer extends LitElement {
           ?short=${this.config.info === 'short' || !this.player.active}
           ?short-scroll=${this.config.info === 'scroll'}
           ?scroll=${this.overflow}
-          style='animation-duration: ${this.overflow}s; color: ${this.foregroundColor};'>
+          style='animation-duration: ${this.overflow}s; color: ${this.foregroundColor || ''};'>
           ${this.config.info === 'scroll' ? html`
             <div>
               <div class='marquee'>
@@ -543,8 +543,8 @@ class MiniMediaPlayer extends LitElement {
       return;
 
     if (!this.player.picture) {
-      this.foregroundColor = 'transparent';
-      this.backgroundColor = 'transparent';
+      this.foregroundColor = '';
+      this.backgroundColor = '';
       return;
     }
 
@@ -559,8 +559,8 @@ class MiniMediaPlayer extends LitElement {
       .catch((err) => {
         // eslint-disable-next-line no-console
         console.error('Error getting Image Colors', err);
-        this.foregroundColor = 'transparent';
-        this.backgroundColor = 'transparent';
+        this.foregroundColor = '';
+        this.backgroundColor = '';
       });
   }
 
