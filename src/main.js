@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { styleMap } from 'lit-html/directives/style-map';
 import ResizeObserver from 'resize-observer-polyfill';
+import * as Vibrant from 'node-vibrant';
 import MediaPlayerObject from './model';
 import style from './style';
 import sharedStyle from './sharedStyle';
@@ -21,6 +22,8 @@ import {
   UPDATE_PROPS,
   BREAKPOINT,
   LABEL_SHORTCUT,
+  CONTRAST_RATIO,
+  COLOR_SIMILARITY_THRESHOLD,
 } from './const';
 
 if (!customElements.get('ha-slider')) {
@@ -44,6 +47,27 @@ if (!customElements.get('ha-icon')) {
   );
 }
 
+const luminance = function (r, g, b) {
+  const a = [r, g, b].map((v) => {
+    let w = v;
+    w /= 255;
+    return w <= 0.03928 ? w / 12.92 : ((w + 0.055) / 1.055) ** 2.4;
+  });
+  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+};
+
+const contrast = function (rgb1, rgb2) {
+  const lum1 = luminance(...rgb1);
+  const lum2 = luminance(...rgb2);
+  const brightest = Math.max(lum1, lum2);
+  const darkest = Math.min(lum1, lum2);
+  return (brightest + 0.05) / (darkest + 0.05);
+};
+
+function getContrastRatio(rgb1, rgb2) {
+  return Math.round((contrast(rgb1, rgb2) + Number.EPSILON) * 100) / 100;
+}
+
 class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
@@ -54,6 +78,9 @@ class MiniMediaPlayer extends LitElement {
     this.prevThumbnail = '';
     this.edit = false;
     this.rtl = false;
+    this.cardHeight = 0;
+    this.foregroundColor = 'transparent';
+    this.backgroundColor = 'transparent';
   }
 
   static get properties() {
@@ -71,6 +98,9 @@ class MiniMediaPlayer extends LitElement {
       edit: Boolean,
       rtl: Boolean,
       idle: Boolean,
+      cardHeight: Number,
+      foregroundColor: String,
+      backgroundColor: String,
     };
   }
 
@@ -154,6 +184,7 @@ class MiniMediaPlayer extends LitElement {
         this.prevThumbnail = '';
       }, 1000);
     }
+    changedProps.has('player') && this.setColors();
     return UPDATE_PROPS.some(prop => changedProps.has(prop)) && this.player;
   }
 
@@ -174,6 +205,20 @@ class MiniMediaPlayer extends LitElement {
       });
     });
     ro.observe(this);
+
+    const card = this.shadowRoot.querySelector('ha-card');
+    if (card) {
+      const cardRo = new ResizeObserver(() => {
+        if (!this._cardResizeTimer) {
+          this._cardResizeTimer = setTimeout(() => {
+            this._cardResizeTimer = null;
+            this.measureCard();
+          }, 250);
+        }
+      });
+      cardRo.observe(card);
+    }
+
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.speaker_group.expanded || false;
   }
@@ -196,7 +241,9 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork}
         content=${this.player.content}>
         <div class='mmp__bg'>
+          ${this.renderColorBlock()}
           ${this.renderArtwork(artwork)}
+          ${this.renderGradient()}
         </div>
         <div class='mmp-player'>
           <div class='mmp-player__core flex' ?inactive=${this.player.idle}>
@@ -231,7 +278,7 @@ class MiniMediaPlayer extends LitElement {
               <mmp-tts
                 .config=${config.tts}
                 .hass=${this.hass}
-                .player=${this.player}>
+                .entity=${this.player.id}>
               </mmp-tts>
             ` : ''}
             <mmp-group-list
@@ -254,6 +301,18 @@ class MiniMediaPlayer extends LitElement {
     `;
   }
 
+  renderColorBlock() {
+    if (this.config.artwork !== 'contain')
+      return;
+    return html`<div class="color-block" style=${styleMap({ backgroundColor: this.backgroundColor || '' })}></div>`;
+  }
+
+  renderNoImage() {
+    if (this.config.artwork !== 'contain')
+      return;
+    return html`<div class="no-img" style='background-color: ${this.backgroundColor};'}></div>`;
+  }
+
   renderArtwork(artwork) {
     if (!this.thumbnail && !this.config.background)
       return;
@@ -263,9 +322,26 @@ class MiniMediaPlayer extends LitElement {
       ? `url(${this.config.background})`
       : this.thumbnail;
 
+    if (this.config.artwork === 'contain')
+      return html`<div class='cover' style='background-image: ${url}; background-color: ${this.backgroundColor}; width: ${this.cardHeight}px;'></div>`;
+
     return html`
       <div class='cover' style='background-image: ${url};'></div>
       ${this.prevThumbnail && html`<div class='cover --prev' style='background-image: ${this.prevThumbnail};'></div>`}`;
+  }
+
+  renderGradient() {
+    if (this.config.artwork !== 'contain')
+      return;
+
+    const gradientStyle = {
+      'background-image': `linear-gradient(to right, ${
+        this.backgroundColor
+      }, ${`${this.backgroundColor}00`})`,
+      width: `${this.cardHeight}px`,
+    };
+
+    return html`<div class="color-gradient" style=${styleMap(gradientStyle)}></div>`;
   }
 
   handlePopup(e) {
@@ -283,6 +359,12 @@ class MiniMediaPlayer extends LitElement {
           state=${this.player.state}>
         </div>`;
 
+    if (this.player.active && artwork && this.config.artwork === 'contain')
+      return html`
+        <div class='entity__icon' style='color: ${this.foregroundColor};'>
+          <ha-icon .icon=${this.computeIcon()} ></ha-icon>
+        </div>`;
+
     const state = !this.config.hide.icon_state && this.player.isActive;
     return html`
       <div class='entity__icon' ?color=${state}>
@@ -292,6 +374,13 @@ class MiniMediaPlayer extends LitElement {
 
   renderEntityName() {
     if (this.config.hide.name) return;
+
+    if (this.config.artwork === 'contain')
+      return html`
+        <div class='entity__info__name' style='color: ${this.foregroundColor};'>
+          ${this.name} ${this.speakerCount()}
+        </div>`;
+
     return html`
       <div class='entity__info__name'>
         ${this.name} ${this.speakerCount()}
@@ -301,6 +390,23 @@ class MiniMediaPlayer extends LitElement {
   renderMediaInfo() {
     if (this.config.hide.info) return;
     const items = this.player.mediaInfo;
+
+    if (this.config.artwork === 'contain')
+      return html`
+        <div class='entity__info__media'
+          ?short=${this.config.info === 'short' || !this.player.active}
+          ?short-scroll=${this.config.info === 'scroll'}
+          ?scroll=${this.overflow}
+          style='animation-duration: ${this.overflow}s; color: ${this.foregroundColor};'>
+          ${this.config.info === 'scroll' ? html`
+            <div>
+              <div class='marquee'>
+                ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
+              </div>
+            </div>` : ''}
+          ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
+        </div>`;
+
     return html`
       <div class='entity__info__media'
         ?short=${this.config.info === 'short' || !this.player.active}
@@ -371,6 +477,15 @@ class MiniMediaPlayer extends LitElement {
       || ICON.DEFAULT;
   }
 
+  measureCard() {
+    const card = this.shadowRoot.querySelector('ha-card');
+    if (!card) {
+      return;
+    }
+
+    this.cardHeight = card.offsetHeight;
+  }
+
   computeOverflow() {
     const ele = this.shadowRoot.querySelector('.marquee');
     if (ele) {
@@ -421,6 +536,89 @@ class MiniMediaPlayer extends LitElement {
 
   getCardSize() {
     return this.config.collapse ? 1 : 2;
+  }
+
+  setColors() {
+    if (this.player.picture === this.picture)
+      return;
+
+    if (!this.player.picture) {
+      this.foregroundColor = 'transparent';
+      this.backgroundColor = 'transparent';
+      return;
+    }
+
+    new Vibrant(this.player.picture, {
+      colorCount: 16,
+      generator: this.customGenerator,
+    })
+      .getPalette()
+      .then((result) => {
+        [this.foregroundColor, this.backgroundColor] = result;
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Error getting Image Colors', err);
+        this.foregroundColor = 'transparent';
+        this.backgroundColor = 'transparent';
+      });
+  }
+
+  customGenerator(colors) {
+    colors.sort((colorA, colorB) => colorB.population - colorA.population);
+
+    const backgroundColor = colors[0];
+    let foregroundColor;
+
+    const contrastRatios = new Map();
+    const approvedContrastRatio = function (color) {
+      if (!contrastRatios.has(color)) {
+        contrastRatios.set(
+          color,
+          getContrastRatio(backgroundColor.rgb, color.rgb),
+        );
+      }
+
+      return contrastRatios.get(color) > CONTRAST_RATIO;
+    };
+
+    // We take each next color and find one that has better contrast.
+    for (let i = 1; i < colors.length && foregroundColor === undefined; i += 1) {
+      // If this color matches, score, take it.
+      if (approvedContrastRatio(colors[i])) {
+        foregroundColor = colors[i].hex;
+        break;
+      }
+
+      // This color has the wrong contrast ratio, but it is the right color.
+      // Let's find similar colors that might have the right contrast ratio
+
+      const currentColor = colors[i];
+
+      for (let j = i + 1; j < colors.length; j += 1) {
+        const compareColor = colors[j];
+
+        // difference. 0 is same, 765 max difference
+        const diffScore = Math.abs(currentColor.rgb[0] - compareColor.rgb[0])
+          + Math.abs(currentColor.rgb[1] - compareColor.rgb[1])
+          + Math.abs(currentColor.rgb[2] - compareColor.rgb[2]);
+
+        if (diffScore <= COLOR_SIMILARITY_THRESHOLD) {
+          if (approvedContrastRatio(compareColor)) {
+            if (approvedContrastRatio(compareColor)) {
+              foregroundColor = compareColor.hex;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (foregroundColor === undefined) {
+      foregroundColor = backgroundColor.bodyTextColor;
+    }
+
+    return [foregroundColor, backgroundColor.hex];
   }
 }
 

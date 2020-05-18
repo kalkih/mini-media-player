@@ -38,7 +38,7 @@ const ICON = {
   VOL_UP: 'mdi:volume-plus',
 };
 const UPDATE_PROPS = ['entity', '_overflow',
-  'break', 'thumbnail', 'prevThumbnail', 'edit', 'idle'];
+  'break', 'thumbnail', 'prevThumbnail', 'edit', 'idle', 'cardHeight', 'backgroundColor', 'foregroundColor'];
 
 const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
 
@@ -62,6 +62,10 @@ const PLATFORM = {
   SOUNDTOUCH: 'soundtouch',
 };
 
+const CONTRAST_RATIO = 4.5;
+
+const COLOR_SIMILARITY_THRESHOLD = 150;
+
 export {
   DEFAULT_HIDE,
   ICON,
@@ -71,4 +75,6 @@ export {
   LABEL_SHORTCUT,
   MEDIA_INFO,
   PLATFORM,
+  CONTRAST_RATIO,
+  COLOR_SIMILARITY_THRESHOLD,
 };
