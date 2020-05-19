@@ -19,7 +19,7 @@ class MiniMediaPlayerProgress extends LitElement {
 
   set player(player) {
     this._player = player;
-    if (this.hasProgress) {
+    if (this.hasProgress && this.player.isPlaying) {
       this.trackProgress();
     }
   }
@@ -76,10 +76,12 @@ class MiniMediaPlayerProgress extends LitElement {
   }
 
   trackProgress() {
+    console.log('tracking progress')
     this.progress = this.player.progress;
     if (!this.tracker)
       this.tracker = setInterval(() => this.trackProgress(), 1000);
     if (!this.player.isPlaying) {
+      console.log('clear tracker')
       clearInterval(this.tracker);
       this.tracker = null;
     }
@@ -121,7 +123,8 @@ class MiniMediaPlayerProgress extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    if (this.hasProgress) {
+    this.progress = 0;
+    if (this.hasProgress && this.player.isPlaying && !this.tracker) {
       this.trackProgress();
     }
   }
