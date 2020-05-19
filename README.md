@@ -48,7 +48,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 2. Replace the local file with the latest one attached in the [latest release](https://github.com/kalkih/mini-media-player/releases/latest).
 
-3. Add the new version number to the end of the cards reference url in your `ui-lovelace.yaml` like below.
+3. Add the new version number to the end of the cards reference url in your `configuration.yaml` or thourh the UI like below.
 
   ```yaml
   resources:
