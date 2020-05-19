@@ -37,6 +37,13 @@ if (!customElements.get('ha-icon-button')) {
   );
 }
 
+if (!customElements.get('ha-icon')) {
+  customElements.define(
+    'ha-icon',
+    class extends customElements.get('iron-icon') {},
+  );
+}
+
 class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
