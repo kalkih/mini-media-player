@@ -1,3 +1,8 @@
+## v1.8.1
+### FIXED
+- Changed icon element for HA > 0.110.0 support #302 (#304)
+
+
 ## v1.8.0
 ### ADDED
 - Options to hide previous and/or next playback controls #233 (#275)
