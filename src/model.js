@@ -247,19 +247,23 @@ export default class MediaPlayerObject {
   }
 
   volumeUp(e) {
-    this.callService(e, 'volume_set', {
-      entity_id: this.config.entity,
-      volume_level: this.attr.volume_level + this.config.volume_step / 100,
-    })
-      .catch(() => this.callService(e, 'volume_up'));
+    if (this.config.volume_step !== 10) {
+      this.callService(e, 'volume_set', {
+        entity_id: this.config.entity,
+        volume_level: this.attr.volume_level + this.config.volume_step / 100,
+      })
+        .catch(() => this.callService(e, 'volume_up'));
+    } else this.callService(e, 'volume_up');
   }
 
   volumeDown(e) {
-    this.callService(e, 'volume_set', {
-      entity_id: this.config.entity,
-      volume_level: this.attr.volume_level - this.config.volume_step / 100,
-    })
-      .catch(() => this.callService(e, 'volume_down'));
+    if (this.config.volume_step !== 10) {
+      this.callService(e, 'volume_set', {
+        entity_id: this.config.entity,
+        volume_level: this.attr.volume_level - this.config.volume_step / 100,
+      })
+        .catch(() => this.callService(e, 'volume_down'));
+    } else this.callService(e, 'volume_down');
   }
 
   seek(e, pos) {
