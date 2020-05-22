@@ -186,6 +186,10 @@ export default class MediaPlayerObject {
     return !(typeof this.attr.is_volume_muted === 'undefined');
   }
 
+  get supportsVolumeSet() {
+    return !(typeof this.attr.volume_level === 'undefined');
+  }
+
   getAttribute(attribute) {
     return this.attr[attribute] || '';
   }
@@ -256,11 +260,21 @@ export default class MediaPlayerObject {
   }
 
   volumeUp(e) {
-    this.callService(e, 'volume_up');
+    if (this.supportsVolumeSet) {
+      this.callService(e, 'volume_set', {
+        entity_id: this.config.entity,
+        volume_level: this.vol + this.config.volume_step / 100,
+      });
+    } else this.callService(e, 'volume_up');
   }
 
   volumeDown(e) {
-    this.callService(e, 'volume_down');
+    if (this.supportsVolumeSet) {
+      this.callService(e, 'volume_set', {
+        entity_id: this.config.entity,
+        volume_level: this.vol - this.config.volume_step / 100,
+      });
+    } else this.callService(e, 'volume_down');
   }
 
   seek(e, pos) {
