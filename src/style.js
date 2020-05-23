@@ -60,6 +60,8 @@ const style = css`
     position: relative;
     color: inherit;
     font-size: calc(var(--mmp-unit) * 0.35);
+    --mdc-icon-button-size: calc(var(--mmp-unit));
+    --mdc-icon-size: calc(var(--mmp-unit) * 0.6);
   }
   ha-card.--group {
     box-shadow: none;
