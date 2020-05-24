@@ -1,4 +1,4 @@
-import { PROGRESS_PROPS, MEDIA_INFO } from './const';
+import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM } from './const';
 
 export default class MediaPlayerObject {
   constructor(hass, config, entity) {
@@ -82,12 +82,18 @@ export default class MediaPlayerObject {
   }
 
   get group() {
-    const groupName = `${this.config.speaker_group.platform}_group`;
+    const groupName = `${this.platform}_group`;
     return this.attr[groupName] || [];
   }
 
+  get platform() {
+    return this.config.speaker_group.platform;
+  }
+
   get master() {
-    return this.group[0] || this.config.entity;
+    return this.supportsMaster
+      ? this.group[0] || this.config.entity
+      : this.config.entity;
   }
 
   get isMaster() {
@@ -190,12 +196,16 @@ export default class MediaPlayerObject {
     return !(typeof this.attr.volume_level === 'undefined');
   }
 
-  getAttribute(attribute) {
-    return this.attr[attribute] || '';
+  get supportsMaster() {
+    return this.platform !== PLATFORM.SQUEEZEBOX;
   }
 
   get artwork() {
     return `url(${this.attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture})`;
+  }
+
+  getAttribute(attribute) {
+    return this.attr[attribute] || '';
   }
 
   toggle(e) {

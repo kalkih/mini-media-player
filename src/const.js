@@ -55,6 +55,9 @@ const MEDIA_INFO = [
   { attr: 'app_name' },
 ];
 
+const PLATFORM = {
+  SQUEEZEBOX: 'squeezebox',
+}
 
 export {
   DEFAULT_HIDE,
@@ -64,4 +67,5 @@ export {
   BREAKPOINT,
   LABEL_SHORTCUT,
   MEDIA_INFO,
+  PLATFORM,
 };
