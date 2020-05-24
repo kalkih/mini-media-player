@@ -56,8 +56,11 @@ const MEDIA_INFO = [
 ];
 
 const PLATFORM = {
+  SONOS: 'sonos',
   SQUEEZEBOX: 'squeezebox',
-}
+  BLUESOUND: 'bluesound',
+  SOUNDTOUCH: 'soundtouch',
+};
 
 export {
   DEFAULT_HIDE,
