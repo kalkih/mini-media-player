@@ -296,18 +296,12 @@ export default class MediaPlayerObject {
     const options = { entity_id: entity };
     if (checked) {
       options.master = this.config.entity;
-      if (platform === 'bluesound') {
-        return this.callService(e, `${platform}_JOIN`, options);
-      }
       if (platform === 'soundtouch') {
         const service = this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE';
         return this.handleSoundtouch(e, service, entity);
       }
       this.callService(e, 'join', options, platform);
     } else {
-      if (platform === 'bluesound') {
-        return this.callService(e, `${platform}_UNJOIN`, options);
-      }
       if (platform === 'soundtouch') {
         return this.handleSoundtouch(e, 'REMOVE_ZONE_SLAVE', entity);
       }
