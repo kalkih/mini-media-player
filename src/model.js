@@ -263,7 +263,7 @@ export default class MediaPlayerObject {
     if (this.supportsVolumeSet) {
       this.callService(e, 'volume_set', {
         entity_id: this.config.entity,
-        volume_level: this.vol + this.config.volume_step / 100,
+        volume_level: Math.min(this.vol + this.config.volume_step / 100, 1),
       });
     } else this.callService(e, 'volume_up');
   }
@@ -272,7 +272,7 @@ export default class MediaPlayerObject {
     if (this.supportsVolumeSet) {
       this.callService(e, 'volume_set', {
         entity_id: this.config.entity,
-        volume_level: this.vol - this.config.volume_step / 100,
+        volume_level: Math.max(this.vol - this.config.volume_step / 100, 0),
       });
     } else this.callService(e, 'volume_down');
   }
