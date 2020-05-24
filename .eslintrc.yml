@@ -9,7 +9,6 @@ rules:
   no-mixed-operators: 0
   class-methods-use-this: 0
   no-nested-ternary: 0
-  linebreak-style: 0
 globals:
   window: true
   Event: true
