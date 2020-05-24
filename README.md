@@ -78,7 +78,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | sound_mode | string | optional | v1.1.2 | Change sound mode select appearance, `icon` for just an icon, `full` for the full sound mode name.
 | info | string | optional | v1.0.0 | Change how the media information is displayed, `short` to limit media information to one row, `scroll` to scroll overflowing media info.
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
-| volume_step | string | 10 | v1.9.0 | Change the volume step size of volume buttons.
+| volume_step | number | optional | v1.9.0 | Change the volume step size of volume buttons (number between 1 - 100).
 | max_volume | number | optional | v0.8.2 | Specify the max vol limit of the volume slider (number between 1 - 100).
 | min_volume | number | optional | v1.1.2 | Specify the min vol limit of the volume slider (number between 1 - 100).
 | replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play_pause` (previously `play`), `stop`, `play_stop`, `next`.
