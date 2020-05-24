@@ -260,7 +260,7 @@ export default class MediaPlayerObject {
   }
 
   volumeUp(e) {
-    if (this.supportsVolumeSet) {
+    if (this.supportsVolumeSet && this.config.volume_step > 0) {
       this.callService(e, 'volume_set', {
         entity_id: this.config.entity,
         volume_level: Math.min(this.vol + this.config.volume_step / 100, 1),
@@ -269,7 +269,7 @@ export default class MediaPlayerObject {
   }
 
   volumeDown(e) {
-    if (this.supportsVolumeSet) {
+    if (this.supportsVolumeSet && this.config.volume_step > 0) {
       this.callService(e, 'volume_set', {
         entity_id: this.config.entity,
         volume_level: Math.max(this.vol - this.config.volume_step / 100, 0),
