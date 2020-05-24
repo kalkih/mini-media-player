@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map';
 
 import './dropdown';
 import './button';
@@ -50,7 +51,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
       <div class='mmp-shortcuts__buttons'>
         ${this.buttons.map(item => html`
           <mmp-button
-            style=${`min-height: ${this.height}px;`}
+            style="${styleMap(this.shortcutStyle(item))}"
             raised
             columns=${this.shortcuts.columns}
             ?color=${item.id === active}
@@ -88,6 +89,13 @@ class MiniMediaPlayerShortcuts extends LitElement {
     this.player.setMedia(ev, options);
   }
 
+  shortcutStyle(item) {
+    return {
+      'min-height': `${this.height}px;`,
+      ...(item.cover && { 'background-image': `url(${item.cover})` }),
+    };
+  }
+
   static get styles() {
     return [
       sharedStyle,
@@ -101,6 +109,9 @@ class MiniMediaPlayerShortcuts extends LitElement {
         .mmp-shortcuts__button {
           min-width: calc(50% - 8px);
           flex: 1;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
         }
         .mmp-shortcuts__button > div {
           display: flex;
