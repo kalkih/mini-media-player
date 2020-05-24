@@ -138,10 +138,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           justify-content: flex-end;
         }
         .group-button {
-          height: calc(var(--mmp-unit) * .85);
-          width: calc(var(--mmp-unit) * .85);
-          min-width: calc(var(--mmp-unit) * .85);
-          margin: 3px;
+          --mdc-icon-size: calc(var(--mmp-unit) * 0.5);
         }
         ha-icon-button {
           min-width: var(--mmp-unit);
