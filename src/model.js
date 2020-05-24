@@ -82,8 +82,10 @@ export default class MediaPlayerObject {
   }
 
   get group() {
-    const groupName = `${this.platform}_group`;
-    return this.attr[groupName] || [];
+    if (this.platform === PLATFORM.SQUEEZEBOX) {
+      return this.attr.sync_group || [];
+    }
+    return this.attr[`${this.platform}_group`] || [];
   }
 
   get platform() {
