@@ -1,3 +1,15 @@
+## v1.9.0
+### NEW
+- Squeezebox multiroom support (#312) **(BETA)**
+- Volume step size option for volume buttons #219 (#308) @craiq
+- Added `cover` option for shortcut items #236 (#314)
+
+### FIXED
+- Fixed misaligned icons #305 (#310)
+- Fixed misaligned multiroom button #305 (#313)
+- Updated bluesound service calls for speaker group management #296 (#315)
+
+
 ## v1.8.1
 ### FIXED
 - Changed icon element for HA > 0.110.0 support #302 (#304)

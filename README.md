@@ -17,11 +17,11 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 
-2. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or in the Home Assistant UI from the resource tab.
+2. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.8.1
+    - url: /local/mini-media-player-bundle.js?v=1.9.0
       type: module
   ```
 
@@ -32,14 +32,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.8.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.9.0/mini-media-player-bundle.js
   ```
 
-3. Add a reference to `mini-media-player-bundle.js` inside your `ui-lovelace.yaml`.
+3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.8.1
+    - url: /local/mini-media-player-bundle.js?v=1.9.0
       type: module
   ```
 
@@ -48,11 +48,11 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 2. Replace the local file with the latest one attached in the [latest release](https://github.com/kalkih/mini-media-player/releases/latest).
 
-3. Add the new version number to the end of the cards reference url in your `configuration.yaml` or thourh the UI like below.
+3. Add the new version number to the end of the cards reference url in your `configuration.yaml` or through the Home Assistant.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.8.1
+    - url: /local/mini-media-player-bundle.js?v=1.9.0
       type: module
   ```
 
@@ -78,7 +78,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | sound_mode | string | optional | v1.1.2 | Change sound mode select appearance, `icon` for just an icon, `full` for the full sound mode name.
 | info | string | optional | v1.0.0 | Change how the media information is displayed, `short` to limit media information to one row, `scroll` to scroll overflowing media info.
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
-| volume_step | number | optional | v1.9.0 | Change the volume step size of volume buttons (number between 1 - 100).
+| volume_step | number | optional | v1.9.0 | Change the volume step size of volume buttons (number between 1 - 100)<sup>[1](#option_foot1)</sup>.
 | max_volume | number | optional | v0.8.2 | Specify the max vol limit of the volume slider (number between 1 - 100).
 | min_volume | number | optional | v1.1.2 | Specify the min vol limit of the volume slider (number between 1 - 100).
 | replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play_pause` (previously `play`), `stop`, `play_stop`, `next`.
@@ -88,6 +88,8 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | speaker_group | object | optional | v1.0.0 | Speaker group management/multiroom, see [Speaker group object](#speaker-group-object) for available options.
 | shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
 | scale | number | optional | v1.5.0 | UI scale modifier, default is `1`.
+
+<a name="option_foot1"><sup>1</sup></a> Only supported on entities with `volume_level` attribute.
 
 #### Idle object
 | Name | Type | Default | Description |
