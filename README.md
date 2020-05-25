@@ -128,21 +128,22 @@ See [Speaker group management](#speaker-group-management) for example usage.
 **Supported platforms**
 - sonos
 - soundtouch
-- yamaha_musiccast<sup>[1](#speaker_foot1)</sup>
+- squeezebox<sup>[2](#speaker_foot2)</sup>
 - bluesound<sup>[2](#speaker_foot2)</sup>
 - snapcast<sup>[2](#speaker_foot2)</sup>
+- yamaha_musiccast<sup>[1](#speaker_foot1)</sup>
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | entities | list | **required** | A list containing [speaker entities](#speaker-entity-object) of one of supported platforms, to enable group management of those speakers.
-| platform | string | 'sonos' | The media_player platform to control. `sonos`, `soundtouch`, `snapcast`, `bluesound` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
+| platform | string | 'sonos' | The media_player platform to control. `sonos`, `soundtouch`, `snapcast`, `bluesound`, `squeezebox` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
 | expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
 | icon | string | optional | Override default group button icon *(any mdi icon)*.
 
 <a name="speaker_foot1"><sup>1</sup></a> Currently not yet supported in Home Assistant, *soon™*
-<a name="speaker_foot2"><sup>2</sup></a> Some features are not yet supported.
+<a name="speaker_foot2"><sup>2</sup></a> All features are not yet supported.
 
 #### Speaker entity object
 | Name | Type | Default | Description |

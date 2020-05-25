@@ -1,4 +1,4 @@
-import { PROGRESS_PROPS, MEDIA_INFO } from './const';
+import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM } from './const';
 
 export default class MediaPlayerObject {
   constructor(hass, config, entity) {
@@ -82,12 +82,20 @@ export default class MediaPlayerObject {
   }
 
   get group() {
-    const groupName = `${this.config.speaker_group.platform}_group`;
-    return this.attr[groupName] || [];
+    if (this.platform === PLATFORM.SQUEEZEBOX) {
+      return this.attr.sync_group || [];
+    }
+    return this.attr[`${this.platform}_group`] || [];
+  }
+
+  get platform() {
+    return this.config.speaker_group.platform;
   }
 
   get master() {
-    return this.group[0] || this.config.entity;
+    return this.supportsMaster
+      ? this.group[0] || this.config.entity
+      : this.config.entity;
   }
 
   get isMaster() {
@@ -190,12 +198,16 @@ export default class MediaPlayerObject {
     return !(typeof this.attr.volume_level === 'undefined');
   }
 
-  getAttribute(attribute) {
-    return this.attr[attribute] || '';
+  get supportsMaster() {
+    return this.platform !== PLATFORM.SQUEEZEBOX;
   }
 
   get artwork() {
     return `url(${this.attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture})`;
+  }
+
+  getAttribute(attribute) {
+    return this.attr[attribute] || '';
   }
 
   toggle(e) {
@@ -306,20 +318,30 @@ export default class MediaPlayerObject {
   }
 
   handleGroupChange(e, entity, checked) {
-    const { platform } = this.config.speaker_group;
+    const { platform } = this;
     const options = { entity_id: entity };
     if (checked) {
       options.master = this.config.entity;
-      if (platform === 'soundtouch') {
-        const service = this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE';
-        return this.handleSoundtouch(e, service, entity);
+      switch (platform) {
+        case PLATFORM.SOUNDTOUCH:
+          return this.handleSoundtouch(e, this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE', entity);
+        case PLATFORM.SQUEEZEBOX:
+          return this.callService(e, 'sync', {
+            entity_id: this.config.entity,
+            other_player: entity,
+          }, PLATFORM.SQUEEZEBOX);
+        default:
+          return this.callService(e, 'join', options, platform);
       }
-      this.callService(e, 'join', options, platform);
     } else {
-      if (platform === 'soundtouch') {
-        return this.handleSoundtouch(e, 'REMOVE_ZONE_SLAVE', entity);
+      switch (platform) {
+        case PLATFORM.SOUNDTOUCH:
+          return this.handleSoundtouch(e, 'REMOVE_ZONE_SLAVE', entity);
+        case PLATFORM.SQUEEZEBOX:
+          return this.callService(e, 'unsync', options, PLATFORM.SQUEEZEBOX);
+        default:
+          return this.callService(e, 'unjoin', options, platform);
       }
-      this.callService(e, 'unjoin', options, platform);
     }
   }
 
@@ -327,7 +349,7 @@ export default class MediaPlayerObject {
     return this.callService(e, service, {
       master: this.master,
       slaves: entity,
-    }, 'soundtouch', true);
+    }, PLATFORM.SOUNDTOUCH, true);
   }
 
   toggleScript(e, id, data = {}) {
