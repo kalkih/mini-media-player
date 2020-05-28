@@ -1,4 +1,9 @@
 ## v1.9.0
+### FIXED
+- Fix broken shortcut column height #318 (#319)
+
+
+## v1.9.0
 ### NEW
 - Squeezebox multiroom support (#312) **(BETA)**
 - Volume step size option for volume buttons #219 (#308) @craiq
