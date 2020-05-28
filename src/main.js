@@ -254,6 +254,7 @@ class MiniMediaPlayer extends LitElement {
             </div>
             <mmp-powerstrip
               @toggleGroupList=${this.toggleGroupList}
+              .color=${this.foregroundColor}
               .hass=${this.hass}
               .player=${this.player}
               .config=${config}
@@ -265,6 +266,7 @@ class MiniMediaPlayer extends LitElement {
           <div class='mmp-player__adds'>
             ${!config.collapse && this.player.active ? html`
               <mmp-media-controls
+                .color=${this.foregroundColor}
                 .player=${this.player}
                 .config=${config}
                 .break=${this.break}>
@@ -310,7 +312,7 @@ class MiniMediaPlayer extends LitElement {
   renderNoImage() {
     if (this.config.artwork !== 'contain')
       return;
-    return html`<div class="no-img" style='background-color: ${this.backgroundColor};'}></div>`;
+    return html`<div class="no-img" style=${styleMap({ backgroundColor: this.backgroundColor || '' })}></div>`;
   }
 
   renderArtwork(artwork) {
@@ -361,7 +363,7 @@ class MiniMediaPlayer extends LitElement {
 
     if (this.player.active && artwork && this.config.artwork === 'contain')
       return html`
-        <div class='entity__icon' style='color: ${this.foregroundColor || ''};'>
+        <div class='entity__icon' style=${styleMap({ backgroundColor: this.backgroundColor || '' })}>
           <ha-icon .icon=${this.computeIcon()} ></ha-icon>
         </div>`;
 
