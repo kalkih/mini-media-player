@@ -47,22 +47,22 @@ if (!customElements.get('ha-icon')) {
   );
 }
 
-const luminance = function (r, g, b) {
+function luminance(r, g, b) {
   const a = [r, g, b].map((v) => {
     let w = v;
     w /= 255;
     return w <= 0.03928 ? w / 12.92 : ((w + 0.055) / 1.055) ** 2.4;
   });
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-};
+}
 
-const contrast = function (rgb1, rgb2) {
+function contrast(rgb1, rgb2) {
   const lum1 = luminance(...rgb1);
   const lum2 = luminance(...rgb2);
   const brightest = Math.max(lum1, lum2);
   const darkest = Math.min(lum1, lum2);
   return (brightest + 0.05) / (darkest + 0.05);
-};
+}
 
 function getContrastRatio(rgb1, rgb2) {
   return Math.round((contrast(rgb1, rgb2) + Number.EPSILON) * 100) / 100;
@@ -304,13 +304,13 @@ class MiniMediaPlayer extends LitElement {
   }
 
   renderColorBlock() {
-    if (this.config.artwork !== 'contain')
+    if (this.config.artwork !== 'material')
       return;
     return html`<div class="color-block" style=${styleMap({ backgroundColor: this.backgroundColor || '' })}></div>`;
   }
 
   renderNoImage() {
-    if (this.config.artwork !== 'contain')
+    if (this.config.artwork !== 'material')
       return;
     return html`<div class="no-img" style=${styleMap({ backgroundColor: this.backgroundColor || '' })}></div>`;
   }
@@ -324,7 +324,7 @@ class MiniMediaPlayer extends LitElement {
       ? `url(${this.config.background})`
       : this.thumbnail;
 
-    if (this.config.artwork === 'contain')
+    if (this.config.artwork === 'material')
       return html`<div class='cover' style='background-image: ${url}; background-color: ${this.backgroundColor}; width: ${this.cardHeight}px;'></div>`;
 
     return html`
@@ -333,7 +333,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   renderGradient() {
-    if (this.config.artwork !== 'contain')
+    if (this.config.artwork !== 'material')
       return;
 
     const gradientStyle = {
@@ -361,7 +361,7 @@ class MiniMediaPlayer extends LitElement {
           state=${this.player.state}>
         </div>`;
 
-    if (this.player.active && artwork && this.config.artwork === 'contain')
+    if (this.player.active && artwork && this.config.artwork === 'material')
       return html`
         <div class='entity__icon' style=${styleMap({ backgroundColor: this.backgroundColor || '' })}>
           <ha-icon .icon=${this.computeIcon()} ></ha-icon>
@@ -377,7 +377,7 @@ class MiniMediaPlayer extends LitElement {
   renderEntityName() {
     if (this.config.hide.name) return;
 
-    if (this.config.artwork === 'contain')
+    if (this.config.artwork === 'material')
       return html`
         <div class='entity__info__name' style=${styleMap({ color: this.foregroundColor || '' })}>
           ${this.name} ${this.speakerCount()}
@@ -393,7 +393,7 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.hide.info) return;
     const items = this.player.mediaInfo;
 
-    if (this.config.artwork === 'contain')
+    if (this.config.artwork === 'material')
       return html`
         <div class='entity__info__media'
           ?short=${this.config.info === 'short' || !this.player.active}
@@ -573,7 +573,7 @@ class MiniMediaPlayer extends LitElement {
     let foregroundColor;
 
     const contrastRatios = new Map();
-    const approvedContrastRatio = function (color) {
+    function approvedContrastRatio(color) {
       if (!contrastRatios.has(color)) {
         contrastRatios.set(
           color,
@@ -582,7 +582,7 @@ class MiniMediaPlayer extends LitElement {
       }
 
       return contrastRatios.get(color) > CONTRAST_RATIO;
-    };
+    }
 
     // We take each next color and find one that has better contrast.
     for (let i = 1; i < colors.length && foregroundColor === undefined; i += 1) {

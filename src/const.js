@@ -37,6 +37,7 @@ const ICON = {
   VOL_DOWN: 'mdi:volume-minus',
   VOL_UP: 'mdi:volume-plus',
 };
+
 const UPDATE_PROPS = ['entity', '_overflow',
   'break', 'thumbnail', 'prevThumbnail', 'edit', 'idle', 'cardHeight', 'backgroundColor', 'foregroundColor'];
 
