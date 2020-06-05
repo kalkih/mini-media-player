@@ -36,7 +36,7 @@ const style = css`
   ha-card.--bg {
     --mmp-info-opacity: .75;
   }
-  ha-card.--has-artwork[artwork='contain']
+  ha-card.--has-artwork[artwork='material']
   ha-card.--has-artwork[artwork*='cover'] {
     --mmp-accent-color: var(--mini-media-player-overlay-accent-color, var(--mini-media-player-accent-color, var(--accent-color, #f39c12)));
     --mmp-text-color: var(--mmp-overlay-base-color);
@@ -114,25 +114,25 @@ const style = css`
     transform: translateZ(0);
     opacity: var(--mmp-bg-opacity);
   }
-  ha-card[artwork='contain'].--has-artwork .mmp__bg,
+  ha-card[artwork='material'].--has-artwork .mmp__bg,
   ha-card[artwork*='cover'].--has-artwork .mmp__bg {
     opacity: var(--mmp-artwork-opacity);
     background: transparent;
   }
-  ha-card[artwork='contain'].--has-artwork .mmp__bg {
+  ha-card[artwork='material'].--has-artwork .mmp__bg {
     display: flex;
   }
-  ha-card[artwork='contain'].--has-artwork .cover {
+  ha-card[artwork='material'].--has-artwork .cover {
     height: 100%;
     right:0;
     left: unset;
     transition: width 0.8s ease 0s, opacity 0.8s linear 0.8s;
   }
-  ha-card[artwork='contain'].--has-artwork .color-block {
+  ha-card[artwork='material'].--has-artwork .color-block {
     width: 100%;
     transition: opacity 0.4s ease 0s, background-color 0.4s ease 0s;
   }
-  ha-card[artwork='contain'].--has-artwork .no-img {
+  ha-card[artwork='material'].--has-artwork .no-img {
     width: 50%;
     background-size: initial;
     padding-bottom: 0px;
@@ -144,7 +144,7 @@ const style = css`
     background-position: center center;
     transition: opacity 0.4s ease 0s, background-color 0.4s ease 0s;
   }
-  ha-card[artwork='contain'].--has-artwork .color-gradient {
+  ha-card[artwork='material'].--has-artwork .color-gradient {
     position: absolute;
     height: 100%;
     right: 0px;
@@ -178,7 +178,7 @@ const style = css`
   .cover.--prev {
     animation: fade-in .5s linear reverse forwards;
   }
-  ha-card[artwork='contain'].--has-artwork .cover:before {
+  ha-card[artwork='material'].--has-artwork .cover:before {
     background: rgba(0,0,0,0);
   }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
@@ -197,7 +197,7 @@ const style = css`
   ha-card.--bg .cover {
     display: block;
   }
-  ha-card[artwork='contain'].--has-artwork .cover {
+  ha-card[artwork='material'].--has-artwork .cover {
     background-size: cover;
   }
   ha-card[artwork='full-cover-fit'].--has-artwork .cover {
@@ -339,7 +339,7 @@ const style = css`
     position: absolute;
     white-space: nowrap;
   }
-  ha-card[artwork='contain'].--has-artwork .entity__info__media,
+  ha-card[artwork='material'].--has-artwork .entity__info__media,
   ha-card[artwork*='cover'].--has-artwork .entity__info__media,
   ha-card.--bg .entity__info__media {
     color: var(--mmp-media-cover-info-color);
