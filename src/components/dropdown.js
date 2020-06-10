@@ -114,7 +114,7 @@ class MiniMediaPlayerDropdown extends LitElement {
           text-transform: none;
         }
         .mmp-dropdown__icon {
-          height: calc(var(--mmp-unit) * .6);
+          height: auto;
           width: calc(var(--mmp-unit) * .6);
           min-width: calc(var(--mmp-unit) * .6);
         }
