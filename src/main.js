@@ -309,12 +309,6 @@ class MiniMediaPlayer extends LitElement {
     return html`<div class="color-block" style=${styleMap({ backgroundColor: this.backgroundColor || '' })}></div>`;
   }
 
-  renderNoImage() {
-    if (this.config.artwork !== 'material')
-      return;
-    return html`<div class="no-img" style=${styleMap({ backgroundColor: this.backgroundColor || '' })}></div>`;
-  }
-
   renderArtwork(artwork) {
     if (!this.thumbnail && !this.config.background)
       return;
