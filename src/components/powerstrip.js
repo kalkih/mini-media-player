@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
 
 import './sourceMenu';
 import './soundMenu';
@@ -18,7 +17,6 @@ class MiniMediaPlayerPowerstrip extends LitElement {
       config: {},
       groupVisible: Boolean,
       idle: Boolean,
-      color: String,
     };
   }
 
@@ -70,7 +68,6 @@ class MiniMediaPlayerPowerstrip extends LitElement {
       ${this.idle ? this.renderIdleView : ''}
       ${this.hasControls ? html`
         <mmp-media-controls
-          .color=${this.color}
           .player=${this.player}
           .config=${this.config}>
         </mmp-media-controls>
@@ -89,7 +86,6 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         </mmp-sound-menu>` : ''}
       ${this.showGroupButton ? html`
         <ha-icon-button class='group-button'
-          style=${styleMap({ color: this.color || '' })}
           .icon=${this.icon}
           ?inactive=${!this.player.isGrouped}
           ?color=${this.groupVisible}
@@ -97,7 +93,6 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         </ha-icon-button>` : ''}
       ${this.showPowerButton ? html`
         <ha-icon-button class='power-button'
-          style=${styleMap({ color: this.color || '' })}
           .icon=${ICON.POWER}
           @click=${e => this.player.toggle(e)}
           ?color=${this.powerColor}>
@@ -114,7 +109,6 @@ class MiniMediaPlayerPowerstrip extends LitElement {
     if (this.player.isPaused)
       return html`
         <ha-icon-button
-          style=${styleMap({ color: this.color || '' })}
           .icon=${ICON.PLAY[this.player.isPlaying]}
           @click=${e => this.player.playPause(e)}>
         </ha-icon-button>`;

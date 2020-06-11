@@ -371,12 +371,6 @@ class MiniMediaPlayer extends LitElement {
   renderEntityName() {
     if (this.config.hide.name) return;
 
-    if (this.config.artwork === 'material')
-      return html`
-        <div class='entity__info__name' style=${styleMap({ color: this.foregroundColor || '' })}>
-          ${this.name} ${this.speakerCount()}
-        </div>`;
-
     return html`
       <div class='entity__info__name'>
         ${this.name} ${this.speakerCount()}
@@ -446,7 +440,7 @@ class MiniMediaPlayer extends LitElement {
   computeStyles() {
     const { scale } = this.config;
     return styleMap({
-      ...(scale && { '--mmp-unit': `${40 * scale}px` }),
+      ...(scale && { '--mmp-unit': `${40 * scale}px` }, this.foregroundColor && { '--mmp-text-color': this.foregroundColor }),
     });
   }
 

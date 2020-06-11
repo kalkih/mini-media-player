@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
 
 import { ICON } from '../const';
 import sharedStyle from '../sharedStyle';
@@ -10,7 +9,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
       player: {},
       config: {},
       break: Boolean,
-      color: String,
     };
   }
 
@@ -33,7 +31,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
       ${this.showShuffle ? html`
         <div class='flex mmp-media-controls__shuffle'>
           <ha-icon-button
-            style=${styleMap({ color: this.color || '' })}
             class='shuffle-button'
             @click=${e => this.player.toggleShuffle(e)}
             .icon=${ICON.SHUFFLE}
@@ -45,14 +42,12 @@ class MiniMediaPlayerMediaControls extends LitElement {
         <div class='flex mmp-media-controls__media' ?flow=${this.config.flow || this.break}>
           ${!hide.prev ? html`
             <ha-icon-button
-              style=${styleMap({ color: this.color || '' })}
               @click=${e => this.player.prev(e)}
               .icon=${ICON.PREV}>
             </ha-icon-button>` : ''}
           ${this.renderPlayButtons()}
           ${!hide.next ? html`
             <ha-icon-button
-              style=${styleMap({ color: this.color || '' })}
               @click=${e => this.player.next(e)}
               .icon=${ICON.NEXT}>
             </ha-icon-button>` : ''}
@@ -89,12 +84,10 @@ class MiniMediaPlayerMediaControls extends LitElement {
       <div class='mmp-media-controls__volume --buttons flex'>
         ${this.renderMuteButton(muted)}
         <ha-icon-button
-          style=${styleMap({ color: this.color || '' })}
           @click=${e => this.player.volumeDown(e)}
           .icon=${ICON.VOL_DOWN}>
         </ha-icon-button>
         <ha-icon-button
-          style=${styleMap({ color: this.color || '' })}
           @click=${e => this.player.volumeUp(e)}
           .icon=${ICON.VOL_UP}>
         </ha-icon-button>
@@ -108,7 +101,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
       case 'play_pause':
         return html`
           <ha-icon-button
-            style=${styleMap({ color: this.color || '' })}
             @click=${e => this.player.playPause(e)}
             .icon=${ICON.PLAY[this.player.isPlaying]}>
           </ha-icon-button>
@@ -116,7 +108,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
       case 'stop':
         return html`
           <ha-icon-button
-            style=${styleMap({ color: this.color || '' })}
             @click=${e => this.player.stop(e)}
             .icon=${ICON.STOP.true}>
           </ha-icon-button>
@@ -124,7 +115,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
       case 'play_stop':
         return html`
           <ha-icon-button
-            style=${styleMap({ color: this.color || '' })}
             @click=${e => this.player.playStop(e)}
             .icon=${ICON.STOP[this.player.isPlaying]}>
           </ha-icon-button>
@@ -132,7 +122,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
       case 'next':
         return html`
           <ha-icon-button
-            style=${styleMap({ color: this.color || '' })}
             @click=${e => this.player.next(e)}
             .icon=${ICON.NEXT}>
           </ha-icon-button>
@@ -141,7 +130,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
         if (!this.player.supportsMute) return;
         return html`
           <ha-icon-button
-            style=${styleMap({ color: this.color || '' })}
             @click=${e => this.player.toggleMute(e)}
             .icon=${ICON.MUTE[muted]}>
           </ha-icon-button>
@@ -154,14 +142,12 @@ class MiniMediaPlayerMediaControls extends LitElement {
     return html`
       ${!hide.play_pause ? html`
         <ha-icon-button
-          style=${styleMap({ color: this.color || '' })}
           @click=${e => this.player.playPause(e)}
           .icon=${ICON.PLAY[this.player.isPlaying]}>
         </ha-icon-button>
       ` : html``}
       ${!hide.play_stop ? html`
         <ha-icon-button
-          style=${styleMap({ color: this.color || '' })}
           @click=${e => this.handleStop(e)}
           .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}>
         </ha-icon-button>
