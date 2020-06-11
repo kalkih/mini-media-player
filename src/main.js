@@ -381,22 +381,6 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.hide.info) return;
     const items = this.player.mediaInfo;
 
-    if (this.config.artwork === 'material')
-      return html`
-        <div class='entity__info__media'
-          ?short=${this.config.info === 'short' || !this.player.active}
-          ?short-scroll=${this.config.info === 'scroll'}
-          ?scroll=${this.overflow}
-          style='animation-duration: ${this.overflow}s; color: ${this.foregroundColor || ''};'>
-          ${this.config.info === 'scroll' ? html`
-            <div>
-              <div class='marquee'>
-                ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
-              </div>
-            </div>` : ''}
-          ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
-        </div>`;
-
     return html`
       <div class='entity__info__media'
         ?short=${this.config.info === 'short' || !this.player.active}
