@@ -333,7 +333,7 @@ class MiniMediaPlayer extends LitElement {
     const gradientStyle = {
       'background-image': `linear-gradient(to right, ${
         this.backgroundColor
-      }, ${`${this.backgroundColor}00`})`,
+      }, ${this.backgroundColor}00)`,
       width: `${this.cardHeight}px`,
     };
 
