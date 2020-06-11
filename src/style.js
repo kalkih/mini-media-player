@@ -166,9 +166,6 @@ const style = css`
   .cover.--prev {
     animation: fade-in .5s linear reverse forwards;
   }
-  ha-card[artwork='material'].--has-artwork .cover:before {
-    background: rgba(0,0,0,0);
-  }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
     background: linear-gradient(to top, var(--mmp-overlay-color) var(--mmp-overlay-color-stop), transparent 100%);
     border-bottom-left-radius: var(--ha-card-border-radius, 0);
