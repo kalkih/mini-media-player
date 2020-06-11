@@ -132,18 +132,6 @@ const style = css`
     width: 100%;
     transition: opacity 0.4s ease 0s, background-color 0.4s ease 0s;
   }
-  ha-card[artwork='material'].--has-artwork .no-img {
-    width: 50%;
-    background-size: initial;
-    padding-bottom: 0px;
-    position: absolute;
-    right: 0px;
-    height: 100%;
-    width: 50%;
-    background-repeat: no-repeat;
-    background-position: center center;
-    transition: opacity 0.4s ease 0s, background-color 0.4s ease 0s;
-  }
   ha-card[artwork='material'].--has-artwork .color-gradient {
     position: absolute;
     height: 100%;
