@@ -338,10 +338,14 @@ class MiniMediaPlayer extends LitElement {
     });
   }
 
-  computeArtwork() {
+  async computeArtwork() {
     const { picture, hasArtwork } = this.player;
     if (hasArtwork && picture !== this.picture) {
-      this.thumbnail = this.player.artwork;
+      try {
+        this.thumbnail = await this.player.fetchArtwork();
+      } catch (error) {
+        this.thumbnail = '';
+      }
       this.picture = picture;
     }
     return !!(hasArtwork && this.thumbnail);
