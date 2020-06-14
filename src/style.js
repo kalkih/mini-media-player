@@ -129,6 +129,10 @@ const style = css`
     transition: opacity .75s cubic-bezier(.21,.61,.35,1);
     will-change: opacity;
   }
+  .cover:before {
+    content: '';
+    background: var(--mmp-overlay-color);
+  }
   .cover {
     animation: fade-in .5s cubic-bezier(.21,.61,.35,1);
     background-size: cover;
@@ -137,9 +141,8 @@ const style = css`
     border-radius: var(--ha-card-border-radius, 0);
     overflow: hidden;
   }
-  .cover:before {
-    background: var(--mmp-overlay-color);
-    content: '';
+  .cover.--prev {
+    animation: fade-in .5s linear reverse forwards;
   }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
     background: linear-gradient(to top, var(--mmp-overlay-color) var(--mmp-overlay-color-stop), transparent 100%);

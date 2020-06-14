@@ -50,7 +50,8 @@ class MiniMediaPlayer extends LitElement {
     this._overflow = false;
     this.initial = true;
     this.picture = false;
-    this.thumbnail = false;
+    this.thumbnail = '';
+    this.prevThumbnail = '';
     this.edit = false;
     this.rtl = false;
   }
@@ -66,6 +67,7 @@ class MiniMediaPlayer extends LitElement {
       initial: Boolean,
       picture: String,
       thumbnail: String,
+      prevThumbnail: String,
       edit: Boolean,
       rtl: Boolean,
       idle: Boolean,
@@ -147,6 +149,11 @@ class MiniMediaPlayer extends LitElement {
 
   shouldUpdate(changedProps) {
     if (this.break === undefined) this.computeRect(this);
+    if (changedProps.has('prevThumbnail') && this.prevThumbnail) {
+      setTimeout(() => {
+        this.prevThumbnail = '';
+      }, 1000);
+    }
     return UPDATE_PROPS.some(prop => changedProps.has(prop)) && this.player;
   }
 
@@ -255,7 +262,9 @@ class MiniMediaPlayer extends LitElement {
       ? `url(${this.config.background})`
       : this.thumbnail;
 
-    return html`<div class='cover' style='background-image: ${url};'></div>`;
+    return html`
+      <div class='cover' style='background-image: ${url};'></div>
+      ${this.prevThumbnail && html`<div class='cover --prev' style='background-image: ${this.prevThumbnail};'></div>`}`;
   }
 
   handlePopup(e) {
@@ -341,12 +350,16 @@ class MiniMediaPlayer extends LitElement {
   async computeArtwork() {
     const { picture, hasArtwork } = this.player;
     if (hasArtwork && picture !== this.picture) {
+      this.picture = picture;
       try {
-        this.thumbnail = await this.player.fetchArtwork();
+        const artwork = await this.player.fetchArtwork();
+        if (this.thumbnail) {
+          this.prevThumbnail = this.thumbnail;
+        }
+        this.thumbnail = artwork;
       } catch (error) {
         this.thumbnail = '';
       }
-      this.picture = picture;
     }
     return !!(hasArtwork && this.thumbnail);
   }
