@@ -38,7 +38,7 @@ const ICON = {
   VOL_UP: 'mdi:volume-plus',
 };
 const UPDATE_PROPS = ['entity', '_overflow',
-  'break', 'thumbnail', 'edit', 'idle'];
+  'break', 'thumbnail', 'prevThumbnail', 'edit', 'idle'];
 
 const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
 
