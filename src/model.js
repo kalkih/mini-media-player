@@ -1,4 +1,5 @@
 import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM } from './const';
+import arrayBufferToBase64 from './utils/misc';
 
 export default class MediaPlayerObject {
   constructor(hass, config, entity) {
@@ -202,8 +203,18 @@ export default class MediaPlayerObject {
     return this.platform !== PLATFORM.SQUEEZEBOX;
   }
 
-  get artwork() {
-    return `url(${this.attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture})`;
+  async fetchArtwork() {
+    const url = this.attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture;
+
+    try {
+      const res = await fetch(new Request(url));
+      const buffer = await res.arrayBuffer();
+      const image64 = arrayBufferToBase64(buffer);
+      const imageType = res.headers.get('Content-Type') || 'image/jpeg';
+      return `url(data:${imageType};base64,${image64})`;
+    } catch (error) {
+      return false;
+    }
   }
 
   getAttribute(attribute) {

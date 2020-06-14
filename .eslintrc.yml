@@ -14,3 +14,5 @@ globals:
   Event: true
   customElements: true
   CustomEvent: true
+  fetch: true
+  Request: true
