@@ -231,7 +231,6 @@ class MiniMediaPlayer extends LitElement {
             </div>
             <mmp-powerstrip
               @toggleGroupList=${this.toggleGroupList}
-              .color=${this.foregroundColor}
               .hass=${this.hass}
               .player=${this.player}
               .config=${config}
@@ -243,7 +242,6 @@ class MiniMediaPlayer extends LitElement {
           <div class='mmp-player__adds'>
             ${!config.collapse && this.player.active ? html`
               <mmp-media-controls
-                .color=${this.foregroundColor}
                 .player=${this.player}
                 .config=${config}
                 .break=${this.break}>
