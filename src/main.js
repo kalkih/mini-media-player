@@ -293,12 +293,17 @@ class MiniMediaPlayer extends LitElement {
       ? `url(${this.config.background})`
       : this.thumbnail;
 
-    if (this.config.artwork === 'material')
-      return html`<div class='cover' style='background-image: ${url}; background-color: ${this.backgroundColor}; width: ${this.cardHeight}px;'></div>`;
 
-    return html`
-      <div class='cover' style='background-image: ${url};'></div>
-      ${this.prevThumbnail && html`<div class='cover --prev' style='background-image: ${this.prevThumbnail};'></div>`}`;
+    const artworkStyle = {
+      backgroundImage: url,
+      backgroundColor: this.backgroundColor || '',
+      width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
+    };
+
+    if (this.config.artwork === 'material')
+      return html`
+        <div class='cover' style=${styleMap(artworkStyle)}></div>
+        ${this.prevThumbnail && html`<div class='cover --prev' style='background-image: ${this.prevThumbnail};'></div>`}`;
   }
 
   renderGradient() {
