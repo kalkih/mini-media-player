@@ -28,19 +28,21 @@
     "@babel/plugin-proposal-decorators": "^7.3.0",
     "@babel/plugin-transform-template-literals": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
+    "babel-loader": "^8.1.0",
     "babel-plugin-iife-wrap": "^1.1.0",
     "babel-preset-minify": "^0.5.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "2.16.0",
-    "rollup": "^0.66.6",
-    "rollup-plugin-node-resolve": "^3.4.0"
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
-    "build": "npm run lint && npm run rollup && npm run babel",
-    "rollup": "rollup -c",
+    "build": "npm run lint && npm run webpack && npm run babel",
+    "webpack": "webpack",
     "babel": "babel dist/mini-media-player-bundle.js --out-file dist/mini-media-player-bundle.js",
     "lint": "eslint src/* --ext .js",
-    "watch": "rollup -c --watch"
+    "watch": "webpack --watch",
+    "dev": "webpack --watch"
   }
 }
