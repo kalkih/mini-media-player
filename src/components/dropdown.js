@@ -50,7 +50,7 @@ class MiniMediaPlayerDropdown extends LitElement {
               <span class='mmp-dropdown__label ellipsis'>
                 ${this.selected || this.label}
               </span>
-              <ha-icon class='mmp-dropdown__icon' .icon=${ICON.DROPDOWN}></ha-icon>
+              <ha-icon class='mmp-dropdown__button icon' .icon=${ICON.DROPDOWN}></ha-icon>
             </div>
           </mmp-button>
         `}
