@@ -144,7 +144,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
 | icon | string | optional | Override default group button icon *(any mdi icon)*.
 
-<a name="speaker_foot1"><sup>1</sup></a> Currently not yet supported in Home Assistant, *soon™*
+<a name="speaker_foot1"><sup>1</sup></a> Requires [custom component](https://github.com/ppanagiotis/pymusiccast) available in HACS
 <a name="speaker_foot2"><sup>2</sup></a> All features are not yet supported.
 
 #### Speaker entity object
