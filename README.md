@@ -134,6 +134,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 - bluesound<sup>[2](#speaker_foot2)</sup>
 - snapcast<sup>[2](#speaker_foot2)</sup>
 - yamaha_musiccast<sup>[1](#speaker_foot1)</sup>
+- linkplay<sup>[3](#speaker_foot3)</sup>
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
@@ -146,6 +147,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 
 <a name="speaker_foot1"><sup>1</sup></a> Currently not yet supported in Home Assistant, *soon™*
 <a name="speaker_foot2"><sup>2</sup></a> All features are not yet supported.
+<a name="speaker_foot3"><sup>3</sup></a> Using [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset.
 
 #### Speaker entity object
 | Name | Type | Default | Description |
