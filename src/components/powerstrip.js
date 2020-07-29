@@ -7,7 +7,7 @@ import './mediaControls';
 import { ICON } from '../const';
 import sharedStyle from '../sharedStyle';
 
-import getLabel from '../utils/getLabel';
+import t from '../utils/translation';
 
 class MiniMediaPlayerPowerstrip extends LitElement {
   static get properties() {
@@ -60,7 +60,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
     if (this.player.isUnavailable)
       return html`
         <span class='label ellipsis'>
-          ${getLabel(this.hass, 'state.default.unavailable', 'Unavailable')}
+          ${t(this.hass, 'state.unavailable', 'state.default.unavailable')}
         </span>
       `;
 
@@ -115,7 +115,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
     else
       return html`
         <span class='label ellipsis'>
-          ${getLabel(this.hass, 'state.media_player.idle', 'Idle')}
+          ${t(this.hass, 'state.idle', 'state.media_player.idle')}
         </span>
       `;
   }

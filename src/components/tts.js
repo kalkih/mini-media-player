@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
-import getLabel from '../utils/getLabel';
+import t from '../utils/translation';
 
 class MiniMediaPlayerTts extends LitElement {
   static get properties() {
@@ -12,7 +12,7 @@ class MiniMediaPlayerTts extends LitElement {
   }
 
   get label() {
-    return getLabel(this.hass, 'ui.card.media_player.text_to_speak', 'Say');
+    return t(this.hass, 'placeholder.tts', 'ui.card.media_player.text_to_speak', 'Say');
   }
 
   get input() {
@@ -31,7 +31,7 @@ class MiniMediaPlayerTts extends LitElement {
         @click=${e => e.stopPropagation()}>
       </paper-input>
       <mmp-button class='mmp-tts__button' @click=${this.handleTts}>
-        <span>SEND</span>
+        <span>${t(this.hass, 'label.send')}</span>
       </mmp-button>
     `;
   }
