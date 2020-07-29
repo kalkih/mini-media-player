@@ -1,4 +1,4 @@
-## v1.9.0
+## v1.9.1
 ### FIXED
 - Fix broken shortcut column height #318 (#319)
 
