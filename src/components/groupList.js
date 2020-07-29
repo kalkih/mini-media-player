@@ -1,11 +1,14 @@
 import { LitElement, html, css } from 'lit-element';
 
+import t from '../utils/translation';
+
 import './groupItem';
 import './button';
 
 class MiniMediaPlayerGroupList extends LitElement {
   static get properties() {
     return {
+      hass: {},
       entities: {},
       player: {},
       visible: Boolean,
@@ -39,22 +42,22 @@ class MiniMediaPlayerGroupList extends LitElement {
     const { id } = this.player;
     return html`
       <div class='mmp-group-list'>
-        <span class='mmp-group-list__title'>Group speakers</span>
+        <span class='mmp-group-list__title'>${t(this.hass, 'title.speaker_management')}</span>
         ${this.entities.map(item => this.renderItem(item, id))}
         <div class='mmp-group-list__buttons'>
           <mmp-button raised ?disabled=${!isGrouped}
             @click=${e => this.player.handleGroupChange(e, id, false)}>
-            <span>Leave</span>
+            <span>${t(this.hass, 'label.leave')}</span>
           </mmp-button>
           ${isGrouped && isMaster ? html`
             <mmp-button raised
               @click=${e => this.player.handleGroupChange(e, group, false)}>
-              <span>Ungroup</span>
+              <span>${t(this.hass, 'label.ungroup')}</span>
             </mmp-button>
           ` : html``}
           <mmp-button raised ?disabled=${!isMaster}
             @click=${e => this.player.handleGroupChange(e, this.entities.map(item => item.entity_id), true)}>
-            <span>Group all</span>
+            <span>${t(this.hass, 'label.group_all')}</span>
           </mmp-button>
         </div>
       </div>
