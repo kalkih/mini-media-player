@@ -221,10 +221,6 @@ export default class MediaPlayerObject {
     return this.attr[attribute] || '';
   }
 
-  getAttribute(attribute) {
-    return this.attr[attribute] || '';
-  }
-
   toggle(e) {
     if (this.config.toggle_power)
       return this.callService(e, 'toggle');

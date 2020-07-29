@@ -22,9 +22,10 @@ const contrast = (rgb1, rgb2) => {
   return (brightest + 0.05) / (darkest + 0.05);
 };
 
-function getContrastRatio(rgb1, rgb2) {
-  return Math.round((contrast(rgb1, rgb2) + Number.EPSILON) * 100) / 100;
-}
+const getContrastRatio = (rgb1, rgb2) => Math.round(
+  (contrast(rgb1, rgb2) + Number.EPSILON) * 100,
+) / 100;
+
 
 const colorGenerator = (colors) => {
   colors.sort((colorA, colorB) => colorB.population - colorA.population);
@@ -86,5 +87,4 @@ const colorGenerator = (colors) => {
 export default picture => new Vibrant(picture, {
   colorCount: 16,
   generator: colorGenerator,
-})
-  .getPalette();
+}).getPalette();

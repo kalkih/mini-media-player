@@ -161,7 +161,9 @@ class MiniMediaPlayer extends LitElement {
         this.prevThumbnail = '';
       }, 1000);
     }
-    changedProps.has('player') && this.setColors();
+    if (changedProps.has('player') && this.config.artwork === 'material') {
+      this.setColors();
+    }
     return UPDATE_PROPS.some(prop => changedProps.has(prop)) && this.player;
   }
 
@@ -175,6 +177,7 @@ class MiniMediaPlayer extends LitElement {
             this._resizeTimer = setTimeout(() => {
               this._resizeTimer = null;
               this.computeRect(this._resizeEntry);
+              this.measureCard();
             }, 250);
           }
           this._resizeEntry = entry;
@@ -182,19 +185,6 @@ class MiniMediaPlayer extends LitElement {
       });
     });
     ro.observe(this);
-
-    const card = this.shadowRoot.querySelector('ha-card');
-    if (card) {
-      const cardRo = new ResizeObserver(() => {
-        if (!this._cardResizeTimer) {
-          this._cardResizeTimer = setTimeout(() => {
-            this._cardResizeTimer = null;
-            this.measureCard();
-          }, 250);
-        }
-      });
-      cardRo.observe(card);
-    }
 
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.speaker_group.expanded || false;
@@ -218,7 +208,6 @@ class MiniMediaPlayer extends LitElement {
         artwork=${config.artwork}
         content=${this.player.content}>
         <div class='mmp__bg'>
-          ${this.renderColorBlock()}
           ${this.renderArtwork(artwork)}
           ${this.renderGradient()}
         </div>
@@ -278,12 +267,6 @@ class MiniMediaPlayer extends LitElement {
     `;
   }
 
-  renderColorBlock() {
-    if (this.config.artwork !== 'material')
-      return;
-    return html`<div class="color-block" style=${styleMap({ backgroundColor: this.backgroundColor || '' })}></div>`;
-  }
-
   renderArtwork(artwork) {
     if (!this.thumbnail && !this.config.background)
       return;
@@ -293,17 +276,21 @@ class MiniMediaPlayer extends LitElement {
       ? `url(${this.config.background})`
       : this.thumbnail;
 
-
     const artworkStyle = {
       backgroundImage: url,
       backgroundColor: this.backgroundColor || '',
       width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
     };
+    const artworkPrevStyle = {
+      backgroundImage: this.prevThumbnail,
+      width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
+    };
 
-    if (this.config.artwork === 'material')
-      return html`
-        <div class='cover' style=${styleMap(artworkStyle)}></div>
-        ${this.prevThumbnail && html`<div class='cover --prev' style='background-image: ${this.prevThumbnail};'></div>`}`;
+    return html`
+      <div class='cover' style=${styleMap(artworkStyle)}></div>
+      ${this.prevThumbnail && html`
+        <div class='cover --prev' style=${styleMap(artworkPrevStyle)}></div>
+      `}`;
   }
 
   renderGradient() {
@@ -311,13 +298,13 @@ class MiniMediaPlayer extends LitElement {
       return;
 
     const gradientStyle = {
-      'background-image': `linear-gradient(to right, ${
-        this.backgroundColor
-      }, ${this.backgroundColor}00)`,
-      width: `${this.cardHeight}px`,
+      backgroundImage: `linear-gradient(to left,
+        transparent 0,
+        ${this.backgroundColor} ${this.cardHeight}px,
+        ${this.backgroundColor} 100%)`,
     };
 
-    return html`<div class="color-gradient" style=${styleMap(gradientStyle)}></div>`;
+    return html`<div class="cover-gradient" style=${styleMap(gradientStyle)}></div>`;
   }
 
   handlePopup(e) {
@@ -335,16 +322,10 @@ class MiniMediaPlayer extends LitElement {
           state=${this.player.state}>
         </div>`;
 
-    if (this.player.active && artwork && this.config.artwork === 'material')
-      return html`
-        <div class='entity__icon' style=${styleMap({ backgroundColor: this.backgroundColor || '' })}>
-          <ha-icon .icon=${this.computeIcon()} ></ha-icon>
-        </div>`;
-
     const state = !this.config.hide.icon_state && this.player.isActive;
     return html`
       <div class='entity__icon' ?color=${state}>
-        <ha-icon .icon=${this.computeIcon()} ></ha-icon>
+        <ha-icon .icon=${this.computeIcon()}></ha-icon>
       </div>`;
   }
 
@@ -404,7 +385,18 @@ class MiniMediaPlayer extends LitElement {
   computeStyles() {
     const { scale } = this.config;
     return styleMap({
-      ...(scale && { '--mmp-unit': `${40 * scale}px` }, this.foregroundColor && { '--mmp-text-color': this.foregroundColor }),
+      ...(
+        scale && { '--mmp-unit': `${40 * scale}px` },
+        (this.foregroundColor && this.player.isActive) && {
+          '--mmp-text-color': this.foregroundColor,
+          '--mmp-icon-color': this.foregroundColor,
+          '--mmp-icon-active-color': this.foregroundColor,
+          '--mmp-accent-color': this.foregroundColor,
+          '--paper-slider-container-color': this.foregroundColor,
+          '--secondary-text-color': this.foregroundColor,
+          '--mmp-media-cover-info-color': this.foregroundColor,
+        }
+      ),
     });
   }
 
