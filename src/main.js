@@ -2,6 +2,8 @@ import { LitElement, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { styleMap } from 'lit-html/directives/style-map';
 import ResizeObserver from 'resize-observer-polyfill';
+
+import { generateConfig } from './utils/config';
 import MediaPlayerObject from './model';
 import style from './style';
 import sharedStyle from './sharedStyle';
@@ -18,11 +20,9 @@ import './components/powerstrip';
 import './components/mediaControls';
 
 import {
-  DEFAULT_HIDE,
   ICON,
   UPDATE_PROPS,
   BREAKPOINT,
-  LABEL_SHORTCUT,
 } from './const';
 
 class MiniMediaPlayer extends LitElement {
@@ -92,40 +92,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   setConfig(config) {
-    if (!config.entity || config.entity.split('.')[0] !== 'media_player')
-      throw new Error('Specify an entity from within the media_player domain.');
-
-    const conf = {
-      artwork: 'default',
-      info: 'default',
-      more_info: true,
-      source: 'default',
-      sound_mode: 'default',
-      toggle_power: true,
-      volume_step: null,
-      tap_action: {
-        action: 'more-info',
-      },
-      ...config,
-      hide: { ...DEFAULT_HIDE, ...config.hide },
-      speaker_group: {
-        show_group_count: true,
-        platform: 'sonos',
-        ...config.sonos,
-        ...config.speaker_group,
-      },
-      shortcuts: {
-        label: LABEL_SHORTCUT,
-        ...config.shortcuts,
-      },
-    };
-    conf.max_volume = Number(conf.max_volume) || 100;
-    conf.min_volume = Number(conf.min_volume) || 0;
-    conf.collapse = (conf.hide.controls || conf.hide.volume);
-    conf.info = conf.collapse && conf.info !== 'scroll' ? 'short' : conf.info;
-    conf.flow = (conf.hide.icon && conf.hide.name && conf.hide.info);
-
-    this.config = conf;
+    this.config = generateConfig(config);
   }
 
   shouldUpdate(changedProps) {
