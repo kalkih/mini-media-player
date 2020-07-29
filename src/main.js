@@ -7,6 +7,8 @@ import style from './style';
 import sharedStyle from './sharedStyle';
 import handleClick from './utils/handleClick';
 
+import './ensureComponents';
+
 import './components/groupList';
 import './components/dropdown';
 import './components/shortcuts';
@@ -22,27 +24,6 @@ import {
   BREAKPOINT,
   LABEL_SHORTCUT,
 } from './const';
-
-if (!customElements.get('ha-slider')) {
-  customElements.define(
-    'ha-slider',
-    class extends customElements.get('paper-slider') {},
-  );
-}
-
-if (!customElements.get('ha-icon-button')) {
-  customElements.define(
-    'ha-icon-button',
-    class extends customElements.get('paper-icon-button') {},
-  );
-}
-
-if (!customElements.get('ha-icon')) {
-  customElements.define(
-    'ha-icon',
-    class extends customElements.get('iron-icon') {},
-  );
-}
 
 class MiniMediaPlayer extends LitElement {
   constructor() {
