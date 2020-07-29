@@ -202,6 +202,23 @@ class MiniMediaPlayer extends LitElement {
     `;
   }
 
+  computeClasses({ config } = this) {
+    return classMap({
+      '--responsive': this.break || config.hide.icon,
+      '--initial': this.initial,
+      '--bg': config.background,
+      '--group': config.group,
+      '--more-info': config.tap_action !== 'none',
+      '--has-artwork': this.player.hasArtwork && this.thumbnail,
+      '--flow': config.flow,
+      '--collapse': config.collapse,
+      '--rtl': this.rtl,
+      '--progress': this.player.hasProgress,
+      '--runtime': !config.hide.runtime && this.player.hasProgress,
+      '--inactive': !this.player.isActive,
+    });
+  }
+
   renderArtwork(artwork) {
     if (!this.thumbnail && !this.config.background)
       return;
@@ -272,23 +289,6 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
-  computeClasses({ config } = this) {
-    return classMap({
-      '--responsive': this.break || config.hide.icon,
-      '--initial': this.initial,
-      '--bg': config.background,
-      '--group': config.group,
-      '--more-info': config.tap_action !== 'none',
-      '--has-artwork': this.player.hasArtwork && this.thumbnail,
-      '--flow': config.flow,
-      '--collapse': config.collapse,
-      '--rtl': this.rtl,
-      '--progress': this.player.hasProgress,
-      '--runtime': !config.hide.runtime && this.player.hasProgress,
-      '--inactive': !this.player.isActive,
-    });
-  }
-
   computeStyles() {
     const { scale } = this.config;
     return styleMap({
@@ -342,19 +342,6 @@ class MiniMediaPlayer extends LitElement {
 
   toggleGroupList() {
     this.edit = !this.edit;
-  }
-
-  fire(type, inDetail, inOptions) {
-    const options = inOptions || {};
-    const detail = inDetail === null || inDetail === undefined ? {} : inDetail;
-    const e = new Event(type, {
-      bubbles: options.bubbles === undefined ? true : options.bubbles,
-      cancelable: Boolean(options.cancelable),
-      composed: options.composed === undefined ? true : options.composed,
-    });
-    e.detail = detail;
-    this.dispatchEvent(e);
-    return e;
   }
 
   updateIdleStatus() {
