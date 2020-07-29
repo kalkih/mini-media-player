@@ -105,7 +105,7 @@ const style = css`
     padding-top: 100%;
   }
   .mmp__bg {
-    background: var(--ha-card-background, var(--paper-card-background-color, white));
+    background: var(--ha-card-background, var(--card-background-color, white));
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
     overflow: hidden;
