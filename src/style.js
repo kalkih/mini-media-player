@@ -79,6 +79,8 @@ const style = css`
     width: 100%;
     position: absolute;
     pointer-events: none;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
   ha-card:before {
     content: '';
