@@ -9,7 +9,7 @@
         }
       }
     ],
-    ["minify"]
+		["minify"]
   ],
   "comments": false,
   "plugins": [

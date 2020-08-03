@@ -23,7 +23,7 @@ const style = css`
         var(--mini-media-player-base-color,
           var(--paper-item-icon-color, #44739e)));
     --mmp-icon-active-color: var(--paper-item-icon-active-color, --mmp-active-color);
-    --mmp-info-opacity: 1;
+    --mmp-info-opacity: 0.75;
     --mmp-bg-opacity: var(--mini-media-player-background-opacity, 1);
     --mmp-artwork-opacity: var(--mini-media-player-artwork-opacity, 1);
     --mmp-progress-height: var(--mini-media-player-progress-height, 6px);
@@ -36,6 +36,7 @@ const style = css`
   ha-card.--bg {
     --mmp-info-opacity: .75;
   }
+  ha-card.--has-artwork[artwork='material']
   ha-card.--has-artwork[artwork*='cover'] {
     --mmp-accent-color: var(--mini-media-player-overlay-accent-color, var(--mini-media-player-accent-color, var(--accent-color, #f39c12)));
     --mmp-text-color: var(--mmp-overlay-base-color);
@@ -43,7 +44,7 @@ const style = css`
     --mmp-active-color: rgba(255,255,255,.5);
     --mmp-icon-color: var(--mmp-text-color);
     --mmp-icon-active-color: var(--mmp-text-color);
-    --mmp-info-opacity: .75;
+    --mmp-info-opacity: 0.75;
     --paper-slider-container-color: var(--mini-media-player-overlay-color, rgba(255,255,255,.75));
     --mdc-theme-primary: var(--mmp-text-color);
     --mdc-theme-on-primary: var(--mmp-text-color);
@@ -115,9 +116,30 @@ const style = css`
     transform: translateZ(0);
     opacity: var(--mmp-bg-opacity);
   }
+  ha-card[artwork='material'].--has-artwork .mmp__bg,
   ha-card[artwork*='cover'].--has-artwork .mmp__bg {
     opacity: var(--mmp-artwork-opacity);
     background: transparent;
+  }
+  ha-card[artwork='material'].--has-artwork .mmp__bg {
+    display: flex;
+  }
+  ha-card[artwork='material'].--has-artwork .cover {
+    height: 100%;
+    right: 0;
+    left: unset;
+    animation: fade-in 4s cubic-bezier(.21,.61,.35,1) !important;
+  }
+  ha-card[artwork='material'].--has-artwork .cover.--prev {
+    animation: fade-in 1s linear reverse forwards !important;
+  }
+  ha-card[artwork='material'].--has-artwork .cover-gradient {
+    position: absolute;
+    height: 100%;
+    right: 0;
+    left: 0;
+    opacity: 1;
+    transition: opacity 0.25s cubic-bezier(.21,.61,.35,1);
   }
   ha-card.--group .mmp__bg {
     background: transparent;
@@ -161,6 +183,9 @@ const style = css`
   }
   ha-card.--bg .cover {
     display: block;
+  }
+  ha-card[artwork='material'].--has-artwork .cover {
+    background-size: cover;
   }
   ha-card[artwork='full-cover-fit'].--has-artwork .cover {
     background-color: black;

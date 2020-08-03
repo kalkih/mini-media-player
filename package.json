@@ -19,6 +19,7 @@
   "dependencies": {
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1",
+    "node-vibrant": "^3.1.5",
     "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {

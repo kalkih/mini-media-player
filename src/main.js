@@ -8,6 +8,7 @@ import MediaPlayerObject from './model';
 import style from './style';
 import sharedStyle from './sharedStyle';
 import handleClick from './utils/handleClick';
+import colorsFromPicture from './utils/colorGenerator';
 
 import './ensureComponents';
 
@@ -35,6 +36,9 @@ class MiniMediaPlayer extends LitElement {
     this.prevThumbnail = '';
     this.edit = false;
     this.rtl = false;
+    this.cardHeight = 0;
+    this.foregroundColor = '';
+    this.backgroundColor = '';
   }
 
   static get properties() {
@@ -52,6 +56,9 @@ class MiniMediaPlayer extends LitElement {
       edit: Boolean,
       rtl: Boolean,
       idle: Boolean,
+      cardHeight: Number,
+      foregroundColor: String,
+      backgroundColor: String,
     };
   }
 
@@ -102,6 +109,9 @@ class MiniMediaPlayer extends LitElement {
         this.prevThumbnail = '';
       }, 1000);
     }
+    if (changedProps.has('player') && this.config.artwork === 'material') {
+      this.setColors();
+    }
     return UPDATE_PROPS.some(prop => changedProps.has(prop)) && this.player;
   }
 
@@ -115,6 +125,7 @@ class MiniMediaPlayer extends LitElement {
             this._resizeTimer = setTimeout(() => {
               this._resizeTimer = null;
               this.computeRect(this._resizeEntry);
+              this.measureCard();
             }, 250);
           }
           this._resizeEntry = entry;
@@ -122,6 +133,7 @@ class MiniMediaPlayer extends LitElement {
       });
     });
     ro.observe(this);
+
     setTimeout(() => this.initial = false, 250);
     this.edit = this.config.speaker_group.expanded || false;
   }
@@ -145,6 +157,7 @@ class MiniMediaPlayer extends LitElement {
         content=${this.player.content}>
         <div class='mmp__bg'>
           ${this.renderArtwork(artwork)}
+          ${this.renderGradient()}
         </div>
         <div class='mmp-player'>
           <div class='mmp-player__core flex' ?inactive=${this.player.idle}>
@@ -228,9 +241,35 @@ class MiniMediaPlayer extends LitElement {
       ? `url(${this.config.background})`
       : this.thumbnail;
 
+    const artworkStyle = {
+      backgroundImage: url,
+      backgroundColor: this.backgroundColor || '',
+      width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
+    };
+    const artworkPrevStyle = {
+      backgroundImage: this.prevThumbnail,
+      width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
+    };
+
     return html`
-      <div class='cover' style='background-image: ${url};'></div>
-      ${this.prevThumbnail && html`<div class='cover --prev' style='background-image: ${this.prevThumbnail};'></div>`}`;
+      <div class='cover' style=${styleMap(artworkStyle)}></div>
+      ${this.prevThumbnail && html`
+        <div class='cover --prev' style=${styleMap(artworkPrevStyle)}></div>
+      `}`;
+  }
+
+  renderGradient() {
+    if (this.config.artwork !== 'material')
+      return;
+
+    const gradientStyle = {
+      backgroundImage: `linear-gradient(to left,
+        transparent 0,
+        ${this.backgroundColor} ${this.cardHeight}px,
+        ${this.backgroundColor} 100%)`,
+    };
+
+    return html`<div class="cover-gradient" style=${styleMap(gradientStyle)}></div>`;
   }
 
   handlePopup(e) {
@@ -251,12 +290,13 @@ class MiniMediaPlayer extends LitElement {
     const state = !this.config.hide.icon_state && this.player.isActive;
     return html`
       <div class='entity__icon' ?color=${state}>
-        <ha-icon .icon=${this.computeIcon()} ></ha-icon>
+        <ha-icon .icon=${this.computeIcon()}></ha-icon>
       </div>`;
   }
 
   renderEntityName() {
     if (this.config.hide.name) return;
+
     return html`
       <div class='entity__info__name'>
         ${this.name} ${this.speakerCount()}
@@ -266,6 +306,7 @@ class MiniMediaPlayer extends LitElement {
   renderMediaInfo() {
     if (this.config.hide.info) return;
     const items = this.player.mediaInfo;
+
     return html`
       <div class='entity__info__media'
         ?short=${this.config.info === 'short' || !this.player.active}
@@ -292,7 +333,18 @@ class MiniMediaPlayer extends LitElement {
   computeStyles() {
     const { scale } = this.config;
     return styleMap({
-      ...(scale && { '--mmp-unit': `${40 * scale}px` }),
+      ...(
+        scale && { '--mmp-unit': `${40 * scale}px` },
+        (this.foregroundColor && this.player.isActive) && {
+          '--mmp-text-color': this.foregroundColor,
+          '--mmp-icon-color': this.foregroundColor,
+          '--mmp-icon-active-color': this.foregroundColor,
+          '--mmp-accent-color': this.foregroundColor,
+          '--paper-slider-container-color': this.foregroundColor,
+          '--secondary-text-color': this.foregroundColor,
+          '--mmp-media-cover-info-color': this.foregroundColor,
+        }
+      ),
     });
   }
 
@@ -317,6 +369,15 @@ class MiniMediaPlayer extends LitElement {
     return this.config.icon
       ? this.config.icon : this.player.icon
       || ICON.DEFAULT;
+  }
+
+  measureCard() {
+    const card = this.shadowRoot.querySelector('ha-card');
+    if (!card) {
+      return;
+    }
+
+    this.cardHeight = card.offsetHeight;
   }
 
   computeOverflow() {
@@ -356,6 +417,26 @@ class MiniMediaPlayer extends LitElement {
 
   getCardSize() {
     return this.config.collapse ? 1 : 2;
+  }
+
+  async setColors() {
+    if (this.player.picture === this.picture)
+      return;
+
+    if (!this.player.picture) {
+      this.foregroundColor = '';
+      this.backgroundColor = '';
+      return;
+    }
+
+    try {
+      [this.foregroundColor, this.backgroundColor] = await colorsFromPicture(this.player.picture);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error getting Image Colors', err);
+      this.foregroundColor = '';
+      this.backgroundColor = '';
+    }
   }
 }
 
