@@ -244,7 +244,7 @@ class MiniMediaPlayer extends LitElement {
               <mmp-tts
                 .config=${config.tts}
                 .hass=${this.hass}
-                .entity=${this.player.id}>
+                .player=${this.player}>
               </mmp-tts>
             ` : ''}
             <mmp-group-list
