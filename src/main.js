@@ -484,7 +484,7 @@ class MiniMediaPlayer extends LitElement {
     return this.config.collapse ? 1 : 2;
   }
 
-  setColors() {
+  async setColors() {
     if (this.player.picture === this.picture)
       return;
 
@@ -494,15 +494,14 @@ class MiniMediaPlayer extends LitElement {
       return;
     }
 
-    colorsFromPicture(this.player.picture).then((result) => {
-      [this.foregroundColor, this.backgroundColor] = result;
-    })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error('Error getting Image Colors', err);
-        this.foregroundColor = '';
-        this.backgroundColor = '';
-      });
+    try {
+      [this.foregroundColor, this.backgroundColor] = await colorsFromPicture(this.player.picture);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error getting Image Colors', err);
+      this.foregroundColor = '';
+      this.backgroundColor = '';
+    }
   }
 }
 
