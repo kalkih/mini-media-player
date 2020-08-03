@@ -9,6 +9,13 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ![Preview Image](https://user-images.githubusercontent.com/457678/47517460-9282d600-d888-11e8-9705-cf9ec3698c3c.png)
 
+
+Mini Media Player is being sponsored by the following tool; please help to support us by taking a look and signing up for a free trial.
+
+<a href="https://tracking.gitads.io/?repo=mini-media-player">
+  <img src="https://images.gitads.io/mini-media-player" alt="GitAds"/>
+</a>
+
 ## Install
 
 *This card is available in [HACS](https://github.com/custom-components/hacs) (Home Assistant Community Store)*
@@ -21,7 +28,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.9.1
+    - url: /local/mini-media-player-bundle.js?v=1.10.0
       type: module
   ```
 
@@ -32,14 +39,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.9.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.10.0/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.9.1
+    - url: /local/mini-media-player-bundle.js?v=1.10.0
       type: module
   ```
 
@@ -52,7 +59,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.9.1
+    - url: /local/mini-media-player-bundle.js?v=1.10.0
       type: module
   ```
 
@@ -139,15 +146,17 @@ See [Speaker group management](#speaker-group-management) for example usage.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | entities | list | **required** | A list containing [speaker entities](#speaker-entity-object) of one of supported platforms, to enable group management of those speakers.
-| platform | string | 'sonos' | The media_player platform to control. `sonos`, `soundtouch`, `snapcast`, `bluesound`, `squeezebox` or `yamaha_musiccast`<sup>[1](#speaker_foot1)</sup>.
+| platform | string | 'sonos' | Any supported multiroom platform e.g. `sonos`, `soundtouch`, `bluesound`, see **supported platforms** above.
 | sync_volume | boolean | optional | Keep volume Synchronize between grouped speakers.
 | expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
 | icon | string | optional | Override default group button icon *(any mdi icon)*.
 
-<a name="speaker_foot1"><sup>1</sup></a> Requires [custom component](https://github.com/ppanagiotis/pymusiccast) available in HACS
+<a name="speaker_foot1"><sup>1</sup></a> Requires [custom component](https://github.com/ppanagiotis/pymusiccast), available in HACS.
+
 <a name="speaker_foot2"><sup>2</sup></a> All features are not yet supported.
-<a name="speaker_foot3"><sup>3</sup></a> Using [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset.
+
+<a name="speaker_foot3"><sup>3</sup></a> Requires [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset.
 
 #### Speaker entity object
 | Name | Type | Default | Description |
