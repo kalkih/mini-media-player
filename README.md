@@ -28,7 +28,7 @@ Mini Media Player is being sponsored by the following tool; please help to suppo
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.10.0
+    - url: /local/mini-media-player-bundle.js?v=1.10.1
       type: module
   ```
 
@@ -39,14 +39,14 @@ Mini Media Player is being sponsored by the following tool; please help to suppo
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.10.0/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.10.1/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.10.0
+    - url: /local/mini-media-player-bundle.js?v=1.10.1
       type: module
   ```
 
@@ -59,7 +59,7 @@ Mini Media Player is being sponsored by the following tool; please help to suppo
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.10.0
+    - url: /local/mini-media-player-bundle.js?v=1.10.1
       type: module
   ```
 

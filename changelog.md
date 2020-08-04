@@ -1,3 +1,12 @@
+## v1.10.1
+### NEW
+- Add Polish translations (#370) @cyrosy
+- Add French translations (#371) @bieniu
+
+### FIXED
+- Fixed invalid text & icon colors when using artwork cover option (#372)
+- Fixed missing icon & broken default artwork #369 (#375)
+
 ## v1.10.0
 ### NEW
 - Smoothly fade in & crossfade between cover artwork (#339)
