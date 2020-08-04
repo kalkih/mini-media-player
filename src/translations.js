@@ -37,6 +37,24 @@ const translations = {
       speaker_management: 'Gestion des groupes',
     },
   },
+  pl: {
+    placeholder: {
+      tts: 'Zamień tekst na mowę',
+    },
+    label: {
+      leave: 'Opuść',
+      ungroup: 'Usuń grupę',
+      group_all: 'Grupuj wszystkie',
+      send: 'Wyślij',
+    },
+    state: {
+      idle: 'nieaktywny',
+      unavailable: 'niedostępny',
+    },
+    title: {
+      speaker_management: 'Zarządzanie grupą',
+    },
+  },
 };
 
 export default translations;
