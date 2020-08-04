@@ -36,7 +36,7 @@ const style = css`
   ha-card.--bg {
     --mmp-info-opacity: .75;
   }
-  ha-card.--has-artwork[artwork='material']
+  ha-card.--has-artwork[artwork='material'],
   ha-card.--has-artwork[artwork*='cover'] {
     --mmp-accent-color: var(--mini-media-player-overlay-accent-color, var(--mini-media-player-accent-color, var(--accent-color, #f39c12)));
     --mmp-text-color: var(--mmp-overlay-base-color);
