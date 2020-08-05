@@ -156,7 +156,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 
 <a name="speaker_foot2"><sup>2</sup></a> All features are not yet supported.
 
-<a name="speaker_foot3"><sup>3</sup></a> Requires [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset.
+<a name="speaker_foot3"><sup>3</sup></a> Requires [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset, available in HACS.
 
 #### Speaker entity object
 | Name | Type | Default | Description |
