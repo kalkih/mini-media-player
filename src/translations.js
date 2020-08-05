@@ -46,6 +46,7 @@ const translations = {
       ungroup: 'Összes kilép',
       group_all: 'Összes belép',
       send: 'Küldés',
+      master: 'forrás',
     },
     state: {
       idle: 'Tétlen',
