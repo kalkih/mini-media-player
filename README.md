@@ -85,7 +85,7 @@ Mini Media Player is being sponsored by the following tool; please help to suppo
 | sound_mode | string | optional | v1.1.2 | Change sound mode select appearance, `icon` for just an icon, `full` for the full sound mode name.
 | info | string | optional | v1.0.0 | Change how the media information is displayed, `short` to limit media information to one row, `scroll` to scroll overflowing media info.
 | volume_stateless | boolean | false | v0.6 | Swap out the volume slider for volume up & down buttons.
-| volume_step | number | optional | v1.9.0 | Change the volume step size of volume buttons (number between 1 - 100)<sup>[1](#option_foot1)</sup>.
+| volume_step | number | optional | v1.9.0 | Change the volume step size of the volume buttons and the volume slider (number between 1 - 100)<sup>[1](#option_foot1)</sup>.
 | max_volume | number | optional | v0.8.2 | Specify the max vol limit of the volume slider (number between 1 - 100).
 | min_volume | number | optional | v1.1.2 | Specify the min vol limit of the volume slider (number between 1 - 100).
 | replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play_pause` (previously `play`), `stop`, `play_stop`, `next`.

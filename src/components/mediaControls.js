@@ -73,6 +73,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           ?disabled=${muted}
           min=${this.minVol} max=${this.maxVol}
           value=${this.player.vol * 100}
+          step=${this.config.volume_step || 1}
           dir=${'ltr'}
           ignore-bar-touch pin>
         </ha-slider>
