@@ -121,8 +121,10 @@ const style = css`
     opacity: var(--mmp-artwork-opacity);
     background: transparent;
   }
-  ha-card[artwork='material'].--has-artwork .mmp__bg {
-    display: flex;
+  ha-card[artwork='material'] .cover {
+    height: 100%;
+    right: 0;
+    left: unset;
   }
   ha-card[artwork='material'].--has-artwork .cover {
     height: 100%;
@@ -150,7 +152,7 @@ const style = css`
     opacity: 0;
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
-    transition: opacity .75s cubic-bezier(.21,.61,.35,1);
+    transition: opacity .75s cubic-bezier(.21,.61,.35,1), width .05s cubic-bezier(.21,.61,.35,1);
     will-change: opacity;
   }
   .cover:before {
