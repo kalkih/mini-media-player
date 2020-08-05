@@ -38,6 +38,25 @@ const translations = {
       speaker_management: 'Gestion des groupes',
     },
   },
+  hu: {
+    placeholder: {
+      tts: 'Szövegfelolvasás',
+    },
+    label: {
+      leave: 'Kilépés',
+      ungroup: 'Összes kilép',
+      group_all: 'Összes belép',
+      send: 'Küldés',
+      master: 'Forrás',
+    },
+    state: {
+      idle: 'Tétlen',
+      unavailable: 'Nem elérhető',
+    },
+    title: {
+      speaker_management: 'Hangszóró csoportosítás',
+    },
+  },
   pl: {
     placeholder: {
       tts: 'Zamień tekst na mowę',
