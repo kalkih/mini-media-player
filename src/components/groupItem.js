@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 
+import t from '../utils/translation';
+
 class MiniMediaPlayerGroupItem extends LitElement {
   static get properties() {
     return {
@@ -18,7 +20,7 @@ class MiniMediaPlayerGroupItem extends LitElement {
         @change='${e => e.stopPropagation()}'
         @click='${this.handleClick}'>
         ${this.item.name}
-        ${this.master ? html`<span>(master)</span>` : ''}
+        ${this.master ? html`<span>(${t(this.hass, 'label.master')})</span>` : ''}
       </paper-checkbox>
     `;
   }
@@ -40,6 +42,7 @@ class MiniMediaPlayerGroupItem extends LitElement {
       }
       paper-checkbox > span {
         font-weight: 600;
+        text-transform: lowercase;
       }
 
       ha-card[artwork*='cover'][has-artwork] paper-checkbox[disabled] {

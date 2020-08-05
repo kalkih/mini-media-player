@@ -10,6 +10,7 @@ const translations = {
       ungroup: 'Ungroup',
       group_all: 'Group all',
       send: 'Send',
+      master: 'Master',
     },
     state: {
       idle: 'Idle',
