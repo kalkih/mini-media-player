@@ -45,7 +45,7 @@ const style = css`
     --mmp-icon-color: var(--mmp-text-color);
     --mmp-icon-active-color: var(--mmp-text-color);
     --mmp-info-opacity: 0.75;
-    --paper-slider-container-color: var(--mini-media-player-overlay-color, rgba(255,255,255,.75));
+    --paper-slider-container-color: var(--mini-media-player-overlay-color, rgba(255,255,255,.75)) !important;
     --mdc-theme-primary: var(--mmp-text-color);
     --mdc-theme-on-primary: var(--mmp-text-color);
     --paper-checkbox-unchecked-color: var(--mmp-text-color);

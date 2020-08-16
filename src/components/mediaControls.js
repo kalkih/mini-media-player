@@ -183,7 +183,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
           max-width: none;
           min-width: 100px;
           width: 100%;
-          --paper-slider-container-color: var(--mini-media-player-overlay-color, rgba(255,255,255,.75));
           --paper-slider-active-color: var(--mmp-accent-color);
           --paper-slider-knob-color: var(--mmp-accent-color);
         }
