@@ -237,14 +237,14 @@ class MiniMediaPlayer extends LitElement {
       return;
 
     const url = this.config.background
-      && (!this.thumbnail || this.config.artwork === 'default')
+      && (!this.player.isActive || !this.thumbnail || this.config.artwork === 'default')
       ? `url(${this.config.background})`
       : this.thumbnail;
 
     const artworkStyle = {
       backgroundImage: url,
       backgroundColor: this.backgroundColor || '',
-      width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
+      width: this.config.artwork === 'material' && this.player.isActive ? `${this.cardHeight}px` : '100%',
     };
     const artworkPrevStyle = {
       backgroundImage: this.prevThumbnail,
@@ -259,7 +259,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   renderGradient() {
-    if (this.config.artwork !== 'material')
+    if (this.config.artwork !== 'material' || !this.player.isActive)
       return;
 
     const gradientStyle = {
