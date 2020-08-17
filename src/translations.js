@@ -3,7 +3,7 @@
 const translations = {
   en: {
     placeholder: {
-      tts: 'Text to speak',
+      tts: 'Text to speech',
     },
     label: {
       leave: 'Leave',
