@@ -363,7 +363,7 @@ class MiniMediaPlayer extends LitElement {
         }
         this.thumbnail = artwork;
       } catch (error) {
-        this.thumbnail = '';
+        this.thumbnail = `url(${picture})`;
       }
     }
     return !!(hasArtwork && this.thumbnail);
