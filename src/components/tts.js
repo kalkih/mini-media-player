@@ -12,7 +12,7 @@ class MiniMediaPlayerTts extends LitElement {
   }
 
   get label() {
-    return t(this.hass, 'placeholder.tts', 'ui.card.media_player.text_to_speech', 'Say');
+    return t(this.hass, 'placeholder.tts', 'ui.card.media_player.text_to_speak', 'Say');
   }
 
   get input() {
