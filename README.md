@@ -10,12 +10,6 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 ![Preview Image](https://user-images.githubusercontent.com/457678/47517460-9282d600-d888-11e8-9705-cf9ec3698c3c.png)
 
 
-Mini Media Player is being sponsored by the following tool; please help to support us by taking a look and signing up for a free trial.
-
-<a href="https://tracking.gitads.io/?repo=mini-media-player">
-  <img src="https://images.gitads.io/mini-media-player" alt="GitAds"/>
-</a>
-
 ## Install
 
 *This card is available in [HACS](https://github.com/custom-components/hacs) (Home Assistant Community Store)*
@@ -28,7 +22,7 @@ Mini Media Player is being sponsored by the following tool; please help to suppo
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.10.1
+    - url: /local/mini-media-player-bundle.js?v=1.10.2
       type: module
   ```
 
@@ -39,14 +33,14 @@ Mini Media Player is being sponsored by the following tool; please help to suppo
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.10.1/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.10.2/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.10.1
+    - url: /local/mini-media-player-bundle.js?v=1.10.2
       type: module
   ```
 
@@ -59,7 +53,7 @@ Mini Media Player is being sponsored by the following tool; please help to suppo
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.10.1
+    - url: /local/mini-media-player-bundle.js?v=1.10.2
       type: module
   ```
 
