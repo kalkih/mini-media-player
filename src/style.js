@@ -121,11 +121,6 @@ const style = css`
     opacity: var(--mmp-artwork-opacity);
     background: transparent;
   }
-  ha-card[artwork='material'] .cover {
-    height: 100%;
-    right: 0;
-    left: unset;
-  }
   ha-card[artwork='material'].--has-artwork .cover {
     height: 100%;
     right: 0;
@@ -141,10 +136,19 @@ const style = css`
     right: 0;
     left: 0;
     opacity: 1;
-    transition: opacity 0.25s cubic-bezier(.21,.61,.35,1);
   }
   ha-card.--group .mmp__bg {
     background: transparent;
+  }
+  ha-card.--inactive .cover {
+    opacity: 0;
+  }
+  ha-card.--inactive .cover.--bg {
+    opacity: 1;
+  }
+  .cover-gradient {
+    transition: opacity .45s linear;
+    opacity: 0;
   }
   .cover,
   .cover:before {
@@ -152,7 +156,7 @@ const style = css`
     opacity: 0;
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
-    transition: opacity .75s cubic-bezier(.21,.61,.35,1), width .05s cubic-bezier(.21,.61,.35,1);
+    transition: opacity .75s linear, width .05s cubic-bezier(.21,.61,.35,1);
     will-change: opacity;
   }
   .cover:before {
@@ -176,8 +180,7 @@ const style = css`
     border-bottom-right-radius: var(--ha-card-border-radius, 0);
   }
   ha-card.--has-artwork .cover,
-  ha-card.--has-artwork[artwork='cover'] .cover:before,
-  ha-card.--bg .cover {
+  ha-card.--has-artwork[artwork='cover'] .cover:before {
     opacity: .999;
   }
   ha-card[artwork='default'] .cover {
