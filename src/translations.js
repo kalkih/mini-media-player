@@ -44,8 +44,8 @@ const translations = {
     },
     label: {
       leave: 'Kilépés',
-      ungroup: 'Összes kilép',
-      group_all: 'Összes belép',
+      ungroup: 'Összes ki',
+      group_all: 'Összes be',
       send: 'Küldés',
       master: 'Forrás',
     },
@@ -54,7 +54,7 @@ const translations = {
       unavailable: 'Nem elérhető',
     },
     title: {
-      speaker_management: 'Hangszóró csoportosítás',
+      speaker_management: 'Hangszórók csoportosítása',
     },
   },
   pl: {
