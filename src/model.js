@@ -67,6 +67,10 @@ export default class MediaPlayerObject {
   }
 
   get position() {
+    if (typeof this.attr.media_position === 'string') {
+      // mpd provides media_position as 'position:duration'
+      return Number(this.attr.media_position.split(':')[0]) || 0;
+    }
     return this.attr.media_position || 0;
   }
 
