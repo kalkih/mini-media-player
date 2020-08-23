@@ -174,6 +174,9 @@ const style = css`
   .cover.--prev {
     animation: fade-in .5s linear reverse forwards;
   }
+  .cover.--bg {
+    opacity: 1;
+  }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
     background: linear-gradient(to top, var(--mmp-overlay-color) var(--mmp-overlay-color-stop), transparent 100%);
     border-bottom-left-radius: var(--ha-card-border-radius, 0);
