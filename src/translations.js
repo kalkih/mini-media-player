@@ -75,6 +75,25 @@ const translations = {
       speaker_management: 'Zarządzanie grupą',
     },
   },
+  uk: {
+    placeholder: {
+      tts: 'Текст для відтворення',
+    },
+    label: {
+      leave: 'Залишити',
+      ungroup: 'Розгрупувати',
+      group_all: 'Згрупувати всі',
+      send: 'Надіслати',
+      master: 'Головний',
+    },
+    state: {
+      idle: 'бездіяльність',
+      unavailable: 'недоступний',
+    },
+    title: {
+      speaker_management: 'Управління групою',
+    },
+  },
 };
 
 export default translations;
