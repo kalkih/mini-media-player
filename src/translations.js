@@ -84,6 +84,7 @@ const translations = {
       ungroup: 'Розгрупувати',
       group_all: 'Згрупувати всі',
       send: 'Надіслати',
+      master: 'Головний',
     },
     state: {
       idle: 'бездіяльність',
