@@ -213,6 +213,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | play_pause | boolean | false | The play/pause button in media playback controls.
 | play_stop | boolean | true | The play/stop button in media playback controls.
 | volume | boolean | false | The volume controls.
+| volume_level | boolean | true | The current volume level in percentage.
 | mute | boolean | false | The mute button.
 | progress | boolean | false | The progress bar.
 | runtime | boolean | true | The media runtime indicators.
