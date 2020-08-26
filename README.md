@@ -197,6 +197,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | service_data | object |  | Any service data | Service data to include with the service call (e.g. `entity_id: media_player.office`).
 | navigation_path | string |  | Any path | Path to navigate to (e.g. `/lovelace/0/`) when `action` is defined as `navigate`.
 | url | string |  | Any URL | URL to open when `action` is defined as `url`.
+| new_tab | boolean | `false` | `true` / `false` | Open URL in new tab when `action` is defined as `url`.
 
 #### Hide object
 | Name | Type | Default | Description |

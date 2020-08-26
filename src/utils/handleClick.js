@@ -27,7 +27,11 @@ export default (node, hass, config, actionConfig, entityId) => {
     }
     case 'url': {
       if (!actionConfig.url) return;
-      window.location.href = actionConfig.url;
+      if (actionConfig.new_tab) {
+        window.open(actionConfig.url, '_blank');
+      } else {
+        window.location.href = actionConfig.url;
+      }
     }
   }
 };
