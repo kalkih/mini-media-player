@@ -6,6 +6,7 @@ const DEFAULT_HIDE = {
   sound_mode: true,
   runtime: true,
   volume: false,
+  volume_level: true,
   controls: false,
   play_pause: false,
   play_stop: true,

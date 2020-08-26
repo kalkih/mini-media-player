@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 
 import { ICON } from '../const';
 import sharedStyle from '../sharedStyle';
@@ -22,6 +23,10 @@ class MiniMediaPlayerMediaControls extends LitElement {
 
   get minVol() {
     return this.config.min_volume || 0;
+  }
+
+  get vol() {
+    return Math.round(this.player.vol * 100);
   }
 
   render() {
@@ -57,42 +62,58 @@ class MiniMediaPlayerMediaControls extends LitElement {
   }
 
   renderVolControls(muted) {
-    if (this.config.volume_stateless)
-      return this.renderVolButtons(muted);
-    else
-      return this.renderVolSlider(muted);
+    const volumeControls = this.config.volume_stateless
+      ? this.renderVolButtons(muted)
+      : this.renderVolSlider(muted);
+
+    const classes = classMap({
+      '--buttons': this.config.volume_stateless,
+      'mmp-media-controls__volume': true,
+      flex: true,
+    });
+
+    const showVolumeLevel = !this.config.hide.volume_level;
+    return html`
+      <div class=${classes}>
+        ${volumeControls}
+        ${showVolumeLevel ? this.renderVolLevel() : ''}
+      </div>`;
   }
 
   renderVolSlider(muted) {
     return html`
-      <div class='mmp-media-controls__volume --slider flex'>
-        ${this.renderMuteButton(muted)}
-        <ha-slider
-          @change=${this.handleVolumeChange}
-          @click=${e => e.stopPropagation()}
-          ?disabled=${muted}
-          min=${this.minVol} max=${this.maxVol}
-          value=${this.player.vol * 100}
-          step=${this.config.volume_step || 1}
-          dir=${'ltr'}
-          ignore-bar-touch pin>
-        </ha-slider>
-      </div>`;
+      ${this.renderMuteButton(muted)}
+      <ha-slider
+        @change=${this.handleVolumeChange}
+        @click=${e => e.stopPropagation()}
+        ?disabled=${muted}
+        min=${this.minVol} max=${this.maxVol}
+        value=${this.player.vol * 100}
+        step=${this.config.volume_step || 1}
+        dir=${'ltr'}
+        ignore-bar-touch pin>
+      </ha-slider>
+    `;
   }
 
   renderVolButtons(muted) {
     return html`
-      <div class='mmp-media-controls__volume --buttons flex'>
-        ${this.renderMuteButton(muted)}
-        <ha-icon-button
-          @click=${e => this.player.volumeDown(e)}
-          .icon=${ICON.VOL_DOWN}>
-        </ha-icon-button>
-        <ha-icon-button
-          @click=${e => this.player.volumeUp(e)}
-          .icon=${ICON.VOL_UP}>
-        </ha-icon-button>
-      </div>`;
+      ${this.renderMuteButton(muted)}
+      <ha-icon-button
+        @click=${e => this.player.volumeDown(e)}
+        .icon=${ICON.VOL_DOWN}>
+      </ha-icon-button>
+      <ha-icon-button
+        @click=${e => this.player.volumeUp(e)}
+        .icon=${ICON.VOL_UP}>
+      </ha-icon-button>
+    `;
+  }
+
+  renderVolLevel() {
+    return html`
+      <span class="mmp-media-controls__volume__level">${this.vol}%</span>
+    `;
   }
 
   renderMuteButton(muted) {
@@ -192,6 +213,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
         .mmp-media-controls__volume {
           flex: 100;
           max-height: var(--mmp-unit);
+          align-items: center;
         }
         .mmp-media-controls__volume.--buttons {
           justify-content: left;
