@@ -1,3 +1,16 @@
+## v1.11.0
+### NEW
+- Ability to display volume level percentage #289 (#406)
+- New tap action option, open url in new tab #227 (#405)
+
+### FIXED
+- Fix disappearing background #393 (#402)
+
+### TRANSLATIONS
+- Added Ukrainian translations (#400) @denysdovhan
+- Improved Hungarian translations (#396) @nagyrobi
+
+
 ## v1.10.2
 ### NEW
 - Add support for slider volume steps #365 (#382)
@@ -8,7 +21,7 @@
 - Artwork not clearing post playback #376 (#391)
 - Artwork url fallback if failing fetch of base64 image #385 (#392)
 
-### Changes
+### CHANGES
 - Minor changes to background & artwork transitions
 
 ### TRANSLATIONS
