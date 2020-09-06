@@ -57,6 +57,25 @@ const translations = {
       speaker_management: 'Hangszórók csoportosítása',
     },
   },
+  no: {
+    placeholder: {
+      tts: 'Tekst til tale',
+    },
+    label: {
+      leave: 'Forlat',
+      ungroup: 'Oppløs gruppe',
+      group_all: 'Grupper alle',
+      send: 'Send',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Inaktiv',
+      unavailable: 'Utilgjengelig',
+    },
+    title: {
+      speaker_management: 'Gruppestyring',
+    },
+  },
   pl: {
     placeholder: {
       tts: 'Zamień tekst na mowę',
