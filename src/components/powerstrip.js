@@ -56,8 +56,12 @@ class MiniMediaPlayerPowerstrip extends LitElement {
     return (this.player.soundModes.length > 0 && !this.config.hide.sound_mode);
   }
 
+  get showLabel() {
+    return !this.config.hide.state_label;
+  }
+
   render() {
-    if (this.player.isUnavailable)
+    if (this.player.isUnavailable && this.showLabel)
       return html`
         <span class='label ellipsis'>
           ${t(this.hass, 'state.unavailable', 'state.default.unavailable')}
@@ -112,12 +116,14 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           .icon=${ICON.PLAY[this.player.isPlaying]}
           @click=${e => this.player.playPause(e)}>
         </ha-icon-button>`;
-    else
+    else if (this.showLabel)
       return html`
         <span class='label ellipsis'>
           ${t(this.hass, 'state.idle', 'state.media_player.idle')}
         </span>
       `;
+    else
+      return html``;
   }
 
   static get styles() {
