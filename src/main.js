@@ -367,14 +367,12 @@ class MiniMediaPlayer extends LitElement {
       if (this.thumbnail) {
         this.prevThumbnail = this.thumbnail;
       }
-      this.thumbnail = artwork ? artwork : `url(${picture})`;
+      this.thumbnail = artwork || `url(${picture})`;
     }
   }
 
   computeIcon() {
-    return this.config.icon
-      ? this.config.icon : this.player.icon
-      || ICON.DEFAULT;
+    return this.config.icon ? this.player.icon : ICON.DEFAULT;
   }
 
   measureCard() {
