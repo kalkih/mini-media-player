@@ -222,6 +222,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | power_state | boolean | true | Dynamic color of the power button to indicate on/off.
 | icon_state | boolean | true | Dynamic color of the entity icon to indicate entity state.
 | shuffle | boolean | true | The shuffle button (only for players with `shuffle_set` support).
+| state_label | boolean | false | State labels such as `Unavailable` & `Idle`.
 
 
 ### Theme variables
