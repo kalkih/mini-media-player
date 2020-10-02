@@ -2,6 +2,8 @@ import { LitElement, html, css } from 'lit-element';
 
 import t from '../utils/translation';
 
+import './checkbox';
+
 class MiniMediaPlayerGroupItem extends LitElement {
   static get properties() {
     return {
@@ -14,14 +16,16 @@ class MiniMediaPlayerGroupItem extends LitElement {
 
   render() {
     return html`
-      <paper-checkbox
+      <mmp-checkbox
         ?checked=${this.checked}
         ?disabled=${this.disabled}
         @change='${e => e.stopPropagation()}'
         @click='${this.handleClick}'>
-        ${this.item.name}
-        ${this.master ? html`<span>(${t(this.hass, 'label.master')})</span>` : ''}
-      </paper-checkbox>
+        <span>
+          ${this.item.name}
+          ${this.master ? html`<span>(${t(this.hass, 'label.master')})</span>` : ''}
+        </span>
+      </mmp-checkbox>
     `;
   }
 
