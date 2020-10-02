@@ -337,17 +337,16 @@ class MiniMediaPlayer extends LitElement {
   computeStyles() {
     const { scale } = this.config;
     return styleMap({
-      ...(
-        scale && { '--mmp-unit': `${40 * scale}px` },
-        (this.foregroundColor && this.player.isActive) && {
-          '--mmp-text-color': this.foregroundColor,
-          '--mmp-icon-color': this.foregroundColor,
-          '--mmp-icon-active-color': this.foregroundColor,
-          '--mmp-accent-color': this.foregroundColor,
-          '--paper-slider-container-color': this.foregroundColor,
-          '--secondary-text-color': this.foregroundColor,
-          '--mmp-media-cover-info-color': this.foregroundColor,
-        }
+      ...(scale && { '--mmp-unit': `${40 * scale}px` }),
+      ...((this.foregroundColor && this.player.isActive) && {
+        '--mmp-text-color': this.foregroundColor,
+        '--mmp-icon-color': this.foregroundColor,
+        '--mmp-icon-active-color': this.foregroundColor,
+        '--mmp-accent-color': this.foregroundColor,
+        '--paper-slider-container-color': this.foregroundColor,
+        '--secondary-text-color': this.foregroundColor,
+        '--mmp-media-cover-info-color': this.foregroundColor,
+      }
       ),
     });
   }
