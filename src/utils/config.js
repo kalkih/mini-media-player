@@ -14,6 +14,8 @@ export const generateConfig = (config) => {
   const conf = {
     artwork: 'default',
     info: 'default',
+    group: false,
+    volume_stateless: false,
     more_info: true,
     source: 'default',
     sound_mode: 'default',

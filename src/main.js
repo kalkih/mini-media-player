@@ -26,6 +26,10 @@ import {
   BREAKPOINT,
 } from './const';
 
+import MiniMediaPlayerEditor from './editor';
+
+customElements.define('mini-media-player-editor', MiniMediaPlayerEditor);
+
 class MiniMediaPlayer extends LitElement {
   constructor() {
     super();
@@ -96,6 +100,10 @@ class MiniMediaPlayer extends LitElement {
 
   get name() {
     return this.config.name || this.player.name;
+  }
+
+  static getConfigElement() {
+    return window.document.createElement('mini-media-player-editor');
   }
 
   setConfig(config) {
