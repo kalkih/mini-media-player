@@ -270,7 +270,6 @@ export default class MiniMediaPlayerEditor extends LitElement {
     if (!this._config || !this.hass) {
       return;
     }
-    console.warn(ev);
     const { target } = ev;
     if (this[`_${target.configValue}`] === target.value) {
       return;
