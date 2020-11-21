@@ -420,6 +420,16 @@ const style = css`
     from { opacity: 0; }
     to { opacity: 1; }
   }
+  ha-switch {
+    padding: 16px 6px;
+  }
+  .side-by-side {
+    display: flex;
+  }
+  .side-by-side > * {
+    flex: 1;
+    padding-right: 4px;
+  }
 `;
 
 export default style;
