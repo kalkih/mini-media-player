@@ -363,17 +363,12 @@ class MiniMediaPlayer extends LitElement {
     const { picture, hasArtwork } = this.player;
     if (hasArtwork && picture !== this.picture) {
       this.picture = picture;
-      try {
-        const artwork = await this.player.fetchArtwork();
-        if (this.thumbnail) {
-          this.prevThumbnail = this.thumbnail;
-        }
-        this.thumbnail = artwork;
-      } catch (error) {
-        this.thumbnail = `url(${picture})`;
+      const artwork = await this.player.fetchArtwork();
+      if (this.thumbnail) {
+        this.prevThumbnail = this.thumbnail;
       }
+      this.thumbnail = artwork ? artwork : `url(${picture})`;
     }
-    return !!(hasArtwork && this.thumbnail);
   }
 
   computeIcon() {
