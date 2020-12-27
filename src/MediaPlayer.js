@@ -1,5 +1,4 @@
-import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM } from './const';
-import arrayBufferToBase64 from './utils/misc';
+import { MEDIA_INFO, PLATFORM } from './const';
 
 export default class MediaPlayerObject {
   constructor(hass, config, entity) {
@@ -131,13 +130,6 @@ export default class MediaPlayerObject {
     return this.attr.entity_picture_local || this.attr.entity_picture;
   }
 
-  get hasArtwork() {
-    return (this.picture
-      && this.config.artwork !== 'none'
-      && this.active
-      && !this.idle);
-  }
-
   get mediaInfo() {
     return MEDIA_INFO.map(item => ({
       text: this.attr[item.attr],
@@ -146,45 +138,8 @@ export default class MediaPlayerObject {
     })).filter(item => item.text);
   }
 
-  get hasProgress() {
-    return !this.config.hide.progress
-      && !this.idle
-      && PROGRESS_PROPS.every(prop => prop in this.attr);
-  }
-
   get progress() {
     return this.position + (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0;
-  }
-
-  get idleView() {
-    const idle = this.config.idle_view;
-    if (idle.when_idle && this.isIdle
-      || idle.when_standby && this.isStandby
-      || idle.when_paused && this.isPaused)
-      return true;
-
-    // TODO: remove?
-    if (!this.updatedAt || !idle.after || this.isPlaying)
-      return false;
-
-    return this.checkIdleAfter(idle.after);
-  }
-
-  get trackIdle() {
-    return (
-      this.active
-      && !this.isPlaying
-      && this.updatedAt
-      && this.config.idle_view
-      && this.config.idle_view.after
-    );
-  }
-
-  checkIdleAfter(time) {
-    const diff = (Date.now() - new Date(this.updatedAt).getTime()) / 1000;
-    this.idle = diff > time * 60;
-    this.active = this.isActive;
-    return this.idle;
   }
 
   get supportsShuffle() {
@@ -201,20 +156,6 @@ export default class MediaPlayerObject {
 
   get supportsMaster() {
     return this.platform !== PLATFORM.SQUEEZEBOX;
-  }
-
-  async fetchArtwork() {
-    const url = this.attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture;
-
-    try {
-      const res = await fetch(new Request(url));
-      const buffer = await res.arrayBuffer();
-      const image64 = arrayBufferToBase64(buffer);
-      const imageType = res.headers.get('Content-Type') || 'image/jpeg';
-      return `url(data:${imageType};base64,${image64})`;
-    } catch (error) {
-      return false;
-    }
   }
 
   getAttribute(attribute) {

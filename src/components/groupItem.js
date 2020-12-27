@@ -2,9 +2,12 @@ import { LitElement, html, css } from 'lit-element';
 
 import t from '../utils/translation';
 
+import './volumeSlider';
+
 class MiniMediaPlayerGroupItem extends LitElement {
   static get properties() {
     return {
+      player: {},
       item: {},
       checked: Boolean,
       disabled: Boolean,
@@ -14,14 +17,17 @@ class MiniMediaPlayerGroupItem extends LitElement {
 
   render() {
     return html`
-      <paper-checkbox
-        ?checked=${this.checked}
-        ?disabled=${this.disabled}
-        @change='${e => e.stopPropagation()}'
-        @click='${this.handleClick}'>
-        ${this.item.name}
-        ${this.master ? html`<span>(${t(this.hass, 'label.master')})</span>` : ''}
-      </paper-checkbox>
+      <div>
+        <paper-checkbox
+          ?checked=${this.checked}
+          ?disabled=${this.disabled}
+          @change='${e => e.stopPropagation()}'
+          @click='${this.handleClick}'>
+          ${this.item.name}
+          ${this.master ? html`<span>(${t(this.hass, 'label.master')})</span>` : ''}
+        </paper-checkbox>
+        <mmp-volume-slider player=${this.player}></mmp-volume-slider>
+      </div>
     `;
   }
 

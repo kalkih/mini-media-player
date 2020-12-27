@@ -4,7 +4,8 @@ import { styleMap } from 'lit-html/directives/style-map';
 import ResizeObserver from 'resize-observer-polyfill';
 
 import { generateConfig } from './utils/config';
-import MediaPlayerObject from './model';
+import MediaPlayer from './MediaPlayer';
+import MediaPlayerExtended from './MediaPlayerExtended';
 import style from './style';
 import sharedStyle from './sharedStyle';
 import handleClick from './utils/handleClick';
@@ -43,6 +44,8 @@ class MiniMediaPlayer extends LitElement {
     this.cardHeight = 0;
     this.foregroundColor = '';
     this.backgroundColor = '';
+    this.entities = [];
+    this.players = [];
   }
 
   static get properties() {
@@ -63,6 +66,8 @@ class MiniMediaPlayer extends LitElement {
       cardHeight: Number,
       foregroundColor: String,
       backgroundColor: String,
+      entities: [],
+      players: [],
     };
   }
 
@@ -79,10 +84,25 @@ class MiniMediaPlayer extends LitElement {
     this._hass = hass;
     if (entity && this.entity !== entity) {
       this.entity = entity;
-      this.player = new MediaPlayerObject(hass, this.config, entity);
+      this.player = new MediaPlayerExtended(hass, this.config, entity);
       this.rtl = this.computeRTL(hass);
       this.idle = this.player.idle;
       if (this.player.trackIdle) this.updateIdleStatus();
+    }
+    this.updateMultiroomEntities(hass);
+  }
+
+  updateMultiroomEntities(hass) {
+    if (this.config.speaker_group && this.edit) {
+      const entities = this.config.speaker_group
+        .map(({ entity_id: entity }) => hass.states[entity]);
+      const updated = entities.some((state, index) => state !== this.entities[index]);
+      if (updated) {
+        this.entities = [...entities];
+        this.players = [
+          ...entities.map(state => new MediaPlayer(hass, this.config, state)),
+        ];
+      }
     }
   }
 
@@ -208,7 +228,8 @@ class MiniMediaPlayer extends LitElement {
               .hass=${this.hass}
               .visible=${this.edit}
               .entities=${config.speaker_group.entities}
-              .player=${this.player}>
+              .player=${this.player}
+              .players=${this.players}>
             </mmp-group-list>
           </div>
         </div>
@@ -367,7 +388,7 @@ class MiniMediaPlayer extends LitElement {
       if (this.thumbnail) {
         this.prevThumbnail = this.thumbnail;
       }
-      this.thumbnail = artwork ? artwork : `url(${picture})`;
+      this.thumbnail = artwork || `url(${picture})`;
     }
   }
 
