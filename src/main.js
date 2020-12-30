@@ -47,7 +47,7 @@ class MiniMediaPlayer extends LitElement {
       config: {},
       entity: {},
       player: {},
-      realPlayer: MediaPlayerObject,
+      groupMgmtPlayer: MediaPlayerObject,
       _overflow: Boolean,
       break: Boolean,
       initial: Boolean,
@@ -81,9 +81,9 @@ class MiniMediaPlayer extends LitElement {
       this.idle = this.player.idle;
       if (this.player.trackIdle) this.updateIdleStatus();
     }
-    if (this.config && this.config.speaker_group && this.config.speaker_group.real_player) {
-      const realPlayer = hass.states[this.config.speaker_group.real_player];
-      this.realPlayer = new MediaPlayerObject(hass, this.config, realPlayer);
+    if (this.config && this.config.speaker_group && this.config.speaker_group.group_mgmt_entity) {
+      const altPlayer = hass.states[this.config.speaker_group.group_mgmt_entity];
+      this.groupMgmtPlayer = new MediaPlayerObject(hass, this.config, altPlayer);
     }
   }
 
@@ -205,7 +205,7 @@ class MiniMediaPlayer extends LitElement {
               .hass=${this.hass}
               .visible=${this.edit}
               .entities=${config.speaker_group.entities}
-              .player=${this.realPlayer ? this.realPlayer : this.player}>
+              .player=${this.groupMgmtPlayer ? this.groupMgmtPlayer : this.player}>>
             </mmp-group-list>
           </div>
         </div>
@@ -334,7 +334,8 @@ class MiniMediaPlayer extends LitElement {
 
   speakerCount() {
     if (this.config.speaker_group.show_group_count) {
-      const count = this.realPlayer ? this.realPlayer.groupCount : this.player.groupCount;
+      const count = this.groupMgmtPlayer
+        ? this.groupMgmtPlayer.groupCount : this.player.groupCount;
       return count > 1 ? ` +${count - 1}` : '';
     }
   }

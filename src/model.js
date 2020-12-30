@@ -6,14 +6,9 @@ export default class MediaPlayerObject {
     this.hass = hass || {};
     this.config = config || {};
     this.entity = entity || {};
+    this.entityId = entity && entity.entity_id || this.config.entity;
     this.state = entity.state;
     this.attr = entity.attributes;
-    this.realPlayerAttr = config
-      && config.speaker_group
-      && config.speaker_group.real_player
-      && hass.states[config.speaker_group.real_player]
-      && hass.states[config.speaker_group.real_player].attributes
-      || {};
     this.idle = config.idle_view ? this.idleView : false;
     this.active = this.isActive;
   }
@@ -90,9 +85,9 @@ export default class MediaPlayerObject {
 
   get group() {
     if (this.platform === PLATFORM.SQUEEZEBOX) {
-      return this.hasRealPlayer ? this.realPlayerAttr.sync_group || [] : this.attr.sync_group || [];
+      return this.attr.sync_group || [];
     }
-    return this.hasRealPlayer ? this.realPlayerAttr[`${this.platform}_group`] || [] : this.attr[`${this.platform}_group`] || [];
+    return this.attr[`${this.platform}_group`] || [];
   }
 
   get platform() {
@@ -101,19 +96,12 @@ export default class MediaPlayerObject {
 
   get master() {
     return this.supportsMaster
-      ? this.group[0] || this.realPlayer : this.config.entity;
-  }
-
-  get hasRealPlayer() {
-    return this.config.speaker_group && this.config.speaker_group.real_player;
-  }
-
-  get realPlayer() {
-    return this.hasRealPlayer ? this.config.speaker_group.real_player : this.config.entity;
+      ? this.group[0] || this.entityId
+      : this.entityId;
   }
 
   get isMaster() {
-    return this.master === this.realPlayer;
+    return this.master === this.entityId;
   }
 
   get sources() {
@@ -298,7 +286,7 @@ export default class MediaPlayerObject {
   volumeUp(e) {
     if (this.supportsVolumeSet && this.config.volume_step > 0) {
       this.callService(e, 'volume_set', {
-        entity_id: this.config.entity,
+        entity_id: this.entityId,
         volume_level: Math.min(this.vol + this.config.volume_step / 100, 1),
       });
     } else this.callService(e, 'volume_up');
@@ -307,7 +295,7 @@ export default class MediaPlayerObject {
   volumeDown(e) {
     if (this.supportsVolumeSet && this.config.volume_step > 0) {
       this.callService(e, 'volume_set', {
-        entity_id: this.config.entity,
+        entity_id: this.entityId,
         volume_level: Math.max(this.vol - this.config.volume_step / 100, 0),
       });
     } else this.callService(e, 'volume_down');
@@ -335,7 +323,7 @@ export default class MediaPlayerObject {
       });
     } else {
       this.callService(e, 'volume_set', {
-        entity_id: this.config.entity,
+        entity_id: this.entityId,
         volume_level: vol,
       });
     }
@@ -345,13 +333,13 @@ export default class MediaPlayerObject {
     const { platform } = this;
     const options = { entity_id: entity };
     if (checked) {
-      options.master = this.realPlayer;
+      options.master = this.entityId;
       switch (platform) {
         case PLATFORM.SOUNDTOUCH:
           return this.handleSoundtouch(e, this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE', entity);
         case PLATFORM.SQUEEZEBOX:
           return this.callService(e, 'sync', {
-            entity_id: this.realPlayer,
+            entity_id: this.entityId,
             other_player: entity,
           }, PLATFORM.SQUEEZEBOX);
         default:
@@ -393,7 +381,7 @@ export default class MediaPlayerObject {
   callService(e, service, inOptions, domain = 'media_player', omit = false) {
     e.stopPropagation();
     this.hass.callService(domain, service, {
-      ...(!omit && { entity_id: this.config.entity }),
+      ...(!omit && { entity_id: this.entityId }),
       ...inOptions,
     });
   }
