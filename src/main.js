@@ -47,6 +47,7 @@ class MiniMediaPlayer extends LitElement {
       config: {},
       entity: {},
       player: {},
+      realPlayer: MediaPlayerObject,
       _overflow: Boolean,
       break: Boolean,
       initial: Boolean,
@@ -79,6 +80,10 @@ class MiniMediaPlayer extends LitElement {
       this.rtl = this.computeRTL(hass);
       this.idle = this.player.idle;
       if (this.player.trackIdle) this.updateIdleStatus();
+    }
+    if (this.config && this.config.speaker_group && this.config.speaker_group.real_player) {
+      const realPlayer = hass.states[this.config.speaker_group.real_player];
+      this.realPlayer = new MediaPlayerObject(hass, this.config, realPlayer);
     }
   }
 
@@ -200,7 +205,7 @@ class MiniMediaPlayer extends LitElement {
               .hass=${this.hass}
               .visible=${this.edit}
               .entities=${config.speaker_group.entities}
-              .player=${this.player}>
+              .player=${this.realPlayer ? this.realPlayer : this.player}>
             </mmp-group-list>
           </div>
         </div>
@@ -329,7 +334,7 @@ class MiniMediaPlayer extends LitElement {
 
   speakerCount() {
     if (this.config.speaker_group.show_group_count) {
-      const count = this.player.groupCount;
+      const count = this.realPlayer ? this.realPlayer.groupCount : this.player.groupCount;
       return count > 1 ? ` +${count - 1}` : '';
     }
   }
