@@ -11,8 +11,8 @@ class MiniMediaPlayerCheckbox extends LitElement {
 
   render() {
     return html`
+      <input type="checkbox" ?checked=${this.checked} ?disabled=${this.disabled}>
       <label class="mmp-checkbox">
-        <input type="checkbox" ?checked=${this.checked} ?disabled=${this.disabled}>
         <slot>
           <span>${this.label}</span>
         </slot>
