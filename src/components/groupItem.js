@@ -7,6 +7,7 @@ import './checkbox';
 class MiniMediaPlayerGroupItem extends LitElement {
   static get properties() {
     return {
+      hass: {},
       item: {},
       checked: Boolean,
       disabled: Boolean,
