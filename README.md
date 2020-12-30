@@ -292,7 +292,7 @@ You can specify media shortcuts through the `shortcuts` option, either as a list
       # Start predefined playlist
       - icon: mdi:cat
         type: playlist
-        id: spotify:user:spotify:playlist:37i9dQZF1DZ06evO2O09Hg
+        id: spotify:user:XXXXXXX:playlist:37i9dQZF1DZ06evO2O09Hg # Where XXXXXXX is your User ID
       # Change the source to bathroom
       - icon: mdi:dog
         type: source
