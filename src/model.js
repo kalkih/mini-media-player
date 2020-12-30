@@ -152,12 +152,12 @@ export default class MediaPlayerObject {
       && PROGRESS_PROPS.every(prop => prop in this.attr);
   }
 
-  get hasPrev() {
+  get supportsPrev() {
     return (this.attr.supported_features | 16) // eslint-disable-line no-bitwise
       === this.attr.supported_features;
   }
 
-  get hasNext() {
+  get supportsNext() {
     return (this.attr.supported_features | 32) // eslint-disable-line no-bitwise
       === this.attr.supported_features;
   }
