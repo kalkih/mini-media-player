@@ -11,6 +11,7 @@ class MiniMediaPlayerGroupList extends LitElement {
       hass: {},
       entities: {},
       player: {},
+      players: [],
       visible: Boolean,
     };
   }
@@ -43,7 +44,7 @@ class MiniMediaPlayerGroupList extends LitElement {
     return html`
       <div class='mmp-group-list'>
         <span class='mmp-group-list__title'>${t(this.hass, 'title.speaker_management')}</span>
-        ${this.entities.map(item => this.renderItem(item, id))}
+        ${this.entities.map((item, index) => this.renderItem(item, id, index))}
         <div class='mmp-group-list__buttons'>
           <mmp-button raised ?disabled=${!isGrouped}
             @click=${e => this.player.handleGroupChange(e, id, false)}>
@@ -64,10 +65,11 @@ class MiniMediaPlayerGroupList extends LitElement {
     `;
   }
 
-  renderItem(item, id) {
+  renderItem(item, id, index) {
     const itemId = item.entity_id;
     return html`
       <mmp-group-item
+        player=${this.players[index]}
         @change=${this.handleGroupChange}
         .item=${item}
         .checked=${itemId === id || this.group.includes(itemId)}

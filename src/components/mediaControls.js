@@ -4,6 +4,8 @@ import { classMap } from 'lit-html/directives/class-map';
 import { ICON } from '../const';
 import sharedStyle from '../sharedStyle';
 
+import './volumeSlider';
+
 class MiniMediaPlayerMediaControls extends LitElement {
   static get properties() {
     return {
@@ -83,16 +85,11 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderVolSlider(muted) {
     return html`
       ${this.renderMuteButton(muted)}
-      <ha-slider
-        @change=${this.handleVolumeChange}
-        @click=${e => e.stopPropagation()}
-        ?disabled=${muted}
+      <mmp-volume-slider
+        player=${this.player}
         min=${this.minVol} max=${this.maxVol}
-        value=${this.player.vol * 100}
-        step=${this.config.volume_step || 1}
-        dir=${'ltr'}
-        ignore-bar-touch pin>
-      </ha-slider>
+        step=${this.config.volume_step || 1}>
+      </mmp-volume-slider>
     `;
   }
 
