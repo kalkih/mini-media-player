@@ -1,13 +1,13 @@
 import { LitElement, html, css } from 'lit-element';
 
-import './sourceMenu';
-import './soundMenu';
-import './mediaControls';
+import './sourceMenu.js';
+import './soundMenu.js';
+import './mediaControls.js';
 
-import { ICON } from '../const';
-import sharedStyle from '../sharedStyle';
+import { ICON } from '../consts.js';
+import sharedStyle from '../styles/shared.js';
 
-import t from '../utils/translation';
+import t from '../utils/translation.js';
 
 class MiniMediaPlayerPowerstrip extends LitElement {
   static get properties() {
@@ -37,23 +37,26 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   }
 
   get sourceSize() {
-    return (this.config.source === 'icon' || this.hasControls || this.idle);
+    return this.config.source === 'icon' || this.hasControls || this.idle;
   }
 
   get soundSize() {
-    return (this.config.sound_mode === 'icon' || this.hasControls || this.idle);
+    return this.config.sound_mode === 'icon' || this.hasControls || this.idle;
   }
 
   get hasControls() {
-    return this.player.active && (this.config.hide.controls !== this.config.hide.volume);
+    return (
+      this.player.active &&
+      this.config.hide.controls !== this.config.hide.volume
+    );
   }
 
   get hasSource() {
-    return (this.player.sources.length > 0 && !this.config.hide.source);
+    return this.player.sources.length > 0 && !this.config.hide.source;
   }
 
   get hasSoundMode() {
-    return (this.player.soundModes.length > 0 && !this.config.hide.sound_mode);
+    return this.player.soundModes.length > 0 && !this.config.hide.sound_mode;
   }
 
   get showLabel() {
@@ -63,44 +66,54 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   render() {
     if (this.player.isUnavailable && this.showLabel)
       return html`
-        <span class='label ellipsis'>
+        <span class="label ellipsis">
           ${t(this.hass, 'state.unavailable', 'state.default.unavailable')}
         </span>
       `;
 
     return html`
       ${this.idle ? this.renderIdleView : ''}
-      ${this.hasControls ? html`
-        <mmp-media-controls
-          .player=${this.player}
-          .config=${this.config}>
-        </mmp-media-controls>
-      ` : ''}
-      ${this.hasSource ? html`
-        <mmp-source-menu
-          .player=${this.player}
-          .icon=${this.sourceSize}
-          ?full=${this.config.source === 'full'}>
-        </mmp-source-menu>` : ''}
-      ${this.hasSoundMode ? html`
-        <mmp-sound-menu
-          .player=${this.player}
-          .icon=${this.soundSize}
-          ?full=${this.config.sound_mode === 'full'}>
-        </mmp-sound-menu>` : ''}
-      ${this.showGroupButton ? html`
-        <ha-icon-button class='group-button'
-          .icon=${this.icon}
-          ?inactive=${!this.player.isGrouped}
-          ?color=${this.groupVisible}
-          @click=${this.handleGroupClick}>
-        </ha-icon-button>` : ''}
-      ${this.showPowerButton ? html`
-        <ha-icon-button class='power-button'
-          .icon=${ICON.POWER}
-          @click=${e => this.player.toggle(e)}
-          ?color=${this.powerColor}>
-        </ha-icon-button>` : ''}
+      ${this.hasControls
+        ? html`
+            <mmp-media-controls .player=${this.player} .config=${this.config}>
+            </mmp-media-controls>
+          `
+        : ''}
+      ${this.hasSource
+        ? html` <mmp-source-menu
+            .player=${this.player}
+            .icon=${this.sourceSize}
+            ?full=${this.config.source === 'full'}
+          >
+          </mmp-source-menu>`
+        : ''}
+      ${this.hasSoundMode
+        ? html` <mmp-sound-menu
+            .player=${this.player}
+            .icon=${this.soundSize}
+            ?full=${this.config.sound_mode === 'full'}
+          >
+          </mmp-sound-menu>`
+        : ''}
+      ${this.showGroupButton
+        ? html` <ha-icon-button
+            class="group-button"
+            .icon=${this.icon}
+            ?inactive=${!this.player.isGrouped}
+            ?color=${this.groupVisible}
+            @click=${this.handleGroupClick}
+          >
+          </ha-icon-button>`
+        : ''}
+      ${this.showPowerButton
+        ? html` <ha-icon-button
+            class="power-button"
+            .icon=${ICON.POWER}
+            @click=${e => this.player.toggle(e)}
+            ?color=${this.powerColor}
+          >
+          </ha-icon-button>`
+        : ''}
     `;
   }
 
@@ -111,19 +124,18 @@ class MiniMediaPlayerPowerstrip extends LitElement {
 
   get renderIdleView() {
     if (this.player.isPaused)
+      return html` <ha-icon-button
+        .icon=${ICON.PLAY[this.player.isPlaying]}
+        @click=${e => this.player.playPause(e)}
+      >
+      </ha-icon-button>`;
+    if (this.showLabel)
       return html`
-        <ha-icon-button
-          .icon=${ICON.PLAY[this.player.isPlaying]}
-          @click=${e => this.player.playPause(e)}>
-        </ha-icon-button>`;
-    else if (this.showLabel)
-      return html`
-        <span class='label ellipsis'>
+        <span class="label ellipsis">
           ${t(this.hass, 'state.idle', 'state.media_player.idle')}
         </span>
       `;
-    else
-      return html``;
+    return html``;
   }
 
   static get styles() {

@@ -1,10 +1,10 @@
 import { LitElement, html, css } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
 
-import './dropdown';
-import './button';
+import './dropdown.js';
+import './button.js';
 
-import sharedStyle from '../sharedStyle';
+import sharedStyle from '../styles/shared.js';
 
 class MiniMediaPlayerShortcuts extends LitElement {
   static get properties() {
@@ -23,7 +23,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
   }
 
   get show() {
-    return (!this.shortcuts.hide_when_off || this.player.active);
+    return !this.shortcuts.hide_when_off || this.player.active;
   }
 
   get active() {
@@ -38,55 +38,62 @@ class MiniMediaPlayerShortcuts extends LitElement {
     if (!this.show) return html``;
     const { active } = this;
 
-    const list = this.list ? html`
-      <mmp-dropdown class='mmp-shortcuts__dropdown'
-        @change=${this.handleShortcut}
-        .items=${this.list}
-        .label=${this.shortcuts.label}
-        .selected=${active}>
-      </mmp-dropdown>
-    ` : '';
+    const list = this.list
+      ? html`
+          <mmp-dropdown
+            class="mmp-shortcuts__dropdown"
+            @change=${this.handleShortcut}
+            .items=${this.list}
+            .label=${this.shortcuts.label}
+            .selected=${active}
+          >
+          </mmp-dropdown>
+        `
+      : '';
 
-    const buttons = this.buttons ? html`
-      <div class='mmp-shortcuts__buttons'>
-        ${this.buttons.map(item => html`
-          <mmp-button
-            style="${styleMap(this.shortcutStyle(item))}"
-            raised
-            columns=${this.shortcuts.columns}
-            ?color=${item.id === active}
-            class='mmp-shortcuts__button'
-            @click=${e => this.handleShortcut(e, item)}>
-            <div align=${this.shortcuts.align_text}>
-              ${item.icon ? html`<ha-icon .icon=${item.icon}></ha-icon>` : ''}
-              ${item.image ? html`<img src=${item.image}>` : ''}
-              ${item.name ? html`<span class="ellipsis">${item.name}</span>` : ''}
-            </div>
-          </mmp-button>`)}
-      </div>
-    ` : '';
+    const buttons = this.buttons
+      ? html`
+          <div class="mmp-shortcuts__buttons">
+            ${this.buttons.map(
+              item => html` <mmp-button
+                style="${styleMap(this.shortcutStyle(item))}"
+                raised
+                columns=${this.shortcuts.columns}
+                ?color=${item.id === active}
+                class="mmp-shortcuts__button"
+                @click=${e => this.handleShortcut(e, item)}
+              >
+                <div align=${this.shortcuts.align_text}>
+                  ${item.icon
+                    ? html`<ha-icon .icon=${item.icon}></ha-icon>`
+                    : ''}
+                  ${item.image
+                    ? html`<img src=${item.image} alt="shortcut" />`
+                    : ''}
+                  ${item.name
+                    ? html`<span class="ellipsis">${item.name}</span>`
+                    : ''}
+                </div>
+              </mmp-button>`
+            )}
+          </div>
+        `
+      : '';
 
-    return html`
-      ${buttons}
-      ${list}
-    `;
+    return html` ${buttons} ${list} `;
   }
 
   handleShortcut(ev, item) {
     const { type, id, data } = item || ev.detail;
-    if (type === 'source')
-      return this.player.setSource(ev, id);
-    if (type === 'service')
-      return this.player.toggleService(ev, id, data);
-    if (type === 'script')
-      return this.player.toggleScript(ev, id, data);
-    if (type === 'sound_mode')
-      return this.player.setSoundMode(ev, id);
+    if (type === 'source') return this.player.setSource(ev, id);
+    if (type === 'service') return this.player.toggleService(ev, id, data);
+    if (type === 'script') return this.player.toggleScript(ev, id, data);
+    if (type === 'sound_mode') return this.player.setSoundMode(ev, id);
     const options = {
       media_content_type: type,
       media_content_id: id,
     };
-    this.player.setMedia(ev, options);
+    return this.player.setMedia(ev, options);
   }
 
   shortcutStyle(item) {
@@ -118,7 +125,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
           justify-content: center;
           align-items: center;
           width: 100%;
-          padding: .2em 0;
+          padding: 0.2em 0;
         }
         .mmp-shortcuts__button > div[align='left'] {
           justify-content: flex-start;
@@ -142,12 +149,12 @@ class MiniMediaPlayerShortcuts extends LitElement {
           min-width: calc(16.66% - 8px);
         }
         .mmp-shortcuts__button > div > span {
-          line-height: calc(var(--mmp-unit) * .6);
+          line-height: calc(var(--mmp-unit) * 0.6);
           text-transform: initial;
         }
         .mmp-shortcuts__button > div > ha-icon {
-          width: calc(var(--mmp-unit) * .6);
-          height: calc(var(--mmp-unit) * .6);
+          width: calc(var(--mmp-unit) * 0.6);
+          height: calc(var(--mmp-unit) * 0.6);
         }
         .mmp-shortcuts__button > div > *:nth-child(2) {
           margin-left: 4px;

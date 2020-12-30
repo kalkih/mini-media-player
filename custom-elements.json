@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "tags": [
+    {
+      "name": "mini-media-player",
+      "description": "Minimalistic media player card for Home Assistant",
+      "properties": [
+        {
+          "name": "hass",
+          "type": "Object",
+          "description": "Hass object"
+        },
+        {
+          "name": "config",
+          "type": "Object",
+          "description": "Config object"
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "cssProperties": [
+      ]
+    }
+  ]
+}

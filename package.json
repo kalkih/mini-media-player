@@ -11,39 +11,68 @@
     "media",
     "custom-cards"
   ],
-  "main": "src/main.js",
-  "module": "src/main.js",
+  "main": "index.js",
+  "module": "index.js",
   "repository": "git@github.com:kalkih/mini-media-player.git",
   "author": "Karl Kihlström <mrkihlstrom@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "web-dev-server --app-index demo/index.html --node-resolve --open --watch",
+    "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
+    "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
+    "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
+    "format:prettier": "prettier \"**/*.js\" --write --ignore-path .gitignore",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "test": "web-test-runner --coverage",
+    "test:watch": "web-test-runner --watch",
+    "storybook": "start-storybook",
+    "storybook:build": "build-storybook",
+    "build": "rimraf dist && rollup -c rollup.config.js",
+    "start:build": "npm run build && web-dev-server --root-dir dist --app-index index.html --open --compatibility none"
+  },
   "dependencies": {
-    "lit-element": "^2.3.1",
-    "lit-html": "^1.2.1",
-    "node-vibrant": "^3.1.5",
+    "lit-element": "^2.2.1",
+    "lit-html": "^1.1.2",
+    "node-vibrant": "^3.2.1-alpha.1",
     "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-class-properties": "^7.3.3",
-    "@babel/plugin-proposal-decorators": "^7.3.0",
-    "@babel/plugin-transform-template-literals": "^7.2.0",
-    "@babel/preset-env": "^7.3.1",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-iife-wrap": "^1.1.0",
-    "babel-preset-minify": "^0.5.0",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "2.16.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "@web/dev-server": "^0.0.12",
+    "eslint": "^6.1.0",
+    "@open-wc/eslint-config": "^4.0.0",
+    "prettier": "^2.0.4",
+    "eslint-config-prettier": "^6.11.0",
+    "husky": "^1.0.0",
+    "lint-staged": "^10.0.0",
+    "@web/test-runner": "^0.7.41",
+    "@open-wc/testing": "^2.0.0",
+    "@open-wc/demoing-storybook": "^2.0.0",
+    "@open-wc/building-rollup": "^1.0.0",
+    "deepmerge": "^4.2.2",
+    "rimraf": "^2.6.3",
+    "rollup": "^2.3.4"
   },
-  "scripts": {
-    "build": "npm run lint && npm run webpack && npm run babel",
-    "webpack": "webpack",
-    "babel": "babel dist/mini-media-player-bundle.js --out-file dist/mini-media-player-bundle.js",
-    "lint": "eslint src/* --ext .js",
-    "watch": "webpack --watch",
-    "dev": "webpack --watch"
+  "eslintConfig": {
+    "extends": [
+      "@open-wc/eslint-config",
+      "eslint-config-prettier"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
   }
 }

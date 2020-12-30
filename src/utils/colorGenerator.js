@@ -1,12 +1,9 @@
-import * as Vibrant from 'node-vibrant';
+import * as Vibrant from 'node-vibrant/dist/vibrant';
 
-import {
-  CONTRAST_RATIO,
-  COLOR_SIMILARITY_THRESHOLD,
-} from '../const';
+import { CONTRAST_RATIO, COLOR_SIMILARITY_THRESHOLD } from '../consts.js';
 
 const luminance = (r, g, b) => {
-  const a = [r, g, b].map((v) => {
+  const a = [r, g, b].map(v => {
     let w = v;
     w /= 255;
     return w <= 0.03928 ? w / 12.92 : ((w + 0.055) / 1.055) ** 2.4;
@@ -22,12 +19,10 @@ const contrast = (rgb1, rgb2) => {
   return (brightest + 0.05) / (darkest + 0.05);
 };
 
-const getContrastRatio = (rgb1, rgb2) => Math.round(
-  (contrast(rgb1, rgb2) + Number.EPSILON) * 100,
-) / 100;
+const getContrastRatio = (rgb1, rgb2) =>
+  Math.round((contrast(rgb1, rgb2) + Number.EPSILON) * 100) / 100;
 
-
-const colorGenerator = (colors) => {
+const colorGenerator = colors => {
   colors.sort((colorA, colorB) => colorB.population - colorA.population);
 
   const backgroundColor = colors[0];
@@ -38,7 +33,7 @@ const colorGenerator = (colors) => {
     if (!contrastRatios.has(color)) {
       contrastRatios.set(
         color,
-        getContrastRatio(backgroundColor.rgb, color.rgb),
+        getContrastRatio(backgroundColor.rgb, color.rgb)
       );
     }
 
@@ -62,9 +57,10 @@ const colorGenerator = (colors) => {
       const compareColor = colors[j];
 
       // difference. 0 is same, 765 max difference
-      const diffScore = Math.abs(currentColor.rgb[0] - compareColor.rgb[0])
-          + Math.abs(currentColor.rgb[1] - compareColor.rgb[1])
-          + Math.abs(currentColor.rgb[2] - compareColor.rgb[2]);
+      const diffScore =
+        Math.abs(currentColor.rgb[0] - compareColor.rgb[0]) +
+        Math.abs(currentColor.rgb[1] - compareColor.rgb[1]) +
+        Math.abs(currentColor.rgb[2] - compareColor.rgb[2]);
 
       if (diffScore <= COLOR_SIMILARITY_THRESHOLD) {
         if (approvedContrastRatio(compareColor)) {
@@ -84,7 +80,8 @@ const colorGenerator = (colors) => {
   return [foregroundColor, backgroundColor.hex];
 };
 
-export default picture => new Vibrant(picture, {
-  colorCount: 16,
-  generator: colorGenerator,
-}).getPalette();
+export default picture =>
+  new Vibrant(picture, {
+    colorCount: 16,
+    generator: colorGenerator,
+  }).getPalette();

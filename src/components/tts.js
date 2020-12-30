@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
-import t from '../utils/translation';
+import t from '../utils/translation.js';
 
 class MiniMediaPlayerTts extends LitElement {
   static get properties() {
@@ -12,7 +12,12 @@ class MiniMediaPlayerTts extends LitElement {
   }
 
   get label() {
-    return t(this.hass, 'placeholder.tts', 'ui.card.media_player.text_to_speak', 'Say');
+    return t(
+      this.hass,
+      'placeholder.tts',
+      'ui.card.media_player.text_to_speak',
+      'Say'
+    );
   }
 
   get input() {
@@ -25,12 +30,15 @@ class MiniMediaPlayerTts extends LitElement {
 
   render() {
     return html`
-      <paper-input id="tts-input" class='mmp-tts__input'
+      <paper-input
+        id="tts-input"
+        class="mmp-tts__input"
         no-label-float
-        placeholder=${this.label}...
-        @click=${e => e.stopPropagation()}>
+        placeholder="${this.label}..."
+        @click=${e => e.stopPropagation()}
+      >
       </paper-input>
-      <mmp-button class='mmp-tts__button' @click=${this.handleTts}>
+      <mmp-button class="mmp-tts__button" @click=${this.handleTts}>
         <span>${t(this.hass, 'label.send')}</span>
       </mmp-button>
     `;
@@ -57,11 +65,12 @@ class MiniMediaPlayerTts extends LitElement {
         message,
       });
     else if (config.platform === 'webos')
-      this.hass.callService('notify', opts.entity_id.split('.').slice(-1)[0], { message });
+      this.hass.callService('notify', opts.entity_id.split('.').slice(-1)[0], {
+        message,
+      });
     else if (config.platform === 'ga')
       this.hass.callService('notify', 'ga_broadcast', { message });
-    else
-      this.hass.callService('tts', `${config.platform}_say`, opts);
+    else this.hass.callService('tts', `${config.platform}_say`, opts);
     e.stopPropagation();
     this.reset();
   }
@@ -83,7 +92,7 @@ class MiniMediaPlayerTts extends LitElement {
         margin-right: 8px;
         --paper-input-container-input: {
           font-size: 1em;
-        };
+        }
       }
       ha-card[rtl] .mmp-tts__input {
         margin-right: auto;
@@ -92,25 +101,25 @@ class MiniMediaPlayerTts extends LitElement {
       .mmp-tts__button {
         margin: 0;
         height: 30px;
-        padding: 0 .4em;
+        padding: 0 0.4em;
       }
       paper-input {
-        opacity: .75;
+        opacity: 0.75;
         --paper-input-container-color: var(--mmp-text-color);
         --paper-input-container-input-color: var(--mmp-text-color);
         --paper-input-container-focus-color: var(--mmp-text-color);
         --paper-input-container: {
           padding: 0;
-        };
+        }
       }
       paper-input[focused] {
         opacity: 1;
       }
 
       ha-card[artwork*='cover'][has-artwork] paper-input {
-        --paper-input-container-color: #FFFFFF;
-        --paper-input-container-input-color: #FFFFFF;
-        --paper-input-container-focus-color: #FFFFFF;
+        --paper-input-container-color: #ffffff;
+        --paper-input-container-input-color: #ffffff;
+        --paper-input-container-focus-color: #ffffff;
       }
     `;
   }

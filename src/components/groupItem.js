@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
-import t from '../utils/translation';
+import t from '../utils/translation.js';
 
 class MiniMediaPlayerGroupItem extends LitElement {
   static get properties() {
@@ -17,22 +17,27 @@ class MiniMediaPlayerGroupItem extends LitElement {
       <paper-checkbox
         ?checked=${this.checked}
         ?disabled=${this.disabled}
-        @change='${e => e.stopPropagation()}'
-        @click='${this.handleClick}'>
+        @change="${e => e.stopPropagation()}"
+        @click="${this.handleClick}"
+      >
         ${this.item.name}
-        ${this.master ? html`<span>(${t(this.hass, 'label.master')})</span>` : ''}
+        ${this.master
+          ? html`<span>(${t(this.hass, 'label.master')})</span>`
+          : ''}
       </paper-checkbox>
     `;
   }
 
   handleClick(ev) {
     ev.stopPropagation();
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: {
-        entity: this.item.entity_id,
-        checked: !this.checked,
-      },
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          entity: this.item.entity_id,
+          checked: !this.checked,
+        },
+      })
+    );
   }
 
   static get styles() {
@@ -46,11 +51,11 @@ class MiniMediaPlayerGroupItem extends LitElement {
       }
 
       ha-card[artwork*='cover'][has-artwork] paper-checkbox[disabled] {
-        --paper-checkbox-checkmark-color: rgba(0,0,0,.5);
+        --paper-checkbox-checkmark-color: rgba(0, 0, 0, 0.5);
       }
       ha-card[artwork*='cover'][has-artwork] paper-checkbox {
-        --paper-checkbox-unchecked-color: #FFFFFF;
-        --paper-checkbox-label-color: #FFFFFF;
+        --paper-checkbox-unchecked-color: #ffffff;
+        --paper-checkbox-label-color: #ffffff;
       }
     `;
   }

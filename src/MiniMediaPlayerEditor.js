@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit-element';
-import style from './style';
-import defaultConfig from './utils/config';
+import style from './styles/main.js';
+import defaultConfig from './utils/config.js';
 
 const fireEvent = (node, type, detail = {}, options = {}) => {
   const event = new Event(type, {
@@ -14,35 +14,15 @@ const fireEvent = (node, type, detail = {}, options = {}) => {
   return event;
 };
 
-const OptionsArtwork = [
-  'cover',
-  'full-cover',
-  'material',
-  'cover-fit',
-  'none',
-];
+const OptionsArtwork = ['cover', 'full-cover', 'material', 'cover-fit', 'none'];
 
-const OptionsSource = [
-  'icon',
-  'full',
-];
+const OptionsSource = ['icon', 'full'];
 
-const OptionsSoundMode = [
-  'icon',
-  'full',
-];
+const OptionsSoundMode = ['icon', 'full'];
 
-const OptionsInfo = [
-  'short',
-  'scroll',
-];
+const OptionsInfo = ['short', 'scroll'];
 
-const OptionsReplaceMute = [
-  'play_pause',
-  'stop',
-  'play_stop',
-  'next',
-];
+const OptionsReplaceMute = ['play_pause', 'stop', 'play_stop', 'next'];
 
 export default class MiniMediaPlayerEditor extends LitElement {
   static get styles() {
@@ -54,11 +34,13 @@ export default class MiniMediaPlayerEditor extends LitElement {
   }
 
   setConfig(config) {
-    this._config = Object.assign({}, defaultConfig, config);
+    this._config = { ...defaultConfig, ...config };
   }
 
   get getMediaPlayerEntities() {
-    return Object.keys(this.hass.states).filter(eid => eid.substr(0, eid.indexOf('.')) === 'media_player');
+    return Object.keys(this.hass.states).filter(
+      eid => eid.substr(0, eid.indexOf('.')) === 'media_player'
+    );
   }
 
   get _group() {
@@ -79,19 +61,22 @@ export default class MiniMediaPlayerEditor extends LitElement {
     if (!this.hass) return html``;
 
     return html`
-      <div class='card-config'>
-        <div class='overall-config'>
-  
+      <div class="card-config">
+        <div class="overall-config">
           <paper-dropdown-menu
             label="Entity (required)"
             .configValue="${'entity'}"
             @value-changed=${this.valueChanged}
-            >
+          >
             <paper-listbox
-              slot="dropdown-content" 
-              .selected="${this.getMediaPlayerEntities.indexOf(this._config.entity)}"
+              slot="dropdown-content"
+              .selected="${this.getMediaPlayerEntities.indexOf(
+                this._config.entity
+              )}"
             >
-              ${this.getMediaPlayerEntities.map(entity => html`<paper-item>${entity}</paper-item>`)}
+              ${this.getMediaPlayerEntities.map(
+                entity => html`<paper-item>${entity}</paper-item>`
+              )}
             </paper-listbox>
           </paper-dropdown-menu>
 
@@ -99,14 +84,14 @@ export default class MiniMediaPlayerEditor extends LitElement {
             <paper-input
               label="Name"
               .value="${this._config.name}"
-              .configValue="${'name'}"
+              configValue="name"
               @value-changed=${this.valueChanged}
             ></paper-input>
 
             <paper-input
               label="Icon"
               .value="${this._config.icon}"
-              .configValue="${'icon'}"
+              configValue="icon"
               @value-changed=${this.valueChanged}
             ></paper-input>
           </div>
@@ -136,19 +121,23 @@ export default class MiniMediaPlayerEditor extends LitElement {
               ></ha-switch>
             </ha-formfield>
           </div>
-          
+
           <div class="side-by-side">
             <paper-dropdown-menu
               label="Artwork"
               .configValue=${'artwork'}
               @value-changed=${this.valueChanged}
               class="dropdown"
-              >
+            >
               <paper-listbox
                 slot="dropdown-content"
-                .selected=${(Object.values(OptionsArtwork).indexOf(this._config.artwork))}
+                .selected=${Object.values(OptionsArtwork).indexOf(
+                  this._config.artwork
+                )}
               >
-                ${(Object.values(OptionsArtwork)).map(item => html` <paper-item>${item}</paper-item> `)}
+                ${Object.values(OptionsArtwork).map(
+                  item => html` <paper-item>${item}</paper-item> `
+                )}
               </paper-listbox>
             </paper-dropdown-menu>
 
@@ -157,12 +146,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
               .configValue=${'source'}
               @value-changed=${this.valueChanged}
               class="dropdown"
-              >
+            >
               <paper-listbox
                 slot="dropdown-content"
-                .selected=${(Object.values(OptionsSource).indexOf(this._config.source))}
+                .selected=${Object.values(OptionsSource).indexOf(
+                  this._config.source
+                )}
               >
-                ${(Object.values(OptionsSource)).map(item => html` <paper-item>${item}</paper-item> `)}
+                ${Object.values(OptionsSource).map(
+                  item => html` <paper-item>${item}</paper-item> `
+                )}
               </paper-listbox>
             </paper-dropdown-menu>
 
@@ -171,12 +164,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
               .configValue=${'sound_mode'}
               @value-changed=${this.valueChanged}
               class="dropdown"
-              >
+            >
               <paper-listbox
                 slot="dropdown-content"
-                .selected=${(Object.values(OptionsSoundMode).indexOf(this._config.sound_mode))}
+                .selected=${Object.values(OptionsSoundMode).indexOf(
+                  this._config.sound_mode
+                )}
               >
-                ${(Object.values(OptionsSoundMode)).map(item => html` <paper-item>${item}</paper-item> `)}
+                ${Object.values(OptionsSoundMode).map(
+                  item => html` <paper-item>${item}</paper-item> `
+                )}
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
@@ -187,12 +184,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
               .configValue=${'info'}
               @value-changed=${this.valueChanged}
               class="dropdown"
-              >
+            >
               <paper-listbox
                 slot="dropdown-content"
-                .selected=${(Object.values(OptionsInfo).indexOf(this._config.info))}
+                .selected=${Object.values(OptionsInfo).indexOf(
+                  this._config.info
+                )}
               >
-                ${(Object.values(OptionsInfo)).map(item => html` <paper-item>${item}</paper-item> `)}
+                ${Object.values(OptionsInfo).map(
+                  item => html` <paper-item>${item}</paper-item> `
+                )}
               </paper-listbox>
             </paper-dropdown-menu>
 
@@ -201,12 +202,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
               .configValue=${'replace_mute'}
               @value-changed=${this.valueChanged}
               class="dropdown"
-              >
+            >
               <paper-listbox
                 slot="dropdown-content"
-                .selected=${(Object.values(OptionsReplaceMute).indexOf(this._config.replace_mute))}
+                .selected=${Object.values(OptionsReplaceMute).indexOf(
+                  this._config.replace_mute
+                )}
               >
-                ${(Object.values(OptionsReplaceMute)).map(item => html` <paper-item>${item}</paper-item> `)}
+                ${Object.values(OptionsReplaceMute).map(
+                  item => html` <paper-item>${item}</paper-item> `
+                )}
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
@@ -258,9 +263,10 @@ export default class MiniMediaPlayerEditor extends LitElement {
           </div>
 
           <div>
-            Settings for Tap actions, TTS, hiding UI elements, idle view, speaker groups and shortcuts can only be configured in the code editor
+            Settings for Tap actions, TTS, hiding UI elements, idle view,
+            speaker groups and shortcuts can only be configured in the code
+            editor
           </div>
-
         </div>
       </div>
     `;
@@ -280,7 +286,8 @@ export default class MiniMediaPlayerEditor extends LitElement {
       } else {
         this._config = {
           ...this._config,
-          [target.configValue]: target.checked !== undefined ? target.checked : target.value,
+          [target.configValue]:
+            target.checked !== undefined ? target.checked : target.value,
         };
       }
     }

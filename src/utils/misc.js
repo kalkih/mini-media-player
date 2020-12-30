@@ -1,8 +1,9 @@
-const arrayBufferToBase64 = (buffer) => {
+const arrayBufferToBase64 = buffer => {
   let binary = '';
   const bytes = [].slice.call(new Uint8Array(buffer));
 
-  bytes.forEach(b => binary += String.fromCharCode(b));
+  // eslint-disable-next-line no-return-assign
+  bytes.forEach(b => (binary += String.fromCharCode(b)));
 
   return window.btoa(binary);
 };

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div id="demo"></div>
+
+  <script type="module">
+    import { html, render } from 'lit-html';
+    import '../mini-media-player.js';
+
+    const config = {
+      type: "custom:mini-media-player",
+      entity: "media_player.example"
+    }
+    const hass = {
+      states: {
+        "media_player.example": {
+          state: "playing",
+          attributes: {
+            volume_level: 0.4000000059604645,
+            is_volume_muted: false,
+            media_content_id: "https://www.home-assistant.io/images/cast/splash.png",
+            media_position: 0,
+            media_position_updated_at: "2020-12-27T20:09:20.780895+00:00",
+            app_id: "CC1AD845",
+            app_name: "Default Media Receiver",
+            entity_picture_local: null,
+            friendly_name: "Example player",
+            supported_features: 152463,
+          }
+        }
+      }
+    }
+    render(
+      html`
+        <mini-media-player ._config=${config} .hass=${hass}></mini-media-player>
+      `,
+      document.querySelector('#demo')
+    );
+    // document.querySelector('mini-media-player').setConfig(config)
+  </script>
+</body>
+</html>

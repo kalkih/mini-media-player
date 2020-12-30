@@ -1,7 +1,7 @@
-import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM } from './const';
-import arrayBufferToBase64 from './utils/misc';
+import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM } from '../consts.js';
+import arrayBufferToBase64 from '../utils/misc.js';
 
-export default class MediaPlayerObject {
+export default class MediaPlayer {
   constructor(hass, config, entity) {
     this.hass = hass || {};
     this.config = config || {};
@@ -45,9 +45,7 @@ export default class MediaPlayerObject {
   }
 
   get isActive() {
-    return (!this.isOff
-      && !this.isUnavailable
-      && !this.idle) || false;
+    return (!this.isOff && !this.isUnavailable && !this.idle) || false;
   }
 
   get shuffle() {
@@ -132,10 +130,12 @@ export default class MediaPlayerObject {
   }
 
   get hasArtwork() {
-    return (this.picture
-      && this.config.artwork !== 'none'
-      && this.active
-      && !this.idle);
+    return (
+      this.picture &&
+      this.config.artwork !== 'none' &&
+      this.active &&
+      !this.idle
+    );
   }
 
   get mediaInfo() {
@@ -147,36 +147,41 @@ export default class MediaPlayerObject {
   }
 
   get hasProgress() {
-    return !this.config.hide.progress
-      && !this.idle
-      && PROGRESS_PROPS.every(prop => prop in this.attr);
+    return (
+      !this.config.hide.progress &&
+      !this.idle &&
+      PROGRESS_PROPS.every(prop => prop in this.attr)
+    );
   }
 
   get progress() {
-    return this.position + (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0;
+    return (
+      this.position + (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0
+    );
   }
 
   get idleView() {
     const idle = this.config.idle_view;
-    if (idle.when_idle && this.isIdle
-      || idle.when_standby && this.isStandby
-      || idle.when_paused && this.isPaused)
+    if (
+      (idle.when_idle && this.isIdle) ||
+      (idle.when_standby && this.isStandby) ||
+      (idle.when_paused && this.isPaused)
+    )
       return true;
 
     // TODO: remove?
-    if (!this.updatedAt || !idle.after || this.isPlaying)
-      return false;
+    if (!this.updatedAt || !idle.after || this.isPlaying) return false;
 
     return this.checkIdleAfter(idle.after);
   }
 
   get trackIdle() {
     return (
-      this.active
-      && !this.isPlaying
-      && this.updatedAt
-      && this.config.idle_view
-      && this.config.idle_view.after
+      this.active &&
+      !this.isPlaying &&
+      this.updatedAt &&
+      this.config.idle_view &&
+      this.config.idle_view.after
     );
   }
 
@@ -204,7 +209,9 @@ export default class MediaPlayerObject {
   }
 
   async fetchArtwork() {
-    const url = this.attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture;
+    const url = this.attr.entity_picture_local
+      ? this.hass.hassUrl(this.picture)
+      : this.picture;
 
     try {
       const res = await fetch(new Request(url));
@@ -222,17 +229,14 @@ export default class MediaPlayerObject {
   }
 
   toggle(e) {
-    if (this.config.toggle_power)
-      return this.callService(e, 'toggle');
-    if (this.isOff)
-      return this.callService(e, 'turn_on');
-    else
-      this.callService(e, 'turn_off');
+    if (this.config.toggle_power) this.callService(e, 'toggle');
+    else if (this.isOff) this.callService(e, 'turn_on');
+    else this.callService(e, 'turn_off');
   }
 
   toggleMute(e) {
     if (this.config.speaker_group.sync_volume) {
-      this.group.forEach((entity) => {
+      this.group.forEach(entity => {
         this.callService(e, 'volume_mute', {
           entity_id: entity,
           is_volume_muted: !this.muted,
@@ -260,10 +264,8 @@ export default class MediaPlayerObject {
   }
 
   playStop(e) {
-    if (!this.isPlaying)
-      this.callService(e, 'media_play');
-    else
-      this.callService(e, 'media_stop');
+    if (!this.isPlaying) this.callService(e, 'media_play');
+    else this.callService(e, 'media_stop');
   }
 
   setSoundMode(e, name) {
@@ -306,12 +308,14 @@ export default class MediaPlayerObject {
 
   setVolume(e, vol) {
     if (this.config.speaker_group.sync_volume) {
-      this.group.forEach((entity) => {
-        const conf = this.config.speaker_group.entities.find(entry => (entry.entity_id === entity))
-          || {};
+      this.group.forEach(entity => {
+        const conf =
+          this.config.speaker_group.entities.find(
+            entry => entry.entity_id === entity
+          ) || {};
         let offsetVol = vol;
         if (conf.volume_offset) {
-          offsetVol += (conf.volume_offset / 100);
+          offsetVol += conf.volume_offset / 100;
           if (offsetVol > 1) offsetVol = 1;
           if (offsetVol < 0) offsetVol = 0;
         }
@@ -335,12 +339,21 @@ export default class MediaPlayerObject {
       options.master = this.config.entity;
       switch (platform) {
         case PLATFORM.SOUNDTOUCH:
-          return this.handleSoundtouch(e, this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE', entity);
+          return this.handleSoundtouch(
+            e,
+            this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE',
+            entity
+          );
         case PLATFORM.SQUEEZEBOX:
-          return this.callService(e, 'sync', {
-            entity_id: this.config.entity,
-            other_player: entity,
-          }, PLATFORM.SQUEEZEBOX);
+          return this.callService(
+            e,
+            'sync',
+            {
+              entity_id: this.config.entity,
+              other_player: entity,
+            },
+            PLATFORM.SQUEEZEBOX
+          );
         default:
           return this.callService(e, 'join', options, platform);
       }
@@ -357,16 +370,27 @@ export default class MediaPlayerObject {
   }
 
   handleSoundtouch(e, service, entity) {
-    return this.callService(e, service, {
-      master: this.master,
-      slaves: entity,
-    }, PLATFORM.SOUNDTOUCH, true);
+    return this.callService(
+      e,
+      service,
+      {
+        master: this.master,
+        slaves: entity,
+      },
+      PLATFORM.SOUNDTOUCH,
+      true
+    );
   }
 
   toggleScript(e, id, data = {}) {
-    this.callService(e, id.split('.').pop(), {
-      ...data,
-    }, 'script');
+    this.callService(
+      e,
+      id.split('.').pop(),
+      {
+        ...data,
+      },
+      'script'
+    );
   }
 
   toggleService(e, id, data = {}) {

@@ -1,7 +1,8 @@
+/* eslint-disable lit-a11y/click-events-have-key-events */
 import { LitElement, html, css } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 
-import convertProgress from '../utils/getProgress';
+import convertProgress from '../utils/getProgress.js';
 
 class MiniMediaPlayerProgress extends LitElement {
   static get properties() {
@@ -53,23 +54,31 @@ class MiniMediaPlayerProgress extends LitElement {
 
   render() {
     return html`
-      <div class='mmp-progress'
+      <div
+        class="mmp-progress"
         @touchstart=${this.initSeek}
         @touchend=${this.handleSeek}
         @mousedown=${this.initSeek}
         @mouseup=${this.handleSeek}
         @mouseleave=${this.resetSeek}
         @click=${e => e.stopPropagation()}
-        ?paused=${!this.player.isPlaying}>
-        ${this.showTime ? html`
-          <div class='mmp-progress__duration'>
-            <span>${(convertProgress(this.seekProgress || this.progress))}</span>
-            <span>${(convertProgress(this.duration))}</span>
-          </div>
-        ` : ''}
-        <paper-progress class=${this.classes}
+        ?paused=${!this.player.isPlaying}
+      >
+        ${this.showTime
+          ? html`
+              <div class="mmp-progress__duration">
+                <span
+                  >${convertProgress(this.seekProgress || this.progress)}</span
+                >
+                <span>${convertProgress(this.duration)}</span>
+              </div>
+            `
+          : ''}
+        <paper-progress
+          class=${this.classes}
           value=${this.seekProgress || this.progress}
-          max=${this.duration}>
+          max=${this.duration}
+        >
         </paper-progress>
       </div>
     `;
@@ -86,7 +95,7 @@ class MiniMediaPlayerProgress extends LitElement {
   }
 
   initSeek(e) {
-    const x = e.offsetX || (e.touches[0].pageX - this.offset);
+    const x = e.offsetX || e.touches[0].pageX - this.offset;
     this.seekWidth = this.width;
     this.seekProgress = this.calcProgress(x);
     this.addEventListener('touchmove', this.moveSeek);
@@ -101,13 +110,13 @@ class MiniMediaPlayerProgress extends LitElement {
 
   moveSeek(e) {
     e.preventDefault();
-    const x = e.offsetX || (e.touches[0].pageX - this.offset);
+    const x = e.offsetX || e.touches[0].pageX - this.offset;
     this.seekProgress = this.calcProgress(x);
   }
 
   handleSeek(e) {
     this.resetSeek();
-    const x = e.offsetX || (e.changedTouches[0].pageX - this.offset);
+    const x = e.offsetX || e.changedTouches[0].pageX - this.offset;
     const pos = this.calcProgress(x);
     this.player.seek(e, pos);
   }
@@ -135,7 +144,9 @@ class MiniMediaPlayerProgress extends LitElement {
     return css`
       .mmp-progress {
         cursor: pointer;
-        left: 0; right: 0; bottom: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         position: absolute;
         pointer-events: auto;
         min-height: calc(var(--mmp-progress-height) + 10px);
@@ -147,9 +158,9 @@ class MiniMediaPlayerProgress extends LitElement {
         position: absolute;
         display: flex;
         justify-content: space-between;
-        font-size: .8em;
+        font-size: 0.8em;
         padding: 0 6px;
-        z-index: 2
+        z-index: 2;
       }
       paper-progress {
         height: var(--mmp-progress-height);
@@ -160,18 +171,21 @@ class MiniMediaPlayerProgress extends LitElement {
         transition: height 0;
         z-index: 1;
         --paper-progress-active-color: var(--mmp-accent-color);
-        --paper-progress-container-color: rgba(100,100,100,.15);
+        --paper-progress-container-color: rgba(100, 100, 100, 0.15);
         --paper-progress-transition-duration: 1s;
         --paper-progress-transition-timing-function: linear;
         --paper-progress-transition-delay: 0s;
       }
       paper-progress.seeking {
-        transition: height .15s ease-out;
+        transition: height 0.15s ease-out;
         height: calc(var(--mmp-progress-height) + 4px);
         --paper-progress-height: calc(var(--mmp-progress-height) + 4px);
       }
       .mmp-progress[paused] paper-progress {
-        --paper-progress-active-color: var(--disabled-text-color, rgba(150,150,150,.5));
+        --paper-progress-active-color: var(
+          --disabled-text-color,
+          rgba(150, 150, 150, 0.5)
+        );
       }
     `;
   }

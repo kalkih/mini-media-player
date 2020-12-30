@@ -1,14 +1,11 @@
-import {
-  DEFAULT_HIDE,
-  LABEL_SHORTCUT,
-} from '../const';
+import { DEFAULT_HIDE, LABEL_SHORTCUT } from '../consts.js';
 
-const validate = (config) => {
+const validate = config => {
   if (!config.entity || config.entity.split('.')[0] !== 'media_player')
     throw new Error('Specify an entity from within the media_player domain.');
 };
 
-export const generateConfig = (config) => {
+export const generateConfig = config => {
   validate(config);
 
   const conf = {
@@ -39,9 +36,9 @@ export const generateConfig = (config) => {
   };
   conf.max_volume = Number(conf.max_volume) || 100;
   conf.min_volume = Number(conf.min_volume) || 0;
-  conf.collapse = (conf.hide.controls || conf.hide.volume);
+  conf.collapse = conf.hide.controls || conf.hide.volume;
   conf.info = conf.collapse && conf.info !== 'scroll' ? 'short' : conf.info;
-  conf.flow = (conf.hide.icon && conf.hide.name && conf.hide.info);
+  conf.flow = conf.hide.icon && conf.hide.name && conf.hide.info;
 
   return conf;
 };

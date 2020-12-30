@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 
-import { ICON } from '../const';
-import sharedStyle from '../sharedStyle';
+import { ICON } from '../consts.js';
+import sharedStyle from '../styles/shared.js';
 
 class MiniMediaPlayerMediaControls extends LitElement {
   static get properties() {
@@ -33,31 +33,43 @@ class MiniMediaPlayerMediaControls extends LitElement {
     const { hide } = this.config;
     return html`
       ${!hide.volume ? this.renderVolControls(this.player.muted) : html``}
-      ${this.showShuffle ? html`
-        <div class='flex mmp-media-controls__shuffle'>
-          <ha-icon-button
-            class='shuffle-button'
-            @click=${e => this.player.toggleShuffle(e)}
-            .icon=${ICON.SHUFFLE}
-            ?color=${this.player.shuffle}>
-          </ha-icon-button>
-        </div>
-      ` : html``}
-      ${!hide.controls ? html`
-        <div class='flex mmp-media-controls__media' ?flow=${this.config.flow || this.break}>
-          ${!hide.prev ? html`
-            <ha-icon-button
-              @click=${e => this.player.prev(e)}
-              .icon=${ICON.PREV}>
-            </ha-icon-button>` : ''}
-          ${this.renderPlayButtons()}
-          ${!hide.next ? html`
-            <ha-icon-button
-              @click=${e => this.player.next(e)}
-              .icon=${ICON.NEXT}>
-            </ha-icon-button>` : ''}
-        </div>
-      ` : html``}
+      ${this.showShuffle
+        ? html`
+            <div class="flex mmp-media-controls__shuffle">
+              <ha-icon-button
+                class="shuffle-button"
+                @click=${e => this.player.toggleShuffle(e)}
+                .icon=${ICON.SHUFFLE}
+                ?color=${this.player.shuffle}
+              >
+              </ha-icon-button>
+            </div>
+          `
+        : html``}
+      ${!hide.controls
+        ? html`
+            <div
+              class="flex mmp-media-controls__media"
+              ?flow=${this.config.flow || this.break}
+            >
+              ${!hide.prev
+                ? html` <ha-icon-button
+                    @click=${e => this.player.prev(e)}
+                    .icon=${ICON.PREV}
+                  >
+                  </ha-icon-button>`
+                : ''}
+              ${this.renderPlayButtons()}
+              ${!hide.next
+                ? html` <ha-icon-button
+                    @click=${e => this.player.next(e)}
+                    .icon=${ICON.NEXT}
+                  >
+                  </ha-icon-button>`
+                : ''}
+            </div>
+          `
+        : html``}
     `;
   }
 
@@ -73,11 +85,9 @@ class MiniMediaPlayerMediaControls extends LitElement {
     });
 
     const showVolumeLevel = !this.config.hide.volume_level;
-    return html`
-      <div class=${classes}>
-        ${volumeControls}
-        ${showVolumeLevel ? this.renderVolLevel() : ''}
-      </div>`;
+    return html` <div class=${classes}>
+      ${volumeControls} ${showVolumeLevel ? this.renderVolLevel() : ''}
+    </div>`;
   }
 
   renderVolSlider(muted) {
@@ -87,11 +97,14 @@ class MiniMediaPlayerMediaControls extends LitElement {
         @change=${this.handleVolumeChange}
         @click=${e => e.stopPropagation()}
         ?disabled=${muted}
-        min=${this.minVol} max=${this.maxVol}
+        min=${this.minVol}
+        max=${this.maxVol}
         value=${this.player.vol * 100}
         step=${this.config.volume_step || 1}
-        dir=${'ltr'}
-        ignore-bar-touch pin>
+        dir="ltr"
+        ignore-bar-touch
+        pin
+      >
       </ha-slider>
     `;
   }
@@ -101,11 +114,13 @@ class MiniMediaPlayerMediaControls extends LitElement {
       ${this.renderMuteButton(muted)}
       <ha-icon-button
         @click=${e => this.player.volumeDown(e)}
-        .icon=${ICON.VOL_DOWN}>
+        .icon=${ICON.VOL_DOWN}
+      >
       </ha-icon-button>
       <ha-icon-button
         @click=${e => this.player.volumeUp(e)}
-        .icon=${ICON.VOL_UP}>
+        .icon=${ICON.VOL_UP}
+      >
       </ha-icon-button>
     `;
   }
@@ -117,43 +132,45 @@ class MiniMediaPlayerMediaControls extends LitElement {
   }
 
   renderMuteButton(muted) {
-    if (this.config.hide.mute) return;
+    if (this.config.hide.mute) return html``;
     switch (this.config.replace_mute) {
       case 'play':
       case 'play_pause':
         return html`
           <ha-icon-button
             @click=${e => this.player.playPause(e)}
-            .icon=${ICON.PLAY[this.player.isPlaying]}>
+            .icon=${ICON.PLAY[this.player.isPlaying]}
+          >
           </ha-icon-button>
         `;
       case 'stop':
         return html`
           <ha-icon-button
             @click=${e => this.player.stop(e)}
-            .icon=${ICON.STOP.true}>
+            .icon=${ICON.STOP.true}
+          >
           </ha-icon-button>
         `;
       case 'play_stop':
         return html`
           <ha-icon-button
             @click=${e => this.player.playStop(e)}
-            .icon=${ICON.STOP[this.player.isPlaying]}>
+            .icon=${ICON.STOP[this.player.isPlaying]}
+          >
           </ha-icon-button>
         `;
       case 'next':
         return html`
-          <ha-icon-button
-            @click=${e => this.player.next(e)}
-            .icon=${ICON.NEXT}>
+          <ha-icon-button @click=${e => this.player.next(e)} .icon=${ICON.NEXT}>
           </ha-icon-button>
         `;
       default:
-        if (!this.player.supportsMute) return;
+        if (!this.player.supportsMute) return html``;
         return html`
           <ha-icon-button
             @click=${e => this.player.toggleMute(e)}
-            .icon=${ICON.MUTE[muted]}>
+            .icon=${ICON.MUTE[muted]}
+          >
           </ha-icon-button>
         `;
     }
@@ -162,23 +179,33 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderPlayButtons() {
     const { hide } = this.config;
     return html`
-      ${!hide.play_pause ? html`
-        <ha-icon-button
-          @click=${e => this.player.playPause(e)}
-          .icon=${ICON.PLAY[this.player.isPlaying]}>
-        </ha-icon-button>
-      ` : html``}
-      ${!hide.play_stop ? html`
-        <ha-icon-button
-          @click=${e => this.handleStop(e)}
-          .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}>
-        </ha-icon-button>
-      ` : html``}
+      ${!hide.play_pause
+        ? html`
+            <ha-icon-button
+              @click=${e => this.player.playPause(e)}
+              .icon=${ICON.PLAY[this.player.isPlaying]}
+            >
+            </ha-icon-button>
+          `
+        : html``}
+      ${!hide.play_stop
+        ? html`
+            <ha-icon-button
+              @click=${e => this.handleStop(e)}
+              .icon=${hide.play_pause
+                ? ICON.STOP[this.player.isPlaying]
+                : ICON.STOP.true}
+            >
+            </ha-icon-button>
+          `
+        : html``}
     `;
   }
 
   handleStop(e) {
-    return this.config.hide.play_pause ? this.player.playStop(e) : this.player.stop(e);
+    return this.config.hide.play_pause
+      ? this.player.playStop(e)
+      : this.player.stop(e);
   }
 
   handleVolumeChange(ev) {

@@ -1,9 +1,9 @@
 import { LitElement, html, css } from 'lit-element';
 
-import { ICON } from '../const';
+import { ICON } from '../consts.js';
 
-import sharedStyle from '../sharedStyle';
-import './button';
+import sharedStyle from '../styles/shared.js';
+import './button.js';
 
 class MiniMediaPlayerDropdown extends LitElement {
   static get properties() {
@@ -21,9 +21,11 @@ class MiniMediaPlayerDropdown extends LitElement {
   onChange(e) {
     const id = e.target.selected;
     if (id !== this.selectedId && this.items[id]) {
-      this.dispatchEvent(new CustomEvent('change', {
-        detail: this.items[id],
-      }));
+      this.dispatchEvent(
+        new CustomEvent('change', {
+          detail: this.items[id],
+        })
+      );
       e.target.selected = -1;
     }
   }
@@ -31,34 +33,51 @@ class MiniMediaPlayerDropdown extends LitElement {
   render() {
     return html`
       <paper-menu-button
-        class='mmp-dropdown'
-        noink no-animations
-        .horizontalAlign=${'right'}
-        .verticalAlign=${'top'}
-        .verticalOffset=${44}
-        @click=${e => e.stopPropagation()}>
-        ${this.icon ? html`
-          <ha-icon-button
-            class='mmp-dropdown__button icon'
-            slot='dropdown-trigger'
-            .icon=${ICON.DROPDOWN}>
-          </ha-icon-button>
-        ` : html`
-          <mmp-button class='mmp-dropdown__button' slot='dropdown-trigger'>
-            <div>
-              <span class='mmp-dropdown__label ellipsis'>
-                ${this.selected || this.label}
-              </span>
-              <ha-icon class='mmp-dropdown__icon' .icon=${ICON.DROPDOWN}></ha-icon>
-            </div>
-          </mmp-button>
-        `}
-        <paper-listbox slot="dropdown-content" .selected=${this.selectedId} @iron-select=${this.onChange}>
-          ${this.items.map(item => html`
-            <paper-item value=${item.id || item.name}>
+        class="mmp-dropdown"
+        noink
+        no-animations
+        horizontalAlign="right"
+        verticalAlign="top"
+        verticalOffset="44"
+        @click=${e => e.stopPropagation()}
+      >
+        ${this.icon
+          ? html`
+              <ha-icon-button
+                class="mmp-dropdown__button icon"
+                slot="dropdown-trigger"
+                .icon=${ICON.DROPDOWN}
+              >
+              </ha-icon-button>
+            `
+          : html`
+              <mmp-button class="mmp-dropdown__button" slot="dropdown-trigger">
+                <div>
+                  <span class="mmp-dropdown__label ellipsis">
+                    ${this.selected || this.label}
+                  </span>
+                  <ha-icon
+                    class="mmp-dropdown__icon"
+                    .icon=${ICON.DROPDOWN}
+                  ></ha-icon>
+                </div>
+              </mmp-button>
+            `}
+        <paper-listbox
+          slot="dropdown-content"
+          .selected=${this.selectedId}
+          @iron-select=${this.onChange}
+        >
+          ${this.items.map(
+            item => html` <paper-item value=${item.id || item.name}>
               ${item.icon ? html`<ha-icon .icon=${item.icon}></ha-icon>` : ''}
-              ${item.name ? html`<span class='mmp-dropdown__item__label'>${item.name}</span>` : ''}
-            </paper-item>`)}
+              ${item.name
+                ? html`<span class="mmp-dropdown__item__label"
+                    >${item.name}</span
+                  >`
+                : ''}
+            </paper-item>`
+          )}
         </paper-listbox>
       </paper-menu-button>
     `;
@@ -72,7 +91,7 @@ class MiniMediaPlayerDropdown extends LitElement {
           display: block;
         }
         :host([faded]) {
-          opacity: .75;
+          opacity: 0.75;
         }
         :host[small] .mmp-dropdown__label {
           max-width: 60px;
@@ -114,8 +133,8 @@ class MiniMediaPlayerDropdown extends LitElement {
         }
         .mmp-dropdown__icon {
           height: auto;
-          width: calc(var(--mmp-unit) * .6);
-          min-width: calc(var(--mmp-unit) * .6);
+          width: calc(var(--mmp-unit) * 0.6);
+          min-width: calc(var(--mmp-unit) * 0.6);
         }
         paper-item > *:nth-child(2) {
           margin-left: 4px;

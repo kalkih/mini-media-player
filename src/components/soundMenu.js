@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
-import './dropdown';
+import './dropdown.js';
 
 class MiniMediaPlayerSoundMenu extends LitElement {
   static get properties() {
