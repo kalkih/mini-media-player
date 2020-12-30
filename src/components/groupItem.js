@@ -17,8 +17,8 @@ class MiniMediaPlayerGroupItem extends LitElement {
   render() {
     return html`
       <mmp-checkbox
-        ?checked=${this.checked}
-        ?disabled=${this.disabled}
+        .checked=${this.checked}
+        .disabled=${this.disabled}
         @change='${e => e.stopPropagation()}'
         @click='${this.handleClick}'>
         <span>
@@ -31,6 +31,7 @@ class MiniMediaPlayerGroupItem extends LitElement {
 
   handleClick(ev) {
     ev.stopPropagation();
+    if (this.disabled) return;
     this.dispatchEvent(new CustomEvent('change', {
       detail: {
         entity: this.item.entity_id,
