@@ -145,6 +145,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 | expanded | boolean | optional | Make the speaker group list expanded by default.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
 | icon | string | optional | Override default group button icon *(any mdi icon)*.
+| group_mgmt_entity | string | optional | Override the player entity for the group management (Useful if you use a universal media_player as your entity but still want to use the grouping feature)
 
 <a name="speaker_foot1"><sup>1</sup></a> Requires [custom component](https://github.com/ppanagiotis/pymusiccast), available in HACS.
 
@@ -307,7 +308,7 @@ You can specify media shortcuts through the `shortcuts` option, either as a list
         data:
           entity_id: media_player.googlehome1234
           uri: spotify:playlist:37i9dQZF1DX9XiAcF7t1s5
-          
+
       ... # etc.
 ```
 **Tip**:
