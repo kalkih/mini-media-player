@@ -47,6 +47,7 @@ class MiniMediaPlayer extends LitElement {
       config: {},
       entity: {},
       player: {},
+      groupMgmtEntity: {},
       groupMgmtPlayer: MediaPlayerObject,
       _overflow: Boolean,
       break: Boolean,
@@ -83,7 +84,10 @@ class MiniMediaPlayer extends LitElement {
     }
     if (this.config && this.config.speaker_group && this.config.speaker_group.group_mgmt_entity) {
       const altPlayer = hass.states[this.config.speaker_group.group_mgmt_entity];
-      this.groupMgmtPlayer = new MediaPlayerObject(hass, this.config, altPlayer);
+      if (altPlayer && this.groupMgmtPlayer !== altPlayer) {
+        this.groupMgmtEntity = altPlayer;
+        this.groupMgmtPlayer = new MediaPlayerObject(hass, this.config, altPlayer);
+      }
     }
   }
 
