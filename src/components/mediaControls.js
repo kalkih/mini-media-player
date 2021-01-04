@@ -45,13 +45,13 @@ class MiniMediaPlayerMediaControls extends LitElement {
       ` : html``}
       ${!hide.controls ? html`
         <div class='flex mmp-media-controls__media' ?flow=${this.config.flow || this.break}>
-          ${!hide.prev ? html`
+          ${!hide.prev && this.player.supportsPrev ? html`
             <ha-icon-button
               @click=${e => this.player.prev(e)}
               .icon=${ICON.PREV}>
             </ha-icon-button>` : ''}
           ${this.renderPlayButtons()}
-          ${!hide.next ? html`
+          ${!hide.next && this.player.supportsNext ? html`
             <ha-icon-button
               @click=${e => this.player.next(e)}
               .icon=${ICON.NEXT}>

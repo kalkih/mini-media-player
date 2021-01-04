@@ -153,6 +153,16 @@ export default class MediaPlayerObject {
       && PROGRESS_PROPS.every(prop => prop in this.attr);
   }
 
+  get supportsPrev() {
+    return (this.attr.supported_features | 16) // eslint-disable-line no-bitwise
+      === this.attr.supported_features;
+  }
+
+  get supportsNext() {
+    return (this.attr.supported_features | 32) // eslint-disable-line no-bitwise
+      === this.attr.supported_features;
+  }
+
   get progress() {
     return this.position + (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0;
   }
