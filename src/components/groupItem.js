@@ -32,6 +32,7 @@ class MiniMediaPlayerGroupItem extends LitElement {
 
   handleClick(ev) {
     ev.stopPropagation();
+    ev.preventDefault();
     if (this.disabled) return;
     this.dispatchEvent(new CustomEvent('change', {
       detail: {
