@@ -7,7 +7,7 @@ A minimalistic yet customizable media player card for [Home Assistant](https://g
 ## Features
 * Minimalistic & compact design
 * Custom shortcuts (scripts, services, play media e.g.)
-* Sonos speaker group management
+* Multiroom management (Sonos, Soundtouch, Squeezebox, Bluesound, Musiccast, Linkplay)
 * Highly customizable, hide/display specific items
 * Playback & volume controls
 * Seek through playback
@@ -20,6 +20,7 @@ A minimalistic yet customizable media player card for [Home Assistant](https://g
 * Custom background
 * Theme variables
 * Responsive design
+* Multiple artwork styles
 * more...
 
 

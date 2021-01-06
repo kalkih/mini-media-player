@@ -1,3 +1,25 @@
+## v1.12.0
+### NEW
+- Added card to the Lovelace card picker (#436) @dcs8
+- Added card editor UI (#442) @dcs8
+- Added option to hide state labels
+- Added option to override entity for group management (#458) @RomRider
+- Hide next and prev buttons by default on unsupported entities (#433) @dmamontov
+
+### FIXED
+- Fixed missing speaker group checkboxes #418 (#464) @mcguiresean @RomRider
+- Broken scale option #415
+- Fix artwork fallback (#449) @CarsonF
+
+### TRANSLATIONS
+- Added Norwegian translations (#411) @kristomi
+- Added CZ translation (#434) @KubaDee
+
+### DOCUMENTATION
+- Add mention for Nabu Casa, which seems to work (#456) @mrand
+- Clarify docs regarding spotify playlist shortcut #441 (#461) @BenFR23
+
+
 ## v1.11.0
 ### NEW
 - Ability to display volume level percentage #289 (#406)
