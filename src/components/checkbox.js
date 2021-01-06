@@ -15,7 +15,7 @@ class MiniMediaPlayerCheckbox extends LitElement {
         .checked=${this.checked}
         ?disabled=${this.disabled}>
       </ha-switch>
-      <span>
+      <span ?disabled=${this.disabled}>
         <slot>
           ${this.label}
         </slot>
@@ -32,7 +32,10 @@ class MiniMediaPlayerCheckbox extends LitElement {
       }
       span {
         margin-left: 1em;
-        font-weight: 500;
+        font-weight: 400;
+      }
+      span[disabled] {
+        opacity: .65;
       }
     `;
   }
