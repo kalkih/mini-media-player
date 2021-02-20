@@ -134,7 +134,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 - squeezebox<sup>[2](#speaker_foot2)</sup>
 - bluesound<sup>[2](#speaker_foot2)</sup>
 - snapcast<sup>[2](#speaker_foot2)</sup>
-- yamaha_musiccast<sup>[1](#speaker_foot1)</sup>
+- musiccast_yamaha<sup>[1](#speaker_foot1)</sup>
 - linkplay<sup>[3](#speaker_foot3)</sup>
 
 | Name | Type | Default | Description |
