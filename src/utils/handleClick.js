@@ -32,6 +32,13 @@ export default (node, hass, config, actionConfig, entityId) => {
       } else {
         window.location.href = actionConfig.url;
       }
+      break;
+    }
+    case 'fire-dom-event': {
+      e = new Event('ll-custom', { composed: true, bubbles: true });
+      e.detail = actionConfig;
+      node.dispatchEvent(e);
+      break;
     }
   }
 };
