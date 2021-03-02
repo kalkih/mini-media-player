@@ -20,6 +20,25 @@ const translations = {
       speaker_management: 'Group management',
     },
   },
+  de: {
+    placeholder: {
+      tts: 'Text zum Sprechen',
+    },
+    label: {
+      leave: 'Verlassen',
+      ungroup: 'Teilen',
+      group_all: 'Gruppieren',
+      send: 'Senden',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Pause',
+      unavailable: 'Nicht verfügbar',
+    },
+    title: {
+      speaker_management: 'Wiedergabe auf',
+    },
+  },
   fr: {
     placeholder: {
       tts: 'Texte à lire',
