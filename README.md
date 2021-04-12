@@ -22,7 +22,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.12.0
+    - url: /local/mini-media-player-bundle.js?v=1.12.1
       type: module
   ```
 
@@ -33,14 +33,14 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.12.0/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.12.1/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.12.0
+    - url: /local/mini-media-player-bundle.js?v=1.12.1
       type: module
   ```
 
@@ -53,7 +53,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
   ```yaml
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.12.0
+    - url: /local/mini-media-player-bundle.js?v=1.12.1
       type: module
   ```
 
@@ -192,7 +192,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 #### Action object options
 | Name | Type | Default | Options | Description |
 |------|:----:|:-------:|:-----------:|-------------|
-| action | string | `more-info` | `more-info` / `navigate` / `call-service`  / `url` / `none` | Action to perform.
+| action | string | `more-info` | `more-info` / `navigate` / `call-service`  / `url` / `fire-dom-event` / `none` | Action to perform.
 | entity | string |  | Any entity id | Override default entity of `more-info`, when  `action` is defined as `more-info`.
 | service | string |  | Any service | Service to call (e.g. `media_player.toggle`) when `action` is defined as `call-service`.
 | service_data | object |  | Any service data | Service data to include with the service call (e.g. `entity_id: media_player.office`).

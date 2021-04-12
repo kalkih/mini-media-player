@@ -1,3 +1,17 @@
+## v1.12.1
+### NEW
+- Support for `fire-dom-event` #484 (#485) @RomRider
+
+### FIXED
+- Fixed missing speaker group checkboxes #418 (#464) @mcguiresean @RomRider
+- Changed name of multiroom integration yamaha_musiccast -> musiccast_yamaha (#476) @winterscar
+- Remove idle_view option from UI editor #468 (#502)
+- Fix missing player icon #467 (#503)
+
+### TRANSLATIONS
+-  Add German translations #482 (#487) @Ruud2702
+
+
 ## v1.12.0
 ### NEW
 - Added card to the Lovelace card picker (#436) @dcs8
