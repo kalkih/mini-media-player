@@ -235,12 +235,6 @@ export default class MiniMediaPlayerEditor extends LitElement {
           </div>
 
           <div class="side-by-side">
-            <paper-input
-              label="Idle View"
-              .value="${this._config.idle_view}"
-              .configValue="${'idle_view'}"
-              @value-changed=${this.valueChanged}
-            ></paper-input>
 
             <paper-input
               label="Background"
