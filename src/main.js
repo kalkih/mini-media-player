@@ -382,7 +382,9 @@ class MiniMediaPlayer extends LitElement {
   }
 
   computeIcon() {
-    return this.config.icon ? this.player.icon : ICON.DEFAULT;
+    return this.config.icon
+      ? this.config.icon : this.player.icon
+      || ICON.DEFAULT;
   }
 
   measureCard() {
