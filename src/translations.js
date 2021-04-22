@@ -151,6 +151,25 @@ const translations = {
       speaker_management: 'Správa skupin',
     },
   },
+  ru: {
+    placeholder: {
+      tts: 'Преобразование текста в речь',
+    },
+    label: {
+      leave: 'Покинуть',
+      ungroup: 'Разгруппировать',
+      group_all: 'Сгруппировать все',
+      send: 'Отправить',
+      master: 'Мастер',
+    },
+    state: {
+      idle: 'Бездействие',
+      unavailable: 'Недоступен',
+    },
+    title: {
+      speaker_management: 'Управление группой',
+    },
+  },
 };
 
 export default translations;
