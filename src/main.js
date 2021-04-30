@@ -258,10 +258,12 @@ class MiniMediaPlayer extends LitElement {
       backgroundImage: this.thumbnail,
       backgroundColor: this.backgroundColor || '',
       width: this.config.artwork === 'material' && this.player.isActive ? `${this.cardHeight}px` : '100%',
+      transform: this.config.artwork === 'youtube-music-cover' ? 'scale(1.777777777777778)' : 'none',
     };
     const artworkPrevStyle = {
       backgroundImage: this.prevThumbnail,
       width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
+      transform: this.config.artwork === 'youtube-music-cover' ? 'scale(1.777777777777778)' : 'none',
     };
 
     return html`
