@@ -164,7 +164,7 @@ export default class MediaPlayerObject {
   }
 
   get progress() {
-    return this.position + (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0;
+    return this.position + this.isPlaying ? (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0 : 0.0;
   }
 
   get idleView() {
