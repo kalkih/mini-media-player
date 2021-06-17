@@ -63,6 +63,7 @@ const PLATFORM = {
   SQUEEZEBOX: 'squeezebox',
   BLUESOUND: 'bluesound',
   SOUNDTOUCH: 'soundtouch',
+  MEDIAPLAYER: 'media_player',
 };
 
 const CONTRAST_RATIO = 4.5;
