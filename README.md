@@ -21,9 +21,10 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
-  resources:
-    - url: /local/mini-media-player-bundle.js?v=1.12.1
-      type: module
+  lovelace:
+    resources:
+      - url: /local/mini-media-player-bundle.js?v=1.12.1
+        type: module
   ```
 
 ### CLI install
@@ -39,9 +40,10 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
   ```yaml
-  resources:
-    - url: /local/mini-media-player-bundle.js?v=1.12.1
-      type: module
+  lovelace:
+    resources:
+      - url: /local/mini-media-player-bundle.js?v=1.12.1
+        type: module
   ```
 
 ## Updating
@@ -52,9 +54,10 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 3. Add the new version number to the end of the cards reference url in your `configuration.yaml` or through the Home Assistant.
 
   ```yaml
-  resources:
-    - url: /local/mini-media-player-bundle.js?v=1.12.1
-      type: module
+  lovelace:
+    resources:
+      - url: /local/mini-media-player-bundle.js?v=1.12.1
+        type: module
   ```
 
 *You may need to empty the browsers cache if you have problems loading the updated card.*
