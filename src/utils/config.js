@@ -29,6 +29,7 @@ export const generateConfig = (config) => {
     speaker_group: {
       show_group_count: true,
       platform: 'sonos',
+      supports_master: true,
       ...config.sonos,
       ...config.speaker_group,
     },

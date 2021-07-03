@@ -214,7 +214,7 @@ export default class MediaPlayerObject {
   }
 
   get supportsMaster() {
-    return this.platform !== PLATFORM.SQUEEZEBOX;
+    return this.platform !== PLATFORM.SQUEEZEBOX && this.config.speaker_group.supports_master;
   }
 
   async fetchArtwork() {
