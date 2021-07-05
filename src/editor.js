@@ -18,6 +18,7 @@ const OptionsArtwork = [
   'cover',
   'full-cover',
   'material',
+  'youtube-music-cover',
   'cover-fit',
   'none',
 ];
