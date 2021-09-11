@@ -1,0 +1,5 @@
+views:
+  - title: Main
+    cards:
+      - type: custom:mini-media-player
+        entity: media_player.example
