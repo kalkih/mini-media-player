@@ -150,7 +150,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 | show_group_count | boolean | true | Have the number of grouped speakers displayed (if any) in the card name.
 | icon | string | optional | Override default group button icon *(any mdi icon)*.
 | group_mgmt_entity | string | optional | Override the player entity for the group management (Useful if you use a universal media_player as your entity but still want to use the grouping feature)
-| support_master | boolean | optional | Set to false if your multiroom system does not define one of the media players as master. Defaults to `true` and has not to be set to false for `squeezebox` for backward compatibility.
+| supports_master | boolean | optional | Set to false if your multiroom system does not define one of the media players as master. Defaults to `true` and has not to be set to false for `squeezebox` for backward compatibility.
 
 <a name="speaker_foot1"><sup>1</sup></a> Requires [custom component](https://github.com/ppanagiotis/pymusiccast), available in HACS.
 
