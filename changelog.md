@@ -1,3 +1,18 @@
+## v1.13.0
+### NEW
+- Support for the new default media player grouping functionality (#525) #519 #528 @micha91   
+  This should allow support for all future multi-room integrations following the new standard
+- Added new speaker group configuration `support_master` (#525) @micha91
+
+### FIXED
+- Issue where player progress continued when paused (#521) #346 @BoOmka
+
+### TRANSLATIONS
+-  Add russian translations (#510)
+
+### DOCUMENTATION
+- Clarify which section of configuration.yaml to edit (#526) @ronnix
+
 ## v1.12.1
 ### NEW
 - Support for `fire-dom-event` #484 (#485) @RomRider
