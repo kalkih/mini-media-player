@@ -170,6 +170,25 @@ const translations = {
       speaker_management: 'Управление группой',
     },
   },
+  es: {
+    placeholder: {
+      tts: 'Texto a voz',
+    },
+    label: {
+      leave: 'Salir',
+      ungroup: 'Desagrupar',
+      group_all: 'Agrupar todos',
+      send: 'Enviar',
+      master: 'Maestro',
+    },
+    state: {
+      idle: 'Inactivo',
+      unavailable: 'No disponible',
+    },
+    title: {
+      speaker_management: 'Gestión de grupo',
+    },
+  },
 };
 
 export default translations;
