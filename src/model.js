@@ -322,6 +322,14 @@ export default class MediaPlayerObject {
     this.callService(e, 'media_seek', { seek_position: pos });
   }
 
+  jump(e, amount) {
+    const newPosition = this.progress + amount;
+    const clampedNewPosition = Math.min(
+      Math.max(newPosition, 0), this.mediaDuration || newPosition,
+    );
+    this.callService(e, 'media_seek', { seek_position: clampedNewPosition });
+  }
+
   setVolume(e, vol) {
     if (this.config.speaker_group.sync_volume) {
       this.group.forEach((entity) => {

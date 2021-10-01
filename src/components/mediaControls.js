@@ -29,6 +29,10 @@ class MiniMediaPlayerMediaControls extends LitElement {
     return Math.round(this.player.vol * 100);
   }
 
+  get jumpAmount() {
+    return this.config.jump_amount || 10;
+  }
+
   render() {
     const { hide } = this.config;
     return html`
@@ -50,7 +54,9 @@ class MiniMediaPlayerMediaControls extends LitElement {
               @click=${e => this.player.prev(e)}
               .icon=${ICON.PREV}>
             </ha-icon-button>` : ''}
+          ${this.renderJumpBackwardButton()}
           ${this.renderPlayButtons()}
+          ${this.renderJumpForwardButton()}
           ${!hide.next && this.player.supportsNext ? html`
             <ha-icon-button
               @click=${e => this.player.next(e)}
@@ -174,6 +180,28 @@ class MiniMediaPlayerMediaControls extends LitElement {
           .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}>
         </ha-icon-button>
       ` : html``}
+    `;
+  }
+
+  renderJumpForwardButton() {
+    const hidden = this.config.hide.jump;
+    if (hidden || !this.player.hasProgress) return html``;
+    return html`
+      <ha-icon-button
+        @click=${e => this.player.jump(e, this.jumpAmount)}
+        .icon=${ICON.FAST_FORWARD}>
+      </ha-icon-button>
+    `;
+  }
+
+  renderJumpBackwardButton() {
+    const hidden = this.config.hide.jump;
+    if (hidden || !this.player.hasProgress) return html``;
+    return html`
+      <ha-icon-button
+        @click=${e => this.player.jump(e, -this.jumpAmount)}
+        .icon=${ICON.REWIND}>
+      </ha-icon-button>
     `;
   }
 

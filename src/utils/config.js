@@ -37,6 +37,7 @@ export const generateConfig = (config) => {
       label: LABEL_SHORTCUT,
       ...config.shortcuts,
     },
+    jump_amount: 10,
   };
   conf.max_volume = Number(conf.max_volume) || 100;
   conf.min_volume = Number(conf.min_volume) || 0;

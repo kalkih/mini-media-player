@@ -86,6 +86,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | max_volume | number | optional | v0.8.2 | Specify the max vol limit of the volume slider (number between 1 - 100).
 | min_volume | number | optional | v1.1.2 | Specify the min vol limit of the volume slider (number between 1 - 100).
 | replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play_pause` (previously `play`), `stop`, `play_stop`, `next`.
+| jump_amount | number | 10 | v0.14.0 | Configure amount of seconds to skip/rewind for jump buttons.
 | toggle_power | boolean | true | v0.8.9 | Set to `false` to change the power button behaviour to `media_player.turn_on`/`media_player.turn_off`.
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
@@ -221,6 +222,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | next | boolean | false | The "next" playback control button.
 | play_pause | boolean | false | The play/pause button in media playback controls.
 | play_stop | boolean | true | The play/stop button in media playback controls.
+| jump | boolean | true | The jump backwards/forwards buttons (entity needs to support progress).
 | volume | boolean | false | The volume controls.
 | volume_level | boolean | true | The current volume level in percentage.
 | mute | boolean | false | The mute button.

@@ -12,6 +12,7 @@ const DEFAULT_HIDE = {
   play_stop: true,
   prev: false,
   next: false,
+  jump: true,
   state_label: false,
 };
 const ICON = {
@@ -38,6 +39,8 @@ const ICON = {
   },
   VOL_DOWN: 'mdi:volume-minus',
   VOL_UP: 'mdi:volume-plus',
+  FAST_FORWARD: 'mdi:fast-forward',
+  REWIND: 'mdi:rewind',
 };
 
 const UPDATE_PROPS = ['entity', 'groupMgmtEntity', '_overflow',
