@@ -225,7 +225,8 @@ class MiniMediaPlayer extends LitElement {
           ${this.player.active && this.player.hasProgress ? html`
             <mmp-progress
               .player=${this.player}
-              .showTime=${!this.config.hide.runtime}>
+              .showTime=${!this.config.hide.runtime}
+              .showRemainingTime=${!this.config.hide.runtime_remaining}>
             </mmp-progress>
           ` : ''}
         </div>
