@@ -12,7 +12,12 @@ class MiniMediaPlayerTts extends LitElement {
   }
 
   get label() {
-    return t(this.hass, 'placeholder.tts', 'ui.card.media_player.text_to_speak', 'Say');
+    return t(
+      this.hass,
+      'placeholder.tts',
+      'ui.card.media_player.text_to_speak',
+      'Say',
+    );
   }
 
   get input() {
@@ -25,12 +30,15 @@ class MiniMediaPlayerTts extends LitElement {
 
   render() {
     return html`
-      <paper-input id="tts-input" class='mmp-tts__input'
+      <paper-input
+        id="tts-input"
+        class="mmp-tts__input"
         no-label-float
-        placeholder=${this.label}...
-        @click=${e => e.stopPropagation()}>
+        placeholder="${this.label}..."
+        @click=${e => e.stopPropagation()}
+      >
       </paper-input>
-      <mmp-button class='mmp-tts__button' @click=${this.handleTts}>
+      <mmp-button class="mmp-tts__button" @click=${this.handleTts}>
         <span>${t(this.hass, 'label.send')}</span>
       </mmp-button>
     `;
@@ -42,12 +50,13 @@ class MiniMediaPlayerTts extends LitElement {
       message,
       entity_id: config.entity_id || this.player.id,
       ...(config.entity_id === 'group' && { entity_id: this.player.group }),
+      ...config.data,
     };
     if (config.language) opts.language = config.language;
     if (config.platform === 'alexa')
       this.hass.callService('notify', 'alexa_media', {
         message,
-        data: { type: config.type || 'tts' },
+        data: { type: config.type || 'tts', ...config.data },
         target: opts.entity_id,
       });
     else if (config.platform === 'sonos')
@@ -55,13 +64,19 @@ class MiniMediaPlayerTts extends LitElement {
         sonos_entity: opts.entity_id,
         volume: config.volume || 0.5,
         message,
+        ...config.data,
       });
     else if (config.platform === 'webos')
-      this.hass.callService('notify', opts.entity_id.split('.').slice(-1)[0], { message });
+      this.hass.callService('notify', opts.entity_id.split('.').slice(-1)[0], {
+        message,
+        ...config.data,
+      });
     else if (config.platform === 'ga')
-      this.hass.callService('notify', 'ga_broadcast', { message });
-    else
-      this.hass.callService('tts', `${config.platform}_say`, opts);
+      this.hass.callService('notify', 'ga_broadcast', {
+        message,
+        ...config.data,
+      });
+    else this.hass.callService('tts', `${config.platform}_say`, opts);
     e.stopPropagation();
     this.reset();
   }
