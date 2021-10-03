@@ -1,4 +1,9 @@
-import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM } from './const';
+import {
+  PROGRESS_PROPS,
+  MEDIA_INFO,
+  PLATFORM,
+  REPEAT_STATE,
+} from './const';
 import arrayBufferToBase64 from './utils/misc';
 
 export default class MediaPlayerObject {
@@ -53,6 +58,10 @@ export default class MediaPlayerObject {
 
   get shuffle() {
     return this.attr.shuffle || false;
+  }
+
+  get repeat() {
+    return this.attr.repeat || REPEAT_STATE.OFF;
   }
 
   get content() {
@@ -209,6 +218,10 @@ export default class MediaPlayerObject {
     return !(typeof this.attr.shuffle === 'undefined');
   }
 
+  get supportsRepeat() {
+    return !(typeof this.attr.repeat === 'undefined');
+  }
+
   get supportsMute() {
     return !(typeof this.attr.is_volume_muted === 'undefined');
   }
@@ -263,6 +276,14 @@ export default class MediaPlayerObject {
 
   toggleShuffle(e) {
     this.callService(e, 'shuffle_set', { shuffle: !this.shuffle });
+  }
+
+  toggleRepeat(e) {
+    const states = Object.values(REPEAT_STATE);
+    const { length } = states;
+    const currentIndex = states.indexOf(this.repeat) - 1;
+    const nextState = states[((currentIndex - 1 % length + length) % length)];
+    this.callService(e, 'repeat_set', { repeat: nextState });
   }
 
   setSource(e, source) {

@@ -1,4 +1,5 @@
 const DEFAULT_HIDE = {
+  repeat: true,
   shuffle: true,
   power_state: true,
   artwork_border: true,
@@ -15,6 +16,13 @@ const DEFAULT_HIDE = {
   next: false,
   state_label: false,
 };
+
+const REPEAT_STATE = {
+  OFF: 'off',
+  ALL: 'all',
+  ONE: 'one',
+};
+
 const ICON = {
   DEFAULT: 'mdi:cast',
   DROPDOWN: 'mdi:chevron-down',
@@ -33,6 +41,11 @@ const ICON = {
   PREV: 'mdi:skip-previous',
   SEND: 'mdi:send',
   SHUFFLE: 'mdi:shuffle',
+  REPEAT: {
+    [REPEAT_STATE.OFF]: 'mdi:repeat-off',
+    [REPEAT_STATE.ONE]: 'mdi:repeat-once',
+    [REPEAT_STATE.ALL]: 'mdi:repeat',
+  },
   STOP: {
     true: 'mdi:stop',
     false: 'mdi:play',
@@ -82,4 +95,5 @@ export {
   PLATFORM,
   CONTRAST_RATIO,
   COLOR_SIMILARITY_THRESHOLD,
+  REPEAT_STATE,
 };

@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 
-import { ICON } from '../const';
+import { ICON, REPEAT_STATE } from '../const';
 import sharedStyle from '../sharedStyle';
 
 class MiniMediaPlayerMediaControls extends LitElement {
@@ -15,6 +15,10 @@ class MiniMediaPlayerMediaControls extends LitElement {
 
   get showShuffle() {
     return !this.config.hide.shuffle && this.player.supportsShuffle;
+  }
+
+  get showRepeat() {
+    return !this.config.hide.repeat && this.player.supportsRepeat;
   }
 
   get maxVol() {
@@ -33,16 +37,8 @@ class MiniMediaPlayerMediaControls extends LitElement {
     const { hide } = this.config;
     return html`
       ${!hide.volume ? this.renderVolControls(this.player.muted) : html``}
-      ${this.showShuffle ? html`
-        <div class='flex mmp-media-controls__shuffle'>
-          <ha-icon-button
-            class='shuffle-button'
-            @click=${e => this.player.toggleShuffle(e)}
-            .icon=${ICON.SHUFFLE}
-            ?color=${this.player.shuffle}>
-          </ha-icon-button>
-        </div>
-      ` : html``}
+      ${this.renderShuffleButton()}
+      ${this.renderRepeatButton()}
       ${!hide.controls ? html`
         <div class='flex mmp-media-controls__media' ?flow=${this.config.flow || this.break}>
           ${!hide.prev && this.player.supportsPrev ? html`
@@ -58,6 +54,35 @@ class MiniMediaPlayerMediaControls extends LitElement {
             </ha-icon-button>` : ''}
         </div>
       ` : html``}
+    `;
+  }
+
+  renderShuffleButton() {
+    return this.showShuffle ? html`
+      <div class='flex mmp-media-controls__shuffle'>
+        <ha-icon-button
+          class='shuffle-button'
+          @click=${e => this.player.toggleShuffle(e)}
+          .icon=${ICON.SHUFFLE}
+          ?color=${this.player.shuffle}>
+        </ha-icon-button>
+      </div>
+    ` : html``;
+  }
+
+  renderRepeatButton() {
+    if (!this.showRepeat) return html``;
+
+    const colored = [REPEAT_STATE.ONE, REPEAT_STATE.ALL].includes(this.player.repeat);
+    return html`
+      <div class='flex mmp-media-controls__repeat'>
+        <ha-icon-button
+          class='repeat-button'
+          @click=${e => this.player.toggleRepeat(e)}
+          .icon=${ICON.REPEAT[this.player.repeat]}
+          ?color=${colored}>
+        </ha-icon-button>
+      </div>
     `;
   }
 
@@ -227,16 +252,12 @@ class MiniMediaPlayerMediaControls extends LitElement {
           max-width: none;
           justify-content: space-between;
         }
-        .mmp-media-controls__shuffle {
+        .mmp-media-controls__shuffle,
+        .mmp-media-controls__repeat {
           flex: 3;
           flex-shrink: 200;
           justify-content: center;
-        }
-        .mmp-media-controls__shuffle ha-icon-button {
-          height: 36px;
-          width: 36px;
-          min-width: 36px;
-          margin: 2px;
+          --mdc-icon-size: 20px;
         }
       `,
     ];
