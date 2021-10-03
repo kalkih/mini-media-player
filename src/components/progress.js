@@ -8,6 +8,7 @@ class MiniMediaPlayerProgress extends LitElement {
     return {
       _player: {},
       showTime: Boolean,
+      showRemainingTime: Boolean,
       progress: Number,
       duration: Number,
       tracker: {},
@@ -63,8 +64,15 @@ class MiniMediaPlayerProgress extends LitElement {
         ?paused=${!this.player.isPlaying}>
         ${this.showTime ? html`
           <div class='mmp-progress__duration'>
-            <span>${(convertProgress(this.seekProgress || this.progress))}</span>
-            <span>${(convertProgress(this.duration))}</span>
+            <span>${convertProgress(this.seekProgress || this.progress)}</span>
+            <div>
+              ${this.showTime ? html`
+                <span class='mmp-progress__duration__remaining'>
+                  -${(convertProgress(this.duration - (this.seekProgress || this.progress)))} |
+                </span>
+              ` : ''}
+              <span>${convertProgress(this.duration)}</span>
+            </div>
           </div>
         ` : ''}
         <paper-progress class=${this.classes}
@@ -150,6 +158,9 @@ class MiniMediaPlayerProgress extends LitElement {
         font-size: .8em;
         padding: 0 6px;
         z-index: 2
+      }
+      .mmp-progress__duration__remaining {
+        opacity: .5;
       }
       paper-progress {
         height: var(--mmp-progress-height);

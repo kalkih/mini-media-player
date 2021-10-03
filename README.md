@@ -226,6 +226,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | mute | boolean | false | The mute button.
 | progress | boolean | false | The progress bar.
 | runtime | boolean | true | The media runtime indicators.
+| runtime_remaining | boolean | true | The media remaining runtime (requires `runtime` option to be visible).
 | artwork_border | boolean | true | The border of the `default` artwork picture.
 | power_state | boolean | true | Dynamic color of the power button to indicate on/off.
 | icon_state | boolean | true | Dynamic color of the entity icon to indicate entity state.
