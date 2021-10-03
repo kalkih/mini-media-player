@@ -1,3 +1,9 @@
+const forwardHaptic = (node, haptic) => {
+  const e = new Event('haptic', { composed: true });
+  e.detail = { haptic };
+  node.dispatchEvent(e);
+};
+
 export default (node, hass, config, actionConfig, entityId) => {
   let e;
   // eslint-disable-next-line default-case
@@ -41,4 +47,6 @@ export default (node, hass, config, actionConfig, entityId) => {
       break;
     }
   }
+
+  if (actionConfig.haptic) forwardHaptic(node, actionConfig.haptic);
 };
