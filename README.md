@@ -146,12 +146,12 @@ See [Speaker group management](#speaker-group-management) for example usage.
 **Supported platforms**
 - sonos
 - soundtouch
-- squeezebox<sup>[2](#speaker_foot2)</sup>
-- bluesound<sup>[2](#speaker_foot2)</sup>
-- snapcast<sup>[2](#speaker_foot2)</sup>
-- musiccast_yamaha<sup>[1](#speaker_foot1)</sup>
-- linkplay<sup>[3](#speaker_foot3)</sup>
-- media_player<sup>[4](#speaker_foot4)</sup>
+- musiccast
+- squeezebox<sup>[1](#speaker_foot1)</sup>
+- bluesound<sup>[1](#speaker_foot1)</sup>
+- snapcast<sup>[1](#speaker_foot1)</sup>
+- linkplay<sup>[2](#speaker_foot2)</sup>
+- media_player<sup>[3](#speaker_foot3)</sup>
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
@@ -164,13 +164,11 @@ See [Speaker group management](#speaker-group-management) for example usage.
 | group_mgmt_entity | string | optional | Override the player entity for the group management (Useful if you use a universal media_player as your entity but still want to use the grouping feature)
 | supports_master | boolean | optional | Set to false if your multiroom system does not define one of the media players as master. Defaults to `true` and has not to be set to false for `squeezebox` for backward compatibility.
 
-<a name="speaker_foot1"><sup>1</sup></a> Requires [custom component](https://github.com/ppanagiotis/pymusiccast), available in HACS.
+<a name="speaker_foot1"><sup>1</sup></a> All features are not yet supported.
 
-<a name="speaker_foot2"><sup>2</sup></a> All features are not yet supported.
+<a name="speaker_foot2"><sup>2</sup></a> Requires [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset, available in HACS.
 
-<a name="speaker_foot3"><sup>3</sup></a> Requires [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset, available in HACS.
-
-<a name="speaker_foot4"><sup>4</sup></a> HomeAssistant added join/unjoin services to the media_player. Future official integrations will implement these services (which are slightly different from the ones, which are already supported by this card) instead of implementing them in their own domain.
+<a name="speaker_foot3"><sup>3</sup></a> HomeAssistant added join/unjoin services to the media_player. Future official integrations will implement these services (which are slightly different from the ones, which are already supported by this card) instead of implementing them in their own domain.
 
 #### Speaker entity object
 | Name | Type | Default | Description |
