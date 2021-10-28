@@ -73,6 +73,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           @click=${e => this.player.toggleShuffle(e)}
           .icon=${ICON.SHUFFLE}
           ?color=${this.player.shuffle}>
+          <ha-icon .icon=${ICON.SHUFFLE}></ha-icon>
         </ha-icon-button>
       </div>
     ` : html``;
@@ -89,6 +90,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           @click=${e => this.player.toggleRepeat(e)}
           .icon=${ICON.REPEAT[this.player.repeat]}
           ?color=${colored}>
+          <ha-icon .icon=${ICON.REPEAT[this.player.repeat]}></ha-icon>
         </ha-icon-button>
       </div>
     `;
@@ -226,6 +228,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
       <ha-icon-button
         @click=${e => this.player.jump(e, this.jumpAmount)}
         .icon=${ICON.FAST_FORWARD}>
+        <ha-icon .icon=${ICON.FAST_FORWARD}></ha-icon>
       </ha-icon-button>
     `;
   }
@@ -237,6 +240,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
       <ha-icon-button
         @click=${e => this.player.jump(e, -this.jumpAmount)}
         .icon=${ICON.REWIND}>
+        <ha-icon .icon=${ICON.REWIND}></ha-icon>
       </ha-icon-button>
     `;
   }
