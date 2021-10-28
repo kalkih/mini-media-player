@@ -42,6 +42,7 @@ class MiniMediaPlayerDropdown extends LitElement {
             class='mmp-dropdown__button icon'
             slot='dropdown-trigger'
             .icon=${ICON.DROPDOWN}>
+            <ha-icon .icon=${ICON.DROPDOWN}></ha-icon>
           </ha-icon-button>
         ` : html`
           <mmp-button class='mmp-dropdown__button' slot='dropdown-trigger'>
