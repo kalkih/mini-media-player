@@ -94,12 +94,14 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           ?inactive=${!this.player.isGrouped}
           ?color=${this.groupVisible}
           @click=${this.handleGroupClick}>
+          <ha-icon .icon=${this.icon}></ha-icon>
         </ha-icon-button>` : ''}
       ${this.showPowerButton ? html`
         <ha-icon-button class='power-button'
           .icon=${ICON.POWER}
           @click=${e => this.player.toggle(e)}
           ?color=${this.powerColor}>
+          <ha-icon .icon=${ICON.POWER}></ha-icon>
         </ha-icon-button>` : ''}
     `;
   }
@@ -115,6 +117,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         <ha-icon-button
           .icon=${ICON.PLAY[this.player.isPlaying]}
           @click=${e => this.player.playPause(e)}>
+          <ha-icon .icon=${ICON.PLAY[this.player.isPlaying]}></ha-icon>
         </ha-icon-button>`;
     else if (this.showLabel)
       return html`
