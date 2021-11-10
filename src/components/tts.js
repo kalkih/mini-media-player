@@ -86,9 +86,7 @@ class MiniMediaPlayerTts extends LitElement {
         ...(config.data.service_data || {}),
       };
       this.hass.callService(domain, service, serviceData);
-    }
-
-    else this.hass.callService('tts', `${config.platform}_say`, opts);
+    } else this.hass.callService('tts', `${config.platform}_say`, opts);
     e.stopPropagation();
     this.reset();
   }
