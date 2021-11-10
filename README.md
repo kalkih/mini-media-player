@@ -117,12 +117,12 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 #### TTS object
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google_translate` or `amazon_polly`, `cloud` for Nabu Casa, `alexa`<sup>[1](#tts_foot1)</sup> for ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639), `ga`<sup>[2](#tts_foot2)</sup><sup>[3](#tts_foot3)</sup> for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay), `sonos`<sup>[2](#tts_foot2)</sup> for use with modified [sonos_say script](https://github.com/kalkih/mini-media-player/issues/86#issuecomment-465541825), `webos`<sup>[4](#tts_foot4)</sup>.
+| platform | string | **required** | Specify [TTS platform](https://www.home-assistant.io/components/tts/), e.g. `google_translate` or `amazon_polly`, `cloud` for Nabu Casa, `alexa`<sup>[1](#tts_foot1)</sup> for ["Alexa as Media Player"](https://community.home-assistant.io/t/echo-devices-alexa-as-media-player-testers-needed/58639), `ga`<sup>[2](#tts_foot2)</sup><sup>[3](#tts_foot3)</sup> for use with [Google Assistant Webserver](https://community.home-assistant.io/t/community-hass-io-add-on-google-assistant-webserver-broadcast-messages-without-interrupting-music/37274) or [Assistant Relay](https://github.com/greghesp/assistant-relay), `sonos`<sup>[2](#tts_foot2)</sup> for use with modified [sonos_say script](https://github.com/kalkih/mini-media-player/issues/86#issuecomment-465541825), `webos`<sup>[4](#tts_foot4)</sup>, `service`<sup>[5](#tts_foot5)</sup>.
 | language | string | optional | The output language.
 | entity_id | string/list | optional | The *entity_id* of the desired output entity or a list of *entity_id's*, can also be `all` to broadcast to all entities or `group` to target currently grouped speakers.
 | volume | float | optional | Volume level of tts output (0 - 1), only supported by platform `sonos`.
 | type | string | optional | `tts`, `announce` or `push`, defaults to `tts`, only supported by platform `alexa`, more info [here](https://github.com/keatontaylor/alexa_media_player/wiki/Notification-Component#functionality).
-| data | list | optional | Any additional data to pass with the notify command.
+| data | object | optional | Any additional data to pass with the notify command.
 
 <a name="tts_foot1"><sup>1</sup></a> Does not support the `language` option.
 
@@ -130,14 +130,29 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 <a name="tts_foot3"><sup>3</sup></a> Requires a custom notify service named `ga_broadcast`, see example below.
 
-<a name="tts_foot4"><sup>4</sup></a> Requires the card entity name to match the notify service name, if they don't match please specify the notify service name in the `entity_id` option.
-
 ```yaml
 # configuration.yaml
 notify:
   - name: ga_broadcast
     platform: rest
     resource: http://[xxx.x.x.xxx]:5000/broadcast_message
+```
+
+<a name="tts_foot4"><sup>4</sup></a> Requires the card entity name to match the notify service name, if they don't match please specify the notify service name in the `entity_id` option.
+
+<a name="tts_foot5"><sup>5</sup></a> Specify `service` & `service_data` under the `data` option, specify `message_filed` to use `message` for the service.
+
+```yaml
+- type: custom:mini-media-player
+  entity: media_player.xiaoai_speaker
+  tts:
+    platform: service
+    data:
+      service: xiaomi_miot.intelligent_speaker
+      service_data:
+        execute: true
+        silent: true
+      message_filed: text
 ```
 
 #### Speaker group object
