@@ -53,30 +53,49 @@ class MiniMediaPlayerTts extends LitElement {
       ...config.data,
     };
     if (config.language) opts.language = config.language;
-    if (config.platform === 'alexa')
-      this.hass.callService('notify', 'alexa_media', {
-        message,
-        data: { type: config.type || 'tts', ...config.data },
-        target: opts.entity_id,
-      });
-    else if (config.platform === 'sonos')
-      this.hass.callService('script', 'sonos_say', {
-        sonos_entity: opts.entity_id,
-        volume: config.volume || 0.5,
-        message,
-        ...config.data,
-      });
-    else if (config.platform === 'webos')
-      this.hass.callService('notify', opts.entity_id.split('.').slice(-1)[0], {
-        message,
-        ...config.data,
-      });
-    else if (config.platform === 'ga')
-      this.hass.callService('notify', 'ga_broadcast', {
-        message,
-        ...config.data,
-      });
-    else this.hass.callService('tts', `${config.platform}_say`, opts);
+    switch (config.platform) {
+      case 'alexa':
+        this.hass.callService('notify', 'alexa_media', {
+          message,
+          data: { type: config.type || 'tts', ...config.data },
+          target: opts.entity_id,
+        });
+        break;
+      case 'sonos':
+        this.hass.callService('script', 'sonos_say', {
+          sonos_entity: opts.entity_id,
+          volume: config.volume || 0.5,
+          message,
+          ...config.data,
+        });
+        break;
+      case 'webos':
+        this.hass.callService('notify', opts.entity_id.split('.').slice(-1)[0], {
+          message,
+          ...config.data,
+        });
+        break;
+      case 'ga':
+        this.hass.callService('notify', 'ga_broadcast', {
+          message,
+          ...config.data,
+        });
+        break;
+      case 'service': {
+        const [domain, service] = (config.data.service || '').split('.');
+        const field = config.data.message_field || 'message';
+        const serviceData = {
+          [field]: message,
+          entity_id: opts.entity_id,
+          ...(config.language ? { language: opts.language } : {}),
+          ...(config.data.service_data || {}),
+        };
+        this.hass.callService(domain, service, serviceData);
+        break;
+      }
+      default:
+        this.hass.callService('tts', `${config.platform}_say`, opts);
+    }
     e.stopPropagation();
     this.reset();
   }
