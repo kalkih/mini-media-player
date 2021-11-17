@@ -121,7 +121,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | language | string | optional | The output language.
 | entity_id | string/list | optional | The *entity_id* of the desired output entity or a list of *entity_id's*, can also be `all` to broadcast to all entities or `group` to target currently grouped speakers.
 | volume | float | optional | Volume level of tts output (0 - 1), only supported by platform `sonos`.
-| type | string | optional | `tts`, `announce` or `push`, defaults to `tts`, only supported by platform `alexa`, more info [here](https://github.com/keatontaylor/alexa_media_player/wiki/Notification-Component#functionality).
+| type | string | optional | `tts`, `announce` or `push`, defaults to `tts`, only supported by platform `alexa`, more info [here](https://github.com/custom-components/alexa_media_player/wiki/Configuration%3A-Notification-Component).
 | data | object | optional | Any additional data to pass with the notify command.
 
 <a name="tts_foot1"><sup>1</sup></a> Does not support the `language` option.

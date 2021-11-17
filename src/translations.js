@@ -189,6 +189,25 @@ const translations = {
       speaker_management: 'Gestión de grupo',
     },
   },
+  zh: {
+    placeholder: {
+      tts: '播放文本',
+    },
+    label: {
+      leave: '退出',
+      ungroup: '取消组合',
+      group_all: '组合全部',
+      send: '发送',
+      master: '主要的',
+    },
+    state: {
+      idle: '空闲',
+      unavailable: '不可用',
+    },
+    title: {
+      speaker_management: '组合管理',
+    },
+  },
 };
 
 export default translations;
