@@ -81,7 +81,7 @@ class MiniMediaPlayerTts extends LitElement {
           ...config.data,
         });
         break;
-      case 'service':
+      case 'service': {
         const [domain, service] = (config.data.service || '').split('.');
         const field = config.data.message_field || 'message';
         const serviceData = {
@@ -92,6 +92,7 @@ class MiniMediaPlayerTts extends LitElement {
         };
         this.hass.callService(domain, service, serviceData);
         break;
+      }
       default:
         this.hass.callService('tts', `${config.platform}_say`, opts);
     }
