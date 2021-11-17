@@ -140,7 +140,7 @@ notify:
 
 <a name="tts_foot4"><sup>4</sup></a> Requires the card entity name to match the notify service name, if they don't match please specify the notify service name in the `entity_id` option.
 
-<a name="tts_foot5"><sup>5</sup></a> Specify `service` & `service_data` under the `data` option, specify `message_filed` to use `message` for the service.
+<a name="tts_foot5"><sup>5</sup></a> Specify `service` & `service_data` under the `data` option, specify `message_field` to use `message` for the service.
 
 ```yaml
 - type: custom:mini-media-player
@@ -152,7 +152,7 @@ notify:
       service_data:
         execute: true
         silent: true
-      message_filed: text
+      message_field: text
 ```
 
 #### Speaker group object

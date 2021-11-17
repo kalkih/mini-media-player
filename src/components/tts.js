@@ -78,7 +78,7 @@ class MiniMediaPlayerTts extends LitElement {
       });
     else if (config.platform === 'service') {
       const [domain, service] = (config.data.service || '').split('.');
-      const field = config.data.message_filed || 'message';
+      const field = config.data.message_field || 'message';
       const serviceData = {
         [field]: message,
         entity_id: opts.entity_id,
