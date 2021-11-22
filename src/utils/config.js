@@ -24,6 +24,7 @@ export const generateConfig = (config) => {
     tap_action: {
       action: 'more-info',
     },
+    jump_amount: 10,
     ...config,
     hide: { ...DEFAULT_HIDE, ...config.hide },
     speaker_group: {
@@ -37,7 +38,6 @@ export const generateConfig = (config) => {
       label: LABEL_SHORTCUT,
       ...config.shortcuts,
     },
-    jump_amount: 10,
   };
   conf.max_volume = Number(conf.max_volume) || 100;
   conf.min_volume = Number(conf.min_volume) || 0;
