@@ -224,7 +224,7 @@ const translations = {
       unavailable: "No disponible",
     },
     title: {
-      speaker_management: "Gestió del grupo",
+      speaker_management: "Gestió del grup",
     },
   },
 };
