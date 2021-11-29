@@ -208,6 +208,25 @@ const translations = {
       speaker_management: '组合管理',
     },
   },
+  ca: {
+    placeholder: {
+      tts: 'Text a veu',
+    },
+    label: {
+      leave: 'Sortir',
+      ungroup: 'Desagrupar',
+      group_all: 'Agrupar-los tots',
+      send: 'Enviar',
+      master: 'Mestre',
+    },
+    state: {
+      idle: 'Inactiu',
+      unavailable: 'No disponible',
+    },
+    title: {
+      speaker_management: 'Gestió del grup',
+    },
+  },
 };
 
 export default translations;
