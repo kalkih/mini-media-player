@@ -208,7 +208,7 @@ const translations = {
       speaker_management: '组合管理',
     },
   },
-  cancelAnimationFrame: {
+  ca: {
     placeholder: {
       tts: 'Text a veu',
     },
