@@ -6,7 +6,7 @@ const getNestedProp = (obj, path) => path.split('.').reduce((p, c) => p && p[c] 
 
 const translation = (hass, label, hassLabel = undefined, fallback = 'unknown') => {
   const lang = hass.selectedLanguage || hass.language;
-  const l639 = lang.split('-')[0]
+  const l639 = lang.split('-')[0];
   return translations[lang] && getNestedProp(translations[lang], label)
     || hass.resources[lang] && hass.resources[lang][hassLabel]
     || translations[l639] && getNestedProp(translations[l639], label)
