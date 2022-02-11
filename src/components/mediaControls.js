@@ -300,7 +300,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
           flex: 3;
           flex-shrink: 200;
           justify-content: center;
-          --mdc-icon-size: 20px;
         }
       `,
     ];
