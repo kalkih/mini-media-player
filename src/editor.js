@@ -18,6 +18,7 @@ const OptionsArtwork = [
   'cover',
   'full-cover',
   'material',
+  'color',
   'cover-fit',
   'none',
 ];

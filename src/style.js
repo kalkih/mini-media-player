@@ -37,6 +37,7 @@ const style = css`
     --mmp-info-opacity: .75;
   }
   ha-card.--has-artwork[artwork='material'],
+  ha-card.--has-artwork[artwork='color'],
   ha-card.--has-artwork[artwork*='cover'] {
     --mmp-accent-color: var(--mini-media-player-overlay-accent-color, var(--mini-media-player-accent-color, var(--accent-color, #f39c12)));
     --mmp-text-color: var(--mmp-overlay-base-color);
@@ -137,6 +138,33 @@ const style = css`
     animation: fade-in 1s linear reverse forwards !important;
   }
   ha-card[artwork='material'].--has-artwork .cover-gradient {
+    position: absolute;
+    height: 100%;
+    right: 0;
+    left: 0;
+    opacity: 1;
+  }
+  ha-card[artwork='color'] * {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+  ha-card[artwork='color'].--has-artwork .mmp__bg {
+    opacity: var(--mmp-artwork-opacity);
+    background: transparent;
+  }
+  ha-card[artwork='color'].--has-artwork .cover {
+    height: 100%;
+    right: 0;
+    left: unset;
+    animation: none !important;
+    transition: none !important;
+    width: 100% !important;
+    background-image: none !important;
+  }
+  ha-card[artwork='color'].--has-artwork .cover.--prev {
+    animation: none !important;
+  }
+  ha-card[artwork='color'].--has-artwork .cover-gradient {
     position: absolute;
     height: 100%;
     right: 0;

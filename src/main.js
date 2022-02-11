@@ -126,7 +126,7 @@ class MiniMediaPlayer extends LitElement {
         this.prevThumbnail = '';
       }, 1000);
     }
-    if (changedProps.has('player') && this.config.artwork === 'material') {
+    if (changedProps.has('player') && (this.config.artwork === 'material' || this.config.artwork === 'color')) {
       this.setColors();
     }
     return UPDATE_PROPS.some(prop => changedProps.has(prop)) && this.player;
@@ -252,7 +252,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   renderArtwork() {
-    if (!this.thumbnail || this.config.artwork === 'default')
+    if (!this.thumbnail || this.config.artwork === 'default' || this.config.artwork === 'none')
       return;
 
     const artworkStyle = {
