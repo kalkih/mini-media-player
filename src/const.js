@@ -81,6 +81,7 @@ const PLATFORM = {
   BLUESOUND: 'bluesound',
   SOUNDTOUCH: 'soundtouch',
   MEDIAPLAYER: 'media_player',
+  HEOS: 'heos',
 };
 
 const CONTRAST_RATIO = 4.5;

@@ -167,6 +167,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 - snapcast<sup>[1](#speaker_foot1)</sup>
 - linkplay<sup>[2](#speaker_foot2)</sup>
 - media_player<sup>[3](#speaker_foot3)</sup>
+- heos
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
