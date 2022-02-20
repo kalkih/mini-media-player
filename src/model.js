@@ -96,7 +96,7 @@ export default class MediaPlayerObject {
     if (this.platform === PLATFORM.SQUEEZEBOX) {
       return this.attr.sync_group || [];
     }
-    if (this.platform === PLATFORM.MEDIAPLAYER) {
+    if (this.platform === PLATFORM.MEDIAPLAYER || this.platform === PLATFORM.HEOS) {
       return this.attr.group_members || [];
     }
     return this.attr[`${this.platform}_group`] || [];
@@ -393,6 +393,11 @@ export default class MediaPlayerObject {
             entity_id: this.entityId,
             group_members: entity,
           }, platform);
+        case PLATFORM.HEOS:
+          return this.callService(e, 'join', {
+            entity_id: this.entityId,
+            group_members: this.group.concat((typeof entity === 'string') ? [entity] : entity),
+          }, PLATFORM.MEDIAPLAYER);
         default:
           return this.callService(e, 'join', options, platform);
       }
@@ -406,6 +411,10 @@ export default class MediaPlayerObject {
           return this.callService(e, 'unjoin', {
             entity_id: entity,
           }, platform);
+        case PLATFORM.HEOS:
+          return this.callService(e, 'unjoin', {
+            entity_id: (typeof entity === 'string') ? entity : entity[0],
+          }, PLATFORM.MEDIAPLAYER);
         default:
           return this.callService(e, 'unjoin', options, platform);
       }
