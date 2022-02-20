@@ -17,6 +17,8 @@
   "author": "Karl Kihlström <mrkihlstrom@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@material/mwc-list": "^0.25.3",
+    "@material/mwc-menu": "^0.25.3",
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1",
     "node-vibrant": "^3.1.5",

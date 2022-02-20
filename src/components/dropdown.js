@@ -1,51 +1,73 @@
 import { LitElement, html, css } from 'lit-element';
+import { MenuBase } from '@material/mwc-menu/mwc-menu-base';
+import { styles as menuBaseStyles } from '@material/mwc-menu/mwc-menu.css';
+import { ListItemBase } from '@material/mwc-list/mwc-list-item-base';
+import { styles as listItemBaseStyles } from '@material/mwc-list/mwc-list-item.css';
 
 import { ICON } from '../const';
-
 import sharedStyle from '../sharedStyle';
 import './button';
 
+customElements.define('mmp-menu',
+  class MiniMediaPlayerMenuBase extends MenuBase {
+    static get styles() {
+      return menuBaseStyles;
+    }
+  });
+
+
+customElements.define('mmp-list-item',
+  class MiniMediaPlayerListItemBase extends ListItemBase {
+    static get styles() {
+      return listItemBaseStyles;
+    }
+  });
+
 class MiniMediaPlayerDropdown extends LitElement {
+  constructor() {
+    super();
+    this.id = Math.random()
+      .toString(36)
+      .substr(2, 9);
+  }
+
   static get properties() {
     return {
       items: [],
       label: String,
       selected: String,
+      id: String,
+      isOpen: Boolean,
     };
   }
 
-  get selectedId() {
+  get selectedIndex() {
     return this.items.map(item => item.id).indexOf(this.selected);
   }
 
-  onChange(e) {
-    const id = e.target.selected;
-    if (id !== this.selectedId && this.items[id]) {
-      this.dispatchEvent(new CustomEvent('change', {
-        detail: this.items[id],
-      }));
-      e.target.selected = -1;
-    }
+  firstUpdated() {
+    const menu = this.shadowRoot.querySelector(`#${this.id}-menu`);
+    const button = this.shadowRoot.querySelector(`#${this.id}-button`);
+    menu.anchor = button;
   }
 
   render() {
     return html`
-      <paper-menu-button
+      <div
         class='mmp-dropdown'
-        noink no-animations
-        .horizontalAlign=${'right'}
-        .verticalAlign=${'top'}
-        .verticalOffset=${44}
-        @click=${e => e.stopPropagation()}>
+        @click=${e => e.stopPropagation()}
+        ?open=${this.isOpen}>
         ${this.icon ? html`
-          <ha-icon-button
+          <mmp-icon-button
+            id=${`${this.id}-button`}
             class='mmp-dropdown__button icon'
-            slot='dropdown-trigger'
-            .icon=${ICON.DROPDOWN}>
+            .icon=${ICON.DROPDOWN}
+            @click=${this.toggleMenu}>
             <ha-icon .icon=${ICON.DROPDOWN}></ha-icon>
-          </ha-icon-button>
+          </mmp-icon-button>
         ` : html`
-          <mmp-button class='mmp-dropdown__button' slot='dropdown-trigger'>
+          <mmp-button id=${`${this.id}-button`} class='mmp-dropdown__button' 
+            @click=${this.toggleMenu}>
             <div>
               <span class='mmp-dropdown__label ellipsis'>
                 ${this.selected || this.label}
@@ -54,15 +76,34 @@ class MiniMediaPlayerDropdown extends LitElement {
             </div>
           </mmp-button>
         `}
-        <paper-listbox slot="dropdown-content" .selected=${this.selectedId} @iron-select=${this.onChange}>
+        <mmp-menu
+          @selected=${this.onChange}
+          activatable
+          id=${`${this.id}-menu`}
+          corner="BOTTOM_START">
           ${this.items.map(item => html`
-            <paper-item value=${item.id || item.name}>
+            <mmp-list-item value=${item.id || item.name}>
               ${item.icon ? html`<ha-icon .icon=${item.icon}></ha-icon>` : ''}
               ${item.name ? html`<span class='mmp-dropdown__item__label'>${item.name}</span>` : ''}
-            </paper-item>`)}
-        </paper-listbox>
-      </paper-menu-button>
+            </mmp-list-item>`)}
+        </mmp-menu>
+      </div>
     `;
+  }
+
+  onChange(e) {
+    const { index } = e.detail;
+    if (index !== this.selectedIndex && this.items[index]) {
+      this.dispatchEvent(new CustomEvent('change', {
+        detail: this.items[index],
+      }));
+    }
+  }
+
+  toggleMenu() {
+    const menu = this.shadowRoot.querySelector(`#${this.id}-menu`);
+    menu.open = !menu.open;
+    this.isOpen = menu.open;
   }
 
   static get styles() {
@@ -88,6 +129,7 @@ class MiniMediaPlayerDropdown extends LitElement {
         .mmp-dropdown {
           padding: 0;
           display: block;
+          position: relative;
         }
         .mmp-dropdown__button {
           display: flex;
@@ -118,18 +160,18 @@ class MiniMediaPlayerDropdown extends LitElement {
           width: calc(var(--mmp-unit) * .6);
           min-width: calc(var(--mmp-unit) * .6);
         }
-        paper-item > *:nth-child(2) {
+        mmp-list-item > *:nth-child(2) {
           margin-left: 4px;
         }
-        paper-menu-button[focused] mmp-button ha-icon {
+        .mmp-dropdown[open] mmp-button ha-icon {
           color: var(--mmp-accent-color);
           transform: rotate(180deg);
         }
-        paper-menu-button[focused] ha-icon-button {
+        .mmp-dropdown[open] mmp-icon-button {
           color: var(--mmp-accent-color);
           transform: rotate(180deg);
         }
-        paper-menu-button[focused] ha-icon-button[focused] {
+        .mmp-dropdown[open] mmp-icon-button[focused] {
           color: var(--mmp-text-color);
           transform: rotate(0deg);
         }
@@ -138,4 +180,4 @@ class MiniMediaPlayerDropdown extends LitElement {
   }
 }
 
-customElements.define('mmp-dropdown', MiniMediaPlayerDropdown);
+window.customElements.define('mmp-dropdown', MiniMediaPlayerDropdown);
