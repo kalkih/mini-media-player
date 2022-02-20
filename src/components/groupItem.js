@@ -18,8 +18,8 @@ class MiniMediaPlayerGroupItem extends LitElement {
   render() {
     return html`
       <mmp-checkbox
-        .checked=${this.checked}
-        .disabled=${this.disabled}
+        .checked=${this.checked || this.master}
+        .disabled=${this.disabled || this.master}
         @change='${e => e.stopPropagation()}'
         @click='${this.handleClick}'>
           ${this.item.name}
@@ -49,4 +49,4 @@ class MiniMediaPlayerGroupItem extends LitElement {
   }
 }
 
-customElements.define('mmp-group-item', MiniMediaPlayerGroupItem);
+window.customElements.define('mmp-group-item', MiniMediaPlayerGroupItem);

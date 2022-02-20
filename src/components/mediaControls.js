@@ -46,20 +46,20 @@ class MiniMediaPlayerMediaControls extends LitElement {
       ${!hide.controls ? html`
         <div class='flex mmp-media-controls__media' ?flow=${this.config.flow || this.break}>
           ${!hide.prev && this.player.supportsPrev ? html`
-            <ha-icon-button
+            <mmp-icon-button
               @click=${e => this.player.prev(e)}
               .icon=${ICON.PREV}>
              <ha-icon .icon=${ICON.PREV}></ha-icon>
-            </ha-icon-button>` : ''}
+            </mmp-icon-button>` : ''}
           ${this.renderJumpBackwardButton()}
           ${this.renderPlayButtons()}
           ${this.renderJumpForwardButton()}
           ${!hide.next && this.player.supportsNext ? html`
-            <ha-icon-button
+            <mmp-icon-button
               @click=${e => this.player.next(e)}
               .icon=${ICON.NEXT}>
              <ha-icon .icon=${ICON.NEXT}></ha-icon>
-            </ha-icon-button>` : ''}
+            </mmp-icon-button>` : ''}
         </div>
       ` : html``}
     `;
@@ -68,13 +68,13 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderShuffleButton() {
     return this.showShuffle ? html`
       <div class='flex mmp-media-controls__shuffle'>
-        <ha-icon-button
+        <mmp-icon-button
           class='shuffle-button'
           @click=${e => this.player.toggleShuffle(e)}
           .icon=${ICON.SHUFFLE}
           ?color=${this.player.shuffle}>
           <ha-icon .icon=${ICON.SHUFFLE}></ha-icon>
-        </ha-icon-button>
+        </mmp-icon-button>
       </div>
     ` : html``;
   }
@@ -85,13 +85,13 @@ class MiniMediaPlayerMediaControls extends LitElement {
     const colored = [REPEAT_STATE.ONE, REPEAT_STATE.ALL].includes(this.player.repeat);
     return html`
       <div class='flex mmp-media-controls__repeat'>
-        <ha-icon-button
+        <mmp-icon-button
           class='repeat-button'
           @click=${e => this.player.toggleRepeat(e)}
           .icon=${ICON.REPEAT[this.player.repeat]}
           ?color=${colored}>
           <ha-icon .icon=${ICON.REPEAT[this.player.repeat]}></ha-icon>
-        </ha-icon-button>
+        </mmp-icon-button>
       </div>
     `;
   }
@@ -118,7 +118,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderVolSlider(muted) {
     return html`
       ${this.renderMuteButton(muted)}
-      <ha-slider
+      <paper-slider
         @change=${this.handleVolumeChange}
         @click=${e => e.stopPropagation()}
         ?disabled=${muted}
@@ -127,23 +127,23 @@ class MiniMediaPlayerMediaControls extends LitElement {
         step=${this.config.volume_step || 1}
         dir=${'ltr'}
         ignore-bar-touch pin>
-      </ha-slider>
+      </paper-slider>
     `;
   }
 
   renderVolButtons(muted) {
     return html`
       ${this.renderMuteButton(muted)}
-      <ha-icon-button
+      <mmp-icon-button
         @click=${e => this.player.volumeDown(e)}
         .icon=${ICON.VOL_DOWN}>
           <ha-icon .icon=${ICON.VOL_DOWN}></ha-icon>
-      </ha-icon-button>
-      <ha-icon-button
+      </mmp-icon-button>
+      <mmp-icon-button
         @click=${e => this.player.volumeUp(e)}
         .icon=${ICON.VOL_UP}>
           <ha-icon .icon=${ICON.VOL_UP}></ha-icon>
-      </ha-icon-button>
+      </mmp-icon-button>
     `;
   }
 
@@ -159,44 +159,44 @@ class MiniMediaPlayerMediaControls extends LitElement {
       case 'play':
       case 'play_pause':
         return html`
-          <ha-icon-button
+          <mmp-icon-button
             @click=${e => this.player.playPause(e)}
             .icon=${ICON.PLAY[this.player.isPlaying]}>
             <ha-icon .icon=${ICON.PLAY[this.player.isPlaying]}></ha-icon>
-          </ha-icon-button>
+          </mmp-icon-button>
         `;
       case 'stop':
         return html`
-          <ha-icon-button
+          <mmp-icon-button
             @click=${e => this.player.stop(e)}
             .icon=${ICON.STOP.true}>
             <ha-icon .icon=${ICON.STOP.true}></ha-icon>
-          </ha-icon-button>
+          </mmp-icon-button>
         `;
       case 'play_stop':
         return html`
-          <ha-icon-button
+          <mmp-icon-button
             @click=${e => this.player.playStop(e)}
             .icon=${ICON.STOP[this.player.isPlaying]}>
             <ha-icon .icon=${ICON.STOP[this.player.isPlaying]}></ha-icon>
-          </ha-icon-button>
+          </mmp-icon-button>
         `;
       case 'next':
         return html`
-          <ha-icon-button
+          <mmp-icon-button
             @click=${e => this.player.next(e)}
             .icon=${ICON.NEXT}>
             <ha-icon .icon=${ICON.NEXT}></ha-icon>
-          </ha-icon-button>
+          </mmp-icon-button>
         `;
       default:
         if (!this.player.supportsMute) return;
         return html`
-          <ha-icon-button
+          <mmp-icon-button
             @click=${e => this.player.toggleMute(e)}
             .icon=${ICON.MUTE[muted]}>
             <ha-icon .icon=${ICON.MUTE[muted]}></ha-icon>
-          </ha-icon-button>
+          </mmp-icon-button>
         `;
     }
   }
@@ -205,18 +205,18 @@ class MiniMediaPlayerMediaControls extends LitElement {
     const { hide } = this.config;
     return html`
       ${!hide.play_pause ? html`
-        <ha-icon-button
+        <mmp-icon-button
           @click=${e => this.player.playPause(e)}
           .icon=${ICON.PLAY[this.player.isPlaying]}>
             <ha-icon .icon=${ICON.PLAY[this.player.isPlaying]}></ha-icon>
-        </ha-icon-button>
+        </mmp-icon-button>
       ` : html``}
       ${!hide.play_stop ? html`
-        <ha-icon-button
+        <mmp-icon-button
           @click=${e => this.handleStop(e)}
           .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}>
             <ha-icon .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}></ha-icon>
-        </ha-icon-button>
+        </mmp-icon-button>
       ` : html``}
     `;
   }
@@ -225,11 +225,11 @@ class MiniMediaPlayerMediaControls extends LitElement {
     const hidden = this.config.hide.jump;
     if (hidden || !this.player.hasProgress) return html``;
     return html`
-      <ha-icon-button
+      <mmp-icon-button
         @click=${e => this.player.jump(e, this.jumpAmount)}
         .icon=${ICON.FAST_FORWARD}>
         <ha-icon .icon=${ICON.FAST_FORWARD}></ha-icon>
-      </ha-icon-button>
+      </mmp-icon-button>
     `;
   }
 
@@ -237,11 +237,11 @@ class MiniMediaPlayerMediaControls extends LitElement {
     const hidden = this.config.hide.jump;
     if (hidden || !this.player.hasProgress) return html``;
     return html`
-      <ha-icon-button
+      <mmp-icon-button
         @click=${e => this.player.jump(e, -this.jumpAmount)}
         .icon=${ICON.REWIND}>
         <ha-icon .icon=${ICON.REWIND}></ha-icon>
-      </ha-icon-button>
+      </mmp-icon-button>
     `;
   }
 
@@ -268,14 +268,14 @@ class MiniMediaPlayerMediaControls extends LitElement {
           flex: 1;
           justify-content: space-between;
         }
-        ha-slider {
+        paper-slider {
           max-width: none;
           min-width: 100px;
           width: 100%;
           --paper-slider-active-color: var(--mmp-accent-color);
           --paper-slider-knob-color: var(--mmp-accent-color);
         }
-        ha-icon-button {
+        mmp-icon-button {
           min-width: var(--mmp-unit);
         }
         .mmp-media-controls__volume {

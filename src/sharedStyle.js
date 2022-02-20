@@ -13,20 +13,20 @@ const sharedStyle = css`
     width: calc(var(--mmp-unit) * .6);
     height: calc(var(--mmp-unit) * .6);
   }
-  ha-icon-button {
+  mmp-icon-button {
     width: var(--mmp-unit);
     height: var(--mmp-unit);
     color: var(--mmp-text-color, var(--primary-text-color));
     transition: color .25s;
   }
-  ha-icon-button[color] {
+  mmp-icon-button[color] {
     color: var(--mmp-accent-color, var(--accent-color)) !important;
     opacity: 1 !important;
   }
-  ha-icon-button[inactive] {
+  mmp-icon-button[inactive] {
     opacity: .5;
   }
-  ha-icon-button ha-icon {
+  mmp-icon-button ha-icon {
     display: flex;
   }
 `;

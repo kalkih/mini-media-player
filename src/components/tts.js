@@ -150,4 +150,4 @@ class MiniMediaPlayerTts extends LitElement {
   }
 }
 
-customElements.define('mmp-tts', MiniMediaPlayerTts);
+window.customElements.define('mmp-tts', MiniMediaPlayerTts);

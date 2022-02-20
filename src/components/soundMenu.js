@@ -54,4 +54,4 @@ class MiniMediaPlayerSoundMenu extends LitElement {
   }
 }
 
-customElements.define('mmp-sound-menu', MiniMediaPlayerSoundMenu);
+window.customElements.define('mmp-sound-menu', MiniMediaPlayerSoundMenu);

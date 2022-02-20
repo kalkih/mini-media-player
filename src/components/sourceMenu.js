@@ -52,4 +52,4 @@ class MiniMediaPlayerSourceMenu extends LitElement {
   }
 }
 
-customElements.define('mmp-source-menu', MiniMediaPlayerSourceMenu);
+window.customElements.define('mmp-source-menu', MiniMediaPlayerSourceMenu);

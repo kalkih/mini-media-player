@@ -1,4 +1,9 @@
 import { LitElement, html, css } from 'lit-element';
+// import { Ripple } from '@material/mwc-ripple';
+import '@material/mwc-ripple';
+
+// window.customElements.define('mmp-ripple', RippleBase);
+
 
 class MiniMediaPlayerButton extends LitElement {
   render() {
@@ -15,38 +20,40 @@ class MiniMediaPlayerButton extends LitElement {
   static get styles() {
     return css`
       :host {
+        --mdc-theme-primary: red;
+        --mdc-ripple-color: red;
         position: relative;
         box-sizing: border-box;
         margin: 4px;
         min-width: 0;
         overflow: hidden;
-        transition: background .5s;
+        transition: background 0.5s;
         border-radius: 4px;
         font-weight: 500;
       }
       :host([raised]) {
         background: var(--mmp-button-color);
-        min-height: calc(var(--mmp-unit) * .8);
-        box-shadow:
-          0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        min-height: calc(var(--mmp-unit) * 0.8);
+        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
           0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-          0px 1px 5px 0px rgba(0,0,0,.12);
+          0px 1px 5px 0px rgba(0, 0, 0, 0.12);
       }
       :host([color]) {
         background: var(--mmp-active-color);
-        transition: background .25s;
+        transition: background 0.25s;
         opacity: 1;
       }
       :host([faded]) {
-        opacity: .75;
+        opacity: 0.75;
       }
       :host([disabled]) {
-        opacity: .25;
+        opacity: 0.25;
         pointer-events: none;
       }
       .container {
         height: 100%;
         width: 100%;
+        user-select: none;
       }
       .slot-container {
         height: 100%;
@@ -67,4 +74,4 @@ class MiniMediaPlayerButton extends LitElement {
   }
 }
 
-customElements.define('mmp-button', MiniMediaPlayerButton);
+window.customElements.define('mmp-button', MiniMediaPlayerButton);

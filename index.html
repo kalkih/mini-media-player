@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600"
+      as="style"
+      type="text/css"
+    />
+    <style>
+      html {
+        --ha-card-background: #37495b;
+        --primary-text-color: #ffffff !important;
+        --secondary-text-color: #ffffff !important;
+        --paper-item-icon-color: #fff !important;
+        --accent-color: lightblue !important;
+        --mini-media-player-base-color: #fff;
+        font-family: Roboto;
+      }
+      body {
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      #demo {
+        width: 100%;
+        max-width: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="demo"></div>
+
+    <script type="module">
+      import { html, render } from 'lit-html';
+      import './dist/mini-media-player-bundle';
+      import MediaPlayerMock from './demo/MediaPlayerMock';
+      import '@polymer/paper-slider/paper-slider';
+      import '@polymer/paper-ripple/paper-ripple';
+      import './ha-icon.js';
+
+      const config = {
+        type: 'custom:mini-media-player',
+        entity: 'media_player.example',
+        idle_view: {
+          when_paused: true,
+        },
+        speaker_group: {
+          platform: 'media_player',
+          show_group_count: true,
+          expanded: true,
+          entities: [
+            { entity_id: 'media_player.example', name: 'example' },
+            { entity_id: 'media_player.example_2', name: 'example 2' },
+            { entity_id: 'media_player.example_3', name: 'example 3' },
+          ],
+        },
+        shortcuts: {
+          buttons: [
+            {
+              icon: 'mdi:play',
+              type: 'playlist',
+              id: 'spotify:user:XXXXXXX:playlist:37i9dQZF1DZ06evO2O09H',
+            },
+            {
+              icon: 'mdi:play',
+              type: 'playlist',
+              id: 'spotify:user:XXXXXXX:playlist:37i9dQZF1DZ06evO2O09H',
+            },
+            {
+              name: 'Shortcut',
+              type: 'playlist',
+              id: 'spotify:user:XXXXXXX:playlist:37i9dQZF1DZ06evO2O09H',
+            },
+          ],
+        },
+      };
+
+      const hassState = {
+        translationMetadata: {
+          translations: {
+            en: {},
+          },
+        },
+        language: 'en',
+      };
+
+      const updateHass = () => {
+        console.log(exampleMediaPlayer.state.attributes.group_members);
+        document.querySelector('mini-media-player').hass = {
+          ...hassState,
+          callService: serviceCallHandler,
+          states: {
+            [exampleMediaPlayer.entityId]: { ...exampleMediaPlayer.state },
+          },
+        };
+      };
+
+      function serviceCallHandler(domain, service, data) {
+        console.log('service call', domain, service, data);
+        if (data && data.entity_id) {
+          setTimeout(() => {
+            entities.forEach(entity => {
+              if (entity.entityId === data.entity_id || service === "unjoin") {
+                entity.handleServiceCall(service, data);
+              }
+            });
+            updateHass();
+          }, 100);
+        }
+      }
+
+      const exampleMediaPlayer = new MediaPlayerMock('example');
+
+      const entities = [exampleMediaPlayer];
+
+      render(html` <mini-media-player></mini-media-player> `, document.querySelector('#demo'));
+      document.querySelector('mini-media-player').setConfig(config);
+      updateHass();
+    </script>
+  </body>
+</html>

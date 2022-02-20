@@ -16,3 +16,5 @@ globals:
   CustomEvent: true
   fetch: true
   Request: true
+  HTMLElement: true
+  document: true

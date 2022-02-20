@@ -188,4 +188,4 @@ class MiniMediaPlayerProgress extends LitElement {
   }
 }
 
-customElements.define('mmp-progress', MiniMediaPlayerProgress);
+window.customElements.define('mmp-progress', MiniMediaPlayerProgress);

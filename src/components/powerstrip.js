@@ -89,20 +89,20 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           ?full=${this.config.sound_mode === 'full'}>
         </mmp-sound-menu>` : ''}
       ${this.showGroupButton ? html`
-        <ha-icon-button class='group-button'
+        <mmp-icon-button class='group-button'
           .icon=${this.icon}
           ?inactive=${!this.player.isGrouped}
           ?color=${this.groupVisible}
           @click=${this.handleGroupClick}>
           <ha-icon .icon=${this.icon}></ha-icon>
-        </ha-icon-button>` : ''}
+        </mmp-icon-button>` : ''}
       ${this.showPowerButton ? html`
-        <ha-icon-button class='power-button'
+        <mmp-icon-button class='power-button'
           .icon=${ICON.POWER}
           @click=${e => this.player.toggle(e)}
           ?color=${this.powerColor}>
           <ha-icon .icon=${ICON.POWER}></ha-icon>
-        </ha-icon-button>` : ''}
+        </mmp-icon-button>` : ''}
     `;
   }
 
@@ -114,11 +114,11 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   get renderIdleView() {
     if (this.player.isPaused)
       return html`
-        <ha-icon-button
+        <mmp-icon-button
           .icon=${ICON.PLAY[this.player.isPlaying]}
           @click=${e => this.player.playPause(e)}>
           <ha-icon .icon=${ICON.PLAY[this.player.isPlaying]}></ha-icon>
-        </ha-icon-button>`;
+        </mmp-icon-button>`;
     else if (this.showLabel)
       return html`
         <span class='label ellipsis'>
@@ -149,7 +149,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
         .group-button {
           --mdc-icon-size: calc(var(--mmp-unit) * 0.5);
         }
-        ha-icon-button {
+        mmp-icon-button {
           min-width: var(--mmp-unit);
         }
       `,
@@ -157,4 +157,4 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   }
 }
 
-customElements.define('mmp-powerstrip', MiniMediaPlayerPowerstrip);
+window.customElements.define('mmp-powerstrip', MiniMediaPlayerPowerstrip);

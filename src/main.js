@@ -19,6 +19,7 @@ import './components/tts';
 import './components/progress';
 import './components/powerstrip';
 import './components/mediaControls';
+import './components/iconButton';
 
 import {
   ICON,
@@ -49,6 +50,7 @@ class MiniMediaPlayer extends LitElement {
     return {
       _hass: {},
       config: {},
+      _config: {},
       entity: {},
       player: {},
       groupMgmtEntity: {},
@@ -76,7 +78,10 @@ class MiniMediaPlayer extends LitElement {
   }
 
   set hass(hass) {
-    if (!hass) return;
+    // console.log('State:', hass);
+    // console.log('Config:', this.config);
+
+    if (!hass || !this.config) return;
     const entity = hass.states[this.config.entity];
     this._hass = hass;
     if (entity && this.entity !== entity) {
@@ -116,6 +121,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   setConfig(config) {
+    console.log('set config');
     this.config = generateConfig(config);
   }
 

@@ -106,4 +106,4 @@ class MiniMediaPlayerGroupList extends LitElement {
   }
 }
 
-customElements.define('mmp-group-list', MiniMediaPlayerGroupList);
+window.customElements.define('mmp-group-list', MiniMediaPlayerGroupList);

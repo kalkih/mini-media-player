@@ -160,4 +160,4 @@ class MiniMediaPlayerShortcuts extends LitElement {
   }
 }
 
-customElements.define('mmp-shortcuts', MiniMediaPlayerShortcuts);
+window.customElements.define('mmp-shortcuts', MiniMediaPlayerShortcuts);
