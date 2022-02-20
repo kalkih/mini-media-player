@@ -46,13 +46,16 @@
       const config = {
         type: 'custom:mini-media-player',
         entity: 'media_player.example',
-        idle_view: {
-          when_paused: true,
+        tts: {
+          platform: 'google',
         },
+        // idle_view: {
+        //   when_paused: true,
+        // },
         speaker_group: {
           platform: 'media_player',
           show_group_count: true,
-          expanded: true,
+          // expanded: true,
           entities: [
             { entity_id: 'media_player.example', name: 'example' },
             { entity_id: 'media_player.example_2', name: 'example 2' },
@@ -90,7 +93,6 @@
       };
 
       const updateHass = () => {
-        console.log(exampleMediaPlayer.state.attributes.group_members);
         document.querySelector('mini-media-player').hass = {
           ...hassState,
           callService: serviceCallHandler,

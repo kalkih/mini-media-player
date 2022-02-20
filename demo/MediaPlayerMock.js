@@ -8,19 +8,21 @@ class MediaPlayerMock {
   }
 
   handleServiceCall(service, data = {}) {
-    console.log('hello');
     switch (service) {
       case 'media_play_pause':
         this.state.state = ['paused', 'on'].includes(this.state.state) ? 'playing' : 'paused';
-        // if (this.state.state === this.state.state.paused) {
-        this.state.attributes = {
-          ...this.state.attributes,
-          media_position:
-            (new Date().getTime()
-              - new Date(this.state.attributes.media_position_updated_at).getTime())
-            / 1000,
-          media_position_updated_at: new Date().toISOString(),
-        };
+        if (this.state.state === this.state.state.paused) {
+          this.state.attributes = {
+            ...this.state.attributes,
+            media_position:
+              (new Date().getTime()
+                - new Date(this.state.attributes.media_position_updated_at).getTime())
+              / 1000,
+            media_position_updated_at: new Date().toISOString(),
+          };
+        } else {
+          this.state.attributes.media_position_updated_at = new Date().toISOString();
+        }
         break;
       case 'volume_mute':
         this.state.attributes.is_volume_muted = !this.state.attributes.is_volume_muted;
@@ -52,7 +54,6 @@ class MediaPlayerMock {
         }
         break;
       case 'unjoin':
-        console.log('hello');
         if (this.state.attributes.group_members) {
           this.state.attributes.group_members = this.state.attributes.group_members.filter(entity => (typeof data.entity_id === 'string'
             ? entity !== data.entity_id

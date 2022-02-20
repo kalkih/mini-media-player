@@ -1,6 +1,30 @@
 import { LitElement, html, css } from 'lit-element';
+import { TextFieldBase } from '@material/mwc-textfield/mwc-textfield-base';
+import { styles } from '@material/mwc-textfield/mwc-textfield.css';
 
 import t from '../utils/translation';
+
+customElements.define('mmp-textfield',
+  class MiniMediaPlayerTextField extends TextFieldBase {
+    static get styles() {
+      return [
+        styles,
+        css`
+        input {
+          font-size: 1em !important;
+        }
+          label {
+            height: var(--mmp-unit) !important;
+            border-radius: 4px !important;
+            overflow: hidden;
+            box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+              0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+              0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+          }
+        `,
+      ];
+    }
+  });
 
 class MiniMediaPlayerTts extends LitElement {
   static get properties() {
@@ -30,14 +54,14 @@ class MiniMediaPlayerTts extends LitElement {
 
   render() {
     return html`
-      <paper-input
+      <mmp-textfield
         id="tts-input"
         class="mmp-tts__input"
-        no-label-float
-        placeholder="${this.label}..."
         @click=${e => e.stopPropagation()}
+        filled
+        placeholder="${this.label}..."
       >
-      </paper-input>
+      </mmp-textfield>
       <mmp-button class="mmp-tts__button" @click=${this.handleTts}>
         <span>${t(this.hass, 'label.send')}</span>
       </mmp-button>
@@ -108,16 +132,15 @@ class MiniMediaPlayerTts extends LitElement {
     return css`
       :host {
         align-items: center;
-        margin-left: 8px;
+        margin: 0 4px;
         display: flex;
+        align-items: stretch;
+        margin-top: 4px;
       }
       .mmp-tts__input {
         cursor: text;
         flex: 1;
         margin-right: 8px;
-        --paper-input-container-input: {
-          font-size: 1em;
-        };
       }
       ha-card[rtl] .mmp-tts__input {
         margin-right: auto;
@@ -125,23 +148,17 @@ class MiniMediaPlayerTts extends LitElement {
       }
       .mmp-tts__button {
         margin: 0;
-        height: 30px;
-        padding: 0 .4em;
+        height: auto;
+        padding: 0 .6em;
       }
-      paper-input {
-        opacity: .75;
-        --paper-input-container-color: var(--mmp-text-color);
-        --paper-input-container-input-color: var(--mmp-text-color);
-        --paper-input-container-focus-color: var(--mmp-text-color);
-        --paper-input-container: {
-          padding: 0;
-        };
+      mmp-textfield {
+        --mdc-text-field-fill-color: var(--mmp-button-color);
+        --mdc-text-field-ink-color: var(--mmp-text-color);
+        --mdc-text-field-label-ink-color: var(--mmp-text-color);
+        --mdc-text-field-idle-line-color: transparent;
+        --mdc-text-field-hover-line-color: transparent;
       }
-      paper-input[focused] {
-        opacity: 1;
-      }
-
-      ha-card[artwork*='cover'][has-artwork] paper-input {
+      ha-card[artwork*='cover'][has-artwork] mmp-textfield {
         --paper-input-container-color: #FFFFFF;
         --paper-input-container-input-color: #FFFFFF;
         --paper-input-container-focus-color: #FFFFFF;

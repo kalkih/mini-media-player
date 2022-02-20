@@ -121,7 +121,6 @@ class MiniMediaPlayer extends LitElement {
   }
 
   setConfig(config) {
-    console.log('set config');
     this.config = generateConfig(config);
   }
 

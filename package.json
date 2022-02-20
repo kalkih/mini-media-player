@@ -24,6 +24,7 @@
     "@material/mwc-menu": "^0.25.3",
     "@material/mwc-ripple": "^0.25.3",
     "@material/mwc-slider": "^0.25.3",
+    "@material/mwc-textfield": "^0.25.3",
     "@polymer/paper-ripple": "^3.0.2",
     "@polymer/paper-slider": "^3.0.1",
     "lit-element": "^2.3.1",

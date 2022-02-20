@@ -20,8 +20,6 @@ class MiniMediaPlayerButton extends LitElement {
   static get styles() {
     return css`
       :host {
-        --mdc-theme-primary: red;
-        --mdc-ripple-color: red;
         position: relative;
         box-sizing: border-box;
         margin: 4px;

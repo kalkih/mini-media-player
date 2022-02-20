@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-// import { RippleBase } from '@material/mwc-ripple/mwc-ripple-base';
 import { IconButtonBase } from '@material/mwc-icon-button/mwc-icon-button-base';
 import { styles } from '@material/mwc-icon-button/mwc-icon-button.css';
 
