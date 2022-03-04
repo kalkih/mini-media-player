@@ -20,7 +20,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 2. Go to Sidebar -> Configuration -> Lovelace Dashboards -> Resources.
 3. Click on `+ ADD RESOURCE`.
-4. Type `/local/mini-media-player-bundle.js?v=1.16.0` below URL.
+4. Type `/local/mini-media-player-bundle.js?v=1.16.1` below URL.
 5. Choose `JavaScript Module` below Resource Type.
 6. Accept.
 
@@ -33,7 +33,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.0
+      - url: /local/mini-media-player-bundle.js?v=1.16.1
         type: module
   ```
 
@@ -52,7 +52,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.0
+      - url: /local/mini-media-player-bundle.js?v=1.16.1
         type: module
   ```
 
@@ -66,7 +66,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.0
+      - url: /local/mini-media-player-bundle.js?v=1.16.1
         type: module
   ```
 
