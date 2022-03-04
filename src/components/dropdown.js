@@ -55,7 +55,8 @@ class MiniMediaPlayerDropdown extends LitElement {
           @selected=${this.onChange}
           activatable
           id='menu'
-          corner='BOTTOM_START'>
+          corner='BOTTOM_RIGHT'
+          menuCorner='END'>
           ${this.items.map(item => html`
             <mwc-list-item value=${item.id || item.name}>
               ${item.icon ? html`<ha-icon .icon=${item.icon}></ha-icon>` : ''}
