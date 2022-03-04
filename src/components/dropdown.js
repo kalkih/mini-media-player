@@ -5,13 +5,6 @@ import sharedStyle from '../sharedStyle';
 import './button';
 
 class MiniMediaPlayerDropdown extends LitElement {
-  constructor() {
-    super();
-    this.id = Math.random()
-      .toString(36)
-      .substr(2, 9);
-  }
-
   static get properties() {
     return {
       items: [],
@@ -27,8 +20,8 @@ class MiniMediaPlayerDropdown extends LitElement {
   }
 
   firstUpdated() {
-    const menu = this.shadowRoot.querySelector(`#${this.id}-menu`);
-    const button = this.shadowRoot.querySelector(`#${this.id}-button`);
+    const menu = this.shadowRoot.querySelector('#menu');
+    const button = this.shadowRoot.querySelector('#button');
     menu.anchor = button;
   }
 
@@ -40,14 +33,14 @@ class MiniMediaPlayerDropdown extends LitElement {
         ?open=${this.isOpen}>
         ${this.icon ? html`
           <mmp-icon-button
-            id=${`${this.id}-button`}
+            id='button'
             class='mmp-dropdown__button icon'
             .icon=${ICON.DROPDOWN}
             @click=${this.toggleMenu}>
             <ha-icon .icon=${ICON.DROPDOWN}></ha-icon>
           </mmp-icon-button>
         ` : html`
-          <mmp-button id=${`${this.id}-button`} class='mmp-dropdown__button' 
+          <mmp-button id='button' class='mmp-dropdown__button' 
             @click=${this.toggleMenu}>
             <div>
               <span class='mmp-dropdown__label ellipsis'>
@@ -61,8 +54,8 @@ class MiniMediaPlayerDropdown extends LitElement {
           @closed=${() => this.isOpen = false}
           @selected=${this.onChange}
           activatable
-          id=${`${this.id}-menu`}
-          corner="BOTTOM_START">
+          id='menu'
+          corner='BOTTOM_START'>
           ${this.items.map(item => html`
             <mwc-list-item value=${item.id || item.name}>
               ${item.icon ? html`<ha-icon .icon=${item.icon}></ha-icon>` : ''}
@@ -83,7 +76,7 @@ class MiniMediaPlayerDropdown extends LitElement {
   }
 
   toggleMenu() {
-    const menu = this.shadowRoot.querySelector(`#${this.id}-menu`);
+    const menu = this.shadowRoot.querySelector('#menu');
     menu.open = !menu.open;
     this.isOpen = menu.open;
   }
