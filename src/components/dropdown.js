@@ -32,13 +32,13 @@ class MiniMediaPlayerDropdown extends LitElement {
         @click=${e => e.stopPropagation()}
         ?open=${this.isOpen}>
         ${this.icon ? html`
-          <mmp-icon-button
+          <ha-icon-button
             id='button'
             class='mmp-dropdown__button icon'
             .icon=${ICON.DROPDOWN}
             @click=${this.toggleMenu}>
             <ha-icon .icon=${ICON.DROPDOWN}></ha-icon>
-          </mmp-icon-button>
+          </ha-icon-button>
         ` : html`
           <mmp-button id='button' class='mmp-dropdown__button' 
             @click=${this.toggleMenu}>

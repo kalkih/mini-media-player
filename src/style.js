@@ -429,13 +429,6 @@ const style = css`
   ha-switch {
     padding: 16px 6px;
   }
-  .side-by-side {
-    display: flex;
-  }
-  .side-by-side > * {
-    flex: 1;
-    padding-right: 4px;
-  }
 `;
 
 export default style;
