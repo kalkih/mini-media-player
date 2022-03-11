@@ -51,7 +51,7 @@ class MiniMediaPlayerDropdown extends LitElement {
           </mmp-button>
         `}
         <mwc-menu
-          @closed=${() => this.isOpen = false}
+          @closed=${this.handleClose}
           @selected=${this.onChange}
           activatable
           id='menu'
@@ -74,6 +74,11 @@ class MiniMediaPlayerDropdown extends LitElement {
         detail: this.items[index],
       }));
     }
+  }
+
+  handleClose(e) {
+    e.stopPropagation();
+    this.isOpen = false;
   }
 
   toggleMenu() {
