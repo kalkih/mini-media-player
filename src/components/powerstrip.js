@@ -33,7 +33,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   }
 
   get powerColor() {
-    return this.player.active && !this.config.hide.power_state;
+    return this.player.isActive && !this.config.hide.power_state;
   }
 
   get sourceSize() {
@@ -45,7 +45,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   }
 
   get hasControls() {
-    return this.player.active && (this.config.hide.controls !== this.config.hide.volume);
+    return this.player.isActive && (this.config.hide.controls !== this.config.hide.volume);
   }
 
   get hasSource() {

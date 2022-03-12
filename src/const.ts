@@ -16,6 +16,7 @@ const DEFAULT_HIDE = {
   next: false,
   jump: true,
   state_label: false,
+  progress: false,
 };
 
 const REPEAT_STATE = {
@@ -57,8 +58,19 @@ const ICON = {
   REWIND: 'mdi:rewind',
 };
 
-const UPDATE_PROPS = ['entity', 'groupMgmtEntity', '_overflow',
-  'break', 'thumbnail', 'prevThumbnail', 'edit', 'idle', 'cardHeight', 'backgroundColor', 'foregroundColor'];
+const UPDATE_PROPS = [
+  'entity',
+  'groupMgmtEntity',
+  '_overflow',
+  'break',
+  'thumbnail',
+  'prevThumbnail',
+  'edit',
+  'idle',
+  'cardHeight',
+  'backgroundColor',
+  'foregroundColor',
+];
 
 const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
 

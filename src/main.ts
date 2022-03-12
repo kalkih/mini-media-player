@@ -52,7 +52,7 @@ class MiniMediaPlayer extends LitElement {
       _hass: {},
       config: {},
       entity: {},
-      player: {},
+      player: MediaPlayerObject,
       groupMgmtEntity: {},
       groupMgmtPlayer: MediaPlayerObject,
       _overflow: Boolean,
@@ -167,6 +167,8 @@ class MiniMediaPlayer extends LitElement {
   render({ config } = this) {
     this.computeArtwork();
 
+    console.log(this.player);
+
     return html`
       <ha-card
         class=${this.computeClasses()}
@@ -197,7 +199,7 @@ class MiniMediaPlayer extends LitElement {
             </mmp-powerstrip>
           </div>
           <div class='mmp-player__adds'>
-            ${!config.collapse && this.player.active ? html`
+            ${!config.collapse && this.player.isActive ? html`
               <mmp-media-controls
                 .player=${this.player}
                 .config=${config}
@@ -224,7 +226,7 @@ class MiniMediaPlayer extends LitElement {
           </div>
         </div>
         <div class='mmp__container'>
-          ${this.player.active && this.player.hasProgress ? html`
+          ${this.player.isActive && this.player.hasProgress ? html`
             <mmp-progress
               .player=${this.player}
               .showTime=${!this.config.hide.runtime}
@@ -303,7 +305,7 @@ class MiniMediaPlayer extends LitElement {
 
   renderIcon() {
     if (this.config.hide.icon) return;
-    if (this.player.active && this.thumbnail && this.config.artwork === 'default')
+    if (this.player.isActive && this.thumbnail && this.config.artwork === 'default')
       return html`
         <div class='entity__artwork'
           style='background-image: ${this.thumbnail};'
@@ -333,7 +335,7 @@ class MiniMediaPlayer extends LitElement {
 
     return html`
       <div class='entity__info__media'
-        ?short=${this.config.info === 'short' || !this.player.active}
+        ?short=${this.config.info === 'short' || !this.player.isActive}
         ?short-scroll=${this.config.info === 'scroll'}
         ?scroll=${this.overflow}
         style='animation-duration: ${this.overflow}s;'>
@@ -403,7 +405,7 @@ class MiniMediaPlayer extends LitElement {
     const ele = this.shadowRoot.querySelector('.marquee');
     if (ele) {
       const status = ele.clientWidth > ele.parentNode.clientWidth;
-      this.overflow = status && this.player.active ? 7.5 + (ele.clientWidth / 50) : false;
+      this.overflow = status && this.player.isActive ? 7.5 + (ele.clientWidth / 50) : false;
     }
   }
 

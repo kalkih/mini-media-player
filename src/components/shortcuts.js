@@ -23,7 +23,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
   }
 
   get show() {
-    return (!this.shortcuts.hide_when_off || this.player.active);
+    return (!this.shortcuts.hide_when_off || this.player.isActive);
   }
 
   get active() {

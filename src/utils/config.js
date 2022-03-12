@@ -1,7 +1,4 @@
-import {
-  DEFAULT_HIDE,
-  LABEL_SHORTCUT,
-} from '../const';
+import { DEFAULT_HIDE, LABEL_SHORTCUT } from '../const';
 
 const validate = (config) => {
   if (!config.entity || config.entity.split('.')[0] !== 'media_player')
@@ -20,7 +17,6 @@ export const generateConfig = (config) => {
     source: 'default',
     sound_mode: 'default',
     toggle_power: true,
-    volume_step: null,
     tap_action: {
       action: 'more-info',
     },
@@ -41,9 +37,9 @@ export const generateConfig = (config) => {
   };
   conf.max_volume = Number(conf.max_volume) || 100;
   conf.min_volume = Number(conf.min_volume) || 0;
-  conf.collapse = (conf.hide.controls || conf.hide.volume);
+  conf.collapse = conf.hide.controls || conf.hide.volume;
   conf.info = conf.collapse && conf.info !== 'scroll' ? 'short' : conf.info;
-  conf.flow = (conf.hide.icon && conf.hide.name && conf.hide.info);
+  conf.flow = conf.hide.icon && conf.hide.name && conf.hide.info;
 
   return conf;
 };
