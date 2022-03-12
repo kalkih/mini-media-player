@@ -1,4 +1,4 @@
-import * as Vibrant from 'node-vibrant';
+import * as Vibrant from "node-vibrant/dist/vibrant";
 
 import {
   CONTRAST_RATIO,
