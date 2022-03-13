@@ -17,6 +17,9 @@ const DEFAULT_HIDE = {
   jump: true,
   state_label: false,
   progress: false,
+  icon: false,
+  name: false,
+  info: false,
 };
 
 const REPEAT_STATE = {

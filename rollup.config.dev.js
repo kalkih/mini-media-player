@@ -10,6 +10,7 @@ export default {
   output: {
     file: './dist/mini-media-player-bundle.js',
     format: 'es',
+    inlineDynamicImports: true,
   },
   plugins: [
     resolve(),

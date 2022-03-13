@@ -1,11 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import { LitElement, html } from 'lit-element';
+// // @ts-nocheck
+import {
+  LitElement,
+  html,
+  customElement,
+  property,
+  state,
+  CSSResultGroup,
+  PropertyValues,
+  TemplateResult,
+} from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { styleMap } from 'lit-html/directives/style-map';
 import ResizeObserver from 'resize-observer-polyfill';
 
-import { generateConfig } from './utils/config';
+import { generateConfig } from './config/config';
 import MediaPlayerObject from './model';
 import style from './style';
 import sharedStyle from './sharedStyle';
@@ -22,64 +31,17 @@ import './components/progress';
 import './components/powerstrip';
 import './components/mediaControls';
 
-import {
-  ICON,
-  UPDATE_PROPS,
-  BREAKPOINT,
-} from './const';
+import { ICON, UPDATE_PROPS, BREAKPOINT } from './const';
+import { HomeAssistant, MediaPlayerEntity } from './types';
+import { Part } from 'lit-html';
+import { MiniMediaPlayerBaseConfiguration, MiniMediaPlayerConfiguration } from './config/types';
 
-import MiniMediaPlayerEditor from './editor';
-
-customElements.define('mini-media-player-editor', MiniMediaPlayerEditor);
-
+@customElement('mini-media-player')
 class MiniMediaPlayer extends LitElement {
-  constructor() {
-    super();
-    this._overflow = false;
-    this.initial = true;
-    this.picture = false;
-    this.thumbnail = '';
-    this.prevThumbnail = '';
-    this.edit = false;
-    this.rtl = false;
-    this.cardHeight = 0;
-    this.foregroundColor = '';
-    this.backgroundColor = '';
-  }
-
-  static get properties() {
-    return {
-      _hass: {},
-      config: {},
-      entity: {},
-      player: MediaPlayerObject,
-      groupMgmtEntity: {},
-      groupMgmtPlayer: MediaPlayerObject,
-      _overflow: Boolean,
-      break: Boolean,
-      initial: Boolean,
-      picture: String,
-      thumbnail: String,
-      prevThumbnail: String,
-      edit: Boolean,
-      rtl: Boolean,
-      idle: Boolean,
-      cardHeight: Number,
-      foregroundColor: String,
-      backgroundColor: String,
-    };
-  }
-
-  static get styles() {
-    return [
-      sharedStyle,
-      style,
-    ];
-  }
-
+  @property({ attribute: false })
   set hass(hass) {
     if (!hass) return;
-    const entity = hass.states[this.config.entity];
+    const entity = hass.states[this.config.entity] as MediaPlayerEntity;
     this._hass = hass;
     if (entity && this.entity !== entity) {
       this.entity = entity;
@@ -89,39 +51,67 @@ class MiniMediaPlayer extends LitElement {
       if (this.player.trackIdle) this.updateIdleStatus();
     }
     if (this.config && this.config.speaker_group && this.config.speaker_group.group_mgmt_entity) {
-      const altPlayer = hass.states[this.config.speaker_group.group_mgmt_entity];
-      if (altPlayer && this.groupMgmtPlayer !== altPlayer) {
+      const altPlayer = hass.states[this.config.speaker_group.group_mgmt_entity] as MediaPlayerEntity;
+      if (altPlayer && this.groupMgmtEntity !== altPlayer) {
         this.groupMgmtEntity = altPlayer;
         this.groupMgmtPlayer = new MediaPlayerObject(hass, this.config, altPlayer);
       }
     }
   }
 
-  get hass() {
+  get hass(): HomeAssistant {
     return this._hass;
   }
 
-  set overflow(v) {
-    if (this._overflow !== v) this._overflow = v;
+  @state() private _overflow?: number;
+  @state() private initial = true;
+  @state() private picture?: string = undefined;
+  @state() private thumbnail = '';
+  @state() private prevThumbnail = '';
+  @state() private edit = false;
+  @state() private rtl = false;
+  @state() private cardHeight = 0;
+  @state() private foregroundColor = '';
+  @state() private backgroundColor = '';
+
+  @state() private config!: MiniMediaPlayerConfiguration;
+  @state() private _hass!: HomeAssistant;
+  @state() private entity?: MediaPlayerEntity;
+  @state() private player!: MediaPlayerObject;
+  @state() private idle!: boolean;
+  @state() private groupMgmtPlayer?: MediaPlayerObject;
+  @state() private groupMgmtEntity?: MediaPlayerEntity;
+  @state() private break = false;
+  @state() private _resizeEntry?: ResizeObserverEntry;
+  @state() private _resizeTimer?: NodeJS.Timeout;
+  @state() private _idleTracker?: NodeJS.Timeout;
+
+  public static async getConfigElement() {
+    await import('./editor');
+    return document.createElement('mini-media-player-editor');
   }
 
-  get overflow() {
+  static get styles(): CSSResultGroup {
+    return [sharedStyle, style];
+  }
+
+  set overflow(value: number | undefined) {
+    if (this._overflow !== value) this._overflow = value;
+  }
+
+  get overflow(): number | undefined {
     return this._overflow;
   }
 
-  get name() {
+  get name(): string {
     return this.config.name || this.player.name;
   }
 
-  static getConfigElement() {
-    return window.document.createElement('mini-media-player-editor');
-  }
-
-  setConfig(config) {
+  setConfig(config: MiniMediaPlayerBaseConfiguration) {
     this.config = generateConfig(config);
   }
 
-  shouldUpdate(changedProps) {
+  protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (this.break === undefined) this.computeRect(this);
     if (changedProps.has('prevThumbnail') && this.prevThumbnail) {
       setTimeout(() => {
@@ -131,20 +121,22 @@ class MiniMediaPlayer extends LitElement {
     if (changedProps.has('player') && this.config.artwork === 'material') {
       this.setColors();
     }
-    return UPDATE_PROPS.some(prop => changedProps.has(prop)) && this.player;
+    return UPDATE_PROPS.some((prop) => changedProps.has(prop)) && Boolean(this.player);
   }
 
-  firstUpdated() {
-    const ro = new ResizeObserver((entries) => {
+  protected firstUpdated() {
+    const ro = new ResizeObserver((entries: ResizeObserverEntry[]) => {
       entries.forEach((entry) => {
         window.requestAnimationFrame(() => {
           if (this.config.info === 'scroll') this.computeOverflow();
           if (!this._resizeTimer) {
             this.computeRect(entry);
             this._resizeTimer = setTimeout(() => {
-              this._resizeTimer = null;
-              this.computeRect(this._resizeEntry);
-              this.measureCard();
+              this._resizeTimer = undefined;
+              if (this._resizeEntry) {
+                this.computeRect(this._resizeEntry);
+                this.measureCard();
+              }
             }, 250);
           }
           this._resizeEntry = entry;
@@ -153,41 +145,33 @@ class MiniMediaPlayer extends LitElement {
     });
     ro.observe(this);
 
-    setTimeout(() => this.initial = false, 250);
+    setTimeout(() => (this.initial = false), 250);
     this.edit = this.config.speaker_group.expanded || false;
   }
 
-  updated() {
+  protected updated() {
     if (this.config.info === 'scroll')
       setTimeout(() => {
         this.computeOverflow();
       }, 10);
   }
 
-  render({ config } = this) {
+  render({ config } = this): TemplateResult | void {
     this.computeArtwork();
-
-    console.log(this.player);
 
     return html`
       <ha-card
         class=${this.computeClasses()}
         style=${this.computeStyles()}
-        @click=${e => this.handlePopup(e)}
+        @click=${(e) => this.handlePopup(e)}
         artwork=${config.artwork}
-        content=${this.player.content}>
-        <div class='mmp__bg'>
-          ${this.renderBackground()}
-          ${this.renderArtwork()}
-          ${this.renderGradient()}
-        </div>
-        <div class='mmp-player'>
-          <div class='mmp-player__core flex' ?inactive=${this.player.idle}>
+        content=${this.player.content}
+      >
+        <div class="mmp__bg">${this.renderBackground()} ${this.renderArtwork()} ${this.renderGradient()}</div>
+        <div class="mmp-player">
+          <div class="mmp-player__core flex" ?inactive=${this.player.idle}>
             ${this.renderIcon()}
-            <div class='entity__info'>
-              ${this.renderEntityName()}
-              ${this.renderMediaInfo()}
-            </div>
+            <div class="entity__info">${this.renderEntityName()} ${this.renderMediaInfo()}</div>
             <mmp-powerstrip
               @toggleGroupList=${this.toggleGroupList}
               .hass=${this.hass}
@@ -195,44 +179,41 @@ class MiniMediaPlayer extends LitElement {
               .config=${config}
               .groupVisible=${this.edit}
               .idle=${this.idle}
-              ?flow=${config.flow}>
+              ?flow=${config.flow}
+            >
             </mmp-powerstrip>
           </div>
-          <div class='mmp-player__adds'>
-            ${!config.collapse && this.player.isActive ? html`
-              <mmp-media-controls
-                .player=${this.player}
-                .config=${config}
-                .break=${this.break}>
-              </mmp-media-controls>
-            ` : ''}
-            <mmp-shortcuts
-              .player=${this.player}
-              .shortcuts=${config.shortcuts}>
-            </mmp-shortcuts>
-            ${config.tts ? html`
-              <mmp-tts
-                .config=${config.tts}
-                .hass=${this.hass}
-                .player=${this.player}>
-              </mmp-tts>
-            ` : ''}
+          <div class="mmp-player__adds">
+            ${!config.collapse && this.player.isActive
+              ? html`
+                  <mmp-media-controls .player=${this.player} .config=${config} .break=${this.break}>
+                  </mmp-media-controls>
+                `
+              : ''}
+            <mmp-shortcuts .player=${this.player} .shortcuts=${config.shortcuts}> </mmp-shortcuts>
+            ${config.tts
+              ? html` <mmp-tts .config=${config.tts} .hass=${this.hass} .player=${this.player}> </mmp-tts> `
+              : ''}
             <mmp-group-list
               .hass=${this.hass}
               .visible=${this.edit}
               .entities=${config.speaker_group.entities}
-              .player=${this.groupMgmtPlayer ? this.groupMgmtPlayer : this.player}>>
+              .player=${this.groupMgmtPlayer ? this.groupMgmtPlayer : this.player}
+              >>
             </mmp-group-list>
           </div>
         </div>
-        <div class='mmp__container'>
-          ${this.player.isActive && this.player.hasProgress ? html`
-            <mmp-progress
-              .player=${this.player}
-              .showTime=${!this.config.hide.runtime}
-              .showRemainingTime=${!this.config.hide.runtime_remaining}>
-            </mmp-progress>
-          ` : ''}
+        <div class="mmp__container">
+          ${this.player.isActive && this.player.hasProgress
+            ? html`
+                <mmp-progress
+                  .player=${this.player}
+                  .showTime=${!this.config.hide.runtime}
+                  .showRemainingTime=${!this.config.hide.runtime_remaining}
+                >
+                </mmp-progress>
+              `
+            : ''}
         </div>
       </ha-card>
     `;
@@ -242,9 +223,9 @@ class MiniMediaPlayer extends LitElement {
     return classMap({
       '--responsive': this.break || config.hide.icon,
       '--initial': this.initial,
-      '--bg': config.background,
+      '--bg': config.background || false,
       '--group': config.group,
-      '--more-info': config.tap_action !== 'none',
+      '--more-info': config.tap_action.action !== 'none',
       '--has-artwork': this.player.hasArtwork && this.thumbnail,
       '--flow': config.flow,
       '--collapse': config.collapse,
@@ -255,9 +236,8 @@ class MiniMediaPlayer extends LitElement {
     });
   }
 
-  renderArtwork() {
-    if (!this.thumbnail || this.config.artwork === 'default')
-      return;
+  renderArtwork(): TemplateResult | undefined {
+    if (!this.thumbnail || this.config.artwork === 'default') return;
 
     const artworkStyle = {
       backgroundImage: this.thumbnail,
@@ -269,16 +249,12 @@ class MiniMediaPlayer extends LitElement {
       width: this.config.artwork === 'material' ? `${this.cardHeight}px` : '',
     };
 
-    return html`
-      <div class='cover' style=${styleMap(artworkStyle)}></div>
-      ${this.prevThumbnail && html`
-        <div class='cover --prev' style=${styleMap(artworkPrevStyle)}></div>
-      `}`;
+    return html` <div class="cover" style=${styleMap(artworkStyle)}></div>
+      ${this.prevThumbnail && html` <div class="cover --prev" style=${styleMap(artworkPrevStyle)}></div> `}`;
   }
 
-  renderGradient() {
-    if (this.config.artwork !== 'material')
-      return;
+  renderGradient(): TemplateResult | undefined {
+    if (this.config.artwork !== 'material') return;
 
     const gradientStyle = {
       backgroundImage: `linear-gradient(to left,
@@ -290,7 +266,7 @@ class MiniMediaPlayer extends LitElement {
     return html`<div class="cover-gradient" style=${styleMap(gradientStyle)}></div>`;
   }
 
-  renderBackground() {
+  renderBackground(): TemplateResult | undefined {
     if (!this.config.background) return;
 
     return html`
@@ -298,83 +274,84 @@ class MiniMediaPlayer extends LitElement {
     `;
   }
 
-  handlePopup(e) {
+  handlePopup(e: MouseEvent) {
     e.stopPropagation();
     handleClick(this, this._hass, this.config, this.config.tap_action, this.player.id);
   }
 
-  renderIcon() {
+  renderIcon(): TemplateResult | undefined {
     if (this.config.hide.icon) return;
-    if (this.player.isActive && this.thumbnail && this.config.artwork === 'default')
-      return html`
-        <div class='entity__artwork'
-          style='background-image: ${this.thumbnail};'
-          ?border=${!this.config.hide.artwork_border}
-          state=${this.player.state}>
-        </div>`;
-
-    const state = !this.config.hide.icon_state && this.player.isActive;
-    return html`
-      <div class='entity__icon' ?color=${state}>
-        <ha-icon .icon=${this.computeIcon()}></ha-icon>
+    if (this.player.isActive && this.thumbnail && this.config.artwork === 'default') {
+      return html` <div
+        class="entity__artwork"
+        style="background-image: ${this.thumbnail};"
+        ?border=${!this.config.hide.artwork_border}
+        state=${this.player.state}
+      >
+        ${' '}
       </div>`;
+    }
+
+    const active = !this.config.hide.icon_state && this.player.isActive;
+    return html` <div class="entity__icon" ?color=${active}>
+      <ha-icon .icon=${this.computeIcon()}></ha-icon>
+    </div>`;
   }
 
-  renderEntityName() {
+  renderEntityName(): TemplateResult | undefined {
     if (this.config.hide.name) return;
 
-    return html`
-      <div class='entity__info__name'>
-        ${this.name} ${this.speakerCount()}
-      </div>`;
+    return html` <div class="entity__info__name">${this.name} ${this.speakerCount()}</div>`;
   }
 
-  renderMediaInfo() {
+  renderMediaInfo(): TemplateResult | undefined {
     if (this.config.hide.info) return;
     const items = this.player.mediaInfo;
 
-    return html`
-      <div class='entity__info__media'
-        ?short=${this.config.info === 'short' || !this.player.isActive}
-        ?short-scroll=${this.config.info === 'scroll'}
-        ?scroll=${this.overflow}
-        style='animation-duration: ${this.overflow}s;'>
-        ${this.config.info === 'scroll' ? html`
-          <div>
-            <div class='marquee'>
-              ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
+    return html` <div
+      class="entity__info__media"
+      ?short=${this.config.info === 'short' || !this.player.isActive}
+      ?short-scroll=${this.config.info === 'scroll'}
+      ?scroll=${this.overflow}
+      style="animation-duration: ${this.overflow}s;"
+    >
+      ${this.config.info === 'scroll'
+        ? html` <div>
+            <div class="marquee">
+              ${items.map((i) => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
             </div>
-          </div>` : ''}
-        ${items.map(i => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
-      </div>`;
+          </div>`
+        : ''}
+      ${items.map((i) => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
+    </div>`;
   }
 
-  speakerCount() {
+  speakerCount(): string | undefined {
     if (this.config.speaker_group.show_group_count) {
-      const count = this.groupMgmtPlayer
-        ? this.groupMgmtPlayer.groupCount : this.player.groupCount;
+      const count = this.groupMgmtPlayer ? this.groupMgmtPlayer.groupCount : this.player.groupCount;
       return count > 1 ? ` +${count - 1}` : '';
     }
+    return;
   }
 
-  computeStyles() {
+  computeStyles(): (part: Part) => void {
     const { scale } = this.config;
     return styleMap({
       ...(scale && { '--mmp-unit': `${40 * scale}px` }),
-      ...((this.foregroundColor && this.player.isActive) && {
-        '--mmp-text-color': this.foregroundColor,
-        '--mmp-icon-color': this.foregroundColor,
-        '--mmp-icon-active-color': this.foregroundColor,
-        '--mmp-accent-color': this.foregroundColor,
-        '--paper-slider-container-color': this.foregroundColor,
-        '--secondary-text-color': this.foregroundColor,
-        '--mmp-media-cover-info-color': this.foregroundColor,
-      }
-      ),
+      ...(this.foregroundColor &&
+        this.player.isActive && {
+          '--mmp-text-color': this.foregroundColor,
+          '--mmp-icon-color': this.foregroundColor,
+          '--mmp-icon-active-color': this.foregroundColor,
+          '--mmp-accent-color': this.foregroundColor,
+          '--paper-slider-container-color': this.foregroundColor,
+          '--secondary-text-color': this.foregroundColor,
+          '--mmp-media-cover-info-color': this.foregroundColor,
+        }),
     });
   }
 
-  async computeArtwork() {
+  async computeArtwork(): Promise<void> {
     const { picture, hasArtwork } = this.player;
     if (hasArtwork && picture !== this.picture) {
       this.picture = picture;
@@ -386,14 +363,12 @@ class MiniMediaPlayer extends LitElement {
     }
   }
 
-  computeIcon() {
-    return this.config.icon
-      ? this.config.icon : this.player.icon
-      || ICON.DEFAULT;
+  computeIcon(): string {
+    return this.config.icon ? this.config.icon : this.player.icon || ICON.DEFAULT;
   }
 
-  measureCard() {
-    const card = this.shadowRoot.querySelector('ha-card');
+  measureCard(): void {
+    const card = this.shadowRoot?.querySelector('ha-card') as HTMLElement | undefined;
     if (!card) {
       return;
     }
@@ -401,20 +376,25 @@ class MiniMediaPlayer extends LitElement {
     this.cardHeight = card.offsetHeight;
   }
 
-  computeOverflow() {
-    const ele = this.shadowRoot.querySelector('.marquee');
-    if (ele) {
-      const status = ele.clientWidth > ele.parentNode.clientWidth;
-      this.overflow = status && this.player.isActive ? 7.5 + (ele.clientWidth / 50) : false;
+  computeOverflow(): void {
+    const element = this.shadowRoot?.querySelector('.marquee') as HTMLElement | undefined;
+    if (element && element.parentNode) {
+      const status = element.clientWidth > (element.parentNode as HTMLElement).clientWidth;
+      this.overflow = status && this.player.isActive ? 7.5 + element.clientWidth / 50 : undefined;
     }
   }
 
-  computeRect(entry) {
-    const { left, width } = entry.contentRect || entry.getBoundingClientRect();
-    this.break = (width + left * 2) < BREAKPOINT;
+  private computeRect(entry: ResizeObserverEntry | HTMLElement) {
+    if ('contentRect' in entry) {
+      const { left, width } = entry.contentRect;
+      this.break = width + left * 2 < BREAKPOINT;
+    } else {
+      const { left, width } = entry.getBoundingClientRect();
+      this.break = width + left * 2 < BREAKPOINT;
+    }
   }
 
-  computeRTL(hass) {
+  computeRTL(hass: HomeAssistant): boolean {
     const lang = hass.language || 'en';
     if (hass.translationMetadata.translations[lang]) {
       return hass.translationMetadata.translations[lang].isRTL || false;
@@ -422,27 +402,31 @@ class MiniMediaPlayer extends LitElement {
     return false;
   }
 
-  toggleGroupList() {
+  toggleGroupList(): void {
     this.edit = !this.edit;
   }
 
-  updateIdleStatus() {
+  updateIdleStatus(): void {
+    const delay = this.config?.idle_view?.after;
+    if (!delay) {
+      return;
+    }
+
     if (this._idleTracker) clearTimeout(this._idleTracker);
     const diff = (Date.now() - new Date(this.player.updatedAt).getTime()) / 1000;
     this._idleTracker = setTimeout(() => {
-      this.idle = this.player.checkIdleAfter(this.config.idle_view.after);
+      this.idle = this.player.checkIdleAfter(delay);
       this.player.idle = this.idle;
-      this._idleTracker = null;
-    }, ((this.config.idle_view.after * 60) - diff) * 1000);
+      this._idleTracker = undefined;
+    }, (delay * 60 - diff) * 1000);
   }
 
-  getCardSize() {
+  public getCardSize(): number {
     return this.config.collapse ? 1 : 2;
   }
 
-  async setColors() {
-    if (this.player.picture === this.picture)
-      return;
+  async setColors(): Promise<void> {
+    if (this.player.picture === this.picture) return;
 
     if (!this.player.picture) {
       this.foregroundColor = '';
@@ -461,11 +445,11 @@ class MiniMediaPlayer extends LitElement {
   }
 }
 
-customElements.define('mini-media-player', MiniMediaPlayer);
-
 // Configures the preview in the Lovelace card picker
-window.customCards = window.customCards || [];
-window.customCards.push({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).customCards = (window as any).customCards || [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).customCards.push({
   type: 'mini-media-player',
   name: 'Mini Media Player',
   preview: false,
