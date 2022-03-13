@@ -373,9 +373,9 @@ export default class MediaPlayerObject {
     }
   }
 
-  handleGroupChange(e: MouseEvent, entity: string, checked: boolean): void {
+  handleGroupChange(e: Event, entity: string | string[], checked: boolean): void {
     const { platform } = this;
-    const options: { entity_id: string; master?: string } = { entity_id: entity };
+    const options: { entity_id: string | string[]; master?: string } = { entity_id: entity };
     if (checked) {
       options.master = this._entityId;
       switch (platform) {
@@ -444,7 +444,7 @@ export default class MediaPlayerObject {
     }
   }
 
-  handleSoundtouch(e: MouseEvent, service: string, entity: string | string[]): void {
+  handleSoundtouch(e: Event, service: string, entity: string | string[]): void {
     return this.callService(
       e,
       service,
