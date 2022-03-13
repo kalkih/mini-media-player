@@ -28,6 +28,7 @@ export interface HomeAssistant {
   language: string;
   // local stored language, keep that name for backward compatibility
   selectedLanguage: string | null;
+  translationMetadata: TranslationMetadata;
   vibrate: boolean;
   resources: Resources;
   callService(
@@ -49,6 +50,19 @@ export interface HomeAssistant {
   callWS<T>(msg: MessageBase): Promise<T>;
 }
 
+export interface Translation {
+  nativeName: string;
+  isRTL: boolean;
+  hash: string;
+}
+
+export interface TranslationMetadata {
+  fragments: string[];
+  translations: {
+    [lang: string]: Translation;
+  };
+}
+
 export interface ServiceCallRequest {
   domain: string;
   service: string;
@@ -63,67 +77,6 @@ export interface ServiceCallResponse {
 
 export interface Resources {
   [language: string]: Record<string, string>;
-}
-
-interface MiniMediaPlayerSpeakerGroupEntity {
-  entity_id: string;
-  name: string;
-  volume_offset?: number;
-}
-
-export interface MiniMediaPlayerConfiguration {
-  speaker_group: {
-    platform: string;
-    show_group_count: boolean;
-    supports_master: boolean;
-    sync_volume?: boolean;
-    entities?: MiniMediaPlayerSpeakerGroupEntity[];
-  };
-  artwork: string;
-  hide: MiniMediaPlayerHideConfiguration;
-  toggle_power: boolean;
-  volume_step?: number;
-  entity: string;
-  info: 'default' | 'short' | 'scroll';
-  group: boolean;
-  volume_stateless: boolean;
-  more_info: boolean;
-  source: 'default' | 'icon' | 'full';
-  sound_mode: 'default' | 'icon' | 'full';
-  tap_action: {
-    action: string;
-  };
-  jump_amount: number;
-  shortcuts: {
-    label: string;
-  };
-  idle_view?: {
-    when_idle?: boolean;
-    when_paused?: boolean;
-    when_standby?: boolean;
-    after?: number;
-  };
-}
-
-interface MiniMediaPlayerHideConfiguration {
-  repeat: boolean;
-  shuffle: boolean;
-  power_state: boolean;
-  artwork_border: boolean;
-  icon_state: boolean;
-  sound_mode: boolean;
-  runtime: boolean;
-  runtime_remaining: boolean;
-  volume: boolean;
-  volume_level: boolean;
-  controls: boolean;
-  play_pause: boolean;
-  play_stop: boolean;
-  prev: boolean;
-  next: boolean;
-  jump: boolean;
-  state_label: boolean;
-  progress: boolean;
 }
 
 export enum MediaPlayerEntityState {

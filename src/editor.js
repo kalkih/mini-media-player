@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import style from './style';
-import defaultConfig from './utils/config';
+import generateConfig from './config/config';
 import './components/dropdown';
 
 const fireEvent = (node, type, detail = {}, options = {}) => {
@@ -15,38 +15,18 @@ const fireEvent = (node, type, detail = {}, options = {}) => {
   return event;
 };
 
-const OptionsArtwork = [
-  'cover',
-  'full-cover',
-  'material',
-  'cover-fit',
-  'none',
-];
+const OptionsArtwork = ['cover', 'full-cover', 'material', 'cover-fit', 'none'];
 
-const OptionsSource = [
-  'icon',
-  'full',
-];
+const OptionsSource = ['icon', 'full'];
 
-const OptionsSoundMode = [
-  'icon',
-  'full',
-];
+const OptionsSoundMode = ['icon', 'full'];
 
-const OptionsInfo = [
-  'short',
-  'scroll',
-];
+const OptionsInfo = ['short', 'scroll'];
 
-const OptionsReplaceMute = [
-  'play_pause',
-  'stop',
-  'play_stop',
-  'next',
-];
+const OptionsReplaceMute = ['play_pause', 'stop', 'play_stop', 'next'];
 
 const computeItems = (options, optional = false) => {
-  const items = options.map(option => ({
+  const items = options.map((option) => ({
     name: option,
     id: option,
   }));
@@ -57,7 +37,6 @@ const computeItems = (options, optional = false) => {
 
   return items;
 };
-
 
 export default class MiniMediaPlayerEditor extends LitElement {
   static get styles() {
@@ -74,8 +53,8 @@ export default class MiniMediaPlayerEditor extends LitElement {
         }
         .editor-label {
           margin-left: 6px;
-          font-size: .8em;
-          opacity: .75;
+          font-size: 0.8em;
+          opacity: 0.75;
         }
       `,
     ];
@@ -86,11 +65,11 @@ export default class MiniMediaPlayerEditor extends LitElement {
   }
 
   setConfig(config) {
-    this._config = Object.assign({}, defaultConfig, config);
+    this._config = Object.assign({}, generateConfig, config);
   }
 
   get getMediaPlayerEntities() {
-    return Object.keys(this.hass.states).filter(eid => eid.substr(0, eid.indexOf('.')) === 'media_player');
+    return Object.keys(this.hass.states).filter((eid) => eid.substr(0, eid.indexOf('.')) === 'media_player');
   }
 
   get _group() {
@@ -110,20 +89,22 @@ export default class MiniMediaPlayerEditor extends LitElement {
   render() {
     if (!this.hass) return html``;
 
-    const mediaPlayerOptions = this.getMediaPlayerEntities.map(entity => ({
+    const mediaPlayerOptions = this.getMediaPlayerEntities.map((entity) => ({
       name: entity,
       id: entity,
     }));
 
     return html`
-      <div class='card-config'>
-        <div class='overall-config'>
-          <span class='editor-label'>Entity (required)</span>
-          <mmp-dropdown class='mmp-shortcuts__dropdown'
+      <div class="card-config">
+        <div class="overall-config">
+          <span class="editor-label">Entity (required)</span>
+          <mmp-dropdown
+            class="mmp-shortcuts__dropdown"
             @change=${({ detail }) => this.valueChanged({ target: { configValue: 'entity', value: detail.id } })}
             .items=${mediaPlayerOptions}
             .label=${'Select entity'}
-            .selected=${this._config.entity}>
+            .selected=${this._config.entity}
+          >
           </mmp-dropdown>
 
           <div class="editor-side-by-side">
@@ -144,11 +125,7 @@ export default class MiniMediaPlayerEditor extends LitElement {
 
           <div class="editor-side-by-side">
             <ha-formfield label="Group cards">
-              <ha-switch
-                .checked=${this._group}
-                .configValue="${'group'}"
-                @change=${this.valueChanged}
-              ></ha-switch>
+              <ha-switch .checked=${this._group} .configValue="${'group'}" @change=${this.valueChanged}></ha-switch>
             </ha-formfield>
 
             <ha-formfield label="Swap volume slider for buttons">
@@ -167,55 +144,67 @@ export default class MiniMediaPlayerEditor extends LitElement {
               ></ha-switch>
             </ha-formfield>
           </div>
-          
+
           <div class="editor-side-by-side">
             <div>
-              <span class='editor-label'>Artwork</span>
-              <mmp-dropdown class='mmp-shortcuts__dropdown'
+              <span class="editor-label">Artwork</span>
+              <mmp-dropdown
+                class="mmp-shortcuts__dropdown"
                 @change=${({ detail }) => this.valueChanged({ target: { configValue: 'artwork', value: detail.id } })}
                 .items=${computeItems(OptionsArtwork, true)}
                 .label=${'Default'}
-                .selected=${this._config.artwork}>
+                .selected=${this._config.artwork}
+              >
               </mmp-dropdown>
             </div>
             <div>
-              <span class='editor-label'>Source</span>
-              <mmp-dropdown class='mmp-shortcuts__dropdown'
+              <span class="editor-label">Source</span>
+              <mmp-dropdown
+                class="mmp-shortcuts__dropdown"
                 @change=${({ detail }) => this.valueChanged({ target: { configValue: 'source', value: detail.id } })}
                 .items=${computeItems(OptionsSource, true)}
                 .label=${'Default'}
-                .selected=${this._config.source}>
+                .selected=${this._config.source}
+              >
               </mmp-dropdown>
             </div>
             <div>
-              <span class='editor-label'>Sound mode</span>
-              <mmp-dropdown class='mmp-shortcuts__dropdown'
-                @change=${({ detail }) => this.valueChanged({ target: { configValue: 'sound_mode', value: detail.id } })}
+              <span class="editor-label">Sound mode</span>
+              <mmp-dropdown
+                class="mmp-shortcuts__dropdown"
+                @change=${({ detail }) =>
+                  this.valueChanged({ target: { configValue: 'sound_mode', value: detail.id } })}
                 .items=${computeItems(OptionsSoundMode, true)}
                 .label=${'Default'}
-                .selected=${this._config.sound_mode}>
+                .selected=${this._config.sound_mode}
+              >
               </mmp-dropdown>
             </div>
           </div>
 
           <div class="editor-side-by-side">
             <div>
-              <span class='editor-label'>Info</span>
-              <mmp-dropdown class='mmp-shortcuts__dropdown'
+              <span class="editor-label">Info</span>
+              <mmp-dropdown
+                class="mmp-shortcuts__dropdown"
                 @change=${({ detail }) => this.valueChanged({ target: { configValue: 'info', value: detail.id } })}
                 .items=${computeItems(OptionsInfo, true)}
                 .label=${'Default'}
-                .selected=${this._config.info}>
+                .selected=${this._config.info}
+              >
               </mmp-dropdown>
             </div>
 
             <div>
-              <span class='editor-label'>Replace Mute</span>
-              <mmp-dropdown class='mmp-shortcuts__dropdown'
-                @change=${({ detail }) => this.valueChanged({ target: { configValue: 'replace_mute', value: detail.id } })}
+              <span class="editor-label">Replace Mute</span>
+              <mmp-dropdown
+                class="mmp-shortcuts__dropdown"
+                @change=${({ detail }) =>
+                  this.valueChanged({ target: { configValue: 'replace_mute', value: detail.id } })}
                 .items=${computeItems(OptionsReplaceMute, true)}
                 .label=${'Default'}
-                .selected=${this._config.replace_mute}>
+                .selected=${this._config.replace_mute}
+              >
               </mmp-dropdown>
             </div>
           </div>
@@ -260,9 +249,9 @@ export default class MiniMediaPlayerEditor extends LitElement {
           </div>
 
           <div>
-            Settings for Tap actions, TTS, hiding UI elements, idle view, speaker groups and shortcuts can only be configured in the code editor
+            Settings for Tap actions, TTS, hiding UI elements, idle view, speaker groups and shortcuts can only be
+            configured in the code editor
           </div>
-
         </div>
       </div>
     `;
@@ -289,3 +278,5 @@ export default class MiniMediaPlayerEditor extends LitElement {
     fireEvent(this, 'config-changed', { config: this._config });
   }
 }
+
+customElements.define('mini-media-player-editor', MiniMediaPlayerEditor);

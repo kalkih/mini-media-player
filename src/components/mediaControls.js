@@ -38,7 +38,6 @@ class MiniMediaPlayerMediaControls extends LitElement {
   }
 
   render() {
-    console.log("hello world");
     const { hide } = this.config;
     return html`
       ${!hide.volume ? this.renderVolControls(this.player.muted) : html``}

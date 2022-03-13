@@ -1,11 +1,6 @@
+import { MiniMediaPlayerConfiguration } from './config/types';
 import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM, REPEAT_STATE } from './const';
-import {
-  HomeAssistant,
-  MediaPlayerEntity,
-  MediaPlayerEntityAttributes,
-  MediaPlayerEntityState,
-  MiniMediaPlayerConfiguration,
-} from './types';
+import { HomeAssistant, MediaPlayerEntity, MediaPlayerEntityAttributes, MediaPlayerEntityState } from './types';
 import arrayBufferToBase64 from './utils/misc';
 
 export interface MediaPlayerMedia {
@@ -18,20 +13,21 @@ export default class MediaPlayerObject {
   config: MiniMediaPlayerConfiguration;
   entity: MediaPlayerEntity;
 
+  state: MediaPlayerEntityState;
+  idle: boolean;
+
   _entityId: string;
-  _state: MediaPlayerEntityState;
   _attr: MediaPlayerEntityAttributes;
-  _idle: boolean;
   _active: boolean;
 
   constructor(hass: HomeAssistant, config: MiniMediaPlayerConfiguration, entity: MediaPlayerEntity) {
     this.hass = hass || {};
     this.config = config || {};
     this.entity = entity || {};
+    this.state = entity.state;
+    this.idle = config.idle_view ? this.idleView : false;
     this._entityId = (entity && entity.entity_id) || this.config.entity;
-    this._state = entity.state;
     this._attr = entity.attributes;
-    this._idle = config.idle_view ? this.idleView : false;
     this._active = this.isActive;
   }
 
@@ -44,31 +40,31 @@ export default class MediaPlayerObject {
   }
 
   get isPaused(): boolean {
-    return this._state === MediaPlayerEntityState.PAUSED;
+    return this.state === MediaPlayerEntityState.PAUSED;
   }
 
   get isPlaying(): boolean {
-    return this._state === MediaPlayerEntityState.PLAYING;
+    return this.state === MediaPlayerEntityState.PLAYING;
   }
 
   get isIdle(): boolean {
-    return this._state === MediaPlayerEntityState.IDLE;
+    return this.state === MediaPlayerEntityState.IDLE;
   }
 
   get isStandby(): boolean {
-    return this._state === MediaPlayerEntityState.STANDBY;
+    return this.state === MediaPlayerEntityState.STANDBY;
   }
 
   get isUnavailable(): boolean {
-    return this._state === MediaPlayerEntityState.UNAVAILABLE;
+    return this.state === MediaPlayerEntityState.UNAVAILABLE;
   }
 
   get isOff(): boolean {
-    return this._state === MediaPlayerEntityState.OFF;
+    return this.state === MediaPlayerEntityState.OFF;
   }
 
   get isActive(): boolean {
-    return (!this.isOff && !this.isUnavailable && !this._idle) || false;
+    return (!this.isOff && !this.isUnavailable && !this.idle) || false;
   }
 
   get shuffle(): boolean {
@@ -158,7 +154,7 @@ export default class MediaPlayerObject {
   }
 
   get hasArtwork(): boolean {
-    return !!this.picture && this.config.artwork !== 'none' && this._active && !this._idle;
+    return !!this.picture && this.config.artwork !== 'none' && this._active && !this.idle;
   }
 
   get mediaInfo(): {
@@ -174,7 +170,7 @@ export default class MediaPlayerObject {
   }
 
   get hasProgress(): boolean {
-    return !this.config.hide.progress && !this._idle && PROGRESS_PROPS.every((prop) => prop in this._attr);
+    return !this.config.hide.progress && !this.idle && PROGRESS_PROPS.every((prop) => prop in this._attr);
   }
 
   get supportsPrev(): boolean {
@@ -205,18 +201,18 @@ export default class MediaPlayerObject {
     // TODO: remove?
     if (!this.updatedAt || !idle?.after || this.isPlaying) return false;
 
-    return this._checkIdleAfter(idle.after);
+    return this.checkIdleAfter(idle.after);
   }
 
   get trackIdle(): boolean {
     return Boolean(this._active && !this.isPlaying && this.updatedAt && this.config?.idle_view?.after);
   }
 
-  private _checkIdleAfter(time: number) {
+  public checkIdleAfter(time: number): boolean {
     const diff = (Date.now() - new Date(this.updatedAt).getTime()) / 1000;
-    this._idle = diff > time * 60;
+    this.idle = diff > time * 60;
     this._active = this.isActive;
-    return this._idle;
+    return this.idle;
   }
 
   get supportsShuffle(): boolean {
