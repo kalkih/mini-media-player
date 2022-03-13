@@ -37,6 +37,7 @@ import { Part } from 'lit-html';
 import { MiniMediaPlayerBaseConfiguration, MiniMediaPlayerConfiguration } from './config/types';
 
 @customElement('mini-media-player')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class MiniMediaPlayer extends LitElement {
   @property({ attribute: false })
   set hass(hass) {

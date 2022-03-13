@@ -136,7 +136,7 @@ export interface MiniMediaPlayerSpeakerGroup extends MiniMediaPlayerSpeakerGroup
   supports_master: boolean;
 }
 
-interface MiniMediaPlayerSpeakerGroupEntry {
+export interface MiniMediaPlayerSpeakerGroupEntry {
   entity_id: string;
   name: string;
   volume_offset?: number;
