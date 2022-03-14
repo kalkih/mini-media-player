@@ -285,7 +285,7 @@ export default class MediaPlayerObject {
     this.callService(e, 'repeat_set', { repeat: nextState });
   }
 
-  setSource(e: MouseEvent, source: string): void {
+  setSource(e: Event, source: string): void {
     this.callService(e, 'select_source', { source });
   }
 
@@ -303,7 +303,7 @@ export default class MediaPlayerObject {
     else this.callService(e, 'media_stop');
   }
 
-  setSoundMode(e: MouseEvent, name: string): void {
+  setSoundMode(e: Event, name: string): void {
     this.callService(e, 'select_sound_mode', { sound_mode: name });
   }
 
