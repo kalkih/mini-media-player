@@ -302,12 +302,9 @@ class MiniMediaPlayer extends LitElement {
 
   renderImage() {
     if (this.config.image == undefined) return;
-    return html`
-      <div class='entity__icon'>
-        <img src="${
-              this.config.image
-            }" height=25></img>`
-      </div>`;
+    return html` <div class="entity__icon">
+      <img src="${this.config.image}" height=25/>
+    </div>`;
   }
 
   renderEntityName(): TemplateResult | undefined {
