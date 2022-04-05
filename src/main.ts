@@ -293,17 +293,15 @@ class MiniMediaPlayer extends LitElement {
       </div>`;
     }
 
+    if (this.config.image != undefined){
+      return html` <div class="entity__icon">
+        <img src="${this.config.image}" height=25/>
+      </div>`;
+    }
+
     const active = !this.config.hide.icon_state && this.player.isActive;
     return html` <div class="entity__icon" ?color=${active}>
       <ha-icon .icon=${this.computeIcon()}></ha-icon>
-    </div>`;
-    renderImage();
-  }
-
-  renderImage() {
-    if (this.config.image == undefined) return;
-    return html` <div class="entity__icon">
-      <img src="${this.config.image}" height=25/>
     </div>`;
   }
 
