@@ -121,6 +121,13 @@ export default class MiniMediaPlayerEditor extends LitElement {
               .configValue="${'icon'}"
               @value-changed=${this.valueChanged}
             ></paper-input>
+
+            <paper-input
+              label="Image"
+              .value="${this._config.image}"
+              .configValue="${'image'}"
+              @value-changed=${this.valueChanged}
+            ></paper-input>
           </div>
 
           <div class="editor-side-by-side">
