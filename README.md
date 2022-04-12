@@ -83,6 +83,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 | entity | string | **required** | v0.1 | An entity_id from an entity within the `media_player` domain.
 | name | string | optional | v0.6 | Override the entities friendly name.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
+| icon_image | string | optional | v1.16.2 | Override icon with an image url
 | tap_action | [action object](#action-object-options) | true | v0.7.0 | Action on click/tap.
 | group | boolean | optional | v0.1 | Removes paddings, background color and box-shadow.
 | hide | object | optional | v1.0.0 | Manage visible UI elements, see [hide object](#hide-object) for available options.
