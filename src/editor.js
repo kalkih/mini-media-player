@@ -123,9 +123,9 @@ export default class MiniMediaPlayerEditor extends LitElement {
             ></paper-input>
 
             <paper-input
-              label="Image"
-              .value="${this._config.image}"
-              .configValue="${'image'}"
+              label="Icon Image"
+              .value="${this._config.icon_image}"
+              .configValue="${'icon_image'}"
               @value-changed=${this.valueChanged}
             ></paper-input>
           </div>

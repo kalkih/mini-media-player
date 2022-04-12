@@ -293,9 +293,9 @@ class MiniMediaPlayer extends LitElement {
       </div>`;
     }
 
-    if (this.config.image != undefined){
+    if (this.config.icon_image != undefined){
       return html` <div class="entity__icon">
-        <img src="${this.config.image}" height=25/>
+        <img src="${this.config.icon_image}" height=25/>
       </div>`;
     }
 

@@ -3,6 +3,7 @@ export interface MiniMediaPlayerBaseConfiguration {
   entity: string;
   name?: string;
   icon?: string;
+  icon_image?: string;
   tap_action?: MiniMediaPlayerAction;
   group?: boolean;
   hide?: MiniMediaPlayerHideConfiguration;
