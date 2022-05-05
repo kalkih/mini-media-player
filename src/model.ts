@@ -108,7 +108,7 @@ export default class MediaPlayerObject {
       return this._attr.sync_group || [];
     }
     if (this.platform === PLATFORM.MEDIAPLAYER || this.platform === PLATFORM.HEOS
-      || PLATFORM.SONOS) {
+      || this.platform === PLATFORM.SONOS) {
       return this._attr.group_members || [];
     }
     return (this._attr[`${this.platform}_group`] || []) as string[];
@@ -392,7 +392,8 @@ export default class MediaPlayerObject {
             },
             PLATFORM.SQUEEZEBOX,
           );
-        case PLATFORM.MEDIAPLAYER || PLATFORM.SONOS:
+        case PLATFORM.MEDIAPLAYER:
+        case PLATFORM.SONOS:
           return this.callService(
             e,
             'join',
@@ -421,7 +422,8 @@ export default class MediaPlayerObject {
           return this.handleSoundtouch(e, 'REMOVE_ZONE_SLAVE', entity);
         case PLATFORM.SQUEEZEBOX:
           return this.callService(e, 'unsync', options, PLATFORM.SQUEEZEBOX);
-        case PLATFORM.MEDIAPLAYER || PLATFORM.SONOS:
+        case PLATFORM.MEDIAPLAYER:
+        case PLATFORM.SONOS:
           return this.callService(
             e,
             'unjoin',
