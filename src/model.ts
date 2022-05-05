@@ -401,7 +401,7 @@ export default class MediaPlayerObject {
               entity_id: this._entityId,
               group_members: entity,
             },
-            platform,
+            PLATFORM.MEDIAPLAYER,
           );
         case PLATFORM.HEOS:
           return this.callService(
@@ -430,7 +430,7 @@ export default class MediaPlayerObject {
             {
               entity_id: entity,
             },
-            platform,
+            PLATFORM.MEDIAPLAYER,
           );
         case PLATFORM.HEOS:
           return this.callService(
