@@ -84,7 +84,7 @@ export default class MediaPlayerObject {
   }
 
   get updatedAt(): string | number | Date {
-    return this._attr.media_position_updated_at || 0;
+    return this._attr?.media_position_updated_at || 0;
   }
 
   get position(): number {
@@ -248,11 +248,6 @@ export default class MediaPlayerObject {
     } catch (error) {
       return false;
     }
-  }
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  getAttribute(attribute: keyof MediaPlayerEntityAttributes): any {
-    return this._attr[attribute];
   }
 
   toggle(e: MouseEvent): void {
