@@ -1,8 +1,6 @@
 language: node_js
 node_js:
-  - "10.15.0"
-  - "8.12.0"
+  - "16.14.1"
 script:
   - npm run lint
-  - npm run webpack
-  - npm run babel
+  - npm run build

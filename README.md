@@ -20,7 +20,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 2. Go to Sidebar -> Configuration -> Lovelace Dashboards -> Resources.
 3. Click on `+ ADD RESOURCE`.
-4. Type `/local/mini-media-player-bundle.js?v=1.16.2` below URL.
+4. Type `/local/mini-media-player-bundle.js?v=1.16.3` below URL.
 5. Choose `JavaScript Module` below Resource Type.
 6. Accept.
 
@@ -33,7 +33,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.2
+      - url: /local/mini-media-player-bundle.js?v=1.16.3
         type: module
   ```
 
@@ -44,7 +44,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.16.0/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.16.3/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
@@ -52,7 +52,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.2
+      - url: /local/mini-media-player-bundle.js?v=1.16.3
         type: module
   ```
 
@@ -66,7 +66,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.2
+      - url: /local/mini-media-player-bundle.js?v=1.16.3
         type: module
   ```
 
@@ -144,16 +144,16 @@ notify:
 <a name="tts_foot5"><sup>5</sup></a> Specify `service` & `service_data` under the `data` option, specify `message_field` to use `message` for the service.
 
 ```yaml
-- type: custom:mini-media-player
-  entity: media_player.xiaoai_speaker
-  tts:
-    platform: service
-    data:
-      service: xiaomi_miot.intelligent_speaker
-      service_data:
-        execute: true
-        silent: true
-      message_field: text
+type: custom:mini-media-player
+entity: media_player.xiaoai_speaker
+tts:
+  platform: service
+  data:
+    service: xiaomi_miot.intelligent_speaker
+    service_data:
+      execute: true
+      silent: true
+    message_field: text
 ```
 
 #### Speaker group object
@@ -292,8 +292,8 @@ Can be specified by color name, hexadecimal, rgb, rgba, hsl, hsla, basically any
 <img src="https://user-images.githubusercontent.com/457678/52081816-771c1b00-259b-11e9-8c1e-cfd93ac3e66d.png" width="500px" alt="Basic card example" />
 
 ```yaml
-- type: custom:mini-media-player
-  entity: media_player.kitchen_speakers
+type: custom:mini-media-player
+entity: media_player.kitchen_speakers
 ```
 
 #### Compact card
@@ -302,14 +302,14 @@ Setting either `volume` and/or `controls` to `true` in the `hide` option object 
 <img src="https://user-images.githubusercontent.com/457678/53042774-569efc80-3487-11e9-8242-03d388d40c34.png" width="500px" alt="Compact card example" />
 
 ```yaml
-- type: custom:mini-media-player
-  entity: media_player.example
-  icon: mdi:spotify
-  artwork: cover
-  hide:
-    volume: true
-    source: true
-    power_state: false
+type: custom:mini-media-player
+entity: media_player.example
+icon: mdi:spotify
+artwork: cover
+hide:
+  volume: true
+  source: true
+  power_state: false
 ```
 
 #### Card with media shortcuts
@@ -360,36 +360,36 @@ Set the `group` option to `true` when nesting mini media player cards inside oth
 <img src="https://user-images.githubusercontent.com/457678/52081831-800cec80-259b-11e9-9b35-63b23805c879.png" width="500px" alt="Grouped cards example" />
 
 ```yaml
-- type: entities
-  entities:
-    - type: custom:mini-media-player
-      entity: media_player.multiroom_player
-      group: true
-      source: icon
-      info: short
-      hide:
-        volume: true
-        power: true
-    - type: custom:mini-media-player
-      entity: media_player.kitchen_speakers
-      group: true
-      hide:
-        controls: true
-    - type: custom:mini-media-player
-      entity: media_player.bathroom_speakers
-      group: true
-      hide:
-        controls: true
-    - type: custom:mini-media-player
-      entity: media_player.bedroom_speakers
-      group: true
-      hide:
-        controls: true
-    - type: custom:mini-media-player
-      entity: media_player.patio_speakers
-      group: true
-      hide:
-        controls: true
+type: entities
+entities:
+  - type: custom:mini-media-player
+    entity: media_player.multiroom_player
+    group: true
+    source: icon
+    info: short
+    hide:
+      volume: true
+      power: true
+  - type: custom:mini-media-player
+    entity: media_player.kitchen_speakers
+    group: true
+    hide:
+      controls: true
+  - type: custom:mini-media-player
+    entity: media_player.bathroom_speakers
+    group: true
+    hide:
+      controls: true
+  - type: custom:mini-media-player
+    entity: media_player.bedroom_speakers
+    group: true
+    hide:
+      controls: true
+  - type: custom:mini-media-player
+    entity: media_player.patio_speakers
+    group: true
+    hide:
+      controls: true
 ```
 
 #### Stacked cards
@@ -442,26 +442,26 @@ Specify all your speaker entities in a list under the option `speaker_group` -> 
 <img src="https://user-images.githubusercontent.com/457678/52181170-53511300-27ef-11e9-9d54-aa9c84a96168.gif" width="500px" alt="sonos group management example">
 
 ```yaml
-- type: custom:mini-media-player
-  entity: media_player.sonos_office
-  hide:
-    power: true
-    icon: true
-    source: true
-  speaker_group:
-    platform: sonos
-    show_group_count: true
-    entities:
-      - entity_id: media_player.sonos_office
-        name: Sonos Office
-      - entity_id: media_player.sonos_livingroom
-        name: Sonos Livingroom
-      - entity_id: media_player.sonos_kitchen
-        name: Sonos Kitchen
-      - entity_id: media_player.sonos_bathroom
-        name: Sonos Bathroom
-      - entity_id: media_player.sonos_bedroom
-        name: Sonos Bedroom
+type: custom:mini-media-player
+entity: media_player.sonos_office
+hide:
+  power: true
+  icon: true
+  source: true
+speaker_group:
+  platform: sonos
+  show_group_count: true
+  entities:
+    - entity_id: media_player.sonos_office
+      name: Sonos Office
+    - entity_id: media_player.sonos_livingroom
+      name: Sonos Livingroom
+    - entity_id: media_player.sonos_kitchen
+      name: Sonos Kitchen
+    - entity_id: media_player.sonos_bathroom
+      name: Sonos Bathroom
+    - entity_id: media_player.sonos_bedroom
+      name: Sonos Bedroom
 ```
 
 If you are planning to use the `speaker_group` option in several cards, creating a separate yaml file for the list is highly recommended, this will result in a less cluttered `ui-lovelace.yaml` and also make the list easier to manage and maintain.
