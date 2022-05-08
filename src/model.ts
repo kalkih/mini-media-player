@@ -25,9 +25,9 @@ export default class MediaPlayerObject {
     this.config = config || {};
     this.entity = entity || {};
     this.state = entity.state;
-    this.idle = config.idle_view ? this.idleView : false;
     this._entityId = (entity && entity.entity_id) || this.config.entity;
-    this._attr = entity.attributes;
+    this._attr = entity.attributes || {};
+    this.idle = config.idle_view ? this.idleView : false;
     this._active = this.isActive;
   }
 
