@@ -1,9 +1,6 @@
-import * as Vibrant from "node-vibrant/dist/vibrant";
+import Vibrant from 'node-vibrant/dist/vibrant';
 
-import {
-  CONTRAST_RATIO,
-  COLOR_SIMILARITY_THRESHOLD,
-} from '../const';
+import { CONTRAST_RATIO, COLOR_SIMILARITY_THRESHOLD } from '../const';
 
 const luminance = (r, g, b) => {
   const a = [r, g, b].map((v) => {
@@ -22,10 +19,7 @@ const contrast = (rgb1, rgb2) => {
   return (brightest + 0.05) / (darkest + 0.05);
 };
 
-const getContrastRatio = (rgb1, rgb2) => Math.round(
-  (contrast(rgb1, rgb2) + Number.EPSILON) * 100,
-) / 100;
-
+const getContrastRatio = (rgb1, rgb2) => Math.round((contrast(rgb1, rgb2) + Number.EPSILON) * 100) / 100;
 
 const colorGenerator = (colors) => {
   colors.sort((colorA, colorB) => colorB.population - colorA.population);
@@ -34,22 +28,19 @@ const colorGenerator = (colors) => {
   let foregroundColor;
 
   const contrastRatios = new Map();
-  function approvedContrastRatio(color) {
-    if (!contrastRatios.has(color)) {
-      contrastRatios.set(
-        color,
-        getContrastRatio(backgroundColor.rgb, color.rgb),
-      );
+  const approvedContrastRatio = (hex, rgb) => {
+    if (!contrastRatios.has(hex)) {
+      contrastRatios.set(hex, getContrastRatio(backgroundColor.rgb, rgb));
     }
 
-    return contrastRatios.get(color) > CONTRAST_RATIO;
-  }
+    return contrastRatios.get(hex) > CONTRAST_RATIO;
+  };
 
   // We take each next color and find one that has better contrast.
-  for (let i = 1; i < colors.length && foregroundColor === undefined; i += 1) {
+  for (let i = 1; i < colors.length && foregroundColor === undefined; i++) {
     // If this color matches, score, take it.
-    if (approvedContrastRatio(colors[i])) {
-      foregroundColor = colors[i].hex;
+    if (approvedContrastRatio(colors[i].hex, colors[i].rgb)) {
+      foregroundColor = colors[i].rgb;
       break;
     }
 
@@ -58,33 +49,32 @@ const colorGenerator = (colors) => {
 
     const currentColor = colors[i];
 
-    for (let j = i + 1; j < colors.length; j += 1) {
+    for (let j = i + 1; j < colors.length; j++) {
       const compareColor = colors[j];
 
       // difference. 0 is same, 765 max difference
-      const diffScore = Math.abs(currentColor.rgb[0] - compareColor.rgb[0])
-          + Math.abs(currentColor.rgb[1] - compareColor.rgb[1])
-          + Math.abs(currentColor.rgb[2] - compareColor.rgb[2]);
+      const diffScore =
+        Math.abs(currentColor.rgb[0] - compareColor.rgb[0]) +
+        Math.abs(currentColor.rgb[1] - compareColor.rgb[1]) +
+        Math.abs(currentColor.rgb[2] - compareColor.rgb[2]);
 
-      if (diffScore <= COLOR_SIMILARITY_THRESHOLD) {
-        if (approvedContrastRatio(compareColor)) {
-          if (approvedContrastRatio(compareColor)) {
-            foregroundColor = compareColor.hex;
-            break;
-          }
-        }
+      if (diffScore > COLOR_SIMILARITY_THRESHOLD) {
+        continue;
+      }
+
+      if (approvedContrastRatio(compareColor.hex, compareColor.rgb)) {
+        foregroundColor = compareColor.rgb;
+        break;
       }
     }
   }
 
   if (foregroundColor === undefined) {
-    foregroundColor = backgroundColor.bodyTextColor;
+    foregroundColor = backgroundColor.getYiq() < 200 ? [255, 255, 255] : [0, 0, 0];
   }
 
-  return [foregroundColor, backgroundColor.hex];
+  return [new backgroundColor.constructor(foregroundColor, 0).hex, backgroundColor.hex];
 };
 
-export default picture => new Vibrant(picture, {
-  colorCount: 16,
-  generator: colorGenerator,
-}).getPalette();
+Vibrant._pipeline.generator.register('default', colorGenerator);
+export default async (picture) => new Vibrant(picture, { colorCount: 16 }).getPalette();
