@@ -12,7 +12,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 ## Install
 
-*This card is available in [HACS](https://github.com/custom-components/hacs) (Home Assistant Community Store)*
+*This card is available in [HACS](https://github.com/hacs/integration) (Home Assistant Community Store)*
 
 ### Simple install
 
