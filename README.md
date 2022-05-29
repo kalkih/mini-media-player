@@ -18,7 +18,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 #### Storage mode **(default)**
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
-2. Go to Sidebar -> Configuration -> Lovelace Dashboards -> Resources.
+2. Go to Sidebar -> Settings -> Dashboards -> Menu (top right corner) -> Resources.
 3. Click on `+ ADD RESOURCE`.
 4. Type `/local/mini-media-player-bundle.js?v=1.16.4` below URL.
 5. Choose `JavaScript Module` below Resource Type.
@@ -61,7 +61,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 
 2. Replace the local file with the latest one attached in the [latest release](https://github.com/kalkih/mini-media-player/releases/latest).
 
-3. Add the new version number to the end of the cards reference url in your `configuration.yaml` (YAML mode) or through the Home Assistant UI - `Sidebar -> Configuration -> Lovelace Dashboards -> Resources` (Storage mode).
+3. Add the new version number to the end of the cards reference url in your `configuration.yaml` (YAML mode) or through the Home Assistant UI - `Sidebar -> Settings -> Dashboards -> Menu (top right corner) -> Resources` (Storage mode).
 
   ```yaml
   lovelace:
