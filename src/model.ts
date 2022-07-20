@@ -182,15 +182,15 @@ export default class MediaPlayerObject {
     return !!this._attr.supported_features && (this._attr.supported_features | 32) === this._attr.supported_features;
   }
 
-  get supportsStop() {
+  get supportsStop(): boolean {
     return !!this._attr.supported_features && (this._attr.supported_features | 4096) === this._attr.supported_features;
   }
 
-  get supportsPlay() {
+  get supportsPlay(): boolean {
     return !!this._attr.supported_features && (this._attr.supported_features | 16384) === this._attr.supported_features;
   }
 
-  get supportsVolume() {
+  get supportsVolume(): boolean {
     return !!this._attr.supported_features && (this._attr.supported_features | 4) === this._attr.supported_features;
   }
 
