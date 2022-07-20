@@ -118,16 +118,19 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderVolSlider(muted) {
     return html`
       ${this.renderMuteButton(muted)}
-      <ha-slider
-        @change=${this.handleVolumeChange}
-        @click=${e => e.stopPropagation()}
-        ?disabled=${muted}
-        min=${this.minVol} max=${this.maxVol}
-        value=${this.player.vol * 100}
-        step=${this.config.volume_step || 1}
-        dir=${'ltr'}
-        ignore-bar-touch pin>
-      </ha-slider>
+      
+      ${this.player.supportsVolume ? html`
+        <ha-slider
+          @change=${this.handleVolumeChange}
+          @click=${e => e.stopPropagation()}
+          ?disabled=${muted}
+          min=${this.minVol} max=${this.maxVol}
+          value=${this.player.vol * 100}
+          step=${this.config.volume_step || 1}
+          dir=${'ltr'}
+          ignore-bar-touch pin>
+        </ha-slider>
+      ` : ''}
     `;
   }
 
@@ -204,14 +207,14 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderPlayButtons() {
     const { hide } = this.config;
     return html`
-      ${!hide.play_pause ? html`
+      ${!hide.play_pause && this.player.supportsPlay ? html`
         <ha-icon-button
           @click=${e => this.player.playPause(e)}
           .icon=${ICON.PLAY[this.player.isPlaying]}>
             <ha-icon .icon=${ICON.PLAY[this.player.isPlaying]}></ha-icon>
         </ha-icon-button>
       ` : html``}
-      ${!hide.play_stop ? html`
+      ${!hide.play_stop && this.player.supportsStop ? html`
         <ha-icon-button
           @click=${e => this.handleStop(e)}
           .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}>
