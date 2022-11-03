@@ -83,7 +83,7 @@ const style = css`
   .mmp__bg,
   .mmp-player,
   .mmp__container {
-    border-radius: var(--ha-card-border-radius, 0);
+    border-radius: var(--ha-card-border-radius, 12px);
   }
   .mmp__container {
     overflow: hidden;
