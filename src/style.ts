@@ -75,6 +75,7 @@ const style = css`
   }
   ha-card.--group {
     box-shadow: none;
+    border: none;
     --mmp-progress-height: var(--mini-media-player-progress-height, 4px);
   }
   ha-card.--more-info {
