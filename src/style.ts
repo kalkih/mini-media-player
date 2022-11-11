@@ -27,6 +27,7 @@ const style = css`
     --mmp-bg-opacity: var(--mini-media-player-background-opacity, 1);
     --mmp-artwork-opacity: var(--mini-media-player-artwork-opacity, 1);
     --mmp-progress-height: var(--mini-media-player-progress-height, 6px);
+    --mmp-border-radius: var(--ha-card-border-radius, 12px);
     --mdc-theme-primary: var(--mmp-text-color);
     --mdc-theme-on-primary: var(--mmp-text-color);
     --paper-checkbox-unchecked-color: var(--mmp-text-color);
@@ -77,6 +78,7 @@ const style = css`
     box-shadow: none;
     border: none;
     --mmp-progress-height: var(--mini-media-player-progress-height, 4px);
+    --mmp-border-radius: 0px
   }
   ha-card.--more-info {
     cursor: pointer;
@@ -84,7 +86,7 @@ const style = css`
   .mmp__bg,
   .mmp-player,
   .mmp__container {
-    border-radius: var(--ha-card-border-radius, 0);
+    border-radius: var(--mmp-border-radius);
   }
   .mmp__container {
     overflow: hidden;
