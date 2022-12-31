@@ -67,6 +67,10 @@ export default class MediaPlayerObject {
     return (!this.isOff && !this.isUnavailable && !this.idle) || false;
   }
 
+  get assumedState(): boolean {
+    return this._attr.assumed_state || false;
+  }
+
   get shuffle(): boolean {
     return this._attr.shuffle || false;
   }
@@ -293,6 +297,14 @@ export default class MediaPlayerObject {
   // TODO: fix opts type
   setMedia(e: MouseEvent, opts: MediaPlayerMedia): void {
     this.callService(e, 'play_media', { ...opts });
+  }
+
+  play(e: MouseEvent): void {
+    this.callService(e, 'media_play');
+  }
+
+  pause(e: MouseEvent): void {
+    this.callService(e, 'media_pause');
   }
 
   playPause(e: MouseEvent): void {
