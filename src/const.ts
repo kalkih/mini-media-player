@@ -87,6 +87,7 @@ const MEDIA_INFO = [
   { attr: 'media_series_title' },
   { attr: 'media_season', prefix: 'S' },
   { attr: 'media_episode', prefix: 'E' },
+  { attr: 'media_channel' },
   { attr: 'app_name' },
 ];
 
