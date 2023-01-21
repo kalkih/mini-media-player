@@ -121,10 +121,14 @@ const style = css`
   header {
     display: none;
   }
+  ha-card[artwork='full-material'].--has-artwork:before {
+    padding-top: 56%;
+  }
   ha-card[artwork='full-cover'].--has-artwork:before {
     padding-top: 56%;
   }
   ha-card[artwork='full-cover'].--has-artwork[content='music']:before,
+  ha-card[artwork='full-material'].--has-artwork[content='music']:before,
   ha-card[artwork='full-cover-fit'].--has-artwork:before {
     padding-top: 100%;
   }
@@ -206,6 +210,9 @@ const style = css`
   }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
     background: linear-gradient(to top, var(--mmp-overlay-color) var(--mmp-overlay-color-stop), transparent 100%);
+  }
+  ha-card[artwork='full-material'].--has-artwork .mmp-player {
+    background: linear-gradient(to top, var(--primary-color), transparent 100%);
   }
   ha-card.--has-artwork .cover,
   ha-card.--has-artwork[artwork='cover'] .cover:before {

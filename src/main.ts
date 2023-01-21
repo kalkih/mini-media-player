@@ -119,7 +119,7 @@ class MiniMediaPlayer extends LitElement {
         this.prevThumbnail = '';
       }, 1000);
     }
-    if (changedProps.has('player') && this.config.artwork === 'material') {
+    if (changedProps.has('player') && this.config.artwork.includes('material')) {
       this.setColors();
     }
     return UPDATE_PROPS.some((prop) => changedProps.has(prop)) && Boolean(this.player);
@@ -357,6 +357,7 @@ class MiniMediaPlayer extends LitElement {
           '--mmp-icon-active-color': this.foregroundColor,
           '--mmp-accent-color': this.foregroundColor,
           '--paper-slider-container-color': this.foregroundColor,
+          '--primary-color': this.backgroundColor,
           '--secondary-text-color': this.foregroundColor,
           '--mmp-media-cover-info-color': this.foregroundColor,
         }),

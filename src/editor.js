@@ -15,7 +15,7 @@ const fireEvent = (node, type, detail = {}, options = {}) => {
   return event;
 };
 
-const OptionsArtwork = ['cover', 'full-cover', 'full-cover-fit', 'material', 'none'];
+const OptionsArtwork = ['cover', 'full-cover', 'full-cover-fit', 'material', 'material', 'full-material', 'none'];
 
 const OptionsSource = ['icon', 'full'];
 

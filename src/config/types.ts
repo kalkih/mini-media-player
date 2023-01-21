@@ -7,7 +7,7 @@ export interface MiniMediaPlayerBaseConfiguration {
   tap_action?: MiniMediaPlayerAction;
   group?: boolean;
   hide?: MiniMediaPlayerHideConfiguration;
-  artwork?: 'default' | 'none' | 'cover' | 'full-cover' | 'material' | 'full-cover-fit';
+  artwork?: 'default' | 'none' | 'cover' | 'full-cover' | 'material' | 'full-material' | 'full-cover-fit';
   tts?: MiniMediaPlayerTTSConfiguration;
   source?: 'default' | 'icon' | 'full';
   sound_mode?: 'default' | 'icon' | 'full';
@@ -39,7 +39,7 @@ export interface MiniMediaPlayerBaseConfiguration {
 
 export interface MiniMediaPlayerConfiguration extends MiniMediaPlayerBaseConfiguration {
   entity: string;
-  artwork: 'default' | 'none' | 'cover' | 'full-cover' | 'material' | 'full-cover-fit';
+  artwork: 'default' | 'none' | 'cover' | 'full-cover' | 'material' | 'full-material' | 'full-cover-fit';
   info: 'default' | 'short' | 'scroll';
   group: boolean;
   volume_stateless: boolean;
