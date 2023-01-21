@@ -85,7 +85,7 @@ const style = css`
     box-shadow: none;
     border: none;
     --mmp-progress-height: var(--mini-media-player-progress-height, 4px);
-    --mmp-border-radius: 0px
+    --mmp-border-radius: 0px;
   }
   ha-card.--more-info {
     cursor: pointer;
