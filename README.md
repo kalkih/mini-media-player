@@ -62,7 +62,7 @@ lovelace:
 | tap_action | [action object](#action-object-options) | true | v0.7.0 | Action on click/tap.
 | group | boolean | optional | v0.1 | Removes paddings, background color and box-shadow.
 | hide | object | optional | v1.0.0 | Manage visible UI elements, see [hide object](#hide-object) for available options.
-| artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `material` for alternate artwork display with dynamic colors, `full-material` to display full artwork with dynamic colors, `none` to hide artwork, `full-cover-fit` for full cover without cropping.
+| artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `material` for alternate artwork display with dynamic colors, `full-material` to display full artwork with dynamic colors, `none` to hide artwork, `full-cover-fit` for full cover without cropping. `square` will always display a rectangular card, even when nothing is being played. `square-material` does the same, but adds the dynamic colors also found in the other `-material` options.
 | tts | object | optional | v1.0.0 | Show Text-To-Speech input, see [TTS object](#tts-object) for available options.
 | source | string | optional | v0.7 | Change source select appearance, `icon` for just an icon, `full` for the full source name.
 | sound_mode | string | optional | v1.1.2 | Change sound mode select appearance, `icon` for just an icon, `full` for the full sound mode name.
