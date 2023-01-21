@@ -38,6 +38,7 @@ const style = css`
     --mmp-info-opacity: 0.75;
   }
   ha-card.--has-artwork[artwork='material'],
+  ha-card.--has-artwork[artwork='square'],
   ha-card.--has-artwork[artwork*='cover'] {
     --mmp-accent-color: var(
       --mini-media-player-overlay-accent-color,
@@ -120,6 +121,10 @@ const style = css`
   }
   header {
     display: none;
+  }
+  ha-card[artwork='square']:before,
+  ha-card[artwork='square-material']:before {
+    padding-top: 100%;
   }
   ha-card[artwork='full-material'].--has-artwork:before {
     padding-top: 56%;
@@ -211,7 +216,8 @@ const style = css`
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
     background: linear-gradient(to top, var(--mmp-overlay-color) var(--mmp-overlay-color-stop), transparent 100%);
   }
-  ha-card[artwork='full-material'].--has-artwork .mmp-player {
+  ha-card[artwork='full-material'].--has-artwork .mmp-player,
+  ha-card[artwork='square-material'].--has-artwork .mmp-player {
     background: linear-gradient(to top, var(--primary-color), transparent 100%);
   }
   ha-card.--has-artwork .cover,
@@ -368,6 +374,7 @@ const style = css`
     white-space: nowrap;
   }
   ha-card[artwork*='cover'].--has-artwork .entity__info__media,
+  ha-card[artwork='square'].--has-artwork .entity__info__media,
   ha-card.--bg .entity__info__media {
     color: var(--mmp-media-cover-info-color);
   }
@@ -379,6 +386,25 @@ const style = css`
   }
   .entity__info__media span:empty {
     display: none;
+  }
+  ha-card[artwork='square'] .entity__info__media span:before,
+  ha-card[artwork='square-material'] .entity__info__media span:before {
+    content: '';
+  }
+  ha-card[artwork='square'] .entity__info__media .attr__media_artist,
+  ha-card[artwork='square-material'] .entity__info__media .attr__media_artist,
+  ha-card[artwork='square'] .entity__info__media .attr__media_title,
+  ha-card[artwork='square-material'] .entity__info__media .attr__media_title {
+    font-size: 1.75em;
+    line-height: 1.1
+  }
+  ha-card[artwork='square'] .entity__info__media .attr__media_artist,
+  ha-card[artwork='square-material'] .entity__info__media .attr__media_artist {
+    font-weight: 300;
+  }
+  ha-card[artwork='square'] .entity__info__media .attr__media_title,
+  ha-card[artwork='square-material'] .entity__info__media .attr__media_title {
+    font-weight: 500
   }
   .mmp-player__adds {
     margin-left: calc(var(--mmp-unit) * 1.2);

@@ -320,22 +320,34 @@ class MiniMediaPlayer extends LitElement {
     if (this.config.hide.info) return;
     const items = this.player.mediaInfo;
 
-    return html` <div
-      class="entity__info__media"
-      ?short=${this.config.info === 'short' || !this.player.isActive}
-      ?short-scroll=${this.config.info === 'scroll'}
-      ?scroll=${this.overflow}
-      style="animation-duration: ${this.overflow}s;"
-    >
-      ${this.config.info === 'scroll'
-        ? html` <div>
-            <div class="marquee">
-              ${items.map((i) => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
-            </div>
-          </div>`
-        : ''}
-      ${items.map((i) => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
-    </div>`;
+    if (this.config.artwork.includes('square')) {
+      const artist = items.find((m) => m.attr === 'media_artist');
+      const title = items.find((m) => m.attr === 'media_title');
+      return html` <div
+        class="entity__info__media"
+        style="animation-duration: ${this.overflow}s; padding-bottom: 0.25em;"
+      >
+        ${!!artist ? html`<span class=${`attr__${artist.attr}`}>${artist.prefix + artist.text}</span><br />` : ''}
+        ${!!title ? html`<span class=${`attr__${title.attr}`}>${title.prefix + title.text}</span>` : ''}
+      </div>`;
+    } else {
+      return html` <div
+        class="entity__info__media"
+        ?short=${this.config.info === 'short' || !this.player.isActive}
+        ?short-scroll=${this.config.info === 'scroll'}
+        ?scroll=${this.overflow}
+        style="animation-duration: ${this.overflow}s;"
+      >
+        ${this.config.info === 'scroll'
+          ? html` <div>
+              <div class="marquee">
+                ${items.map((i) => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
+              </div>
+            </div>`
+          : ''}
+        ${items.map((i) => html`<span class=${`attr__${i.attr}`}>${i.prefix + i.text}</span>`)}
+      </div>`;
+    }
   }
 
   speakerCount(): string | undefined {
