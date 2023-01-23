@@ -218,6 +218,7 @@ const style = css`
   }
   ha-card[artwork='full-material'].--has-artwork .mmp-player,
   ha-card[artwork='square-material'].--has-artwork .mmp-player {
+    padding-top: 175px;
     background: linear-gradient(to top, var(--primary-color), transparent 100%);
   }
   ha-card.--has-artwork .cover,
@@ -396,7 +397,7 @@ const style = css`
   ha-card[artwork='square'] .entity__info__media .attr__media_title,
   ha-card[artwork='square-material'] .entity__info__media .attr__media_title {
     font-size: 1.75em;
-    line-height: 1.1
+    line-height: 1.1;
   }
   ha-card[artwork='square'] .entity__info__media .attr__media_artist,
   ha-card[artwork='square-material'] .entity__info__media .attr__media_artist {
@@ -404,7 +405,7 @@ const style = css`
   }
   ha-card[artwork='square'] .entity__info__media .attr__media_title,
   ha-card[artwork='square-material'] .entity__info__media .attr__media_title {
-    font-weight: 500
+    font-weight: 500;
   }
   .mmp-player__adds {
     margin-left: calc(var(--mmp-unit) * 1.2);
