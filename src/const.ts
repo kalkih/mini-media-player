@@ -97,6 +97,7 @@ const PLATFORM = {
   SOUNDTOUCH: 'soundtouch',
   MEDIAPLAYER: 'media_player',
   HEOS: 'heos',
+  OWNTONE: 'owntone'
 };
 
 const CONTRAST_RATIO = 4.5;
