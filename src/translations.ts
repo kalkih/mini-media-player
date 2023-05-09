@@ -106,7 +106,7 @@ const translations = {
       send: 'Wyślij',
     },
     state: {
-      idle: 'nieaktywny',
+      idle: 'brak aktywności',
       unavailable: 'niedostępny',
     },
     title: {
