@@ -76,6 +76,25 @@ const translations = {
       speaker_management: 'Hangszórók csoportosítása',
     },
   },
+  is: {
+    placeholder: {
+      tts: 'Texti sem á að segja',
+    },
+    label: {
+      leave: 'Yfirgefa',
+      ungroup: 'Aðskilja',
+      group_all: 'Sameina alla',
+      send: 'Senda',
+      master: 'Stjórnandi',
+    },
+    state: {
+      idle: 'Aðgerðalaus',
+      unavailable: 'Ekki tiltækt',
+    },
+    title: {
+      speaker_management: 'Stjórnun hópa',
+    },
+  },
   no: {
     placeholder: {
       tts: 'Tekst til tale',
