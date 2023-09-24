@@ -151,6 +151,25 @@ const translations = {
       speaker_management: 'Správa skupin',
     },
   },
+  sk: {
+    placeholder: {
+      tts: 'Preveď text na reč',
+    },
+    label: {
+      leave: 'Odísť',
+      ungroup: 'Zrušiť zoskupenie',
+      group_all: 'Zoskupiť všetko',
+      send: 'Poslať',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Nečinný',
+      unavailable: 'Nedostupný',
+    },
+    title: {
+      speaker_management: 'Správa skupín',
+    },
+  },
   ru: {
     placeholder: {
       tts: 'Преобразование текста в речь',
