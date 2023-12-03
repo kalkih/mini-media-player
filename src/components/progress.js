@@ -169,7 +169,7 @@ class MiniMediaPlayerProgress extends LitElement {
         height: var(--mmp-progress-height);
         bottom: 0;
         position: absolute;
-        width: 100%;
+        width: 0;
         transition: height 0;
         z-index: 1;
         background-color: var(--mmp-accent-color);
