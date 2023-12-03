@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 
 import convertProgress from '../utils/getProgress';
-import {styleMap} from "lit-html/directives/style-map";
+import {styleMap} from 'lit-html/directives/style-map';
 
 class MiniMediaPlayerProgress extends LitElement {
   static get properties() {
