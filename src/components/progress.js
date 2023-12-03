@@ -151,6 +151,15 @@ class MiniMediaPlayerProgress extends LitElement {
         pointer-events: auto;
         min-height: calc(var(--mmp-progress-height) + 10px);
       }
+      .mmp-progress:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--mmp-progress-height);
+        background-color: rgba(100,100,100,.15);
+      }
       .mmp-progress__duration {
         left: calc(var(--ha-card-border-radius, 4px) / 2);
         right: calc(var(--ha-card-border-radius, 4px) / 2);
