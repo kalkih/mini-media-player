@@ -82,7 +82,7 @@ class MiniMediaPlayerProgress extends LitElement {
   }
    progressBarStyle() {
     return styleMap({
-      width: `${(this.seekProgress || this.progress / this.duration) * 100}%`
+      width: `${((this.seekProgress || this.progress) / this.duration) * 100}%`
     });
   }
 
