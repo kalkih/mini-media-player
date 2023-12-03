@@ -204,7 +204,18 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderPlayButtons() {
     const { hide } = this.config;
     return html`
-      ${!hide.play_pause ? html`
+      ${!hide.play_pause ? this.player.assumedState ? html`
+        <ha-icon-button
+          @click=${e => this.player.play(e)}
+          .icon=${ICON.PLAY.false}>
+            <ha-icon .icon=${ICON.PLAY.false}></ha-icon>
+        </ha-icon-button>
+        <ha-icon-button
+          @click=${e => this.player.pause(e)}
+          .icon=${ICON.PLAY.true}>
+            <ha-icon .icon=${ICON.PLAY.true}></ha-icon>
+        </ha-icon-button>
+      ` : html`
         <ha-icon-button
           @click=${e => this.player.playPause(e)}
           .icon=${ICON.PLAY[this.player.isPlaying]}>
