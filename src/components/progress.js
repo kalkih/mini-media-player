@@ -76,7 +76,7 @@ class MiniMediaPlayerProgress extends LitElement {
             </div>
           </div>
         ` : ''}
-        <div class="progress-bar" style=${this.progressBarStyle()}></div>
+        <div class='progress-bar' style=${this.progressBarStyle()}></div>
       </div>
     `;
   }
