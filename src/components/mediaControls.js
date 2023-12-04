@@ -126,7 +126,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
         value=${this.player.vol * 100}
         step=${this.config.volume_step || 1}
         dir=${'ltr'}
-        ignore-bar-touch pin>
+        ignore-bar-touch pin labeled>
       </ha-slider>
     `;
   }
@@ -272,8 +272,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           max-width: none;
           min-width: 100px;
           width: 100%;
-          --paper-slider-active-color: var(--mmp-accent-color);
-          --paper-slider-knob-color: var(--mmp-accent-color);
+          --md-sys-color-primary: var(--mmp-accent-color);
         }
         ha-icon-button {
           min-width: var(--mmp-unit);
