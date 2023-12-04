@@ -60,6 +60,13 @@ const style = css`
     --switch-unchecked-color: var(--mmp-text-color);
     --switch-unchecked-button-color: var(--mmp-text-color);
     --switch-unchecked-track-color: var(--mmp-text-color);
+    --mdc-text-field-fill-color: transparent;
+    --mdc-text-field-ink-color: var(--mmp-text-color);
+    --mdc-text-field-idle-line-color: var(--mmp-text-color);
+    --mdc-text-field-label-ink-color: var(--mmp-text-color);
+    --mdc-text-field-hover-line-color: var(--mmp-text-color);
+    --mdc-ripple-color: var(--mmp-text-color);
+    --text-field-padding: 0;
     color: var(--mmp-text-color);
   }
   ha-card {
