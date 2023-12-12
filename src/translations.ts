@@ -39,6 +39,25 @@ const translations = {
       speaker_management: 'Wiedergabe auf',
     },
   },
+  fi: {
+      placeholder: {
+          tts: 'Teksti puheeksi',
+      },
+      label: {
+          leave: 'Jätä',
+          ungroup: 'Pura ryhmä',
+          group_all: 'Liitä kaikki',
+          send: 'Lähetä',
+          master: 'Master',
+      },
+      state: {
+          idle: 'Tauko',
+          unavailable: 'Ei käytettävissä',
+      },
+      title: {
+          speaker_management: 'Ryhmän hallinta',
+      },
+  },
   fr: {
     placeholder: {
       tts: 'Texte à lire',
