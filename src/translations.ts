@@ -132,6 +132,25 @@ const translations = {
       speaker_management: 'Zarządzanie grupą',
     },
   },
+  sv: {
+    placeholder: {
+      tts: 'Text till tal',
+    },
+    label: {
+      leave: 'Lämna',
+      ungroup: 'Avgruppera',
+      group_all: 'Gruppera alla',
+      send: 'Skicka',
+      master: 'Master',
+    },
+    state: {
+      idle: "Inaktiv",
+      unavailable: 'Otillgänglig',
+    },
+    title: {
+      speaker_management: 'Gruppstyrning',
+    }
+  },
   uk: {
     placeholder: {
       tts: 'Текст для відтворення',
