@@ -1,6 +1,6 @@
 {
   "name": "mini-media-player",
-  "version": "1.16.6",
+  "version": "1.16.7",
   "description": "A minimalistic yet customizable media player card for Home Assistant Lovelace UI",
   "keywords": [
     "home-assistant",

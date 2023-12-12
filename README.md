@@ -20,7 +20,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 2. Go to Sidebar -> Settings -> Dashboards -> Menu (top right corner) -> Resources.
 3. Click on `+ ADD RESOURCE`.
-4. Type `/local/mini-media-player-bundle.js?v=1.16.6` below URL.
+4. Type `/local/mini-media-player-bundle.js?v=1.16.7` below URL.
 5. Choose `JavaScript Module` below Resource Type.
 6. Accept.
 
@@ -33,7 +33,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.6
+      - url: /local/mini-media-player-bundle.js?v=1.16.7
         type: module
   ```
 
@@ -44,7 +44,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 2. Grab `mini-media-player-bundle.js`
 
   ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.16.6/mini-media-player-bundle.js
+  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.16.7/mini-media-player-bundle.js
   ```
 
 3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
@@ -52,7 +52,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.6
+      - url: /local/mini-media-player-bundle.js?v=1.16.7
         type: module
   ```
 
@@ -66,7 +66,7 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
   ```yaml
   lovelace:
     resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.6
+      - url: /local/mini-media-player-bundle.js?v=1.16.7
         type: module
   ```
 
