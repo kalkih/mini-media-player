@@ -114,6 +114,25 @@ const translations = {
       speaker_management: 'Stjórnun hópa',
     },
   },
+  nl: {
+    placeholder: {
+      tts: 'Tekst naar spraak',
+    },
+    label: {
+      leave: 'Verlaten',
+      ungroup: 'Degroeperen',
+      group_all: 'Groeperen',
+      send: 'Verstuur',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Inactief',
+      unavailable: 'Niet beschikbaar',
+    },
+    title: {
+      speaker_management: 'Groep management',
+    },
+  },
   no: {
     placeholder: {
       tts: 'Tekst til tale',
