@@ -95,6 +95,25 @@ const translations = {
       speaker_management: 'Hangszórók csoportosítása',
     },
   },
+  it: {
+    placeholder: {
+      tts: 'Conversione testo in voce',
+    },
+    label: {
+      leave: 'Lascia',
+      ungroup: 'Separa',
+      group_all: 'Raggruppa tutti',
+      send: 'Invia',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Inattivo',
+      unavailable: 'Non disponibile',
+    },
+    title: {
+      speaker_management: 'Gestione gruppo',
+    },
+  },
   is: {
     placeholder: {
       tts: 'Texti sem á að segja',
