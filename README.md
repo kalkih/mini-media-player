@@ -244,6 +244,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | power | boolean | false | The power button.
 | source | boolean | false | The source select.
 | sound_mode | boolean | true | The sound_mode select.
+| group_button | boolean | false | The group button.
 | controls | boolean | false | The media playback controls.
 | prev | boolean | false | The "previous" playback control button.
 | next | boolean | false | The "next" playback control button.

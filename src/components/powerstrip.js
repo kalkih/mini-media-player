@@ -25,7 +25,7 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   }
 
   get showGroupButton() {
-    return this.config.speaker_group.entities.length > 0;
+    return this.config.speaker_group.entities.length > 0 && !this.config.hide.group_button;
   }
 
   get showPowerButton() {
