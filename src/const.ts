@@ -5,6 +5,7 @@ const DEFAULT_HIDE = {
   artwork_border: true,
   icon_state: true,
   sound_mode: true,
+  group_button: false,
   runtime: true,
   runtime_remaining: true,
   volume: false,
