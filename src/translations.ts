@@ -284,6 +284,25 @@ const translations = {
       speaker_management: 'Gestió del grup',
     },
   },
+  nl: {
+    placeholder: {
+      tts: 'Tekst naar spraak',
+    },
+    label: {
+      leave: 'Verlaten',
+      ungroup: 'Ontgroeperen',
+      group_all: 'Alles groeperen',
+      send: 'Verzenden',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Inactief',
+      unavailable: 'Niet beschikbaar',
+    },
+    title: {
+      speaker_management: 'Groepsbeheer',
+    },
+  },
 };
 
 export default translations;
