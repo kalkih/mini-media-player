@@ -284,6 +284,25 @@ const translations = {
       speaker_management: '组合管理',
     },
   },
+  sk: {
+    placeholder: {
+      tts: 'Prevod textu na reč',
+    },
+    label: {
+      leave: 'Odísť',
+      ungroup: 'Zrušiť zoskupenie',
+      group_all: 'Zoskupiť všetky',
+      send: 'Poslať',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Nečinný',
+      unavailable: 'Nedostupné',
+    },
+    title: {
+      speaker_management: 'Manažment skupiny',
+    },
+  },  
   ca: {
     placeholder: {
       tts: 'Text a veu',
