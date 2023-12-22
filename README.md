@@ -1,7 +1,7 @@
 # Mini Media Player
 
 [![](https://img.shields.io/github/release/kalkih/mini-media-player.svg?style=flat-square)](https://github.com/kalkih/mini-media-player/releases/latest)
-[![](https://img.shields.io/travis/kalkih/mini-media-player.svg?style=flat-square)](https://travis-ci.org/kalkih/mini-media-player)
+[![](https://img.shields.io/travis/com/kalkih/mini-media-player?style=flat-square)](https://travis-ci.org/kalkih/mini-media-player)
 
 A minimalistic yet customizable media player card for [Home Assistant](https://github.com/home-assistant/home-assistant) Lovelace UI.
 
