@@ -76,6 +76,25 @@ const translations = {
       speaker_management: 'Gestion des groupes',
     },
   },
+  he: {
+    placeholder: {
+      tts: 'טקסט לדיבור',
+    },
+    label: {
+      leave: 'לעזוב',
+      ungroup: 'ביטול קבוצה',
+      group_all: 'לקבץ את כולם',
+      send: 'שליחה',
+      master: 'ראשי',
+    },
+    state: {
+      idle: 'לא פעיל',
+      unavailable: 'לא זמין',
+    },
+    title: {
+      speaker_management: 'ניהול קבוצות',
+    },
+  },
   hu: {
     placeholder: {
       tts: 'Szövegfelolvasás',
