@@ -379,6 +379,25 @@ const translations = {
       speaker_management: 'Gerenciamento de grupo',
     },
   },
+  cs: {
+    placeholder: {
+      tts: 'Převod textu na řeč',
+    },
+    label: {
+      leave: 'Opustit',
+      ungroup: 'Zrušit seskupení',
+      group_all: 'Seskupit vše',
+      send: 'Poslat',
+      master: 'Master',
+    },
+    state: {
+      idle: 'Nečinný',
+      unavailable: 'Nedostupné',
+    },
+    title: {
+      speaker_management: 'Správa skupiny',
+    },
+  },  
 };
 
 export default translations;
