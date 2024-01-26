@@ -195,7 +195,7 @@ const style = css`
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    border-radius: var(--ha-card-border-radius, 0);
+    border-radius: var(--mmp-border-radius, 0);
     overflow: hidden;
   }
   .cover.--prev {
@@ -206,8 +206,6 @@ const style = css`
   }
   ha-card[artwork*='full-cover'].--has-artwork .mmp-player {
     background: linear-gradient(to top, var(--mmp-overlay-color) var(--mmp-overlay-color-stop), transparent 100%);
-    border-bottom-left-radius: var(--ha-card-border-radius, 0);
-    border-bottom-right-radius: var(--ha-card-border-radius, 0);
   }
   ha-card.--has-artwork .cover,
   ha-card.--has-artwork[artwork='cover'] .cover:before {
