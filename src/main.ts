@@ -301,7 +301,12 @@ class MiniMediaPlayer extends LitElement {
 
     const active = !this.config.hide.icon_state && this.player.isActive;
     return html` <div class="entity__icon" ?color=${active}>
-      <ha-icon .icon=${this.computeIcon()}></ha-icon>
+      <ha-state-icon
+        .hass=${this.hass}
+        .icon=${this.config.icon}
+        .state=${this.entity}
+        .stateObj=${this.entity}
+      ></ha-state-icon>
     </div>`;
   }
 
@@ -368,10 +373,6 @@ class MiniMediaPlayer extends LitElement {
       }
       this.thumbnail = artwork || `url(${picture})`;
     }
-  }
-
-  computeIcon(): string {
-    return this.config.icon ? this.config.icon : this.player.icon || ICON.DEFAULT;
   }
 
   measureCard(): void {

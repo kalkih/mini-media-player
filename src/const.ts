@@ -30,7 +30,6 @@ const REPEAT_STATE = {
 };
 
 const ICON = {
-  DEFAULT: 'mdi:cast',
   DROPDOWN: 'mdi:chevron-down',
   GROUP: 'mdi:speaker-multiple',
   MENU: 'mdi:menu-down',
