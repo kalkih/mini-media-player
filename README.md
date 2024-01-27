@@ -29,7 +29,7 @@ This card is available in [HACS](https://github.com/hacs/integration) (Home Assi
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 2. Go to Sidebar -> Settings -> Dashboards -> Menu (top right corner) -> Resources.
 3. Click on `+ ADD RESOURCE`.
-4. Type `/local/mini-media-player-bundle.js?v=1.16.8` below URL.
+4. Type `/local/mini-media-player-bundle.js?v=1.16.9` below URL.
 5. Choose `JavaScript Module` below Resource Type.
 6. Accept.
 
@@ -41,7 +41,7 @@ This card is available in [HACS](https://github.com/hacs/integration) (Home Assi
 ```yaml
 lovelace:
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.16.8
+    - url: /local/mini-media-player-bundle.js?v=1.16.9
       type: module
 ```
 
