@@ -10,13 +10,22 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 ![Preview Image](https://user-images.githubusercontent.com/457678/47517460-9282d600-d888-11e8-9705-cf9ec3698c3c.png)
 
 
-## Install
+## Installation
 
-*This card is available in [HACS](https://github.com/hacs/integration) (Home Assistant Community Store)*
+### HACS (recommended)
 
-### Simple install
+This card is available in [HACS](https://github.com/hacs/integration) (Home Assistant Community Store).
 
-#### Storage mode **(default)**
+1. Install HACS if you don't have it already
+2. Open HACS in Home Assistant
+3. Go to "Frontend" section
+4. Click button with "+" icon
+5. Search for "Mini Media Player"
+
+### Manual install
+
+#### UI mode
+
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
 2. Go to Sidebar -> Settings -> Dashboards -> Menu (top right corner) -> Resources.
 3. Click on `+ ADD RESOURCE`.
@@ -27,50 +36,16 @@ Inspired by [Custom UI: Mini media player](https://community.home-assistant.io/t
 #### YAML mode
 
 1. Download and copy `mini-media-player-bundle.js` from the [latest release](https://github.com/kalkih/mini-media-player/releases/latest) into your `config/www` directory.
-
 2. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
 
-  ```yaml
-  lovelace:
-    resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.8
-        type: module
-  ```
+```yaml
+lovelace:
+  resources:
+    - url: /local/mini-media-player-bundle.js?v=1.16.8
+      type: module
+```
 
-### CLI install
-
-1. Move into your `config/www` directory
-
-2. Grab `mini-media-player-bundle.js`
-
-  ```console
-  $ wget https://github.com/kalkih/mini-media-player/releases/download/v1.16.8/mini-media-player-bundle.js
-  ```
-
-3. Add a reference to `mini-media-player-bundle.js` inside your `configuration.yaml` or through the Home Assistant UI from the resource tab.
-
-  ```yaml
-  lovelace:
-    resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.8
-        type: module
-  ```
-
-## Updating
-1. Find your `mini-media-player-bundle.js` file in `config/www` or wherever you ended up storing it.
-
-2. Replace the local file with the latest one attached in the [latest release](https://github.com/kalkih/mini-media-player/releases/latest).
-
-3. Add the new version number to the end of the cards reference url in your `configuration.yaml` (YAML mode) or through the Home Assistant UI - `Sidebar -> Settings -> Dashboards -> Menu (top right corner) -> Resources` (Storage mode).
-
-  ```yaml
-  lovelace:
-    resources:
-      - url: /local/mini-media-player-bundle.js?v=1.16.8
-        type: module
-  ```
-
-*You may need to empty the browsers cache if you have problems loading the updated card.*
+*To update the card to a new version after manual installation, update `mini-media-player-bundle.js` file from [latest release](https://github.com/kalkih/mini-media-player/releases/latest) and edit version of the card in your resources. You may need to empty the browsers cache if you have problems loading the updated card.*
 
 ## Using the card
 
