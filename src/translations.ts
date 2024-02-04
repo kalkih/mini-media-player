@@ -180,6 +180,7 @@ const translations = {
       ungroup: 'Usuń grupę',
       group_all: 'Grupuj wszystkie',
       send: 'Wyślij',
+      master: 'Główny',
     },
     state: {
       idle: 'brak aktywności',
