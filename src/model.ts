@@ -1,5 +1,5 @@
 import { MiniMediaPlayerConfiguration } from './config/types';
-import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM, REPEAT_STATE } from './const';
+import { PROGRESS_PROPS, MEDIA_DURATION_PROP, MEDIA_INFO, PLATFORM, REPEAT_STATE } from './const';
 import { HomeAssistant, MediaPlayerEntity, MediaPlayerEntityAttributes, MediaPlayerEntityState } from './types';
 import arrayBufferToBase64 from './utils/misc';
 
@@ -175,7 +175,7 @@ export default class MediaPlayerObject {
   }
 
   get hasProgress(): boolean {
-    return !this.config.hide.progress && !this.idle && PROGRESS_PROPS.every((prop) => prop in this._attr);
+    return !this.config.hide.progress && !this.idle && PROGRESS_PROPS.every((prop) => prop in this._attr) && this._attr[MEDIA_DURATION_PROP] >= 0;
   }
 
   get supportsPrev(): boolean {
