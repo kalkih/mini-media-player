@@ -175,7 +175,7 @@ export default class MediaPlayerObject {
   }
 
   get hasProgress(): boolean {
-    return !this.config.hide.progress && !this.idle && PROGRESS_PROPS.every((prop) => prop in this._attr) && this._attr[MEDIA_DURATION_PROP] >= 0;
+    return !this.config.hide.progress && !this.idle && PROGRESS_PROPS.every((prop) => prop in this._attr) && (this._attr[MEDIA_DURATION_PROP] ?? -1) > -1;
   }
 
   get supportsPrev(): boolean {
