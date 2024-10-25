@@ -75,7 +75,9 @@ const UPDATE_PROPS = [
   'foregroundColor',
 ];
 
-const PROGRESS_PROPS = ['media_duration', 'media_position', 'media_position_updated_at'];
+const MEDIA_DURATION_PROP = 'media_duration';
+
+const PROGRESS_PROPS = [MEDIA_DURATION_PROP, 'media_position', 'media_position_updated_at'];
 
 const BREAKPOINT = 390;
 
@@ -108,6 +110,7 @@ export {
   DEFAULT_HIDE,
   ICON,
   UPDATE_PROPS,
+  MEDIA_DURATION_PROP,
   PROGRESS_PROPS,
   BREAKPOINT,
   LABEL_SHORTCUT,
