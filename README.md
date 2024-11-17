@@ -158,7 +158,7 @@ See [Speaker group management](#speaker-group-management) for example usage.
 
 <a name="speaker_foot1"><sup>1</sup></a> All features are not yet supported.
 
-<a name="speaker_foot2"><sup>2</sup></a> Requires [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) for sound devices based on Linkplay chipset, available in HACS.
+<a name="speaker_foot2"><sup>2</sup></a> No longer requires [custom component](https://github.com/nagyrobi/home-assistant-custom-components-linkplay#multiroom) since Home Assitant version 2024.08 Linkplay based devices are supported by the Linkplay core integration. The custom integration was supported at least until v1.69.9 of this Custom UI.
 
 <a name="speaker_foot3"><sup>3</sup></a> HomeAssistant added join/unjoin services to the media_player. Future official integrations will implement these services (which are slightly different from the ones, which are already supported by this card) instead of implementing them in their own domain.
 
