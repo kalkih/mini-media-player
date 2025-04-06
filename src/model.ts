@@ -336,7 +336,7 @@ export default class MediaPlayerObject {
     if (this.supportsVolumeSet && this.config.volume_step && this.config.volume_step > 0) {
       this.callService(e, 'volume_set', {
         entity_id: this._entityId,
-        volume_level: Math.min(this.vol + this.config.volume_step / 100, 1),
+        volume_level: Math.min(this.vol + this.config.volume_step / 100, 1).toFixed(2),
       });
     } else this.callService(e, 'volume_up');
   }
@@ -345,7 +345,7 @@ export default class MediaPlayerObject {
     if (this.supportsVolumeSet && this.config.volume_step && this.config.volume_step > 0) {
       this.callService(e, 'volume_set', {
         entity_id: this._entityId,
-        volume_level: Math.max(this.vol - this.config.volume_step / 100, 0),
+        volume_level: Math.max(this.vol - this.config.volume_step / 100, 0).toFixed(2),
       });
     } else this.callService(e, 'volume_down');
   }
