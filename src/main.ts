@@ -52,6 +52,7 @@ class MiniMediaPlayer extends LitElement {
       if (this.player.trackIdle) this.updateIdleStatus();
     } else if (entity && this.player) {
       // Update existing player with new entity state to sync server changes
+      this.entity = entity;
       this.player.updateEntity(entity);
     }
     if (this.config && this.config.speaker_group && this.config.speaker_group.group_mgmt_entity) {
