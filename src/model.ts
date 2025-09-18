@@ -240,6 +240,20 @@ export default class MediaPlayerObject {
     return this.platform !== PLATFORM.SQUEEZEBOX && this.config.speaker_group.supports_master;
   }
 
+  get supportsThumbsUp(): boolean {
+    // Check if thumbs up service is configured
+    return !!(this.config.thumbs.up && this.config.thumbs.up.trim());
+  }
+
+  get supportsThumbsDown(): boolean {
+    // Check if thumbs down service is configured
+    return !!(this.config.thumbs.down && this.config.thumbs.down.trim());
+  }
+
+  get rating(): number {
+    return this._attr.media_rating || 0;
+  }
+
   async fetchArtwork(): Promise<string | false> {
     const url = this._attr.entity_picture_local ? this.hass.hassUrl(this.picture) : this.picture;
 
@@ -495,6 +509,28 @@ export default class MediaPlayerObject {
 
   // TODO: type available services
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  thumbsUp(e: MouseEvent): void {
+    const serviceString = this.config.thumbs.up;
+    if (serviceString && serviceString.includes('.')) {
+      const [domain, service] = serviceString.split('.', 2);
+      this.callService(e, service, {}, domain);
+    } else if (serviceString) {
+      // Default to media_player domain if no domain specified
+      this.callService(e, serviceString);
+    }
+  }
+
+  thumbsDown(e: MouseEvent): void {
+    const serviceString = this.config.thumbs.down;
+    if (serviceString && serviceString.includes('.')) {
+      const [domain, service] = serviceString.split('.', 2);
+      this.callService(e, service, {}, domain);
+    } else if (serviceString) {
+      // Default to media_player domain if no domain specified
+      this.callService(e, serviceString);
+    }
+  }
+
   callService(e: Event, service: string, inOptions?: Record<string, any>, domain = 'media_player', omit = false): void {
     e.stopPropagation();
     this.hass.callService(domain, service, {

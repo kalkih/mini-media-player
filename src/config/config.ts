@@ -45,6 +45,11 @@ export const generateConfig = (config: MiniMediaPlayerBaseConfiguration): MiniMe
       label: LABEL_SHORTCUT,
       ...config.shortcuts,
     },
+    thumbs: {
+      up: '',
+      down: '',
+      ...config.thumbs,
+    },
     max_volume: Number(config.max_volume) ?? 100,
     min_volume: Number(config.min_volume) || 0,
   };

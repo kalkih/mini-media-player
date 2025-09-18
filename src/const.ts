@@ -59,6 +59,14 @@ const ICON = {
   VOL_UP: 'mdi:volume-plus',
   FAST_FORWARD: 'mdi:fast-forward',
   REWIND: 'mdi:rewind',
+  THUMBS_UP: {
+    outline: 'mdi:thumb-up-outline',
+    solid: 'mdi:thumb-up',
+  },
+  THUMBS_DOWN: {
+    outline: 'mdi:thumb-down-outline',
+    solid: 'mdi:thumb-down',
+  },
 };
 
 const UPDATE_PROPS = [

@@ -23,7 +23,7 @@ const OptionsSoundMode = ['icon', 'full'];
 
 const OptionsInfo = ['short', 'scroll'];
 
-const OptionsReplaceMute = ['play_pause', 'stop', 'play_stop', 'next'];
+const OptionsReplaceMute = ['play_pause', 'stop', 'play_stop', 'next', 'thumbs'];
 
 const computeItems = (options, optional = false) => {
   const items = options.map((option) => ({
@@ -84,6 +84,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
   // eslint-disable-next-line camelcase
   get _toggle_power() {
     return this._config.toggle_power || true;
+  }
+
+  // eslint-disable-next-line camelcase
+  get _thumbs_up() {
+    return this._config.thumbs?.up || '';
+  }
+
+  // eslint-disable-next-line camelcase
+  get _thumbs_down() {
+    return this._config.thumbs?.down || '';
   }
 
   render() {
@@ -150,6 +160,20 @@ export default class MiniMediaPlayerEditor extends LitElement {
                 @change=${this.valueChanged}
               ></ha-switch>
             </ha-formfield>
+
+            <paper-input
+              label="Thumbs up service (e.g., media_player.media_thumbs_up)"
+              .value="${this._thumbs_up}"
+              .configValue="${'thumbs_up'}"
+              @value-changed=${this.valueChanged}
+            ></paper-input>
+
+            <paper-input
+              label="Thumbs down service (e.g., media_player.media_thumbs_down)"
+              .value="${this._thumbs_down}"
+              .configValue="${'thumbs_down'}"
+              @value-changed=${this.valueChanged}
+            ></paper-input>
           </div>
 
           <div class="editor-side-by-side">
@@ -275,6 +299,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
     if (target.configValue) {
       if (target.value === '') {
         delete this._config[target.configValue];
+      } else if (target.configValue === 'thumbs_up' || target.configValue === 'thumbs_down') {
+        // Handle nested thumbs configuration
+        const thumbsKey = target.configValue === 'thumbs_up' ? 'up' : 'down';
+        this._config = {
+          ...this._config,
+          thumbs: {
+            ...this._config.thumbs,
+            [thumbsKey]: target.value || '',
+          },
+        };
       } else {
         this._config = {
           ...this._config,
