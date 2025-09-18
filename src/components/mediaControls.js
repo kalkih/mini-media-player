@@ -189,6 +189,9 @@ class MiniMediaPlayerMediaControls extends LitElement {
             <ha-icon .icon=${ICON.NEXT}></ha-icon>
           </ha-icon-button>
         `;
+      case 'thumbs':
+        if (!this.player.supportsThumbsUp && !this.player.supportsThumbsDown) return;
+        return this.renderThumbsButtons();
       default:
         if (!this.player.supportsMute) return;
         return html`
@@ -265,6 +268,32 @@ class MiniMediaPlayerMediaControls extends LitElement {
     this.player.setVolume(ev, vol);
   }
 
+  renderThumbsButtons() {
+    const thumbsUpIcon = this.player.rating === 1 ? ICON.THUMBS_UP.solid : ICON.THUMBS_UP.outline;
+    const thumbsDownIcon = this.player.rating === -1 ? ICON.THUMBS_DOWN.solid : ICON.THUMBS_DOWN.outline;
+    
+    return html`
+      <div class="thumbs-container">
+        ${this.player.supportsThumbsUp ? html`
+          <ha-icon-button
+            @click=${e => this.player.thumbsUp(e)}
+            .icon=${thumbsUpIcon}
+            ?color=${this.player.rating === 1}>
+            <ha-icon .icon=${thumbsUpIcon}></ha-icon>
+          </ha-icon-button>
+        ` : ''}
+        ${this.player.supportsThumbsDown ? html`
+          <ha-icon-button
+            @click=${e => this.player.thumbsDown(e)}
+            .icon=${thumbsDownIcon}
+            ?color=${this.player.rating === -1}>
+            <ha-icon .icon=${thumbsDownIcon}></ha-icon>
+          </ha-icon-button>
+        ` : ''}
+      </div>
+    `;
+  }
+
   static get styles() {
     return [
       sharedStyle,
@@ -310,6 +339,11 @@ class MiniMediaPlayerMediaControls extends LitElement {
           flex: 3;
           flex-shrink: 200;
           justify-content: center;
+        }
+        .thumbs-container {
+          display: flex;
+          align-items: center;
+          gap: 4px;
         }
       `,
     ];

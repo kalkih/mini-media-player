@@ -71,16 +71,18 @@ lovelace:
 | volume_step | number | optional | v1.9.0 | Change the volume step size of the volume buttons and the volume slider (number between 1 - 100)<sup>[1](#option_foot1)</sup>.
 | max_volume | number | optional | v0.8.2 | Specify the max vol limit of the volume slider (number between 1 - 100).
 | min_volume | number | optional | v1.1.2 | Specify the min vol limit of the volume slider (number between 1 - 100).
-| replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play_pause` (previously `play`), `stop`, `play_stop`, `next`.
+| replace_mute | string | optional | v0.9.8 | Replace the mute button, available options are `play_pause` (previously `play`), `stop`, `play_stop`, `next`, `thumbs`<sup>[2](#option_foot2)</sup>.
 | jump_amount | number | 10 | v0.14.0 | Configure amount of seconds to skip/rewind for jump buttons.
 | toggle_power | boolean | true | v0.8.9 | Set to `false` to change the power button behaviour to `media_player.turn_on`/`media_player.turn_off`.
 | idle_view | object | optional | v1.0.0 | Display a less cluttered view when idle, See [Idle object](#idle-object) for available options.
 | background | string | optional | v0.8.6 | Background image, specify the image url `"/local/background-img.png"` e.g.
 | speaker_group | object | optional | v1.0.0 | Speaker group management/multiroom, see [Speaker group object](#speaker-group-object) for available options.
 | shortcuts | object | optional | v1.0.0 | Media shortcuts in a list or as buttons, see [Shortcut object](#shortcuts-object) for available options.
+| thumbs | object | optional | v2.0.0 | Configure custom thumbs up/down services, see [Thumbs object](#thumbs-object) for available options.
 | scale | number | optional | v1.5.0 | UI scale modifier, default is `1`.
 
 <a name="option_foot1"><sup>1</sup></a> Only supported on entities with `volume_level` attribute.
+<a name="option_foot2"><sup>2</sup></a> The `thumbs` option replaces the mute button with thumbs up/down buttons. Use the [Thumbs object](#thumbs-object) to configure which services to call. Icons are outline by default, but show as solid when `media_rating` equals 1 (thumbs up) or -1 (thumbs down). No rating is indicated by no `media_rating` value or 0.
 
 #### Idle object
 | Name | Type | Default | Description |
@@ -129,6 +131,54 @@ tts:
       execute: true
       silent: true
     message_field: text
+```
+
+#### Thumbs object
+Configure which services to call for thumbs up and thumbs down actions. This allows complete flexibility in supporting different media player integrations that may use non-standard service names.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| up | string | optional | Service to call for thumbs up action. Can be just the service name (defaults to media_player domain) or full service format `domain.service`.
+| down | string | optional | Service to call for thumbs down action. Can be just the service name (defaults to media_player domain) or full service format `domain.service`.
+
+**Standard Home Assistant example:**
+```yaml
+type: custom:mini-media-player
+entity: media_player.spotify
+replace_mute: thumbs
+thumbs:
+  up: media_player.media_thumbs_up
+  down: media_player.media_thumbs_down
+```
+
+**Custom integration example:**
+```yaml
+type: custom:mini-media-player
+entity: media_player.pandora
+replace_mute: thumbs
+thumbs:
+  up: pandora.thumbs_up
+  down: pandora.thumbs_down
+```
+
+**Service without domain (defaults to media_player):**
+```yaml
+type: custom:mini-media-player
+entity: media_player.plex
+replace_mute: thumbs
+thumbs:
+  up: rate_track_positive
+  down: rate_track_negative
+```
+
+**Single direction only:**
+```yaml
+type: custom:mini-media-player
+entity: media_player.youtube_music
+replace_mute: thumbs
+thumbs:
+  up: media_player.media_thumbs_up
+  # thumbs down omitted = disabled
 ```
 
 #### Speaker group object

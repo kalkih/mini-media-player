@@ -23,7 +23,7 @@ const OptionsSoundMode = ['icon', 'full'];
 
 const OptionsInfo = ['short', 'scroll'];
 
-const OptionsReplaceMute = ['play_pause', 'stop', 'play_stop', 'next'];
+const OptionsReplaceMute = ['play_pause', 'stop', 'play_stop', 'next', 'thumbs'];
 
 const computeItems = (options, optional = false) => {
   const items = options.map((option) => ({
@@ -84,6 +84,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
   // eslint-disable-next-line camelcase
   get _toggle_power() {
     return this._config.toggle_power || true;
+  }
+
+  // eslint-disable-next-line camelcase
+  get _thumbs_up() {
+    return this._config.thumbs?.up || '';
+  }
+
+  // eslint-disable-next-line camelcase
+  get _thumbs_down() {
+    return this._config.thumbs?.down || '';
   }
 
   render() {
@@ -150,6 +160,7 @@ export default class MiniMediaPlayerEditor extends LitElement {
                 @change=${this.valueChanged}
               ></ha-switch>
             </ha-formfield>
+
           </div>
 
           <div class="editor-side-by-side">
@@ -216,6 +227,36 @@ export default class MiniMediaPlayerEditor extends LitElement {
             </div>
           </div>
 
+          ${this._config.replace_mute === 'thumbs' ? html`
+            <div class="editor-side-by-side">
+              <div>
+                <span class="editor-label">Thumbs Up Service</span>
+                <mmp-dropdown
+                  class="mmp-shortcuts__dropdown"
+                  @change=${({ detail }) =>
+                    this.valueChanged({ target: { configValue: 'thumbs_up', value: detail.id } })}
+                  .items=${this.getServiceItems()}
+                  .label=${'None'}
+                  .selected=${this._thumbs_up}
+                >
+                </mmp-dropdown>
+              </div>
+
+              <div>
+                <span class="editor-label">Thumbs Down Service</span>
+                <mmp-dropdown
+                  class="mmp-shortcuts__dropdown"
+                  @change=${({ detail }) =>
+                    this.valueChanged({ target: { configValue: 'thumbs_down', value: detail.id } })}
+                  .items=${this.getServiceItems()}
+                  .label=${'None'}
+                  .selected=${this._thumbs_down}
+                >
+                </mmp-dropdown>
+              </div>
+            </div>
+          ` : ''}
+
           <div class="editor-side-by-side">
             <paper-input
               label="Volume Step (1-100)"
@@ -264,6 +305,24 @@ export default class MiniMediaPlayerEditor extends LitElement {
     `;
   }
 
+  getServiceItems() {
+    const services = [];
+    services.push({ name: 'None', id: '' });
+    
+    if (this.hass && this.hass.services) {
+      Object.keys(this.hass.services).forEach(domain => {
+        Object.keys(this.hass.services[domain]).forEach(service => {
+          services.push({
+            name: `${domain}.${service}`,
+            id: `${domain}.${service}`
+          });
+        });
+      });
+    }
+    
+    return services.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   valueChanged(ev) {
     if (!this._config || !this.hass) {
       return;
@@ -275,6 +334,16 @@ export default class MiniMediaPlayerEditor extends LitElement {
     if (target.configValue) {
       if (target.value === '') {
         delete this._config[target.configValue];
+      } else if (target.configValue === 'thumbs_up' || target.configValue === 'thumbs_down') {
+        // Handle nested thumbs configuration
+        const thumbsKey = target.configValue === 'thumbs_up' ? 'up' : 'down';
+        this._config = {
+          ...this._config,
+          thumbs: {
+            ...this._config.thumbs,
+            [thumbsKey]: target.value || '',
+          },
+        };
       } else {
         this._config = {
           ...this._config,

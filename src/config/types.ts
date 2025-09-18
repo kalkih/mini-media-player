@@ -16,7 +16,7 @@ export interface MiniMediaPlayerBaseConfiguration {
   volume_step?: number;
   max_volume?: number;
   min_volume?: number;
-  replace_mute?: 'play_pause' | 'stop' | 'play_stop' | 'next';
+  replace_mute?: 'play_pause' | 'stop' | 'play_stop' | 'next' | 'thumbs';
   jump_amount?: number;
   toggle_power?: boolean;
   idle_view?: MiniMediaPlayerIdleViewConfiguration;
@@ -24,6 +24,7 @@ export interface MiniMediaPlayerBaseConfiguration {
   speaker_group?: MiniMediaPlayerSpeakerGroupBase;
   shortcuts?: MiniMediaPlayerShortcuts;
   scale?: number;
+  thumbs?: MiniMediaPlayerThumbsConfiguration;
 
   /**
    * @internal Internal configuration options
@@ -54,6 +55,7 @@ export interface MiniMediaPlayerConfiguration extends MiniMediaPlayerBaseConfigu
   shortcuts: MiniMediaPlayerShortcuts;
   max_volume: number;
   min_volume: number;
+  thumbs: MiniMediaPlayerThumbsConfiguration;
 
   collapse: boolean;
   flow: boolean;
@@ -96,6 +98,11 @@ export interface MiniMediaPlayerTTSConfiguration {
   type?: string | 'tts' | 'announce' | 'push';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: Record<string, any>;
+}
+
+export interface MiniMediaPlayerThumbsConfiguration {
+  up?: string;
+  down?: string;
 }
 
 export interface MiniMediaPlayerAction {

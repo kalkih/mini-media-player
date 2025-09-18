@@ -91,6 +91,7 @@ export enum MediaPlayerEntityState {
 }
 
 export interface MediaPlayerEntity extends HassEntityBase {
+  entity_id: string;
   attributes: MediaPlayerEntityAttributes;
   state: MediaPlayerEntityState;
 }
@@ -111,6 +112,7 @@ export interface MediaPlayerEntityAttributes extends HassEntityAttributeBase {
   media_position?: number;
   media_title?: string;
   icon?: string;
+  entity_picture?: string;
   entity_picture_local?: string;
   is_volume_muted?: boolean;
   volume_level?: number;
@@ -123,4 +125,8 @@ export interface MediaPlayerEntityAttributes extends HassEntityAttributeBase {
   shuffle?: boolean;
   group_members?: string[];
   sync_group?: string[];
+  media_rating?: number;
+  supported_features?: number;
+  assumed_state?: boolean;
+  friendly_name?: string;
 }
