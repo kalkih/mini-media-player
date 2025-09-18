@@ -82,7 +82,7 @@ lovelace:
 | scale | number | optional | v1.5.0 | UI scale modifier, default is `1`.
 
 <a name="option_foot1"><sup>1</sup></a> Only supported on entities with `volume_level` attribute.
-<a name="option_foot2"><sup>2</sup></a> The `thumbs` option replaces the mute button with thumbs up/down buttons. Use the [Thumbs object](#thumbs-object) to configure which services to call. Icons are outline by default, but show as solid when `media_rating` equals 1 (thumbs up) or 0 (thumbs down). No rating is indicated by no `media_rating` value.
+<a name="option_foot2"><sup>2</sup></a> The `thumbs` option replaces the mute button with thumbs up/down buttons. Use the [Thumbs object](#thumbs-object) to configure which services to call. Icons are outline by default, but show as solid when `media_rating` equals 1 (thumbs up) or -1 (thumbs down). No rating is indicated by no `media_rating` value or 0.
 
 #### Idle object
 | Name | Type | Default | Description |

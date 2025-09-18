@@ -270,7 +270,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
 
   renderThumbsButtons() {
     const thumbsUpIcon = this.player.rating === 1 ? ICON.THUMBS_UP.solid : ICON.THUMBS_UP.outline;
-    const thumbsDownIcon = this.player.rating === 0 ? ICON.THUMBS_DOWN.solid : ICON.THUMBS_DOWN.outline;
+    const thumbsDownIcon = this.player.rating === -1 ? ICON.THUMBS_DOWN.solid : ICON.THUMBS_DOWN.outline;
     
     return html`
       <div class="thumbs-container">
@@ -286,7 +286,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           <ha-icon-button
             @click=${e => this.player.thumbsDown(e)}
             .icon=${thumbsDownIcon}
-            ?color=${this.player.rating === 0}>
+            ?color=${this.player.rating === -1}>
             <ha-icon .icon=${thumbsDownIcon}></ha-icon>
           </ha-icon-button>
         ` : ''}
