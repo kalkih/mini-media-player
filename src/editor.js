@@ -161,19 +161,6 @@ export default class MiniMediaPlayerEditor extends LitElement {
               ></ha-switch>
             </ha-formfield>
 
-            <paper-input
-              label="Thumbs up service (e.g., media_player.media_thumbs_up)"
-              .value="${this._thumbs_up}"
-              .configValue="${'thumbs_up'}"
-              @value-changed=${this.valueChanged}
-            ></paper-input>
-
-            <paper-input
-              label="Thumbs down service (e.g., media_player.media_thumbs_down)"
-              .value="${this._thumbs_down}"
-              .configValue="${'thumbs_down'}"
-              @value-changed=${this.valueChanged}
-            ></paper-input>
           </div>
 
           <div class="editor-side-by-side">
@@ -240,6 +227,36 @@ export default class MiniMediaPlayerEditor extends LitElement {
             </div>
           </div>
 
+          ${this._config.replace_mute === 'thumbs' ? html`
+            <div class="editor-side-by-side">
+              <div>
+                <span class="editor-label">Thumbs Up Service</span>
+                <mmp-dropdown
+                  class="mmp-shortcuts__dropdown"
+                  @change=${({ detail }) =>
+                    this.valueChanged({ target: { configValue: 'thumbs_up', value: detail.id } })}
+                  .items=${this.getServiceItems()}
+                  .label=${'None'}
+                  .selected=${this._thumbs_up}
+                >
+                </mmp-dropdown>
+              </div>
+
+              <div>
+                <span class="editor-label">Thumbs Down Service</span>
+                <mmp-dropdown
+                  class="mmp-shortcuts__dropdown"
+                  @change=${({ detail }) =>
+                    this.valueChanged({ target: { configValue: 'thumbs_down', value: detail.id } })}
+                  .items=${this.getServiceItems()}
+                  .label=${'None'}
+                  .selected=${this._thumbs_down}
+                >
+                </mmp-dropdown>
+              </div>
+            </div>
+          ` : ''}
+
           <div class="editor-side-by-side">
             <paper-input
               label="Volume Step (1-100)"
@@ -286,6 +303,24 @@ export default class MiniMediaPlayerEditor extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  getServiceItems() {
+    const services = [];
+    services.push({ name: 'None', id: '' });
+    
+    if (this.hass && this.hass.services) {
+      Object.keys(this.hass.services).forEach(domain => {
+        Object.keys(this.hass.services[domain]).forEach(service => {
+          services.push({
+            name: `${domain}.${service}`,
+            id: `${domain}.${service}`
+          });
+        });
+      });
+    }
+    
+    return services.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   valueChanged(ev) {
