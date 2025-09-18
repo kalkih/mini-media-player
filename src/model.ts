@@ -553,6 +553,13 @@ export default class MediaPlayerObject {
     }
   }
 
+  updateEntity(entity: MediaPlayerEntity): void {
+    this.entity = entity;
+    this.state = entity.state;
+    this._attr = entity.attributes || {};
+    this._active = this.isActive;
+  }
+
   callService(e: Event, service: string, inOptions?: Record<string, any>, domain = 'media_player', omit = false): Promise<ServiceCallResponse> {
     e.stopPropagation();
     return this.hass.callService(domain, service, {
