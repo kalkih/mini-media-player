@@ -1,6 +1,6 @@
 import { MiniMediaPlayerConfiguration } from './config/types';
 import { PROGRESS_PROPS, MEDIA_INFO, PLATFORM, REPEAT_STATE } from './const';
-import { HomeAssistant, MediaPlayerEntity, MediaPlayerEntityAttributes, MediaPlayerEntityState } from './types';
+import { HomeAssistant, MediaPlayerEntity, MediaPlayerEntityAttributes, MediaPlayerEntityState, ServiceCallResponse } from './types';
 import arrayBufferToBase64 from './utils/misc';
 
 export interface MediaPlayerMedia {
@@ -274,26 +274,26 @@ export default class MediaPlayerObject {
   }
 
   toggle(e: MouseEvent): void {
-    if (this.config.toggle_power) return this.callService(e, 'toggle');
-    if (this.isOff) return this.callService(e, 'turn_on');
-    else this.callService(e, 'turn_off');
+    if (this.config.toggle_power) { void this.callService(e, 'toggle'); return; }
+    if (this.isOff) { void this.callService(e, 'turn_on'); return; }
+    else void this.callService(e, 'turn_off');
   }
 
   toggleMute(e: MouseEvent): void {
     if (this.config.speaker_group.sync_volume) {
       this.group.forEach((entity) => {
-        this.callService(e, 'volume_mute', {
+        void this.callService(e, 'volume_mute', {
           entity_id: entity,
           is_volume_muted: !this.muted,
         });
       });
     } else {
-      this.callService(e, 'volume_mute', { is_volume_muted: !this.muted });
+      void this.callService(e, 'volume_mute', { is_volume_muted: !this.muted });
     }
   }
 
   toggleShuffle(e: MouseEvent): void {
-    this.callService(e, 'shuffle_set', { shuffle: !this.shuffle });
+    void this.callService(e, 'shuffle_set', { shuffle: !this.shuffle });
   }
 
   toggleRepeat(e: MouseEvent): void {
@@ -301,41 +301,41 @@ export default class MediaPlayerObject {
     const { length } = states;
     const currentIndex = states.indexOf(this.repeat) - 1;
     const nextState = states[(currentIndex - (1 % length) + length) % length];
-    this.callService(e, 'repeat_set', { repeat: nextState });
+    void this.callService(e, 'repeat_set', { repeat: nextState });
   }
 
   setSource(e: Event, source: string): void {
-    this.callService(e, 'select_source', { source });
+    void this.callService(e, 'select_source', { source });
   }
 
   // TODO: fix opts type
   setMedia(e: MouseEvent, opts: MediaPlayerMedia): void {
-    this.callService(e, 'play_media', { ...opts });
+    void this.callService(e, 'play_media', { ...opts });
   }
 
   play(e: MouseEvent): void {
-    this.callService(e, 'media_play');
+    void this.callService(e, 'media_play');
   }
 
   pause(e: MouseEvent): void {
-    this.callService(e, 'media_pause');
+    void this.callService(e, 'media_pause');
   }
 
   playPause(e: MouseEvent): void {
-    this.callService(e, 'media_play_pause');
+    void this.callService(e, 'media_play_pause');
   }
 
   playStop(e: MouseEvent): void {
-    if (!this.isPlaying) this.callService(e, 'media_play');
-    else this.callService(e, 'media_stop');
+    if (!this.isPlaying) void this.callService(e, 'media_play');
+    else void this.callService(e, 'media_stop');
   }
 
   setSoundMode(e: Event, name: string): void {
-    this.callService(e, 'select_sound_mode', { sound_mode: name });
+    void this.callService(e, 'select_sound_mode', { sound_mode: name });
   }
 
   next(e: MouseEvent): void {
-    this.callService(e, 'media_next_track');
+    void this.callService(e, 'media_next_track');
   }
 
   prev(e: MouseEvent): void {
@@ -409,7 +409,7 @@ export default class MediaPlayerObject {
         case PLATFORM.SOUNDTOUCH:
           return this.handleSoundtouch(e, this.isGrouped ? 'ADD_ZONE_SLAVE' : 'CREATE_ZONE', entity);
         case PLATFORM.SQUEEZEBOX:
-          return this.callService(
+          void this.callService(
             e,
             'sync',
             {
@@ -418,9 +418,10 @@ export default class MediaPlayerObject {
             },
             PLATFORM.SQUEEZEBOX,
           );
+          return;
         case PLATFORM.MEDIAPLAYER:
         case PLATFORM.SONOS:
-          return this.callService(
+          void this.callService(
             e,
             'join',
             {
@@ -429,8 +430,9 @@ export default class MediaPlayerObject {
             },
             PLATFORM.MEDIAPLAYER,
           );
+          return;
         case PLATFORM.HEOS:
-          return this.callService(
+          void this.callService(
             e,
             'join',
             {
@@ -439,18 +441,21 @@ export default class MediaPlayerObject {
             },
             PLATFORM.MEDIAPLAYER,
           );
+          return;
         default:
-          return this.callService(e, 'join', options, platform);
+          void this.callService(e, 'join', options, platform);
+          return;
       }
     } else {
       switch (platform) {
         case PLATFORM.SOUNDTOUCH:
           return this.handleSoundtouch(e, 'REMOVE_ZONE_SLAVE', entity);
         case PLATFORM.SQUEEZEBOX:
-          return this.callService(e, 'unsync', options, PLATFORM.SQUEEZEBOX);
+          void this.callService(e, 'unsync', options, PLATFORM.SQUEEZEBOX);
+          return;
         case PLATFORM.MEDIAPLAYER:
         case PLATFORM.SONOS:
-          return this.callService(
+          void this.callService(
             e,
             'unjoin',
             {
@@ -458,8 +463,9 @@ export default class MediaPlayerObject {
             },
             PLATFORM.MEDIAPLAYER,
           );
+          return;
         case PLATFORM.HEOS:
-          return this.callService(
+          void this.callService(
             e,
             'unjoin',
             {
@@ -467,14 +473,16 @@ export default class MediaPlayerObject {
             },
             PLATFORM.MEDIAPLAYER,
           );
+          return;
         default:
-          return this.callService(e, 'unjoin', options, platform);
+          void this.callService(e, 'unjoin', options, platform);
+          return;
       }
     }
   }
 
   handleSoundtouch(e: Event, service: string, entity: string | string[]): void {
-    return this.callService(
+    void this.callService(
       e,
       service,
       {
@@ -488,7 +496,7 @@ export default class MediaPlayerObject {
 
   toggleScript(e: MouseEvent, id: string, data: Record<string, string> = {}): void {
     const [, name] = id.split('.');
-    this.callService(
+    void this.callService(
       e,
       name,
       {
@@ -509,31 +517,45 @@ export default class MediaPlayerObject {
 
   // TODO: type available services
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  thumbsUp(e: MouseEvent): void {
+  async thumbsUp(e: MouseEvent): Promise<void> {
     const serviceString = this.config.thumbs.up;
-    if (serviceString && serviceString.includes('.')) {
-      const [domain, service] = serviceString.split('.', 2);
-      this.callService(e, service, {}, domain);
-    } else if (serviceString) {
-      // Default to media_player domain if no domain specified
-      this.callService(e, serviceString);
+    try {
+      if (serviceString && serviceString.includes('.')) {
+        const [domain, service] = serviceString.split('.', 2);
+        await this.callService(e, service, {}, domain);
+      } else if (serviceString) {
+        // Default to media_player domain if no domain specified
+        await this.callService(e, serviceString);
+      }
+      // Optimistically update rating for immediate UI feedback
+      this._attr.media_rating = 1;
+      // UI will update on next state change from Home Assistant
+    } catch (error) {
+      console.error('Thumbs up service call failed:', error);
     }
   }
 
-  thumbsDown(e: MouseEvent): void {
+  async thumbsDown(e: MouseEvent): Promise<void> {
     const serviceString = this.config.thumbs.down;
-    if (serviceString && serviceString.includes('.')) {
-      const [domain, service] = serviceString.split('.', 2);
-      this.callService(e, service, {}, domain);
-    } else if (serviceString) {
-      // Default to media_player domain if no domain specified
-      this.callService(e, serviceString);
+    try {
+      if (serviceString && serviceString.includes('.')) {
+        const [domain, service] = serviceString.split('.', 2);
+        await this.callService(e, service, {}, domain);
+      } else if (serviceString) {
+        // Default to media_player domain if no domain specified
+        await this.callService(e, serviceString);
+      }
+      // Optimistically update rating for immediate UI feedback
+      this._attr.media_rating = -1;
+      // UI will update on next state change from Home Assistant
+    } catch (error) {
+      console.error('Thumbs down service call failed:', error);
     }
   }
 
-  callService(e: Event, service: string, inOptions?: Record<string, any>, domain = 'media_player', omit = false): void {
+  callService(e: Event, service: string, inOptions?: Record<string, any>, domain = 'media_player', omit = false): Promise<ServiceCallResponse> {
     e.stopPropagation();
-    this.hass.callService(domain, service, {
+    return this.hass.callService(domain, service, {
       ...(!omit && { entity_id: this._entityId }),
       ...inOptions,
     });
