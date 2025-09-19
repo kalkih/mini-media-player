@@ -3,10 +3,6 @@ name: Build and Release
 on:
   release:
     types: [created]
-  workflow_dispatch:   # allows manual run from Actions tab
-  push:
-    tags:
-      - "test-*"
 
 jobs:
   build:
@@ -27,10 +23,14 @@ jobs:
       - name: Build bundle
         run: npm run build
 
+      - name: Copy bundle to release root
+        run: cp dist/mini-media-player-bundle.js ./mini-media-player-bundle.js
+
       - name: Upload bundle to release
-        if: github.event_name == 'release'  # only upload on real release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/mini-media-player-bundle.js
+          files: mini-media-player-bundle.js
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
