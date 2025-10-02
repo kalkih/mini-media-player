@@ -315,6 +315,7 @@ const style = css`
     word-break: break-word;
     opacity: var(--mmp-info-opacity);
     transition: color 0.5s;
+    -webkit-text-size-adjust: 100%;
   }
   .entity__info__media[short] {
     max-height: calc(var(--mmp-unit) / 2);
