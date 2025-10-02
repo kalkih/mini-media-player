@@ -283,6 +283,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           max-width: none;
           min-width: 100px;
           width: 100%;
+          --md-sys-color-primary: var(--mmp-accent-color); /* before 2025.10.0 */
           color: var(--primary-text-color);
         }
         ha-icon-button {
