@@ -425,6 +425,14 @@ export default class MediaPlayerObject {
             },
             PLATFORM.MEDIAPLAYER,
           );
+        case PLATFORM.OWNTONE:
+          return this.callService(
+            e,
+            'turn_on',
+            {
+              entity_id: entity
+            }
+          );
         default:
           return this.callService(e, 'join', options, platform);
       }
@@ -453,6 +461,14 @@ export default class MediaPlayerObject {
             },
             PLATFORM.MEDIAPLAYER,
           );
+          case PLATFORM.OWNTONE:
+            return this.callService(
+              e,
+              'turn_off',
+              {
+                entity_id: entity
+              }
+            );
         default:
           return this.callService(e, 'unjoin', options, platform);
       }
