@@ -22,7 +22,7 @@ export class MiniMediaPlayerSourceMenu extends LitElement {
   }
 
   get alternatives(): DropdownItem[] {
-    return this.player.sources.map((source) => ({
+    return this.player.sources.sort().map((source) => ({
       name: source,
       id: source,
       type: 'source',
