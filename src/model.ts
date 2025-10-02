@@ -186,6 +186,18 @@ export default class MediaPlayerObject {
     return !!this._attr.supported_features && (this._attr.supported_features | 32) === this._attr.supported_features;
   }
 
+  get supportsPause(): boolean {
+    return !!this._attr.supported_features && (this._attr.supported_features | 1) === this._attr.supported_features;
+  }
+
+  get supportsPlay(): boolean {
+    return !!this._attr.supported_features && (this._attr.supported_features | 16384) === this._attr.supported_features;
+  }
+
+  get supportsStop(): boolean {
+    return !!this._attr.supported_features && (this._attr.supported_features | 4096) === this._attr.supported_features;
+  }
+
   get progress(): number {
     if (this.isPlaying) {
       return this.position + (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0;

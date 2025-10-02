@@ -204,7 +204,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
   renderPlayButtons() {
     const { hide } = this.config;
     return html`
-      ${!hide.play_pause ? this.player.assumedState ? html`
+      ${(!hide.play_pause && this.player.supportsPause) ? this.player.assumedState ? html`
         <ha-icon-button
           @click=${e => this.player.play(e)}
           .icon=${ICON.PLAY.false}>
@@ -222,11 +222,11 @@ class MiniMediaPlayerMediaControls extends LitElement {
             <ha-icon .icon=${ICON.PLAY[this.player.isPlaying]}></ha-icon>
         </ha-icon-button>
       ` : html``}
-      ${!hide.play_stop ? html`
+      ${(!hide.play_stop && this.player.supportsStop) ? html`
         <ha-icon-button
           @click=${e => this.handleStop(e)}
           .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}>
-            <ha-icon .icon=${hide.play_pause ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}></ha-icon>
+            <ha-icon .icon=${(hide.play_pause || !this.player.supportsPause) ? ICON.STOP[this.player.isPlaying] : ICON.STOP.true}></ha-icon>
         </ha-icon-button>
       ` : html``}
     `;
@@ -257,7 +257,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
   }
 
   handleStop(e) {
-    return this.config.hide.play_pause ? this.player.playStop(e) : this.player.stop(e);
+    return (this.config.hide.play_pause || !this.player.supportsPause) ? this.player.playStop(e) : this.player.stop(e);
   }
 
   handleVolumeChange(ev) {
