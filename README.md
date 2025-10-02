@@ -41,7 +41,7 @@ This card is available in [HACS](https://github.com/hacs/integration) (Home Assi
 ```yaml
 lovelace:
   resources:
-    - url: /local/mini-media-player-bundle.js?v=1.16.9
+    - url: /local/mini-media-player-bundle.js?v=1.16.10
       type: module
 ```
 
