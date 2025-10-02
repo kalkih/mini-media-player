@@ -123,7 +123,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
         @click=${e => e.stopPropagation()}
         ?disabled=${muted}
         min=${this.minVol} max=${this.maxVol}
-        value=${this.player.vol * 100}
+        .value=${this.player.vol * 100}
         step=${this.config.volume_step || 1}
         dir=${'ltr'}
         ignore-bar-touch pin labeled>
@@ -283,7 +283,7 @@ class MiniMediaPlayerMediaControls extends LitElement {
           max-width: none;
           min-width: 100px;
           width: 100%;
-          --md-sys-color-primary: var(--mmp-accent-color);
+          color: var(--primary-text-color);
         }
         ha-icon-button {
           min-width: var(--mmp-unit);

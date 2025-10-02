@@ -31,7 +31,7 @@ import './components/progress';
 import './components/powerstrip';
 import './components/mediaControls';
 
-import { ICON, UPDATE_PROPS, BREAKPOINT } from './const';
+import { UPDATE_PROPS, BREAKPOINT } from './const';
 import { HomeAssistant, MediaPlayerEntity } from './types';
 import { Part } from 'lit-html';
 import { MiniMediaPlayerBaseConfiguration, MiniMediaPlayerConfiguration } from './config/types';
@@ -356,9 +356,9 @@ class MiniMediaPlayer extends LitElement {
           '--mmp-icon-color': this.foregroundColor,
           '--mmp-icon-active-color': this.foregroundColor,
           '--mmp-accent-color': this.foregroundColor,
-          '--paper-slider-container-color': this.foregroundColor,
           '--secondary-text-color': this.foregroundColor,
           '--mmp-media-cover-info-color': this.foregroundColor,
+          '--ha-control-color': this.foregroundColor,
         }),
     });
   }
