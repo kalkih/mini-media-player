@@ -7,6 +7,7 @@ import './button';
 import { HomeAssistant } from '../types';
 import MediaPlayerObject from '../model';
 import { MiniMediaPlayerSpeakerGroupEntry } from '../config/types';
+import { PLATFORM} from './../const';
 import { GroupChangeEvent } from './groupItem';
 
 @customElement('mmp-group-list')
@@ -80,7 +81,7 @@ class MiniMediaPlayerGroupList extends LitElement {
       @change=${this.handleGroupChange}
       .item=${item}
       .hass=${this.hass}
-      .checked=${itemId === entityId || this.group.includes(itemId)}
+      .checked=${(this.player.config.speaker_group.platform === PLATFORM.OWNTONE && this.hass.states[itemId].state !== "off") || itemId === entityId || this.group.includes(itemId)}
       .disabled=${itemId === entityId || !this.isMaster}
       .master=${itemId === this.master}
     />`;
