@@ -139,6 +139,16 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           line-height: initial;
           justify-content: flex-end;
         }
+        mmp-source-menu,
+        mmp-sound-menu {
+          min-width: 0;
+          max-width: 120px;
+          flex: 0 1 auto;
+        }
+        mmp-source-menu[full],
+        mmp-sound-menu[full] {
+          max-width: 100%;
+        }
         .group-button {
           --mdc-icon-size: calc(var(--mmp-unit) * 0.5);
         }
