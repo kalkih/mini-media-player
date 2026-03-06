@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 
 import { ICON } from '../const';
 import sharedStyle from '../sharedStyle';

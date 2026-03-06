@@ -17,11 +17,10 @@
   "author": "Karl Kihlström <mrkihlstrom@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "home-assistant-js-websocket": "^6.1.0",
-    "lit-element": "^2.3.1",
-    "lit-html": "^1.2.1",
-    "node-vibrant": "^3.2.1-alpha.1",
-    "resize-observer-polyfill": "^1.5.1"
+    "home-assistant-js-websocket": "9.5.0",
+    "lit": "^3.3.1",
+    "node-vibrant": "4.0.3",
+    "resize-observer-polyfill": "1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

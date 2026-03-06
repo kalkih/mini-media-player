@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
+import { LitElement, html, css } from 'lit';
+import { styleMap } from 'lit/directives/style-map';
 
 import './dropdown';
 import './button';

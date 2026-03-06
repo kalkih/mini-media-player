@@ -1,4 +1,4 @@
-import Vibrant from 'node-vibrant/dist/vibrant';
+import { Vibrant } from 'node-vibrant/browser';
 
 import { CONTRAST_RATIO, COLOR_SIMILARITY_THRESHOLD } from '../const';
 

@@ -1,4 +1,5 @@
-import { LitElement, html, css, customElement, CSSResult, property } from 'lit-element';
+import { LitElement, html, css, CSSResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('mmp-checkbox')
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import style from './style';
 import generateConfig from './config/config';
 import './components/dropdown';
@@ -180,7 +180,7 @@ export default class MiniMediaPlayerEditor extends LitElement {
               <mmp-dropdown
                 class="mmp-shortcuts__dropdown"
                 @change=${({ detail }) =>
-                  this.valueChanged({ target: { configValue: 'sound_mode', value: detail.id } })}
+        this.valueChanged({ target: { configValue: 'sound_mode', value: detail.id } })}
                 .items=${computeItems(OptionsSoundMode, true)}
                 .label=${'Default'}
                 .selected=${this._config.sound_mode}
@@ -207,7 +207,7 @@ export default class MiniMediaPlayerEditor extends LitElement {
               <mmp-dropdown
                 class="mmp-shortcuts__dropdown"
                 @change=${({ detail }) =>
-                  this.valueChanged({ target: { configValue: 'replace_mute', value: detail.id } })}
+        this.valueChanged({ target: { configValue: 'replace_mute', value: detail.id } })}
                 .items=${computeItems(OptionsReplaceMute, true)}
                 .label=${'Default'}
                 .selected=${this._config.replace_mute}

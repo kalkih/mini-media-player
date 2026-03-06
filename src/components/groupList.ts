@@ -1,4 +1,5 @@
-import { LitElement, html, css, customElement, property, CSSResult, TemplateResult } from 'lit-element';
+import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 import t from '../utils/translation';
 
@@ -51,21 +52,21 @@ class MiniMediaPlayerGroupList extends LitElement {
             <span>${t(this.hass, 'label.leave')}</span>
           </mmp-button>
           ${isGrouped && isMaster
-            ? html`
+        ? html`
                 <mmp-button raised @click=${(e) => this.player.handleGroupChange(e, group, false)}>
                   <span>${t(this.hass, 'label.ungroup')}</span>
                 </mmp-button>
               `
-            : html``}
+        : html``}
           <mmp-button
             raised
             ?disabled=${!isMaster}
             @click=${(e) =>
-              this.player.handleGroupChange(
-                e,
-                this.entities.map((item) => item.entity_id),
-                true,
-              )}
+        this.player.handleGroupChange(
+          e,
+          this.entities.map((item) => item.entity_id),
+          true,
+        )}
           >
             <span>${t(this.hass, 'label.group_all')}</span>
           </mmp-button>

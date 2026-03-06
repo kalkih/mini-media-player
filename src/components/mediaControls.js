@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
+import { LitElement, html, css } from 'lit';
+import { classMap } from 'lit/directives/class-map';
 
 import { ICON, REPEAT_STATE } from '../const';
 import sharedStyle from '../sharedStyle';

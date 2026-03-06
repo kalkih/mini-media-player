@@ -1,4 +1,6 @@
-import { LitElement, html, css, CSSResult, property, customElement, TemplateResult } from 'lit-element';
+import { LitElement, html, css, CSSResult, TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+
 import MediaPlayerObject from '../model';
 
 import './dropdown';

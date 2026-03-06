@@ -3,15 +3,16 @@
 import {
   LitElement,
   html,
-  customElement,
-  property,
-  state,
   CSSResultGroup,
   PropertyValues,
   TemplateResult,
-} from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
-import { styleMap } from 'lit-html/directives/style-map';
+} from 'lit';
+import { property, state, customElement } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map';
+import { styleMap } from 'lit/directives/style-map';
+import type { DirectiveResult } from 'lit/directive.js';
+import type { StyleMapDirective } from 'lit/directives/style-map.js';
+
 import ResizeObserver from 'resize-observer-polyfill';
 
 import { generateConfig } from './config/config';
@@ -33,7 +34,6 @@ import './components/mediaControls';
 
 import { UPDATE_PROPS, BREAKPOINT } from './const';
 import { HomeAssistant, MediaPlayerEntity } from './types';
-import { Part } from 'lit-html';
 import { MiniMediaPlayerBaseConfiguration, MiniMediaPlayerConfiguration } from './config/types';
 
 @customElement('mini-media-player')
@@ -186,15 +186,15 @@ class MiniMediaPlayer extends LitElement {
           </div>
           <div class="mmp-player__adds">
             ${!config.collapse && this.player.isActive
-              ? html`
+        ? html`
                   <mmp-media-controls .player=${this.player} .config=${config} .break=${this.break}>
                   </mmp-media-controls>
                 `
-              : ''}
+        : ''}
             <mmp-shortcuts .player=${this.player} .shortcuts=${config.shortcuts}> </mmp-shortcuts>
             ${config.tts
-              ? html` <mmp-tts .config=${config.tts} .hass=${this.hass} .player=${this.player}> </mmp-tts> `
-              : ''}
+        ? html` <mmp-tts .config=${config.tts} .hass=${this.hass} .player=${this.player}> </mmp-tts> `
+        : ''}
             <mmp-group-list
               .hass=${this.hass}
               .visible=${this.edit}
@@ -206,7 +206,7 @@ class MiniMediaPlayer extends LitElement {
         </div>
         <div class="mmp__container">
           ${this.player.isActive && this.player.hasProgress
-            ? html`
+        ? html`
                 <mmp-progress
                   .player=${this.player}
                   .showTime=${!this.config.hide.runtime}
@@ -214,7 +214,7 @@ class MiniMediaPlayer extends LitElement {
                 >
                 </mmp-progress>
               `
-            : ''}
+        : ''}
         </div>
       </ha-card>
     `;
@@ -293,7 +293,7 @@ class MiniMediaPlayer extends LitElement {
       </div>`;
     }
 
-    if (this.config.icon_image != undefined){
+    if (this.config.icon_image != undefined) {
       return html` <div class="entity__icon">
         <img src="${this.config.icon_image}" height="100%" />
       </div>`;
@@ -346,20 +346,20 @@ class MiniMediaPlayer extends LitElement {
     return;
   }
 
-  computeStyles(): (part: Part) => void {
+  computeStyles(): DirectiveResult<typeof StyleMapDirective> {
     const { scale } = this.config;
     return styleMap({
       ...(scale && { '--mmp-unit': `${40 * scale}px` }),
       ...(this.foregroundColor &&
         this.player.isActive && {
-          '--mmp-text-color': this.foregroundColor,
-          '--mmp-icon-color': this.foregroundColor,
-          '--mmp-icon-active-color': this.foregroundColor,
-          '--mmp-accent-color': this.foregroundColor,
-          '--secondary-text-color': this.foregroundColor,
-          '--mmp-media-cover-info-color': this.foregroundColor,
-          '--ha-control-color': this.foregroundColor,
-        }),
+        '--mmp-text-color': this.foregroundColor,
+        '--mmp-icon-color': this.foregroundColor,
+        '--mmp-icon-active-color': this.foregroundColor,
+        '--mmp-accent-color': this.foregroundColor,
+        '--secondary-text-color': this.foregroundColor,
+        '--mmp-media-cover-info-color': this.foregroundColor,
+        '--ha-control-color': this.foregroundColor,
+      }),
     });
   }
 
