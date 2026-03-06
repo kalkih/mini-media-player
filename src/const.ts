@@ -100,6 +100,7 @@ const PLATFORM = {
   SOUNDTOUCH: 'soundtouch',
   MEDIAPLAYER: 'media_player',
   HEOS: 'heos',
+  LINKPLAY: 'linkplay',
 };
 
 const CONTRAST_RATIO = 4.5;
