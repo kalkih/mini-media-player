@@ -224,7 +224,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | prev | boolean | false | The "previous" playback control button.
 | next | boolean | false | The "next" playback control button.
 | play_pause | boolean | false | The play/pause button in media playback controls.
-| play_stop | boolean | true | The play/stop button in media playback controls.
+| play_stop | boolean | false | The play/stop button in media playback controls.
 | jump | boolean | true | The jump backwards/forwards buttons (entity needs to support progress).
 | volume | boolean | false | The volume controls.
 | volume_level | boolean | true | The current volume level in percentage.
