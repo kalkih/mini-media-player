@@ -20,6 +20,7 @@ export const generateConfig = (config: MiniMediaPlayerBaseConfiguration): MiniMe
 
   const conf: MiniMediaPlayerConfiguration = {
     artwork: 'default',
+    adaptive_color: false,
     info: 'default',
     group: false,
     volume_stateless: false,
