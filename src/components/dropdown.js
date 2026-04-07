@@ -174,6 +174,7 @@ class MiniMediaPlayerDropdown extends LitElement {
           overflow-y: auto;
           border-radius: 8px;
           background: var(--card-background-color, var(--ha-card-background, #fff));
+          color: var(--primary-text-color);
           box-shadow: var(--ha-card-box-shadow, 0 2px 6px rgba(0, 0, 0, 0.25));
           padding: 4px;
           z-index: 1000;
