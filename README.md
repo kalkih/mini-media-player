@@ -63,6 +63,7 @@ lovelace:
 | group | boolean | optional | v0.1 | Removes paddings, background color and box-shadow.
 | hide | object | optional | v1.0.0 | Manage visible UI elements, see [hide object](#hide-object) for available options.
 | artwork | string | default | v0.4 | `cover` to display current artwork in the card background, `full-cover` to display full artwork, `material` for alternate artwork display with dynamic colors, `none` to hide artwork, `full-cover-fit` for full cover without cropping.
+| adaptive_color | boolean | false | v1.17.0 | Extend the WCAG-contrast text color (already used by `material` artwork mode) to `cover`, `full-cover`, and `full-cover-fit`. Useful when the album art is light and the default white text/dropdown becomes unreadable. Off by default for backward compatibility.
 | tts | object | optional | v1.0.0 | Show Text-To-Speech input, see [TTS object](#tts-object) for available options.
 | source | string | optional | v0.7 | Change source select appearance, `icon` for just an icon, `full` for the full source name.
 | sound_mode | string | optional | v1.1.2 | Change sound mode select appearance, `icon` for just an icon, `full` for the full sound mode name.

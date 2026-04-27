@@ -119,7 +119,7 @@ class MiniMediaPlayer extends LitElement {
         this.prevThumbnail = '';
       }, 1000);
     }
-    if (changedProps.has('player') && this.config.artwork === 'material') {
+    if (changedProps.has('player') && this.shouldExtractColors()) {
       this.setColors();
     }
     return UPDATE_PROPS.some((prop) => changedProps.has(prop)) && Boolean(this.player);
@@ -431,6 +431,12 @@ class MiniMediaPlayer extends LitElement {
 
   public getCardSize(): number {
     return this.config.collapse ? 1 : 2;
+  }
+
+  private shouldExtractColors(): boolean {
+    if (this.config.artwork === 'material') return true;
+    if (!this.config.adaptive_color) return false;
+    return ['cover', 'full-cover', 'full-cover-fit'].includes(this.config.artwork);
   }
 
   async setColors(): Promise<void> {
