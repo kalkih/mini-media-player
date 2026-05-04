@@ -186,6 +186,10 @@ export default class MediaPlayerObject {
     return !!this._attr.supported_features && (this._attr.supported_features | 32) === this._attr.supported_features;
   }
 
+  get supportsBrowseMedia(): boolean {
+    return !!this._attr.supported_features && (this._attr.supported_features | 131072) === this._attr.supported_features;
+  }
+
   get progress(): number {
     if (this.isPlaying) {
       return this.position + (Date.now() - new Date(this.updatedAt).getTime()) / 1000.0;

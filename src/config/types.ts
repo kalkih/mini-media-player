@@ -151,6 +151,7 @@ interface MiniMediaPlayerHideConfiguration {
   icon_state: boolean;
   sound_mode: boolean;
   group_button: boolean;
+  media_browse: boolean;
   runtime: boolean;
   runtime_remaining: boolean;
   volume: boolean;
