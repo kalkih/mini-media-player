@@ -220,6 +220,7 @@ See [card with media shortcuts](#card-with-media-shortcuts) for example usage.
 | source | boolean | false | The source select.
 | sound_mode | boolean | true | The sound_mode select.
 | group_button | boolean | false | The group button.
+| media_browse | boolean | true | The media browse button (only shown when the entity supports `browse_media`).
 | controls | boolean | false | The media playback controls.
 | prev | boolean | false | The "previous" playback control button.
 | next | boolean | false | The "next" playback control button.

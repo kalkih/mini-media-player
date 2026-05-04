@@ -6,6 +6,7 @@ const DEFAULT_HIDE = {
   icon_state: true,
   sound_mode: true,
   group_button: false,
+  media_browse: true,
   runtime: true,
   runtime_remaining: true,
   volume: false,
@@ -59,6 +60,7 @@ const ICON = {
   VOL_UP: 'mdi:volume-plus',
   FAST_FORWARD: 'mdi:fast-forward',
   REWIND: 'mdi:rewind',
+  BROWSE: 'mdi:play-box-multiple',
 };
 
 const UPDATE_PROPS = [
