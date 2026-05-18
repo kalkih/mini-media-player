@@ -60,6 +60,11 @@ const style = css`
     --switch-unchecked-color: var(--mmp-text-color);
     --switch-unchecked-button-color: var(--mmp-text-color);
     --switch-unchecked-track-color: var(--mmp-text-color);
+    --ha-color-form-background: rgba(255, 255, 255, 0.1);
+    --ha-color-form-background-hover: rgba(255, 255, 255, 0.1);
+    --wa-form-control-value-color: var(--mmp-accent-color);
+    --ha-slider-indicator-color: var(--mmp-accent-color);
+    --ha-slider-thumb-color: var(--mmp-accent-color);
     --mdc-text-field-fill-color: transparent;
     --mdc-text-field-ink-color: var(--mmp-text-color);
     --mdc-text-field-idle-line-color: var(--mmp-text-color);

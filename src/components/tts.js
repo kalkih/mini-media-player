@@ -30,13 +30,13 @@ class MiniMediaPlayerTts extends LitElement {
 
   render() {
     return html`
-      <ha-textfield
+      <ha-input
         id="tts-input"
         class="mmp-tts__input"
         placeholder="${this.label}..."
         @click=${e => e.stopPropagation()}
       >
-      </ha-textfield>
+      </ha-input>
       <mmp-button class="mmp-tts__button" @click=${this.handleTts}>
         <span>${t(this.hass, 'label.send')}</span>
       </mmp-button>
