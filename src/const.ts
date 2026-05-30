@@ -12,7 +12,7 @@ const DEFAULT_HIDE = {
   volume_level: true,
   controls: false,
   play_pause: false,
-  play_stop: true,
+  play_stop: false,
   prev: false,
   next: false,
   jump: true,
