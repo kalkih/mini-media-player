@@ -468,4 +468,14 @@ class MiniMediaPlayer extends LitElement {
   name: 'Mini Media Player',
   preview: false,
   description: 'A minimalistic yet customizable media player card',
+  getEntitySuggestion: (hass: HomeAssistant, entityId: string) => {
+    if (!hass.states[entityId]) return null;
+    if (entityId.split('.')[0] !== 'media_player') return null;
+    return {
+      config: {
+        type: 'custom:mini-media-player',
+        entity: entityId,
+      },
+    };
+  },
 });
