@@ -351,6 +351,12 @@ const style = css`
   .entity__info__media[scroll] .marquee {
     animation: slide linear infinite;
   }
+  .entity__info__media[scroll][rtl] > div {
+    animation-name: move-rtl;
+  }
+  .entity__info__media[scroll][rtl] .marquee {
+    animation-name: slide-rtl;
+  }
   .entity__info__media[scroll] .marquee,
   .entity__info__media[scroll] > div {
     animation-duration: inherit;
@@ -360,6 +366,10 @@ const style = css`
     animation-duration: 10s;
     mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  }
+  .entity__info__media[rtl] {
+    direction: rtl;
+    text-align: right;
   }
   .marquee {
     visibility: hidden;
@@ -447,9 +457,22 @@ const style = css`
       transform: translateX(-100%);
     }
   }
+  @keyframes slide-rtl {
+    100% {
+      transform: translateX(100%);
+    }
+  }
   @keyframes move {
     from {
       transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes move-rtl {
+    from {
+      transform: translateX(-100%);
     }
     to {
       transform: translateX(0);

@@ -2,6 +2,7 @@ import { MiniMediaPlayerConfiguration } from './config/types';
 import { PROGRESS_PROPS, MEDIA_DURATION_PROP, MEDIA_INFO, PLATFORM, REPEAT_STATE } from './const';
 import { HomeAssistant, MediaPlayerEntity, MediaPlayerEntityAttributes, MediaPlayerEntityState } from './types';
 import arrayBufferToBase64 from './utils/misc';
+import decodeHtmlEntities from './utils/decode-html-entities';
 
 export interface MediaPlayerMedia {
   media_content_type: string;
@@ -168,7 +169,7 @@ export default class MediaPlayerObject {
     attr: string;
   }[] {
     return MEDIA_INFO.map((item) => ({
-      text: this._attr[item.attr],
+      text: decodeHtmlEntities(this._attr[item.attr]),
       prefix: '',
       ...item,
     })).filter((item) => item.text);
