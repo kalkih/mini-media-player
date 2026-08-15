@@ -21,6 +21,7 @@ import style from './style';
 import sharedStyle from './sharedStyle';
 import handleClick from './utils/handleClick';
 import colorsFromPicture from './utils/colorGenerator';
+import isRtlText from './utils/is-rtl-text';
 
 import './ensureComponents';
 
@@ -319,12 +320,14 @@ class MiniMediaPlayer extends LitElement {
   renderMediaInfo(): TemplateResult | undefined {
     if (this.config.hide.info) return;
     const items = this.player.mediaInfo;
+    const rtl = items.some((i) => isRtlText(i.text));
 
     return html` <div
       class="entity__info__media"
       ?short=${this.config.info === 'short' || !this.player.isActive}
       ?short-scroll=${this.config.info === 'scroll'}
       ?scroll=${this.overflow}
+      ?rtl=${rtl}
       style="animation-duration: ${this.overflow}s;"
     >
       ${this.config.info === 'scroll'
