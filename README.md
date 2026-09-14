@@ -56,7 +56,7 @@ lovelace:
 |------|------|---------|-------|-------------|
 | type | string | **required** | v0.1 | `custom:mini-media-player`
 | entity | string | **required** | v0.1 | An entity_id from an entity within the `media_player` domain.
-| name | string | optional | v0.6 | Override the entities friendly name.
+| name | string / list | optional | v0.6 | Override the entity name. Accepts a [structured name](#structured-names) on Home Assistant 2026.4 and later.
 | icon | string | optional | v0.1 | Specify a custom icon from any of the available mdi icons.
 | icon_image | string | optional | v1.16.2 | Override icon with an image url
 | tap_action | [action object](#action-object-options) | true | v0.7.0 | Action on click/tap.
@@ -445,6 +445,29 @@ If you are planning to use the `speaker_group` option in several cards, creating
 You then simply reference the file containing the list using `entities: !include filename.yaml` for every occurrence of `entities` in your `ui-lovelace.yaml`.
 
 This is however only possible when you have lovelace mode set to yaml in your HA configuration, see [Lovelace YAML mode](https://www.home-assistant.io/lovelace/yaml-mode/) for more info.
+
+### Structured names
+
+*Requires Home Assistant 2026.4 or later. On earlier versions a structured `name` falls back to the entity's friendly name.*
+
+Home Assistant composes an entity's display name out of its registry context
+(entity, device, area, floor) rather than one `friendly_name` string. `name` can
+be a list of those parts instead of a plain string, so it keeps following renames
+and matches what the built-in cards show:
+
+```yaml
+type: custom:mini-media-player
+entity: media_player.living_room_speaker
+name:
+  - type: area
+  - type: entity
+```
+
+Available part types are `entity`, `device`, `parent_device`, `area`, `floor`, and
+`text` (a literal, written as `{type: text, text: Speaker}`). Parts that resolve to
+nothing are dropped. A plain string `name` keeps working exactly as before.
+
+See the [Home Assistant developer documentation](https://developers.home-assistant.io/docs/frontend/data#hassformatentitynamestateobj-name-options) for details.
 
 ## Development
 *If you plan to contribute back to this repo, please fork & create the PR against the [dev](https://github.com/kalkih/mini-media-player/tree/dev) branch.*

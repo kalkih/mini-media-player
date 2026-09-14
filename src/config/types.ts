@@ -1,7 +1,14 @@
+/** A `name` option: a plain string, or name parts resolved from the registry. */
+export type EntityName = string | EntityNameItem | EntityNameItem[];
+
+export type EntityNameItem =
+  | { type: 'entity' | 'device' | 'parent_device' | 'area' | 'floor' }
+  | { type: 'text'; text: string };
+
 export interface MiniMediaPlayerBaseConfiguration {
   type?: string;
   entity: string;
-  name?: string;
+  name?: EntityName;
   icon?: string;
   icon_image?: string;
   tap_action?: MiniMediaPlayerAction;

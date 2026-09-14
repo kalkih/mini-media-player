@@ -17,6 +17,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 
 import { generateConfig } from './config/config';
 import MediaPlayerObject from './model';
+import { computeEntityName, entityNamesChanged } from './entity-name';
 import style from './style';
 import sharedStyle from './sharedStyle';
 import handleClick from './utils/handleClick';
@@ -43,7 +44,12 @@ class MiniMediaPlayer extends LitElement {
   set hass(hass) {
     if (!hass) return;
     const entity = hass.states[this.config.entity] as MediaPlayerEntity;
+    const oldHass = this._hass;
     this._hass = hass;
+    // The name resolves against the entity/device/area/floor registries, and HA
+    // swaps the real formatEntityName in asynchronously once translations load.
+    // Neither changes an entity state, so nothing below would re-render it.
+    if (entityNamesChanged(oldHass, hass)) this.requestUpdate();
     if (entity && this.entity !== entity) {
       this.entity = entity;
       this.player = new MediaPlayerObject(hass, this.config, entity);
@@ -105,7 +111,7 @@ class MiniMediaPlayer extends LitElement {
   }
 
   get name(): string {
-    return this.config.name || this.player.name;
+    return computeEntityName(this._hass, this.entity, this.config.name);
   }
 
   setConfig(config: MiniMediaPlayerBaseConfiguration) {
