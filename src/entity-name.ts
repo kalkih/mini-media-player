@@ -15,6 +15,12 @@ function atLeastVersion(hass: HomeAssistant | undefined, major: number, minor: n
  * enough and the version has to be checked.
  */
 function supportsEntityNames(hass: HomeAssistant | undefined): boolean {
+  // A hass can report a recent version without carrying the helper (a test
+  // harness, or a hass that has not finished initialising), and calling it
+  // then throws - so the version gate alone is not enough.
+  if (!hass || typeof (hass as { formatEntityName?: unknown }).formatEntityName !== 'function') {
+    return false;
+  }
   return atLeastVersion(hass, 2026, 4);
 }
 
