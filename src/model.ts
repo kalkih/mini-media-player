@@ -2,6 +2,7 @@ import { MiniMediaPlayerConfiguration } from './config/types';
 import { PROGRESS_PROPS, MEDIA_DURATION_PROP, MEDIA_INFO, PLATFORM, REPEAT_STATE } from './const';
 import { HomeAssistant, MediaPlayerEntity, MediaPlayerEntityAttributes, MediaPlayerEntityState } from './types';
 import arrayBufferToBase64 from './utils/misc';
+import { computeEntityName } from './entity-name';
 
 export interface MediaPlayerMedia {
   media_content_type: string;
@@ -96,7 +97,7 @@ export default class MediaPlayerObject {
   }
 
   get name(): string {
-    return this._attr.friendly_name || '';
+    return computeEntityName(this.hass, this.entity, undefined);
   }
 
   get groupCount(): number {
