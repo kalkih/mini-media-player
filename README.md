@@ -132,6 +132,25 @@ tts:
     message_field: text
 ```
 
+For a TTS entity that uses `tts.speak`, use the `service` platform:
+
+```yaml
+type: custom:mini-media-player
+entity: media_player.living_room
+tts:
+  platform: service
+  data:
+    service: tts.speak
+    service_data:
+      entity_id: tts.example_provider
+      media_player_entity_id: media_player.living_room
+```
+
+Replace `tts.example_provider` with your TTS entity and both occurrences of
+`media_player.living_room` with your speaker. The service's `entity_id` selects
+the TTS provider; `media_player_entity_id` selects where to play the speech.
+The text entered in the card is sent as `message` automatically.
+
 #### Speaker group object
 See [Speaker group management](#speaker-group-management) for example usage.
 
