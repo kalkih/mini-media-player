@@ -41,6 +41,28 @@ class MiniMediaPlayerDropdown extends LitElement {
     menu.anchor = button;
   }
 
+  updated(changedProps) {
+    if (changedProps.has('isOpen') && this.isOpen && !this.hasLegacyMenu) {
+      this.positionFallbackMenu();
+    }
+  }
+
+  positionFallbackMenu() {
+    const menu = this.shadowRoot.querySelector('.mmp-dropdown__menu');
+    if (!menu) return;
+    const margin = 8;
+    menu.style.transform = '';
+    menu.removeAttribute('align-right');
+    let rect = menu.getBoundingClientRect();
+    if (rect.right > document.documentElement.clientWidth - margin) {
+      menu.setAttribute('align-right', '');
+      rect = menu.getBoundingClientRect();
+    }
+    if (rect.left < margin) {
+      menu.style.transform = `translateX(${margin - rect.left}px)`;
+    }
+  }
+
   render() {
     return html`
       <div
@@ -166,10 +188,10 @@ class MiniMediaPlayerDropdown extends LitElement {
         }
         .mmp-dropdown__menu {
           position: absolute;
-          right: 0;
+          left: 0;
           top: calc(100% + 2px);
           min-width: 140px;
-          max-width: 240px;
+          max-width: min(240px, calc(100vw - 16px));
           max-height: 320px;
           overflow-y: auto;
           border-radius: 8px;
@@ -182,6 +204,10 @@ class MiniMediaPlayerDropdown extends LitElement {
         }
         .mmp-dropdown__menu[open] {
           display: block;
+        }
+        .mmp-dropdown__menu[align-right] {
+          left: auto;
+          right: 0;
         }
         .mmp-dropdown__item {
           align-items: center;
