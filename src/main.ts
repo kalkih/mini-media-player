@@ -263,11 +263,13 @@ class MiniMediaPlayer extends LitElement {
   renderGradient(): TemplateResult | undefined {
     if (this.config.artwork !== 'material') return;
 
+    const background = this.backgroundColor
+      || 'var(--ha-card-background, var(--card-background-color, var(--paper-card-background-color, white)))';
     const gradientStyle = {
       backgroundImage: `linear-gradient(to left,
         transparent 0,
-        ${this.backgroundColor} ${this.cardHeight}px,
-        ${this.backgroundColor} 100%)`,
+        ${background} ${this.cardHeight}px,
+        ${background} 100%)`,
     };
 
     return html`<div class="cover-gradient" style=${styleMap(gradientStyle)}></div>`;
@@ -354,17 +356,20 @@ class MiniMediaPlayer extends LitElement {
 
   computeStyles(): DirectiveResult<typeof StyleMapDirective> {
     const { scale } = this.config;
+    const foreground = this.foregroundColor
+      || (this.config.artwork === 'material' && this.player.hasArtwork && this.thumbnail
+        ? 'var(--mmp-base-color)' : '');
     return styleMap({
       ...(scale && { '--mmp-unit': `${40 * scale}px` }),
-      ...(this.foregroundColor &&
+      ...(foreground &&
         this.player.isActive && {
-        '--mmp-text-color': this.foregroundColor,
-        '--mmp-icon-color': this.foregroundColor,
-        '--mmp-icon-active-color': this.foregroundColor,
-        '--mmp-accent-color': this.foregroundColor,
-        '--secondary-text-color': this.foregroundColor,
-        '--mmp-media-cover-info-color': this.foregroundColor,
-        '--ha-control-color': this.foregroundColor,
+        '--mmp-text-color': foreground,
+        '--mmp-icon-color': foreground,
+        '--mmp-icon-active-color': foreground,
+        '--mmp-accent-color': foreground,
+        '--secondary-text-color': foreground,
+        '--mmp-media-cover-info-color': foreground,
+        '--ha-control-color': foreground,
       }),
     });
   }
