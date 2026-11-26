@@ -28,6 +28,10 @@ class MiniMediaPlayerPowerstrip extends LitElement {
     return this.config.speaker_group.entities.length > 0 && !this.config.hide.group_button;
   }
 
+  get showBrowseButton() {
+    return !this.config.hide.media_browse && this.player.supportsBrowseMedia;
+  }
+
   get showPowerButton() {
     return !this.config.hide.power;
   }
@@ -83,6 +87,15 @@ class MiniMediaPlayerPowerstrip extends LitElement {
           >
           </mmp-sound-menu>`
         : ''}
+      ${this.showBrowseButton
+        ? html` <ha-icon-button
+            class="browse-button"
+            .icon=${ICON.BROWSE}
+            @click=${(e) => this.handleBrowseClick(e)}
+          >
+            <ha-icon .icon=${ICON.BROWSE}></ha-icon>
+          </ha-icon-button>`
+        : ''}
       ${this.showGroupButton
         ? html` <ha-icon-button
             class="group-button"
@@ -110,6 +123,71 @@ class MiniMediaPlayerPowerstrip extends LitElement {
   handleGroupClick(ev) {
     ev.stopPropagation();
     this.dispatchEvent(new CustomEvent('toggleGroupList'));
+  }
+
+  // Opens the HA media browser dialog (same as the built-in media control card).
+  // HA lazy-loads dialog-media-player-browse via a webpack dynamic import that
+  // custom cards cannot replicate directly. To obtain the real chunk loader, we
+  // instantiate HA's built-in hui-media-control-card, call its _handleBrowseMedia(),
+  // and intercept the show-dialog event to capture the dialogImport function.
+  // On subsequent clicks the dialog element is already registered, so we skip
+  // the loader extraction and fire show-dialog immediately.
+  async handleBrowseClick(ev) {
+    ev.stopPropagation();
+    const entityId = this.player._entityId;
+
+    // Fast path: dialog already loaded
+    if (customElements.get('dialog-media-player-browse')) {
+      this._openBrowseDialog(ev, entityId, () => Promise.resolve());
+      return;
+    }
+
+    // Load the built-in media control card to get access to the webpack
+    // chunk loader for dialog-media-player-browse
+    try {
+      if (!customElements.get('hui-media-control-card')) {
+        const helpers = await window.loadCardHelpers();
+        await helpers.createCardElement({ type: 'media-control', entity: entityId });
+        await customElements.whenDefined('hui-media-control-card');
+      }
+
+      const tempCard = document.createElement('hui-media-control-card');
+      tempCard.setConfig({ type: 'media-control', entity: entityId });
+      tempCard.hass = this.hass;
+
+      let dialogImport = () => Promise.resolve();
+      tempCard.addEventListener('show-dialog', (e) => {
+        e.stopPropagation();
+        dialogImport = e.detail.dialogImport;
+      });
+      tempCard._handleBrowseMedia();
+
+      this._openBrowseDialog(ev, entityId, dialogImport);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('mini-media-player: failed to open browse dialog:', err);
+    }
+  }
+
+  _openBrowseDialog(ev, entityId, dialogImport) {
+    this.dispatchEvent(new CustomEvent('show-dialog', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        dialogTag: 'dialog-media-player-browse',
+        dialogImport,
+        dialogParams: {
+          action: 'play',
+          entityId,
+          mediaPickedCallback: (pickedMedia) => {
+            this.player.setMedia(ev, {
+              media_content_id: pickedMedia.item.media_content_id,
+              media_content_type: pickedMedia.item.media_content_type,
+            });
+          },
+        },
+      },
+    }));
   }
 
   get renderIdleView() {
