@@ -290,7 +290,7 @@ class MiniMediaPlayer extends LitElement {
 
   renderIcon(): TemplateResult | undefined {
     if (this.config.hide.icon) return;
-    if (this.player.isActive && this.thumbnail && this.config.artwork === 'default') {
+    if (this.player.hasArtwork && this.thumbnail && this.config.artwork === 'default') {
       return html` <div
         class="entity__artwork"
         style="background-image: ${this.thumbnail};"
