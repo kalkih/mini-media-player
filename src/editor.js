@@ -83,7 +83,7 @@ export default class MiniMediaPlayerEditor extends LitElement {
 
   // eslint-disable-next-line camelcase
   get _toggle_power() {
-    return this._config.toggle_power || true;
+    return this._config.toggle_power ?? true;
   }
 
   render() {
