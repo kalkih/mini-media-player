@@ -10,6 +10,7 @@ class MiniMediaPlayerDropdown extends LitElement {
       items: [],
       label: String,
       selected: String,
+      selectedLabel: String,
       id: String,
       isOpen: Boolean,
     };
@@ -60,7 +61,7 @@ class MiniMediaPlayerDropdown extends LitElement {
             @click=${this.toggleMenu}>
             <div>
               <span class='mmp-dropdown__label ellipsis'>
-                ${this.selected || this.label}
+                ${this.selectedLabel || this.selected || this.label}
               </span>
               <ha-icon class='mmp-dropdown__icon' .icon=${ICON.DROPDOWN}></ha-icon>
             </div>
