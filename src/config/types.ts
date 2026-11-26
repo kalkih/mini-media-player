@@ -63,13 +63,13 @@ export interface MiniMediaPlayerConfiguration extends MiniMediaPlayerBaseConfigu
 
 export interface MiniMediaPlayerShortcuts {
   list?: MiniMediaPlayerShortcutItem[];
-  Buttons?: MiniMediaPlayerShortcutItem[];
+  buttons?: MiniMediaPlayerShortcutItem[];
   hide_when_off?: boolean;
   columns?: 1 | 2 | 3 | 4 | 5 | 6;
   column_height?: number;
   label?: string;
   attribute?: string;
-  aling_text?: 'left' | 'right' | 'center';
+  align_text?: 'left' | 'right' | 'center';
 }
 
 export interface MiniMediaPlayerShortcutItem {
