@@ -53,6 +53,18 @@ class MiniMediaPlayerProgress extends LitElement {
     });
   }
 
+  get remainingTime() {
+    if (!this.showRemainingTime) {
+      return '';
+    }
+
+    return html`
+    <span class='mmp-progress__duration__remaining'>
+      -${convertProgress(this.duration - (this.seekProgress || this.progress))} |
+    </span>
+  `;
+  }
+
   render() {
     return html`
       <div class='mmp-progress'
@@ -67,11 +79,7 @@ class MiniMediaPlayerProgress extends LitElement {
           <div class='mmp-progress__duration'>
             <span>${convertProgress(this.seekProgress || this.progress)}</span>
             <div>
-              ${this.showTime ? html`
-                <span class='mmp-progress__duration__remaining'>
-                  -${(convertProgress(this.duration - (this.seekProgress || this.progress)))} |
-                </span>
-              ` : ''}
+              ${this.remainingTime}
               <span>${convertProgress(this.duration)}</span>
             </div>
           </div>
@@ -80,6 +88,7 @@ class MiniMediaPlayerProgress extends LitElement {
       </div>
     `;
   }
+
   progressBarStyle() {
     return styleMap({
       width: `${((this.seekProgress || this.progress) / this.duration) * 100}%`
