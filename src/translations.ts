@@ -361,23 +361,23 @@ const translations = {
       speaker_management: 'Groepsbeheer',
     },
   },
-  pt: {
+  'pt-BR': {
     placeholder: {
-      tts: 'Texto para fala',
+      tts: 'Texto para falar',
     },
     label: {
       leave: 'Sair',
       ungroup: 'Desagrupar',
-      group_all: 'Agrupar tudo',
+      group_all: 'Agrupar todos',
       send: 'Enviar',
-      master: 'Master',
+      master: 'Principal',
     },
     state: {
-      idle: 'Ocioso',
+      idle: 'Inativo',
       unavailable: 'Indisponível',
     },
     title: {
-      speaker_management: 'Gerenciamento de grupo',
+      speaker_management: 'Gerenciar grupo',
     },
   },
   cs: {
