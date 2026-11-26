@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult, CSSResult } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 import MediaPlayerObject from '../model';
 
@@ -19,8 +19,6 @@ export class MiniMediaPlayerSoundMenu extends LitElement {
 
   @property({ attribute: false }) public icon!: boolean[];
 
-  @state() private selected?: string = undefined;
-
   get mode(): string {
     return this.player.soundMode;
   }
@@ -39,7 +37,7 @@ export class MiniMediaPlayerSoundMenu extends LitElement {
         @change=${this.handleChange}
         .items=${this.alternatives}
         .label=${this.mode}
-        .selected=${this.selected || this.mode}
+        .selected=${this.mode}
         .icon=${this.icon}
       ></mmp-dropdown>
     `;
@@ -48,7 +46,6 @@ export class MiniMediaPlayerSoundMenu extends LitElement {
   private handleChange(ev: ChangeEvent) {
     const { id } = ev.detail;
     this.player.setSoundMode(ev, id);
-    this.selected = id;
   }
 
   static get styles(): CSSResult {
