@@ -3,6 +3,7 @@ import { PROGRESS_PROPS, MEDIA_DURATION_PROP, MEDIA_INFO, PLATFORM, REPEAT_STATE
 import { HomeAssistant, MediaPlayerEntity, MediaPlayerEntityAttributes, MediaPlayerEntityState } from './types';
 import arrayBufferToBase64 from './utils/misc';
 import { computeEntityName } from './entity-name';
+import translation from './utils/translation';
 
 export interface MediaPlayerMedia {
   media_content_type: string;
@@ -172,6 +173,7 @@ export default class MediaPlayerObject {
       text: this._attr[item.attr],
       prefix: '',
       ...item,
+      ...(item.attr === 'media_season' ? { prefix: translation(this.hass, 'prefix.season', undefined, 'S') } : {}),
     })).filter((item) => item.text);
   }
 

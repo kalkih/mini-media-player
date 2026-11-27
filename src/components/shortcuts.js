@@ -5,6 +5,8 @@ import './dropdown';
 import './button';
 
 import sharedStyle from '../sharedStyle';
+import { LABEL_SHORTCUT } from '../const';
+import t from '../utils/translation';
 
 class MiniMediaPlayerShortcuts extends LitElement {
   static get properties() {
@@ -26,6 +28,10 @@ class MiniMediaPlayerShortcuts extends LitElement {
     return (!this.shortcuts.hide_when_off || this.player.isActive);
   }
 
+  get listLabel() {
+    return this.shortcuts.label ?? t(this.player.hass, 'label.shortcuts', undefined, LABEL_SHORTCUT);
+  }
+
   get active() {
     return this.player.getAttribute(this.shortcuts.attribute);
   }
@@ -42,7 +48,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
       <mmp-dropdown class='mmp-shortcuts__dropdown'
         @change=${this.handleShortcut}
         .items=${this.list}
-        .label=${this.shortcuts.label}
+        .label=${this.listLabel}
         .selected=${active}>
       </mmp-dropdown>
     ` : '';

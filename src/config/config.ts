@@ -1,4 +1,4 @@
-import { DEFAULT_HIDE, LABEL_SHORTCUT } from '../const';
+import { DEFAULT_HIDE } from '../const';
 import { MiniMediaPlayerActionEvent, MiniMediaPlayerBaseConfiguration, MiniMediaPlayerConfiguration } from './types';
 
 const validate = (config: MiniMediaPlayerBaseConfiguration): void => {
@@ -43,7 +43,6 @@ export const generateConfig = (config: MiniMediaPlayerBaseConfiguration): MiniMe
       ...config.speaker_group,
     },
     shortcuts: {
-      label: LABEL_SHORTCUT,
       ...config.shortcuts,
     },
     max_volume: Number(config.max_volume) ?? 100,
