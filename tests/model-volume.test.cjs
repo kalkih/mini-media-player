@@ -94,3 +94,13 @@ test('members without volume_level use relative volume services', () => {
   assert.ok(Math.abs(calls[0].volume_level - 0.22) < 1e-10);
   assert.ok(!Object.hasOwn(calls[1], 'volume_level'));
 });
+for (const [name, group, configured, expected] of [
+  ['synchronizes configured members with offsets', [left, right, 'media_player.unconfigured'], undefined, [[left, 0.4], [right, 0.5]]],
+  ['falls back to the current player when no configured speaker is grouped', [left, 'media_player.unconfigured'], [right, outside], [[left, 0.4]]],
+  ['falls back to the current player when the group is empty', [], [right, outside], [[left, 0.4]]],
+]) {
+  test(`setVolume ${name}`, () => {
+    const { model, calls, event } = setup({ group, configured, offsets: [0, 10] });
+    model.setVolume(event, 0.4); levels(calls, expected);
+  });
+}

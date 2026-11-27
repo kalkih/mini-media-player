@@ -341,11 +341,8 @@ export default class MediaPlayerObject {
   }
 
   private changeVolume(e: MouseEvent, direction: number): void {
-    const { sync_volume, entities } = this.config.speaker_group;
-    const members = sync_volume && entities && this.isGrouped
-      ? this.group.filter((id) => entities.some((entry) => entry.entity_id === id))
-      : [];
-    // Fall back to local control if no configured speaker is in the current group.
+    const { entities } = this.config.speaker_group;
+    const members = this.isGrouped ? this.syncedMembers : [];
     const sync = members.length > 0;
     const targets = sync ? members : [this._entityId];
     const offsetOf = (entityId: string): number =>
@@ -379,15 +376,22 @@ export default class MediaPlayerObject {
     this.callService(e, 'media_seek', { seek_position: clampedNewPosition });
   }
 
+  // Configured speakers in the current group, or none if volume sync is off.
+  // Callers fall back to local control when this is empty.
+  private get syncedMembers(): string[] {
+    const { sync_volume, entities } = this.config.speaker_group;
+    if (!sync_volume || !entities) return [];
+    return this.group.filter((id) => entities.some((entry) => entry.entity_id === id));
+  }
+
   setVolume(e: MouseEvent, volume: number): void {
-    if (this.config.speaker_group.sync_volume && this.config.speaker_group.entities) {
-      this.group.forEach((entity) => {
+    const members = this.syncedMembers;
+    if (members.length > 0) {
+      members.forEach((entity) => {
         const conf = this.config.speaker_group.entities?.find((entry) => entry.entity_id === entity);
 
-        if (typeof conf === 'undefined') return;
-
         let offsetVolume = volume;
-        if (conf.volume_offset) {
+        if (conf?.volume_offset) {
           offsetVolume += conf.volume_offset / 100;
           if (offsetVolume > 1) offsetVolume = 1;
           if (offsetVolume < 0) offsetVolume = 0;
