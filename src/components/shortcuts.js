@@ -29,8 +29,7 @@ class MiniMediaPlayerShortcuts extends LitElement {
   }
 
   get listLabel() {
-    const { label } = this.shortcuts;
-    return label === LABEL_SHORTCUT ? t(this.player.hass, 'label.shortcuts', undefined, label) : label;
+    return this.shortcuts.label ?? t(this.player.hass, 'label.shortcuts', undefined, LABEL_SHORTCUT);
   }
 
   get active() {
