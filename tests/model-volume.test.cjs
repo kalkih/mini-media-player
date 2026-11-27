@@ -14,16 +14,21 @@ const Model = require('../src/model.ts').default;
 const left = 'media_player.lab_left';
 const right = 'media_player.lab_right';
 const outside = 'media_player.lab_outside';
-function setup({ sync = true, step = 2, volume = 0.2, group = [left, right], offsets = [0, 0] } = {}) {
+function setup({
+  sync = true, step = 2, volume = 0.2, group = [left, right], offsets = [0, 0], configured = [left, right, outside],
+  memberVolume = 0.5,
+} = {}) {
   const calls = [];
+  const offsetFor = { [left]: offsets[0], [right]: offsets[1] };
   const config = { entity: left, volume_step: step, speaker_group: {
     platform: 'heos', sync_volume: sync,
-    entities: [{ entity_id: left, volume_offset: offsets[0] },
-      { entity_id: right, volume_offset: offsets[1] }, { entity_id: outside }],
+    entities: configured.map(entity_id => ({ entity_id, volume_offset: offsetFor[entity_id] })),
   } };
+  const states = Object.fromEntries([right, outside].map(id => [id, { entity_id: id, attributes: {} }]));
+  if (memberVolume !== null) Object.values(states).forEach(state => { state.attributes.volume_level = memberVolume; });
   const entity = { entity_id: left, state: 'playing', attributes: { group_members: group } };
   if (volume !== null) entity.attributes.volume_level = volume;
-  const model = new Model({ callService: (domain, service, data) => calls.push({ domain, service, ...data }) }, config, entity);
+  const model = new Model({ states, callService: (domain, service, data) => calls.push({ domain, service, ...data }) }, config, entity);
   const event = { stopPropagation() {} };
   return { model, calls, event };
 }
@@ -76,3 +81,16 @@ for (const group of [[], [left]]) {
     model.volumeUp(event); levels(calls, [[left, 0.22]]);
   });
 }
+test('falls back to the current player when no configured speaker is grouped', () => {
+  const { model, calls, event } = setup({ group: [left, 'media_player.unconfigured'], configured: [right, outside] });
+  model.volumeUp(event); levels(calls, [[left, 0.22]]);
+});
+test('members without volume_level use relative volume services', () => {
+  const { model, calls, event } = setup({ memberVolume: null });
+  model.volumeUp(event);
+  assert.deepEqual(calls.map(({ service, entity_id }) => [service, entity_id]), [
+    ['volume_set', left], ['volume_up', right],
+  ]);
+  assert.ok(Math.abs(calls[0].volume_level - 0.22) < 1e-10);
+  assert.ok(!Object.hasOwn(calls[1], 'volume_level'));
+});
