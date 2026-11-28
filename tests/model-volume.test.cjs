@@ -104,3 +104,11 @@ for (const [name, group, configured, expected] of [
     model.setVolume(event, 0.4); levels(calls, expected);
   });
 }
+test('includes the current player when only other group members are configured', () => {
+  const { model, calls, event } = setup({ configured: [right, outside], offsets: [0, 10] });
+  model.volumeUp(event); levels(calls, [[left, 0.22], [right, 0.32]]);
+});
+test('setVolume includes the current player when only other group members are configured', () => {
+  const { model, calls, event } = setup({ configured: [right, outside], offsets: [0, 10] });
+  model.setVolume(event, 0.4); levels(calls, [[left, 0.4], [right, 0.5]]);
+});

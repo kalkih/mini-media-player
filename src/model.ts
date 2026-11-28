@@ -376,12 +376,15 @@ export default class MediaPlayerObject {
     this.callService(e, 'media_seek', { seek_position: clampedNewPosition });
   }
 
-  // Configured speakers in the current group, or none if volume sync is off.
-  // Callers fall back to local control when this is empty.
+  // Configured speakers in the current group plus the card's own entity, or
+  // none if volume sync is off. The card's entity is always included because
+  // the next volume step starts from its level. Callers fall back to local
+  // control when this is empty.
   private get syncedMembers(): string[] {
     const { sync_volume, entities } = this.config.speaker_group;
     if (!sync_volume || !entities) return [];
-    return this.group.filter((id) => entities.some((entry) => entry.entity_id === id));
+    const members = this.group.filter((id) => entities.some((entry) => entry.entity_id === id));
+    return members.length > 0 ? [...new Set([this._entityId, ...members])] : [];
   }
 
   setVolume(e: MouseEvent, volume: number): void {
