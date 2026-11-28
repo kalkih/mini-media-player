@@ -334,21 +334,37 @@ export default class MediaPlayerObject {
   }
 
   volumeUp(e: MouseEvent): void {
-    if (this.supportsVolumeSet && this.config.volume_step && this.config.volume_step > 0) {
-      this.callService(e, 'volume_set', {
-        entity_id: this._entityId,
-        volume_level: Math.min(this.vol + this.config.volume_step / 100, 1),
-      });
-    } else this.callService(e, 'volume_up');
+    this.changeVolume(e, 1);
   }
 
   volumeDown(e: MouseEvent): void {
-    if (this.supportsVolumeSet && this.config.volume_step && this.config.volume_step > 0) {
-      this.callService(e, 'volume_set', {
-        entity_id: this._entityId,
-        volume_level: Math.max(this.vol - this.config.volume_step / 100, 0),
-      });
-    } else this.callService(e, 'volume_down');
+    this.changeVolume(e, -1);
+  }
+
+  private changeVolume(e: MouseEvent, direction: number): void {
+    const { entities } = this.config.speaker_group;
+    const members = this.isGrouped ? this.syncedMembers : [];
+    const sync = members.length > 0;
+    const targets = sync ? members : [this._entityId];
+    const offsetOf = (entityId: string): number =>
+      (sync && entities?.find((entry) => entry.entity_id === entityId)?.volume_offset) || 0;
+    const step = this.config.volume_step && this.config.volume_step > 0 ? this.config.volume_step : 0;
+
+    targets.forEach((entity_id) => {
+      // Members can differ in capabilities, so check each target separately.
+      const supportsVolumeSet = entity_id === this._entityId
+        ? this.supportsVolumeSet
+        : typeof this.hass.states?.[entity_id]?.attributes?.volume_level !== 'undefined';
+      if (step && this.supportsVolumeSet && supportsVolumeSet) {
+        const volume = this.vol + (direction * step + offsetOf(entity_id) - offsetOf(this._entityId)) / 100;
+        this.callService(e, 'volume_set', {
+          entity_id,
+          volume_level: Math.min(Math.max(volume, 0), 1),
+        });
+      } else {
+        this.callService(e, direction > 0 ? 'volume_up' : 'volume_down', { entity_id });
+      }
+    });
   }
 
   seek(e: MouseEvent, pos: number): void {
@@ -361,15 +377,25 @@ export default class MediaPlayerObject {
     this.callService(e, 'media_seek', { seek_position: clampedNewPosition });
   }
 
+  // Configured speakers in the current group plus the card's own entity, or
+  // none if volume sync is off. The card's entity is always included because
+  // the next volume step starts from its level. Callers fall back to local
+  // control when this is empty.
+  private get syncedMembers(): string[] {
+    const { sync_volume, entities } = this.config.speaker_group;
+    if (!sync_volume || !entities) return [];
+    const members = this.group.filter((id) => entities.some((entry) => entry.entity_id === id));
+    return members.length > 0 ? [...new Set([this._entityId, ...members])] : [];
+  }
+
   setVolume(e: MouseEvent, volume: number): void {
-    if (this.config.speaker_group.sync_volume && this.config.speaker_group.entities) {
-      this.group.forEach((entity) => {
+    const members = this.syncedMembers;
+    if (members.length > 0) {
+      members.forEach((entity) => {
         const conf = this.config.speaker_group.entities?.find((entry) => entry.entity_id === entity);
 
-        if (typeof conf === 'undefined') return;
-
         let offsetVolume = volume;
-        if (conf.volume_offset) {
+        if (conf?.volume_offset) {
           offsetVolume += conf.volume_offset / 100;
           if (offsetVolume > 1) offsetVolume = 1;
           if (offsetVolume < 0) offsetVolume = 0;
